@@ -6,6 +6,7 @@
 //   createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
 import { Marker, type Map as MapLibreMap } from "maplibre-gl";
 import { asset, fetchJson, formatDay, monthName, parseDay } from "../data";
+import { withChips, type NumberEntry } from "../chip";
 import { h } from "../dom";
 import type { Overlays } from "../overlays";
 
@@ -82,11 +83,11 @@ function mean(values: number[]): number {
 interface SeasonRule {
   startFrom: string; // earliest day a start pass may fall on
   lastDry: string; // last dry day before the rain came back
-}
-
-interface DatedValue {
-  date: string;
-  value: string;
+  // The validation.json keys the two dates were read from. The reading marks the phrase that
+  // rests on each as [[key|phrase]], which chip.ts turns into a chip that shows the entry.
+  startKey: string;
+  lastDryKey: string;
+  numbers: Record<string, NumberEntry | undefined>;
 }
 
 const PAIR_DAYS = 14; // as in pipeline/season.py: the second start pass must follow within this
@@ -111,14 +112,14 @@ function reading(passes: Pass[], orbit: string, rule: SeasonRule): string | null
   const lateValues = levels(late);
   if (!startValues || !lateValues) return `${name} pass: not enough data at this place for a reading (a pass it is measured from is missing).`;
   const lateLevel = mean(lateValues);
-  const span = `between the dry start in ${monthName(start[0].date)} and ${monthName(late[late.length - 1].date)}`;
+  const span = `between the [[${rule.startKey}|dry start in ${monthName(start[0].date)}]] and ${monthName(late[late.length - 1].date)}`;
   const fall = Math.round((mean(startValues) - lateLevel) * 10) / 10;
   let text = fall >= 0.1 ? `${name} pass: HH fell ${fall.toFixed(1)} dB ${span}` : `${name} pass: HH did not fall ${span}`;
   const after = passes.find((p) => p.date > rule.lastDry);
   if (after && after.hh !== null) {
     const rise = Math.round((after.hh - lateLevel) * 10) / 10;
     const day = `${parseDay(after.date).getUTCDate()} ${monthName(after.date)}`;
-    text += rise >= 0.1 ? `, then rose ${rise.toFixed(1)} dB on the first pass after the rain (${day})` : `, and had not risen on the first pass after the rain (${day})`;
+    text += rise >= 0.1 ? `, then rose ${rise.toFixed(1)} dB on the first pass [[${rule.lastDryKey}|after the rain]] (${day})` : `, and had not risen on the first pass [[${rule.lastDryKey}|after the rain]] (${day})`;
   }
   return `${text}.`;
 }
@@ -143,7 +144,7 @@ export class PlaceChart {
   private drawn: (() => void) | undefined;
   private pickListeners: (() => void)[] = [];
   private parts: PlaceParts = {};
-  private rules: Promise<Record<string, DatedValue> | null> | undefined;
+  private rules: Promise<Record<string, NumberEntry> | null> | undefined;
   /** The place on show, or null. Read by the link to this view. */
   place: { lon: number; lat: number } | null = null;
 
@@ -292,13 +293,15 @@ export class PlaceChart {
       if (byCell) fires = [...(byCell[String(cellIndex)] ?? [])].sort();
     }
     // The dry start and the last dry day of this site, from the numbers file.
-    this.rules ??= fetchJson<Record<string, DatedValue>>("validation.json");
+    this.rules ??= fetchJson<Record<string, NumberEntry>>("validation.json");
     const numbers = await this.rules;
     if (request !== this.request) return;
-    const startFrom = numbers?.[`start_passes_from_${site.meta.site}`]?.value;
-    const lastDry = numbers?.[`last_dry_day_${site.meta.site}`]?.value;
+    const startKey = `start_passes_from_${site.meta.site}`;
+    const lastDryKey = `last_dry_day_${site.meta.site}`;
+    const startFrom = numbers?.[startKey]?.value;
+    const lastDry = numbers?.[lastDryKey]?.value;
     const isDay = (value: unknown): value is string => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
-    const rule = isDay(startFrom) && isDay(lastDry) ? { startFrom, lastDry } : null;
+    const rule = numbers && isDay(startFrom) && isDay(lastDry) ? { startFrom, lastDry, startKey, lastDryKey, numbers } : null;
     this.draw(body, passes, [...new Set(site.meta.bands.map((b) => b.track))], rain, fires, rule);
   }
 
@@ -314,7 +317,8 @@ export class PlaceChart {
       const span = fires.length === 1 ? `on ${formatDay(fires[0])}` : `on ${fires.length} days, ${formatDay(fires[0])} to ${formatDay(fires[fires.length - 1])}`;
       lines.push(`Fire was detected here ${span}.`);
     }
-    const readingBox = h("div", { class: "reading" }, ...lines.map((t) => h("p", { text: t })));
+    // The two phrases that rest on a date from validation.json become chips; the rest is plain text.
+    const readingBox = h("div", { class: "reading" }, ...lines.map((t) => h("p", {}, withChips(t, rule?.numbers ?? {}))));
 
     const legend = h("div", { class: "chart-legend" });
     for (const t of tracks) {
