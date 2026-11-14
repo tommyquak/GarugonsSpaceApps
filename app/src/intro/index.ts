@@ -2,7 +2,8 @@
 // A skippable way in: the view opens on a made-up peatland observation room, and the large
 // screen on its far wall is this app itself, shrunk. The view holds there until the visitor
 // clicks that screen or "Enter dashboard"; then the camera moves through the screen and the
-// room is thrown away. "Skip to map" does the same with no camera move.
+// room is thrown away. "Skip to map" does the same with no camera move. Clicking one of the
+// side screens on the wall (wall.ts) enters the same way and then opens the view it shows.
 //
 // How it stays out of the map's way:
 //   - #app and the room share one parent, the stage, and only the stage is scaled. The app is
@@ -91,6 +92,7 @@ export function playIntro(): void {
   let foreground: HTMLElement[] = [];
   let timer = 0;
   let moving = false;
+  let openAfter: string | null = null; // the view a clicked wall screen leads to
 
   const onKey = (event: KeyboardEvent): void => {
     if (event.key === "Escape") {
@@ -126,6 +128,12 @@ export function playIntro(): void {
       story.focus({ preventScroll: true });
       story.classList.add("intro-ready");
       window.setTimeout(() => story.classList.remove("intro-ready"), 1700);
+    }
+    // A wall screen was clicked: press the header button for its view, as a visitor would.
+    if (openAfter) {
+      const ids = openAfter === "check" ? ["btn-actions", "tab-actions"] : ["btn-how", "btn-actions", "tab-actions"];
+      const button = ids.map((id) => document.getElementById(id)).find((el) => el && el.offsetParent !== null);
+      if (button && button.getAttribute("aria-pressed") !== "true") button.click();
     }
   }
   finishCurrent = finish;
@@ -164,6 +172,12 @@ export function playIntro(): void {
 
     enter.addEventListener("click", go);
     scene.screen.addEventListener("click", go);
+    scene.room.addEventListener("click", (event) => {
+      const wall = (event.target as Element | null)?.closest<HTMLElement>(".intro-wall");
+      if (!wall) return;
+      openAfter = wall.dataset.open ?? null;
+      go();
+    });
     skip.addEventListener("click", finish);
     document.addEventListener("keydown", onKey, true);
     document.addEventListener("visibilitychange", onHide);
