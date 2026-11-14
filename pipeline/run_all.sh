@@ -81,7 +81,7 @@ if [ -n "${WITH_CONTEXT:-}" ]; then
 fi
 for site in $SITES; do   # these two only read what is on disk, so they always run when their input exists
   if [ -d "data/firms/$site" ]; then
-    $PY pipeline/context/fire_layers.py --site "$site" --firms "data/firms/$site" --layers "$L" --series pipeline/out/series
+    $PY pipeline/context/fire_layers.py --site "$site" --firms "data/firms/$site" --layers "$L" --series pipeline/out/series --dry-until "$DRY_UNTIL"
   fi
   if [ -n "${WITH_CONTEXT:-}" ] || [ -f "$L/rain_daily_$site.json" ]; then
     $PY pipeline/context/rain.py --site "$site" --start "$SEASON_START" --end "$SEASON_END" --out "$L"
