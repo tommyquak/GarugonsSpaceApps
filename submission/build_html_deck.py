@@ -21,7 +21,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_slides import APP_URL, CHOICES, CODE_URL, Numbers, ontology_counts  # noqa: E402
+from build_slides import APP_URL, CHOICES, CODE_URL, MORE_SEASONS, Numbers, SUBSIDENCE, ontology_counts  # noqa: E402
 
 PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "demo_season.gif", "demo_check.gif", "demo_decide.gif",
             "demo_report.gif", "fig_orbits.png", "fig_start.png", "fig_water_table.png", "app_room.jpg"]
@@ -54,6 +54,7 @@ def numbers(num):
 def page(n, draft, counts):
     """The deck. {{key}} slots are filled from validation.json and the ontology file; everything else is fixed text."""
     out = TEMPLATE.replace("{{app_url}}", APP_URL).replace("{{code_url}}", CODE_URL)
+    out = out.replace("{{subsidence}}", html.escape(SUBSIDENCE)).replace("{{more_seasons}}", html.escape(MORE_SEASONS))
     out = out.replace("{{why}}", "\n".join(f"      <p><b>{html.escape(name)}</b> {html.escape(reason)}</p>" for name, reason in CHOICES))
     for key, value in counts.items():
         out = out.replace("{{o_" + key + "}}", html.escape(value))
@@ -171,8 +172,8 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
 /* ===========================================
    SLIDE 7: what next, and the links
    =========================================== */
-.next { position: absolute; left: 140px; top: 290px; width: 700px; font: 400 30px/1.45 var(--sans); color: var(--dim); }
-.next p { margin-bottom: 30px; } .next b { color: var(--ink); font-weight: 600; }
+.next { position: absolute; left: 140px; top: 286px; width: 700px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.next p { margin-bottom: 24px; } .next b { color: var(--ink); font-weight: 600; }
 .links { position: absolute; left: 140px; top: 800px; font: 400 26px/1.8 var(--sans); color: var(--ink); }
 .links b { display: inline-block; width: 210px; font-weight: 600; }
 
@@ -286,8 +287,8 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <h2 class="reveal r1">What NISAR could do next</h2>
     <div class="next reveal r2">
       <p><b>Ground truth first.</b> A sixty-visit field protocol, in the late dry season and after the first rain.</p>
-      <p><b>Years, not months.</b> Subsidence by interferometry over whole peat domes, and every dry season set against wet years.</p>
-      <p><b>Anywhere.</b> The pipeline takes any bounding box; not yet run on a second site.</p>
+      <p><b>Subsidence, a second layer.</b> {{subsidence}}</p>
+      <p><b>More seasons, other peatlands.</b> {{more_seasons}}</p>
     </div>
     <div class="frame dark reveal r3" style="left:920px; top:290px; width:860px; height:404px"><img src="assets/app_room.jpg" alt="The app's entry view: an illustrative control room made with SI, with the live dashboard on its screens"></div>
     <p class="caption reveal r4" style="left:920px; top:716px; width:860px">The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.</p>
