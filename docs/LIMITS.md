@@ -19,7 +19,7 @@ The map colours show how much the HH radar echo fell from the dry start in July 
 - **One pass per orbit after the rain,** taken on or within three days of 20 to 40 mm of rain. Water on vegetation and standing water raise the echo too.
 - **A different processing release.** The two passes after the rain were produced by a later NASA processing release than every dry-season pass, and the forest baseline moves most on exactly those passes. The size of the rise is uncertain by about 0.3 to 0.4 dB.
 - **"Still low after the rain" is unexplained.** Those blocks tend to be woodier and farther from mapped canals than the ones that came back. We do not know why they stayed low, and we attach no recommendation to them.
-- **Timing of the HH rise.** In western blocks where HH fell by more than 1 dB on both orbits, it rose by about 1 dB on each orbit’s first pass after the rain. The preceding pass did not show a comparable rise.
+- **Timing of the HH rise.** In western blocks where HH fell by 1 dB or more on both orbits, it rose by about 1 dB on each orbit’s first pass after the rain. The preceding pass did not show a comparable rise.
 - **Fire and the HV echo.** Among those western blocks on mapped peat, the median change in HV from July to the first dawn pass after rain was 0.54 dB lower in blocks with fire detections than in those without. The other three comparisons, across the two study areas and orbits, gave smaller differences in the same direction (0.29 to 0.40 dB). Those three figures are exploratory. Fire detections cover the full study period and can postdate the radar pass, so this comparison cannot establish cause.
 
 ## Limits of the fire layer
@@ -57,4 +57,4 @@ The two orbits help check whether the same places changed. Nearby 250 m blocks c
 
 Area percentages use only the ground mapped and observed in each group, on peat or off peat. Missing boundary coverage is unknown. The two study areas overlap, so adding their areas would count some ground twice. [How the checks were calculated](https://github.com/tommyquak/GarugonsSpaceApps/tree/main/pipeline/checks)
 
-**A correction to the HV readings.** An earlier calculation shifted HV using the reference forest. After correcting it, the western dusk median for the whole study area changed from a small rise to a small fall. The current results use HV as measured. [Correction record](https://github.com/tommyquak/GarugonsSpaceApps/issues/1#issuecomment-6873030852)
+**A correction to the HV readings.** An earlier calculation shifted HV using the reference forest. After correcting it, the western dusk median for the whole study area changed from a small rise to a small fall. The current results use HV as measured. [Correction record](https://github.com/tommyquak/GarugonsSpaceApps/blob/main/pipeline/checks/README.md)
