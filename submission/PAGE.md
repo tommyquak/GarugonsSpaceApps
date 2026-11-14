@@ -43,6 +43,7 @@ To be added: seven slides with animated GIFs (public link).
 - Forest edges dry too: the fall is about [v: selfcheck_forest_edge_median_125] dB within 250 m of a forest edge and reaches zero only about 4 km inside.
 - On mapped peat in the west box, [v: fell_1db_km2_on_peat_west] km2 fell by 1 dB or more; [v: fell_1db_no_fire_km2_on_peat_west] km2 of that had no fire nearby.
 - After the first rain, land that had fallen by 1 dB or more regained [v: recovery_hh_share_regained_west_125] of the fall in HH and [v: recovery_hv_share_regained_west_125] in HV on the ascending orbit, and [v: recovery_hh_share_regained_west_061] and [v: recovery_hv_share_regained_west_061] on the descending one. The two orbits' rebound maps agree at r = [v: recovery_hh_two_orbit_r_west_061_125].
+- Burnt peat stays darker in HV after the rain: on mapped peat in the west box, burnt land is left [v: recovery_hv_median_left_on_peat_fire_west_125] dB below its June level in HV, against [v: recovery_hv_median_left_on_peat_no_fire_west_125] dB for land that only dried. The same holds on both orbits, at both sites, on and off peat. The ground is wet again either way; the canopy that burned is not back.
 
 ### The physics, and the polarisations
 
@@ -50,6 +51,7 @@ At L-band the wave passes through leaves and reaches branches, trunks and the gr
 
 ### What we do not see, and what we do not claim
 
+- Nothing here has been checked against the ground. Our tests are internal: two orbits agree, intact forest holds still, the rain brings the signal back. They show the signal is real, not what it means in centimetres of water. The public water-level records for this landscape (2013 to 2018 and 2019 to 2020) end before NISAR began. About sixty dipwell visits to 30 of our blocks, in the late dry season and after the first rain, would calibrate the map or show where it is wrong (`submission/IMPACT.md`).
 - We do not measure the water table or soil moisture in physical units. Colour means the radar echo fell.
 - Burnt and cleared land also darkens. The fire layer separates it; without it the map mixes the two.
 - Five months of NISAR cannot yet show peat subsidence. That needs years.

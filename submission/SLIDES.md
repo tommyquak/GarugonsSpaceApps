@@ -36,12 +36,13 @@ Three beats, one row each:
 
 - **Dry.** The two orbits look from opposite sides at dawn and dusk, and agree on where land dried: Spearman r = [v: track5_west_orbit_spearman]. Deep forest holds still: noise floor [v: noise_floor_hh_125] and [v: noise_floor_hh_061] dB.
 - **Burn.** [v: fell_1db_no_fire_km2_on_peat_west] km2 of the dried peat had no fire nearby; the rest is shown separately, on peat and off it.
-- **Rewet.** After the first rain, both orbits see the rebound on their own and their rebound maps agree (r = [v: recovery_hh_two_orbit_r_west_061_125]). HH regained [v: recovery_hh_share_regained_west_125] and [v: recovery_hh_share_regained_west_061] of the fall; HV only [v: recovery_hv_share_regained_west_125] and [v: recovery_hv_share_regained_west_061]. What the rain did not bring back is the story.
+- **Rewet.** After the first rain, both orbits see the rebound on their own and their rebound maps agree (r = [v: recovery_hh_two_orbit_r_west_061_125]). HH regained [v: recovery_hh_share_regained_west_125] and [v: recovery_hh_share_regained_west_061] of the fall; HV only [v: recovery_hv_share_regained_west_125] and [v: recovery_hv_share_regained_west_061]. What the rain did not bring back is the story: burnt peat is left [v: recovery_hv_median_left_on_peat_fire_west_125] dB down in HV against [v: recovery_hv_median_left_on_peat_no_fire_west_125] dB for peat that only dried.
 - Visual: GIF of the click chart on one strongly dried block, HH and HV with rain and fire dates under it.
 
 ## 6. The limits
 
 - A screening map: it shows where to look. It does not measure the water table, subsidence or where fire will start.
+- Not yet checked on the ground. Public water-level records end before NISAR began; about sixty dipwell visits would calibrate it or prove it wrong.
 - Forest edges dry too: about [v: selfcheck_forest_edge_median_125] dB within 250 m of an edge, zero only about 4 km inside.
 - One pass after the rain per orbit so far; the share regained moves by up to [v: recovery_hh_share_regained_sensitivity_west_061] in HH when the choice of passes changes. A placebo (rain pretended one pass sooner) shows no rebound: [v: recovery_hh_share_regained_placebo_west_061].
 - Every check that failed, from `docs/LIMITS.md`.
