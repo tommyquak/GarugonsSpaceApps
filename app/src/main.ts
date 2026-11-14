@@ -3,6 +3,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import { baseStyle } from "./basemaps";
+import { PlaceChart } from "./chart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
 import { byId } from "./dom";
@@ -42,6 +43,7 @@ async function start(): Promise<void> {
   const overlays = new Overlays(map, layers);
   buildPanel(byId("panel-layers"), map, overlays);
   buildSeason(byId("season"), overlays);
+  new PlaceChart(byId("panel-place"), map, overlays, () => undefined);
 }
 
 void start();
