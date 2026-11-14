@@ -52,6 +52,7 @@ SOURCE_RADAR = "NISAR L2 GCOV, ASF DAAC"
 SOURCE_FIRE = "NASA FIRMS active fire detections"
 REFERENCE_RGB = (159, 214, 184)
 FIRE_RGB = (222, 54, 38)   # red is kept for fire detections
+FIRE_FILL = 80             # a light fill with a firm edge, so the fall in the echo under a fire stays in view
 
 
 def hex_rgb(h):
@@ -230,7 +231,7 @@ def main():
         days, grid = grids.get(site, fire_path, a.res)
         path = add(f"fire_{site}", f"Fire detected, May to November, {site}", grid, kind="fire", site=site,
                    unit=None, legend="fill", color="#%02x%02x%02x" % FIRE_RGB, source=SOURCE_FIRE)
-        save_mask(path, grid.warp(days, Resampling.nearest) >= 1, FIRE_RGB, 150, 235, 1)
+        save_mask(path, grid.warp(days, Resampling.nearest) >= 1, FIRE_RGB, FIRE_FILL, 235, 1)
 
     # Fire up to each radar pass date, so the season slider shows it building up.
     for first_path in sorted(a.layers.glob("fire_first_day_*.tif")):
@@ -242,7 +243,7 @@ def main():
             until = dt.date.fromisoformat(day).timetuple().tm_yday
             path = add(f"fire_{site}_to_{day.replace('-', '')}", "Fire detected up to this date", grid, kind="fire-until", site=site,
                        until=day, unit=None, legend="fill", color="#%02x%02x%02x" % FIRE_RGB, source=SOURCE_FIRE)
-            save_mask(path, first_m <= until, FIRE_RGB, 150, 235, 1)
+            save_mask(path, first_m <= until, FIRE_RGB, FIRE_FILL, 235, 1)
 
     for stale in out_layers.glob("*.png"):
         if stale.name not in written:
