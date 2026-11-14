@@ -1,5 +1,5 @@
 {
   "site": "west",
   "bbox": [113.62, -2.95, 113.90, -2.50],
-  "note": "The large block of peat swamp forest west of the Sebangau river. Inside this box the reference is the half with the brighter season-mean HV, which keeps closed forest and drops rivers, clearings and burn scars."
+  "note": "The large block of peat swamp forest west of the Sebangau river. reference.py keeps the part of this box that is closed forest on both tracks."
 }

@@ -18,6 +18,12 @@ def load_stack(path):
             "dates": [str(d) for d in z["dates"]]}
 
 
+def load_reference(layers, site="west"):
+    """The reference forest drawn by reference.py, as a boolean array."""
+    with rasterio.open(f"{layers}/reference_{site}.tif") as src:
+        return src.read(1) == 1
+
+
 def to_date(yyyymmdd):
     return date(int(yyyymmdd[:4]), int(yyyymmdd[4:6]), int(yyyymmdd[6:8]))
 
