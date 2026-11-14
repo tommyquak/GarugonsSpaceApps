@@ -484,7 +484,7 @@ button {
   overflow: auto;
 }
 
-#panel-place:not(.has-data) {
+#panel-place:not(.has-data):not(.has-places) {
   display: none;
 }
 
@@ -637,6 +637,112 @@ button {
   text-align: right;
 }
 
+/* Place card actions, ground look and my places. */
+.place-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.place-actions .text-button[aria-pressed="true"],
+.place-actions .text-button[aria-expanded="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.look {
+  margin: 0 0 10px;
+}
+
+.look-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.look-row input[type="date"] {
+  flex: 1;
+  min-width: 0;
+  min-height: 26px;
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #171b20;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  color-scheme: dark;
+}
+
+.look-map {
+  height: 190px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0d1013;
+}
+
+.my-places {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.my-places[hidden] {
+  display: none;
+}
+
+.my-places h3 {
+  margin: 0 0 4px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.places-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.places-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.place-link {
+  border: 0;
+  padding: 4px 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.my-places .place-actions {
+  margin: 8px 0 0;
+}
+
+.place-pin {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #101317;
+  pointer-events: none;
+}
+
 .place-marker {
   width: 16px;
   height: 16px;
@@ -745,6 +851,11 @@ button:disabled {
 
   #tabs .text-button {
     flex: 1;
+  }
+
+  .look-row input[type="date"],
+  .place-link {
+    min-height: 44px;
   }
 
   /* Room for a finger: 44 px controls on a touch screen. */
