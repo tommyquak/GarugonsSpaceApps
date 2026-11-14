@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import { baseStyle } from "./basemaps";
 import { loadLayers, unionBounds } from "./data";
+import { buildDocs } from "./docs";
 import { byId } from "./dom";
 import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
@@ -17,6 +18,7 @@ export function viewPadding(): { top: number; bottom: number; left: number; righ
 
 async function start(): Promise<void> {
   const layers = await loadLayers();
+  buildDocs(byId("btn-limits"), byId("btn-about"), layers);
   const sources = [...new Set(layers.map((l) => l.source).filter(Boolean))];
 
   const map = new maplibregl.Map({
