@@ -18,6 +18,11 @@ Writes, for one site (docs/DATA_CONTRACT.md sections 2 and 4):
   fire_dates_<site>.json   on the grid of series_<site>.json: for each cell that had a
                            detection, the list of days, as { "<row * cols + col>": [...] }.
 
+  fire_first_day_<site>.tif  the day of the year of the first detection whose footprint reaches
+                           the cell, NaN where there was none. "Fire up to a date" is then
+                           first day <= that date, which is how the app's season slider
+                           shows the fire building up.
+
 With --dry-until (the last dry day, from pipeline/season.py), also:
 
   fire_before_rain_<site>.tif      as fire_days, counting only days on or before the last dry
@@ -117,6 +122,15 @@ def count_days(by_day, shape, edge, until=None):
     return days, days_wide
 
 
+def first_day(by_day, shape):
+    """Day of the year of the first detection whose footprint reaches each cell; NaN where none does."""
+    first = np.full(shape, np.nan, "float32")
+    for day in sorted(by_day):
+        reached = stamp(shape, [c for c, _ in by_day[day]], [r for _, r in by_day[day]])
+        first[reached & np.isnan(first)] = dt.date.fromisoformat(day).timetuple().tm_yday
+    return first
+
+
 def write_layer(path, layer, profile, text, first_day, last_day):
     with rasterio.open(path, "w", **profile) as dst:
         dst.write(layer, 1)
@@ -159,6 +173,8 @@ def main(argv=None):
     for name, layer, text in ((f"fire_days_{a.site}.tif", days, "days with a fire detection whose footprint reaches the cell"),
                               (f"fire_days_1km_{a.site}.tif", days_wide, "days with a fire detection within 1 km")):
         write_layer(a.layers / name, layer, profile, text, min(by_day), max(by_day))
+    write_layer(a.layers / f"fire_first_day_{a.site}.tif", first_day(by_day, shape), profile,
+                f"day of the year {min(by_day)[:4]} of the first fire detection whose footprint reaches the cell", min(by_day), max(by_day))
     km2, km2_wide = float((days > 0).sum() * KM2), float((days_wide > 0).sum() * KM2)
     put(f"fire_any_km2_{a.site}", km2, "km2", a.site, ME, note=f"within the footprint of a detection, {min(by_day)} to {max(by_day)}")
     put(f"fire_any_1km_km2_{a.site}", km2_wide, "km2", a.site, ME, note="within 1 km of a detection")
