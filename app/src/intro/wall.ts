@@ -101,25 +101,39 @@ function classes(ontology: Ontology, index: BlockIndex): string {
   return heading("1 km blocks by class") + rows.join("");
 }
 
-/** One rule from the decision table, a line for each state it needs. */
+/**
+ * One rule from the decision table, as an example: the class first, then the states that must be
+ * true for a block to get it, then the ones that must not be.
+ */
 function rule(ontology: Ontology): string {
   const action = ontology.actions.find((a) => a.id === "fell_still_low") ?? ontology.actions.find((a) => a.id !== NO_ACTION);
   if (!action) return "";
   const titles = new Map(ontology.states.map((state) => [state.id, state.title]));
   const terms = ruleTerms(action.rule, [...titles.keys()]);
-  const step = Math.min(17, (H - 52) / Math.max(terms.length, 1));
-  let out = heading("One rule");
-  terms.forEach((term, k) => {
-    const y = 34 + k * step;
-    out +=
-      `<text x="12" y="${y}" font-size="10" fill="${term.negated ? MUTED : INK}">${term.negated ? "not" : "yes"}</text>` +
-      `<text x="32" y="${y}" font-size="10" fill="${INK}">${esc(clip(titles.get(term.state) ?? term.state, 36))}</text>`;
-  });
-  const y = 34 + terms.length * step + 6;
+  const needed = terms.filter((term) => !term.negated);
+  const barred = terms.filter((term) => term.negated);
+  const lines = 2 + needed.length + (barred.length ? 1 + barred.length : 0); // the class, a label, the states, a label, the states
+  const step = Math.min(15, (H - 30) / Math.max(lines, 1));
+  const size = Math.min(10, step * 0.72);
+  let y = 22 + step;
+  let out = heading("How a block gets its class: one example");
   out +=
-    `<path d="M12 ${y - 12}H${W - 12}" stroke="${FAINT}" stroke-width="0.8"/>` +
-    `<rect x="12" y="${y - 6}" width="8" height="8" rx="2" fill="${actionColor(action.id)}"/>` +
-    `<text x="26" y="${y + 2}" font-size="10" font-weight="600" fill="${INK}">${esc(clip(action.title, 36))}</text>`;
+    `<rect x="12" y="${y - 7.5}" width="8" height="8" rx="2" fill="${actionColor(action.id)}"/>` +
+    `<text x="26" y="${y}" font-size="${size}" font-weight="600" fill="${INK}">${esc(clip(action.title, 38))}</text>`;
+  const label = (text: string): void => {
+    y += step;
+    out += `<text x="12" y="${y}" font-size="${size * 0.88}" fill="${MUTED}">${esc(text)}</text>`;
+  };
+  const state = (id: string): void => {
+    y += step;
+    out += `<text x="20" y="${y}" font-size="${size}" fill="${INK}">${esc(clip(titles.get(id) ?? id, 38))}</text>`;
+  };
+  label(needed.length === 1 ? "A 1 km block gets this class when this is true" : "A 1 km block gets this class when all of these are true");
+  needed.forEach((term) => state(term.state));
+  if (barred.length) {
+    label(barred.length === 1 ? "and this is not" : "and none of these is");
+    barred.forEach((term) => state(term.state));
+  }
   return out;
 }
 
@@ -132,7 +146,7 @@ export async function fillWall(room: HTMLElement): Promise<void> {
     const add = (el: HTMLElement): void => void (front ? room.insertBefore(el, front) : room.append(el));
     add(screen("sources", "The data sources the classes are built from", sources(ontology)));
     add(screen("graph", "The decision graph: sources, observations, states and classes", graph(ontology)));
-    add(screen("rule", "One rule from the decision table", rule(ontology)));
+    add(screen("rule", "How a block gets its class: one rule from the decision table, as an example", rule(ontology)));
     if (index?.sites?.length) add(screen("classes", "Number of 1 km blocks in each class", classes(ontology, index)));
   } catch {
     // The grey shapes stay.
