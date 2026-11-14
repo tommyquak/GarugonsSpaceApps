@@ -17,7 +17,10 @@
 set -euo pipefail
 
 PY=${PYTHON:-python3}
-DRY_UNTIL=${DRY_UNTIL:-20261025}   # last day before the rain returned: last_dry_day_<site> in validation.json
+# The start and the end of the dry season come from the rainfall record (pipeline/season.py) when
+# it is on disk. These two values are the fallback for a first run with no rainfall file yet.
+START_FROM=${START_FROM:-20260710}
+DRY_UNTIL=${DRY_UNTIL:-20261025}
 SEASON_START=${SEASON_START:-2026-05-01}
 SEASON_END=${SEASON_END:-2026-11-12}
 S=pipeline/out/stacks
@@ -38,6 +41,11 @@ if [ -z "${SKIP_PULL:-}" ]; then
   done
 fi
 
+if [ -f "$L/rain_daily_west.json" ]; then
+  eval "$($PY pipeline/season.py --rain "$L/rain_daily_west.json" | tail -1)"
+  echo "== dry season from the rainfall record: start passes from $START_FROM, last dry day $DRY_UNTIL"
+fi
+
 echo "== 3. reference forest and baseline"
 $PY pipeline/drying/reference.py --stacks "$S/west_$ASC.npz" "$S/west_$DESC.npz" --out "$L"
 for track in $ASC $DESC; do
@@ -47,8 +55,8 @@ done
 echo "== 4. dry-down, per-pass layers"
 for site in $SITES; do
   for track in $ASC $DESC; do
-    $PY pipeline/drying/drydown.py --stack "$S/${site}_$track.npz" --baseline "$L/baseline_$track.json" --dry-until "$DRY_UNTIL" --out "$L"
-    $PY pipeline/drying/per_pass.py --stack "$S/${site}_$track.npz" --baseline "$L/baseline_$track.json" --out "$L"
+    $PY pipeline/drying/drydown.py --stack "$S/${site}_$track.npz" --baseline "$L/baseline_$track.json" --start-from "$START_FROM" --dry-until "$DRY_UNTIL" --out "$L"
+    $PY pipeline/drying/per_pass.py --stack "$S/${site}_$track.npz" --baseline "$L/baseline_$track.json" --start-from "$START_FROM" --out "$L"
   done
 done
 
@@ -76,15 +84,16 @@ for site in $SITES; do   # these two only read what is on disk, so they always r
   fi
   if [ -n "${WITH_CONTEXT:-}" ] || [ -f "$L/rain_daily_$site.json" ]; then
     $PY pipeline/context/rain.py --site "$site" --start "$SEASON_START" --end "$SEASON_END" --out "$L"
+    $PY pipeline/season.py --rain "$L/rain_daily_$site.json" > /dev/null     # writes the season dates to validation.json
   fi
 done
 
 echo "== 6. recovery after the rain"
 for site in $SITES; do
-  $PY pipeline/recovery/recovery.py --site "$site" --track $ASC --other-track $DESC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
-  $PY pipeline/recovery/recovery.py --site "$site" --track $DESC --other-track $ASC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
-  $PY pipeline/recovery/sensitivity.py --site "$site" --track $ASC --other-track $DESC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
-  $PY pipeline/recovery/sensitivity.py --site "$site" --track $DESC --other-track $ASC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
+  $PY pipeline/recovery/recovery.py --site "$site" --track $ASC --other-track $DESC --start-from "$START_FROM" --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
+  $PY pipeline/recovery/recovery.py --site "$site" --track $DESC --other-track $ASC --start-from "$START_FROM" --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
+  $PY pipeline/recovery/sensitivity.py --site "$site" --track $ASC --other-track $DESC --start-from "$START_FROM" --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
+  $PY pipeline/recovery/sensitivity.py --site "$site" --track $DESC --other-track $ASC --start-from "$START_FROM" --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
 done
 
 echo "== 6b. split by peat and fire (skips a site until track 3's layers are in $L)"
@@ -93,7 +102,7 @@ $PY pipeline/drying/split.py --layers "$L" --sites $SITES --tracks $ASC $DESC
 echo "== 6c. fusion: one record per 1 km block (skips a site until the fire, peat and canal layers exist)"
 for site in $SITES; do
   if [ -f "$L/fire_days_$site.tif" ] && [ -f "$L/peat_peatmap_$site.tif" ] && [ -f "$L/canal_distance_$site.tif" ]; then
-    $PY pipeline/fusion/blocks.py --site "$site" --tracks $ASC $DESC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L" --out pipeline/out/blocks
+    $PY pipeline/fusion/blocks.py --site "$site" --tracks $ASC $DESC --start-from "$START_FROM" --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L" --out pipeline/out/blocks
     if [ -d "data/firms/$site" ]; then
       $PY pipeline/fusion/hindcast.py --site "$site" --tracks $ASC $DESC --layers "$L" --firms "data/firms/$site" --out pipeline/out/blocks
     fi
@@ -102,7 +111,7 @@ done
 
 echo "== 7. checks"
 $PY pipeline/drying/selfcheck.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL" > "$L/selfcheck_report.json"
-$PY pipeline/drying/sensitivity.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL"
+$PY pipeline/drying/sensitivity.py --stacks "$S" --layers "$L" --start-from "$START_FROM" --dry-until "$DRY_UNTIL"
 
 echo "== 8. the map"
 $PY pipeline/drying/one_look_map.py --layers "$L" --stacks "$S" --sites $SITES --tracks $ASC $DESC --min-db 1 --out pipeline/out/one_look_map.png > /dev/null
