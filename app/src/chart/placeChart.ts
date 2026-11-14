@@ -1,222 +1,419 @@
 // Written with Super Intelligence (SI) assistance.
-// The click-a-place chart: HH and HV over the season for both orbits, with daily rain
-// and fire dates under it. Plain DOM and SVG, no chart library.
+// Click a place: reads the time series of that cell (docs/DATA_CONTRACT.md section 4) and draws
+// HH and HV over the season for both orbits, with a plain reading of what HH did, the days
+// with a fire detection in that cell, and daily rain.
 //
-// Wiring it to the map takes three lines:
-//
-//   import { createPlaceChart } from "./chart/placeChart";
-//   const chart = createPlaceChart(panelElement, { base: import.meta.env.BASE_URL, sites: ["west", "east"] });
-//   map.on("click", (e) => chart.show(e.lngLat.lng, e.lngLat.lat));
+//   createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
+import { Marker, type Map as MapLibreMap } from "maplibre-gl";
+import { asset, fetchJson, formatDay, monthName, parseDay } from "../data";
+import { h } from "../dom";
+import type { Overlays } from "../overlays";
 
-import "./placeChart.css";
-import { PlaceData, type Line, type Place } from "./data";
-
-export interface PlaceChartOptions {
-  base: string; // site root with a trailing slash, for example import.meta.env.BASE_URL
-  sites: string[]; // for example ["west", "east"]
-  onClose?: () => void;
+interface Band {
+  track: string;
+  pol: string;
+  date: string;
 }
 
-export interface PlaceChart {
-  /** Draws the chart for a point. Resolves to false when the point is outside every site. */
-  show(lon: number, lat: number): Promise<boolean>;
-  hide(): void;
-  /** True when a time series file was found. Use it to decide whether to offer the chart at all. */
-  available(): Promise<boolean>;
+interface SeriesMeta {
+  site: string;
+  bounds: [number, number, number, number];
+  cell_deg: number;
+  rows: number;
+  cols: number;
+  scale: number;
+  offset: number;
+  nodata: number;
+  bands: Band[];
 }
 
-const DAY = 86_400_000;
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const ORBIT: Record<string, string> = { "125": "dawn", "010": "dawn", "061": "dusk", "119": "dusk" };
-
-const day = (date: string) => Date.parse(`${date}T00:00:00Z`);
-const shortDate = (date: string) => `${Number(date.slice(8, 10))} ${MONTHS[Number(date.slice(5, 7)) - 1]}`;
-const signed = (value: number, digits = 1) => value.toFixed(digits).replace("-", "−");
-const escapeHtml = (text: string) =>
-  text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
-
-function coordinates(lon: number, lat: number): string {
-  return `${Math.abs(lat).toFixed(3)}° ${lat < 0 ? "S" : "N"}, ${Math.abs(lon).toFixed(3)}° ${lon < 0 ? "W" : "E"}`;
+interface SiteFiles {
+  series: string;
+  bin: string;
+  rain: string | null;
+  fires?: string | null; // fire dates per cell, contract section 4
 }
 
-function lineName(line: Line): string {
-  const orbit = ORBIT[line.track];
-  return `${line.pol.toUpperCase()}, track ${line.track}${orbit ? ` (${orbit})` : ""}`;
+interface Site {
+  meta: SeriesMeta;
+  files: SiteFiles;
+  bin?: Promise<Uint8Array | null>;
+  rain?: Promise<Record<string, number> | null>;
+  fires?: Promise<Record<string, string[]> | null>;
 }
 
-/** Tick values that cover lo to hi with a step of 1, 2 or 5 dB. */
-function ticks(lo: number, hi: number, most: number): number[] {
-  const step = [1, 2, 5, 10, 20].find((s) => (hi - lo) / s <= most) ?? 50;
-  const out: number[] = [];
-  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(v);
-  return out;
+interface Pass {
+  date: string;
+  track: string;
+  hh: number | null;
+  hv: number | null;
 }
 
-export function createPlaceChart(root: HTMLElement, options: PlaceChartOptions): PlaceChart {
-  const data = new PlaceData(options.base, options.sites);
-  root.classList.add("pc");
-  root.hidden = true;
-  root.innerHTML = `
-    <div class="pc-head">
-      <div><div class="pc-title"></div><div class="pc-sub"></div></div>
-      <button class="pc-close" type="button" aria-label="Close the chart">×</button>
-    </div>
-    <div class="pc-body"></div>`;
-  const title = root.querySelector<HTMLElement>(".pc-title")!;
-  const sub = root.querySelector<HTMLElement>(".pc-sub")!;
-  const body = root.querySelector<HTMLElement>(".pc-body")!;
-  let current: Place | null = null;
-  let request = 0;
+// Two series colours checked for colour-blind separation and contrast on the dark panel.
+const TRACK_COLORS = ["#c98500", "#3987e5"];
+const SVG = "http://www.w3.org/2000/svg";
+const W = 320;
+const LEFT = 36;
+const RIGHT = 10;
+const PANEL_H = 84;
+const PANEL_GAP = 22;
+const AXIS_H = 18;
+const TOP = 18;
+const RAIN_H = 34;
+const FIRE_H = 14;
 
-  const hide = () => {
-    request++;
-    current = null;
-    root.hidden = true;
-    options.onClose?.();
-  };
-  root.querySelector(".pc-close")!.addEventListener("click", hide);
+function svg<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}, text?: string): SVGElementTagNameMap[K] {
+  const el = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
 
-  // Redraw at the real width so the text keeps its size on a phone.
-  let drawnWidth = 0;
-  new ResizeObserver(() => {
-    if (current && Math.abs(body.clientWidth - drawnWidth) > 4) draw(current);
-  }).observe(body);
+function db(value: number): string {
+  return `${value.toFixed(1)} dB`;
+}
 
-  function message(text: string) {
-    body.innerHTML = `<p class="pc-note">${escapeHtml(text)}</p>`;
+function mean(values: number[]): number {
+  return values.reduce((a, b) => a + b, 0) / values.length;
+}
+
+// A plain sentence on HH for one orbit: start of the season against its lowest later level,
+// each taken as the mean of two passes, and what the last pass did after that.
+function reading(passes: Pass[], orbit: string): string | null {
+  const v = passes.filter((p) => p.hh !== null).map((p) => ({ date: p.date, hh: p.hh as number }));
+  if (v.length < 4) return null;
+  const start = mean([v[0].hh, v[1].hh]);
+  let low = Infinity;
+  let lowAt = 3;
+  for (let i = 3; i < v.length; i += 1) {
+    const level = mean([v[i - 1].hh, v[i].hh]);
+    if (level < low) {
+      low = level;
+      lowAt = i;
+    }
+  }
+  const name = orbit.charAt(0).toUpperCase() + orbit.slice(1);
+  const fall = Math.round((start - low) * 10) / 10;
+  if (fall < 0.1) return `${name} pass: HH did not fall below its ${monthName(v[0].date)} level.`;
+  let text = `${name} pass: HH fell ${fall.toFixed(1)} dB from ${monthName(v[0].date)} to ${monthName(v[lowAt].date)}`;
+  const last = v[v.length - 1];
+  const rise = Math.round((last.hh - low) * 10) / 10;
+  // When the lowest level and the last pass share a month, name the day so the sentence still reads.
+  const until = monthName(last.date) === monthName(v[lowAt].date) ? `${parseDay(last.date).getUTCDate()} ${monthName(last.date)}` : monthName(last.date);
+  if (lowAt < v.length - 1 && rise >= 0.1) text += `, then rose ${rise.toFixed(1)} dB by ${until}`;
+  return `${text}.`;
+}
+
+/** Draws the chart in `root` whenever the map is clicked. `onOpen` runs when a place is picked. */
+export function createPlaceChart(root: HTMLElement, map: MapLibreMap, overlays: Overlays, onOpen: () => void): PlaceChart {
+  return new PlaceChart(root, map, overlays, onOpen);
+}
+
+export class PlaceChart {
+  private sites: Promise<Site[]> | undefined;
+  private marker: Marker | undefined;
+  private request = 0;
+  private drawn: (() => void) | undefined;
+
+  constructor(
+    private root: HTMLElement,
+    private map: MapLibreMap,
+    private overlays: Overlays,
+    private onOpen: () => void,
+  ) {
+    this.hint();
+    map.on("click", (event) => void this.pick(event.lngLat.lng, event.lngLat.lat));
+    overlays.onChange(() => this.drawn?.());
   }
 
-  function draw(place: Place) {
-    drawnWidth = body.clientWidth;
-    const points = place.lines.flatMap((line) => line.points);
-    if (points.length === 0) {
-      message("No radar data at this place.");
+  private hint(): void {
+    this.root.classList.remove("has-data");
+    this.root.replaceChildren(h("h2", { text: "Place" }), h("p", { class: "note", text: "Click the map to see how the radar signal changed at that place over the season." }));
+  }
+
+  private close(): void {
+    this.marker?.remove();
+    this.marker = undefined;
+    this.drawn = undefined;
+    this.request += 1;
+    this.hint();
+  }
+
+  private loadSites(): Promise<Site[]> {
+    this.sites ??= (async () => {
+      const index = await fetchJson<Record<string, SiteFiles>>("series/index.json");
+      const out: Site[] = [];
+      for (const files of Object.values(index ?? {})) {
+        const meta = await fetchJson<SeriesMeta>(files.series);
+        if (meta && Array.isArray(meta.bands) && Array.isArray(meta.bounds)) out.push({ meta, files });
+      }
+      return out;
+    })();
+    return this.sites;
+  }
+
+  private static cell(meta: SeriesMeta, lon: number, lat: number): number | null {
+    const [west, , , north] = meta.bounds;
+    const col = Math.floor((lon - west) / meta.cell_deg);
+    const row = Math.floor((north - lat) / meta.cell_deg);
+    return col >= 0 && col < meta.cols && row >= 0 && row < meta.rows ? row * meta.cols + col : null;
+  }
+
+  private static passes(meta: SeriesMeta, bin: Uint8Array, cell: number): Pass[] {
+    const byKey = new Map<string, Pass>();
+    meta.bands.forEach((band, k) => {
+      const byte = bin[k * meta.rows * meta.cols + cell];
+      const value = byte === undefined || byte === meta.nodata ? null : byte * meta.scale + meta.offset;
+      const key = `${band.date}|${band.track}`;
+      const pass = byKey.get(key) ?? { date: band.date, track: band.track, hh: null, hv: null };
+      if (band.pol === "hh") pass.hh = value;
+      if (band.pol === "hv") pass.hv = value;
+      byKey.set(key, pass);
+    });
+    return [...byKey.values()].sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  private async pick(lon: number, lat: number): Promise<void> {
+    const request = (this.request += 1);
+    this.marker ??= new Marker({ element: h("div", { class: "place-marker" }) });
+    this.marker.setLngLat([lon, lat]).addTo(this.map);
+    const where = `${Math.abs(lat).toFixed(3)} ${lat < 0 ? "S" : "N"}, ${Math.abs(lon).toFixed(3)} ${lon < 0 ? "W" : "E"}`;
+    const closeButton = h("button", { type: "button", class: "text-button small", text: "Close" });
+    closeButton.addEventListener("click", () => this.close());
+    const body = h("div", { class: "place-body" }, h("p", { class: "note", text: "Loading the radar series." }));
+    this.drawn = undefined;
+    this.root.classList.add("has-data");
+    this.root.replaceChildren(h("div", { class: "panel-head" }, h("h2", { text: "Place" }), h("span", { class: "where", text: where }), closeButton), body);
+    this.onOpen();
+
+    const sites = await this.loadSites();
+    if (request !== this.request) return;
+    if (!sites.length) {
+      body.replaceChildren(h("p", { class: "note", text: "The radar series is not loaded yet, so there is no chart." }));
       return;
     }
-    const width = Math.max(260, drawnWidth);
-    const left = 34, right = 8;
-    const top = 8, radarH = 150, fireH = 16, rainH = 56, gap = 6, axisH = 18;
-    const fireY = top + radarH + gap;
-    const rainY = fireY + fireH + gap;
-    const height = rainY + rainH + axisH;
-
-    const t0 = day(place.season[0]) - 4 * DAY;
-    const t1 = day(place.season[1]) + 4 * DAY;
-    const x = (ms: number) => left + ((ms - t0) / (t1 - t0)) * (width - left - right);
-    const dbs = points.map((p) => p.db);
-    const lo = Math.floor(Math.min(...dbs) - 0.5), hi = Math.ceil(Math.max(...dbs) + 0.5);
-    const y = (db: number) => top + ((hi - db) / (hi - lo)) * radarH;
-    const rain = place.rain.filter((r) => day(r.date) >= t0 && day(r.date) <= t1);
-    const rainMax = Math.ceil(Math.max(10, ...rain.map((r) => r.mm)) / 10) * 10;
-    const fires = place.fires.filter((d) => day(d) >= t0 && day(d) <= t1);
-
-    let svg = `<svg class="pc-svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="Radar brightness, rain and fire over the season at ${coordinates(place.lon, place.lat)}">`;
-    // Month grid, shared by the three panels.
-    const start = new Date(t0);
-    for (let m = Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 1); m <= t1; ) {
-      const d = new Date(m);
-      svg += `<line class="pc-grid" x1="${x(m)}" x2="${x(m)}" y1="${top}" y2="${rainY + rainH}"/>`;
-      if (x(m) < width - right - 14) svg += `<text class="pc-tick" x="${x(m) + 3}" y="${height - 5}">${MONTHS[d.getUTCMonth()]}</text>`;
-      m = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1);
+    let passes: Pass[] = [];
+    let site: Site | undefined;
+    let cellIndex = -1;
+    for (const candidate of sites) {
+      const cell = PlaceChart.cell(candidate.meta, lon, lat);
+      if (cell === null) continue;
+      candidate.bin ??= fetch(asset(candidate.files.bin))
+        .then((res) => (res.ok ? res.arrayBuffer() : null))
+        .then((buffer) => (buffer ? new Uint8Array(buffer) : null))
+        .catch(() => null);
+      const bin = await candidate.bin;
+      if (request !== this.request) return;
+      if (!bin) continue;
+      const found = PlaceChart.passes(candidate.meta, bin, cell);
+      if (found.some((p) => p.hh !== null || p.hv !== null)) {
+        passes = found;
+        site = candidate;
+        cellIndex = cell;
+        break;
+      }
     }
-    for (const v of ticks(lo, hi, 5)) {
-      svg += `<line class="pc-grid" x1="${left}" x2="${width - right}" y1="${y(v)}" y2="${y(v)}"/>`;
-      svg += `<text class="pc-tick" x="${left - 4}" y="${y(v) + 3}" text-anchor="end">${signed(v, 0)}</text>`;
+    if (!site) {
+      body.replaceChildren(h("p", { class: "note", text: "There is no radar series at this place. Click inside the study area." }));
+      return;
     }
-    svg += `<text class="pc-axis" x="${left + 3}" y="${top + 9}">dB</text>`;
-    for (const line of place.lines) {
-      const cls = `pc-${line.pol} pc-t${place.lines.filter((l) => l.pol === line.pol).indexOf(line)}`;
-      const path = line.points.map((p, i) => `${i ? "L" : "M"}${x(day(p.date)).toFixed(1)} ${y(p.db).toFixed(1)}`).join("");
-      svg += `<path class="pc-line ${cls}" d="${path}"/>`;
-      for (const p of line.points) svg += `<circle class="pc-dot ${cls}" cx="${x(day(p.date)).toFixed(1)}" cy="${y(p.db).toFixed(1)}" r="2.6"/>`;
+    let rain: Record<string, number> | null = null;
+    if (site.files.rain) {
+      site.rain ??= fetchJson<Record<string, number>>(site.files.rain);
+      rain = await site.rain;
+      if (request !== this.request) return;
     }
-    // Fire dates.
-    svg += `<text class="pc-axis" x="${left - 4}" y="${fireY + 11}" text-anchor="end">fire</text>`;
-    svg += `<line class="pc-grid" x1="${left}" x2="${width - right}" y1="${fireY + fireH / 2}" y2="${fireY + fireH / 2}"/>`;
-    for (const d of fires) svg += `<rect class="pc-fire" x="${(x(day(d)) - 1.5).toFixed(1)}" y="${fireY + 1}" width="3" height="${fireH - 2}"><title>Fire detected on ${shortDate(d)}</title></rect>`;
-    // Daily rain.
-    svg += `<text class="pc-tick" x="${left - 4}" y="${rainY + 9}" text-anchor="end">${Math.round(rainMax)}</text>`;
-    svg += `<text class="pc-axis" x="${left + 3}" y="${rainY + 9}">mm of rain per day</text>`;
-    svg += `<text class="pc-tick" x="${left - 4}" y="${rainY + rainH}" text-anchor="end">0</text>`;
-    svg += `<line class="pc-base" x1="${left}" x2="${width - right}" y1="${rainY + rainH}" y2="${rainY + rainH}"/>`;
-    const bar = Math.max(1, (width - left - right) / ((t1 - t0) / DAY) - 0.5);
-    for (const r of rain) {
-      const h = (r.mm / rainMax) * rainH;
-      if (h > 0.2) svg += `<rect class="pc-rain" x="${(x(day(r.date)) - bar / 2).toFixed(1)}" y="${(rainY + rainH - h).toFixed(1)}" width="${bar.toFixed(1)}" height="${h.toFixed(1)}"/>`;
+    // Fire dates exist only once track 3 has exported them. null means "not loaded", [] means "none here".
+    let fires: string[] | null = null;
+    if (site.files.fires) {
+      site.fires ??= fetchJson<Record<string, string[]>>(site.files.fires);
+      const byCell = await site.fires;
+      if (request !== this.request) return;
+      if (byCell) fires = [...(byCell[String(cellIndex)] ?? [])].sort();
     }
-    svg += `<line class="pc-cursor" y1="${top}" y2="${rainY + rainH}" hidden/>`;
-    svg += `<rect class="pc-hit" x="${left}" y="${top}" width="${width - left - right}" height="${rainY + rainH - top}"/></svg>`;
-
-    const key = place.lines
-      .map((line) => {
-        const cls = `pc-${line.pol} pc-t${place.lines.filter((l) => l.pol === line.pol).indexOf(line)}`;
-        return `<span class="pc-key"><svg width="22" height="8"><path class="pc-line ${cls}" d="M1 4H21"/><circle class="pc-dot ${cls}" cx="11" cy="4" r="2.6"/></svg>${escapeHtml(lineName(line))}</span>`;
-      })
-      .join("");
-    const notes = [
-      rain.length ? "" : "Rain data is not loaded yet.",
-      fires.length ? "" : "No fire detection is recorded for this place.",
-    ].filter(Boolean).join(" ");
-    body.innerHTML = `<div class="pc-keys">${key}</div>${svg}<div class="pc-read" aria-live="polite"></div>` +
-      `<p class="pc-note">Radar: backscatter averaged over about 250 m. Rain: daily mean over the whole study box, not this place. ${notes}</p>`;
-
-    // Touch or hover: read the values of the nearest radar pass.
-    const read = body.querySelector<HTMLElement>(".pc-read")!;
-    const cursor = body.querySelector<SVGLineElement>(".pc-cursor")!;
-    const svgEl = body.querySelector<SVGSVGElement>(".pc-svg")!;
-    const passDates = [...new Set(points.map((p) => p.date))].sort();
-    const rainOn = new Map(rain.map((r) => [r.date, r.mm]));
-    const readAt = (clientX: number) => {
-      const box = svgEl.getBoundingClientRect();
-      const ms = t0 + ((clientX - box.left - left) / (width - left - right)) * (t1 - t0);
-      const date = passDates.reduce((best, d) => (Math.abs(day(d) - ms) < Math.abs(day(best) - ms) ? d : best));
-      cursor.setAttribute("x1", String(x(day(date))));
-      cursor.setAttribute("x2", String(x(day(date))));
-      cursor.removeAttribute("hidden");
-      const parts = place.lines.flatMap((line) => {
-        const p = line.points.find((q) => q.date === date);
-        return p ? [`${line.pol.toUpperCase()} ${signed(p.db)} dB (track ${line.track})`] : [];
-      });
-      const mm = rainOn.get(date);
-      if (mm !== undefined) parts.push(`rain ${mm.toFixed(1)} mm`);
-      if (fires.includes(date)) parts.push("fire detected");
-      read.textContent = `${shortDate(date)}: ${parts.join(", ")}`;
-    };
-    const hit = body.querySelector<SVGRectElement>(".pc-hit")!;
-    hit.addEventListener("pointermove", (e) => readAt(e.clientX));
-    hit.addEventListener("pointerdown", (e) => readAt(e.clientX));
-    read.textContent = "Touch the chart to read a radar pass.";
+    this.draw(body, passes, [...new Set(site.meta.bands.map((b) => b.track))], rain, fires);
   }
 
-  return {
-    available: () => data.available(),
-    hide,
-    async show(lon, lat) {
-      const mine = ++request;
-      let place: Place | null;
-      try {
-        place = await data.at(lon, lat);
-      } catch (error) {
-        if (mine !== request) return true;
-        current = null;
-        title.textContent = coordinates(lon, lat);
-        sub.textContent = "";
-        root.hidden = false;
-        message("The time series could not be loaded. Check the connection and click again.");
-        console.error(error);
-        return true;
+  private draw(body: HTMLElement, passes: Pass[], tracks: string[], rain: Record<string, number> | null, fires: string[] | null): void {
+    const orbitOf = (track: string): string => this.overlays.layers.find((l) => l.track === track && l.orbit)?.orbit ?? `track ${track}`;
+    const color = (track: string): string => TRACK_COLORS[tracks.indexOf(track) % TRACK_COLORS.length];
+
+    const lines = tracks.map((t) => reading(passes.filter((p) => p.track === t), orbitOf(t))).filter((t): t is string => Boolean(t));
+    const readingBox = h("div", { class: "reading" }, ...lines.map((t) => h("p", { text: t })));
+
+    const legend = h("div", { class: "chart-legend" });
+    for (const t of tracks) {
+      const key = h("span", { class: "line-key" });
+      key.style.background = color(t);
+      const name = orbitOf(t);
+      legend.append(h("span", { class: "legend-item" }, key, `${name.charAt(0).toUpperCase()}${name.slice(1)} pass, track ${t}`));
+    }
+
+    // Shared time axis; one panel per polarisation, both with the same span in decibels.
+    const t0 = parseDay(passes[0].date).getTime();
+    const t1 = parseDay(passes[passes.length - 1].date).getTime();
+    const x = (iso: string): number => LEFT + ((parseDay(iso).getTime() - t0) / Math.max(1, t1 - t0)) * (W - LEFT - RIGHT);
+    const pols = (["hh", "hv"] as const).filter((pol) => passes.some((p) => p[pol] !== null));
+    const ranges = pols.map((pol) => {
+      const values = passes.map((p) => p[pol]).filter((v): v is number => v !== null);
+      return [Math.min(...values), Math.max(...values)];
+    });
+    const span = Math.max(2, ...ranges.map(([lo, hi]) => Math.ceil((hi - lo) * 1.15)));
+    const rows = pols.length + (fires ? 1 : 0) + (rain ? 1 : 0);
+    const height = TOP + pols.length * PANEL_H + (fires ? FIRE_H : 0) + (rain ? RAIN_H : 0) + (rows - 1) * PANEL_GAP + AXIS_H;
+    const fireTop = TOP + pols.length * (PANEL_H + PANEL_GAP);
+    const rainTop = fireTop + (fires ? FIRE_H + PANEL_GAP : 0);
+    const fireDays = (fires ?? []).filter((day) => parseDay(day).getTime() >= t0 && parseDay(day).getTime() <= t1);
+    const chart = svg("svg", { viewBox: `0 0 ${W} ${height}`, class: "chart", role: "img", tabindex: 0, "aria-label": "HH and HV backscatter over the season at the clicked place, for both orbits. Use the arrow keys to read single passes." });
+
+    const months: string[] = [];
+    for (let d = new Date(Date.UTC(new Date(t0).getUTCFullYear(), new Date(t0).getUTCMonth() + 1, 1)); d.getTime() <= t1; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) {
+      months.push(d.toISOString().slice(0, 10));
+    }
+    const panelTop = (k: number): number => TOP + k * (PANEL_H + PANEL_GAP);
+    const scales: ((v: number) => number)[] = [];
+    pols.forEach((pol, k) => {
+      const top = panelTop(k);
+      const mid = (ranges[k][0] + ranges[k][1]) / 2;
+      const lo = Math.round(mid - span / 2);
+      const y = (v: number): number => top + PANEL_H - ((v - lo) / span) * PANEL_H;
+      scales.push(y);
+      chart.append(svg("text", { x: 0, y: top - 6, class: "chart-title" }, `${pol.toUpperCase()} brightness, dB`));
+      for (const tick of [lo, lo + span / 2, lo + span]) {
+        chart.append(svg("line", { x1: LEFT, x2: W - RIGHT, y1: y(tick), y2: y(tick), class: "grid" }));
+        chart.append(svg("text", { x: LEFT - 6, y: y(tick) + 4, class: "tick", "text-anchor": "end" }, String(Math.round(tick * 10) / 10)));
       }
-      if (mine !== request) return true; // a newer click won
-      if (!place) {
-        if (!root.hidden) hide();
-        return false;
+      for (const m of months) {
+        chart.append(svg("line", { x1: x(m), x2: x(m), y1: top + PANEL_H, y2: top + PANEL_H + 4, class: "grid" }));
       }
-      current = place;
-      title.textContent = coordinates(lon, lat);
-      sub.textContent = `Radar brightness, ${shortDate(place.season[0])} to ${shortDate(place.season[1])} ${place.season[1].slice(0, 4)}`;
-      root.hidden = false;
-      draw(place);
-      return true;
-    },
-  };
+      for (const t of tracks) {
+        const pts = passes.filter((p) => p.track === t);
+        let path = "";
+        let pen = false;
+        for (const p of pts) {
+          const v = p[pol];
+          if (v === null) {
+            pen = false; // a pass without data breaks the line
+            continue;
+          }
+          path += `${pen ? "L" : "M"}${x(p.date).toFixed(1)},${y(v).toFixed(1)}`;
+          pen = true;
+        }
+        chart.append(svg("path", { d: path, fill: "none", stroke: color(t), "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+        for (const p of pts) {
+          const v = p[pol];
+          if (v !== null) chart.append(svg("circle", { cx: x(p.date), cy: y(v), r: 4, fill: color(t), class: "dot" }));
+        }
+      }
+    });
+
+    if (fires) {
+      chart.append(svg("text", { x: 0, y: fireTop - 6, class: "chart-title" }, fireDays.length ? "Days with a fire detection here" : "No fire detection here this season"));
+      chart.append(svg("line", { x1: LEFT, x2: W - RIGHT, y1: fireTop + FIRE_H, y2: fireTop + FIRE_H, class: "grid" }));
+      for (const day of fireDays) {
+        chart.append(svg("rect", { x: x(day) - 1.5, y: fireTop, width: 3, height: FIRE_H, class: "fire" }));
+      }
+    }
+
+    if (rain) {
+      const top = rainTop;
+      const days = Object.entries(rain).filter(([day]) => parseDay(day).getTime() >= t0 && parseDay(day).getTime() <= t1);
+      const most = Math.max(1, ...days.map(([, mm]) => mm));
+      chart.append(svg("text", { x: 0, y: top - 6, class: "chart-title" }, "Rain, mm per day"));
+      chart.append(svg("line", { x1: LEFT, x2: W - RIGHT, y1: top + RAIN_H, y2: top + RAIN_H, class: "grid" }));
+      chart.append(svg("text", { x: LEFT - 6, y: top + 8, class: "tick", "text-anchor": "end" }, String(Math.round(most))));
+      for (const [day, mm] of days) {
+        if (mm > 0) chart.append(svg("line", { x1: x(day), x2: x(day), y1: top + RAIN_H, y2: top + RAIN_H - (mm / most) * RAIN_H, class: "rain" }));
+      }
+    }
+
+    // One time axis for all panels: the month names sit under the last one.
+    for (const m of months) {
+      chart.append(svg("text", { x: x(m), y: height - 4, class: "tick", "text-anchor": "middle" }, monthName(m).slice(0, 3)));
+    }
+
+    // Reading single passes: a hairline that snaps to the nearest pass, by pointer or arrow keys.
+    const bottom = panelTop(pols.length - 1) + PANEL_H;
+    const sliderLine = svg("line", { y1: TOP, y2: bottom, class: "slider-line" });
+    const hair = svg("line", { y1: TOP, y2: bottom, class: "hair" });
+    const rings = pols.map(() => svg("circle", { r: 6, class: "ring" }));
+    chart.append(sliderLine, hair, ...rings);
+    const readout = h("p", { class: "readout", "aria-live": "polite" });
+    let focus = -1;
+    const show = (index: number): void => {
+      focus = index;
+      const p = passes[index];
+      hair.style.display = p ? "" : "none";
+      rings.forEach((ring, k) => {
+        const v = p ? p[pols[k]] : null;
+        ring.style.display = v === null ? "none" : "";
+        if (p && v !== null) {
+          ring.setAttribute("cx", String(x(p.date)));
+          ring.setAttribute("cy", String(scales[k](v)));
+          ring.setAttribute("stroke", color(p.track));
+        }
+      });
+      if (!p) {
+        readout.textContent = "Point at the chart, or use the arrow keys, to read a single pass.";
+        return;
+      }
+      hair.setAttribute("x1", String(x(p.date)));
+      hair.setAttribute("x2", String(x(p.date)));
+      const values = pols.map((pol) => `${pol.toUpperCase()} ${p[pol] === null ? "no data" : db(p[pol] as number)}`).join(", ");
+      const burning = fireDays.includes(p.date) ? ". A fire was detected here that day" : "";
+      readout.replaceChildren(h("strong", { text: values }), ` on ${formatDay(p.date)}, ${orbitOf(p.track)} pass${burning}`);
+    };
+    const nearest = (clientX: number): number => {
+      const box = chart.getBoundingClientRect();
+      const at = ((clientX - box.left) / box.width) * W;
+      let best = 0;
+      passes.forEach((p, k) => {
+        if (Math.abs(x(p.date) - at) < Math.abs(x(passes[best].date) - at)) best = k;
+      });
+      return best;
+    };
+    chart.addEventListener("pointermove", (event) => show(nearest(event.clientX)));
+    chart.addEventListener("pointerdown", (event) => show(nearest(event.clientX)));
+    chart.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse") show(-1);
+    });
+    chart.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      const move = event.key === "ArrowRight" ? 1 : -1;
+      show(Math.min(passes.length - 1, Math.max(0, focus < 0 ? (move > 0 ? 0 : passes.length - 1) : focus + move)));
+    });
+    show(-1);
+
+    // The pass the season slider is on, when the map is stepping through passes.
+    this.drawn = (): void => {
+      const step = this.overlays.step;
+      sliderLine.style.display = step ? "" : "none";
+      if (step) {
+        const at = Math.min(W - RIGHT, Math.max(LEFT, x(step.date)));
+        sliderLine.setAttribute("x1", String(at));
+        sliderLine.setAttribute("x2", String(at));
+      }
+    };
+    this.drawn();
+
+    const tableRows = passes.map((p) =>
+      h("tr", {}, h("td", { text: formatDay(p.date) }), h("td", { text: orbitOf(p.track) }), ...pols.map((pol) => h("td", { class: "num", text: p[pol] === null ? "" : (p[pol] as number).toFixed(1) }))),
+    );
+    const table = h(
+      "details",
+      { class: "chart-table" },
+      h("summary", { text: "Show the values as a table" }),
+      h("table", {}, h("thead", {}, h("tr", {}, h("th", { text: "Pass" }), h("th", { text: "Orbit" }), ...pols.map((pol) => h("th", { class: "num", text: `${pol.toUpperCase()}, dB` })))), h("tbody", {}, ...tableRows)),
+    );
+
+    body.replaceChildren(
+      readingBox,
+      legend,
+      chart,
+      readout,
+      table,
+      h("p", { class: "note", text: "Brightness is the average of the cell you clicked, with the scene-wide shift of each pass removed. It shows change in the radar signal, not a water level." }),
+    );
+  }
 }

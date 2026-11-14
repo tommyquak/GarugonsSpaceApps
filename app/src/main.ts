@@ -4,7 +4,7 @@ import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import { baseStyle } from "./basemaps";
-import { PlaceChart } from "./chart";
+import { createPlaceChart } from "./chart/placeChart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
 import { byId } from "./dom";
@@ -62,7 +62,7 @@ async function start(): Promise<void> {
   byId("tab-place").addEventListener("click", () => toggleTab("place"));
   byId("tab-story").addEventListener("click", () => (story.isOpen() ? toggleTab("story") : story.open()));
   setTab("");
-  new PlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
+  createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
 }
 
 void start();

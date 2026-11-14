@@ -65,6 +65,8 @@ The grid is regular in longitude and latitude, so the app finds a cell without a
 
 `series_<site>.bin` is unsigned bytes, one `rows * cols` image per entry of `bands`, in that order, each stored row by row from the north-west corner. Decibels = `byte * scale + offset`. A byte of 0 means no data. Values are backscatter with the scene-wide shift removed, averaged over about 250 m.
 
+`fire_dates_<site>.json` (track 3 writes, optional, same folder): the days with a fire detection in each cell of the grid of `series_<site>.json`, as `{ "<row * cols + col>": ["YYYY-MM-DD", ...] }`. A cell without a detection has no key. The chart shows these days under the radar lines.
+
 ## 5. App files (track 4 owns; committed)
 
 - `app/public/layers/<id>.png`: a layer drawn as an image, in Web Mercator.
