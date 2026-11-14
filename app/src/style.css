@@ -795,10 +795,10 @@ input[type="range"]::-moz-range-thumb {
 
 .op-key {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  margin-top: 14px;
-  font-size: 14px;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 15px;
 }
 
 .op-key:empty {

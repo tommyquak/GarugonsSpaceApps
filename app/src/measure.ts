@@ -174,13 +174,13 @@ export async function buildMeasure(root: HTMLElement, overlays: Overlays): Promi
     const at = step ? data.passes.findIndex((p) => p.date === step.date && p.track === step.track) : -1;
     points.forEach((dot, k) => dot.classList.toggle("is-now", k === at));
     if (at < 0) {
-      head.setAttribute("visibility", "hidden");
+      head.style.display = "none"; // not the visibility attribute: that would show through a hidden panel
       now.textContent = "The whole season. The fall on the map is the late passes minus the start passes.";
       role.textContent = "Press play, drag the slider or click a point to follow the measurement pass by pass.";
       return;
     }
     const p = data.passes[at];
-    head.setAttribute("visibility", "visible");
+    head.style.display = "";
     head.setAttribute("x1", String(x(p.date)));
     head.setAttribute("x2", String(x(p.date)));
     const day = Math.round((parseDay(p.date).getTime() - t0) / 86_400_000);

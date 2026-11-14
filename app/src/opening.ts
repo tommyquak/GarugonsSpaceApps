@@ -87,12 +87,12 @@ const BEATS: Beat[] = [
   },
   {
     map: "check",
-    head: "After the rain, some land had not come back. Start there.",
-    sub: () => "A screening map from one season.",
+    head: "After the rain, some land had not come back. That is where a field team should look first.",
+    sub: () => "Each square is one kilometre. The map opens on this view, with a ranked list and coordinates to take into the field.",
     key: [
-      { color: "#ff3b30", label: "Most affected" },
-      { color: "#ff9f0a", label: "Affected" },
-      { color: "#f2d98a", label: "Changed, then recovered" },
+      { color: "#ff3b30", label: "Fire on several days, and the vegetation has not returned" },
+      { color: "#ff9f0a", label: "The radar echo fell and is still low" },
+      { color: "#f2d98a", label: "Changed, then recovered with the rain" },
     ],
   },
 ];
@@ -159,7 +159,12 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     root = made;
 
     const showMap = (view: "season" | "check"): void => {
-      if (extent) map.fitBounds(extent, { padding: { top: 90, bottom: 260, left: 48, right: 48 }, animate: false });
+      // The caption takes the left of a wide view and the bottom of a narrow one; the map is framed in the rest.
+      const wide = window.innerWidth >= 900;
+      const room = wide
+        ? { top: 96, bottom: 110, left: Math.min(760, Math.round(window.innerWidth * 0.5)), right: 40 }
+        : { top: 80, bottom: Math.round(window.innerHeight * 0.52), left: 16, right: 16 };
+      if (extent) map.fitBounds(extent, { padding: room, animate: false });
       if (view === "season") {
         actions.apply([], null);
         overlays.setPassFire(true);
