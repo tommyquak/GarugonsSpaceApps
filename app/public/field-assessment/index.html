@@ -1,11 +1,11 @@
-<!-- Written with Super Intelligence (SI) assistance. Standalone visual prototype; not wired into the app. -->
+<!-- Written with Super Intelligence (SI) assistance. The field assessment to print: three pages of paper on a table. Its figures are read from ../validation.json and its blocks from ../blocks/, the app's own files. -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101416">
-  <title>Field assessment · visual draft</title>
+  <title>Field assessment · Dry Season Waltz</title>
   <style>
     :root {
       color-scheme: dark;
@@ -37,7 +37,8 @@
     .brand-mark { width: 22px; height: 22px; border: 1px solid #9da8a4; border-radius: 50%; position: relative; }
     .brand-mark::before,.brand-mark::after { content:""; position:absolute; left:4px; right:4px; top:10px; height:1px; background:#9da8a4; transform:rotate(-38deg); }
     .brand-mark::after { transform:rotate(38deg); }
-    .draft-label { color: var(--accent); border: 1px solid rgba(229,168,92,.4); padding: 5px 9px; border-radius: 3px; }
+    .draft-label { color: var(--accent); border: 1px solid rgba(229,168,92,.4); padding: 5px 9px; border-radius: 3px; text-decoration: none; }
+    .draft-label:hover { border-color: var(--accent); }
     main { max-width: 1500px; margin: auto; padding: 20px clamp(18px, 4vw, 62px) 28px; }
     body.report-open { overflow: hidden; }
     .topbar, .intro, .legend { transition: opacity .3s ease; }
@@ -235,7 +236,7 @@
   <div class="grain" aria-hidden="true"></div>
   <header class="topbar">
     <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>Dry Season Waltz · field assessment</span></div>
-    <span class="draft-label">draft</span>
+    <a class="draft-label" href="../">Back to the map</a>
   </header>
 
   <main>
@@ -283,9 +284,9 @@
     </div>
   </main>
 
-  <section class="report-viewer" id="report-viewer" role="dialog" aria-modal="true" aria-label="Three-page field assessment preview" aria-hidden="true">
+  <section class="report-viewer" id="report-viewer" role="dialog" aria-modal="true" aria-label="Three-page field assessment" aria-hidden="true">
     <header class="viewer-bar">
-      <div class="viewer-title">Dry Season Waltz <span aria-hidden="true">/</span> field assessment preview</div>
+      <div class="viewer-title">Dry Season Waltz <span aria-hidden="true">/</span> field assessment</div>
       <div class="viewer-actions">
         <button type="button" id="back-to-sheet">Back to the cover</button>
         <button type="button" class="print" id="print-report">Print / save PDF</button>
@@ -345,7 +346,7 @@
           <p class="page-deck">Twelve blocks: the six highest-ranked of each of the two upper levels. Each is one kilometre square, and the position given is its centre.</p>
           <table class="handoff-table" aria-label="Blocks to visit first">
             <thead><tr><th>No.</th><th>Block</th><th>Centre</th><th>Why it is listed</th><th class="num">Canal</th><th class="tick">Visited</th></tr></thead>
-            <tbody id="handoff-rows"><tr><td colspan="6" class="handoff-empty">The block list is not available in this preview.</td></tr></tbody>
+            <tbody id="handoff-rows"><tr><td colspan="6" class="handoff-empty">The block list could not be read.</td></tr></tbody>
           </table>
           <div class="handoff-key"><span><i class="lv3"></i>Fire on several days, and the vegetation echo still low after the rain</span><span><i class="lv2"></i>No fire, and the ground echo still low after the rain</span></div>
           <div class="section-label">At each block, record</div>
@@ -363,7 +364,7 @@
             <li><strong>The pass after the rain is a single pass per orbit</strong>, and fire detections can miss small or hidden fires.</li>
           </ul>
           <p class="sources">NISAR L2 GCOV, NASA and ISRO, from the Alaska Satellite Facility DAAC. FIRMS active fire detections, NASA. PEATMAP, Xu et al. 2018, CC BY 4.0. Canals from OpenStreetMap contributors. A demonstration brief, not an official NASA or agency product.</p>
-          <div class="page-bottom"><span>Dry Season Waltz · field assessment preview</span><span>Review with local partners before use</span></div>
+          <div class="page-bottom"><span>Dry Season Waltz · a demonstration</span><span>Review with local partners before use</span></div>
         </article>
       </div>
       <p class="footer-hint">The arrow keys turn the page. Print / save PDF gives a three-page handout.</p>
@@ -531,7 +532,7 @@
         }
         html += `<path d="M${viewWidth*.2} ${viewHeight*.17} C${viewWidth*.31} ${viewHeight*.09},${viewWidth*.36} ${viewHeight*.21},${viewWidth*.44} ${viewHeight*.15} S${viewWidth*.59} ${viewHeight*.12},${viewWidth*.69} ${viewHeight*.2}" fill="none" stroke="#9d806a" stroke-width="1.1" opacity=".75"/>`;
         svg.innerHTML = html;
-      }).catch(() => { svg.innerHTML = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/><text x="50%" y="50%" text-anchor="middle" fill="#6d7771" font-size="12">Block layer unavailable in this preview</text>`; });
+      }).catch(() => { svg.innerHTML = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/><text x="50%" y="50%" text-anchor="middle" fill="#6d7771" font-size="12">The blocks could not be read</text>`; });
     }
     // Page 3: the blocks to visit first, read from the block file. The six highest-ranked blocks of
     // each of the two upper levels: fire on several days with the vegetation echo still low, and
