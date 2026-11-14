@@ -54,14 +54,17 @@ def test_uses_the_first_pass_after_the_rain_only():
 def test_fall_rebound_and_left_on_a_known_stack():
     stack, baseline, fall, rebound = make_stack()
     out, _, _ = recovery.recover(stack, baseline, DRY_UNTIL)
+    o = out["hh"]
+    for k in ("fall", "rebound", "left"):
+        assert abs(o[k][30, 10]) < 1e-4, k                            # stable half, scene shift removed from HH
+    assert np.isclose(o["fall"][30, 50], fall, atol=1e-4)
+    assert np.isclose(o["rebound"][30, 50], rebound["hh"], atol=1e-4)
+    hv = out["hv"]                                                    # HV as measured: the stable half carries the scene shift
+    assert abs(hv["rebound"][30, 10]) > 0.1
+    assert np.isclose(hv["fall"][30, 50] - hv["fall"][30, 10], fall, atol=1e-4)          # but it cancels between two places
+    assert np.isclose(hv["rebound"][30, 50] - hv["rebound"][30, 10], rebound["hv"], atol=1e-4)
     for pol in ("hh", "hv"):
-        o = out[pol]
-        for k in ("fall", "rebound", "left"):
-            assert abs(o[k][30, 10]) < 1e-4, (pol, k)                 # stable half, scene shift removed
-        assert np.isclose(o["fall"][30, 50], fall, atol=1e-4)
-        assert np.isclose(o["rebound"][30, 50], rebound[pol], atol=1e-4)
-        assert np.allclose(o["left"], o["fall"] + o["rebound"], atol=1e-5, equal_nan=True)
-    assert out["hh"]["rebound"][30, 50] > out["hv"]["rebound"][30, 50]   # HH comes back more than HV
+        assert np.allclose(out[pol]["left"], out[pol]["fall"] + out[pol]["rebound"], atol=1e-5, equal_nan=True)
 
 
 def test_strong_blocks_need_the_fall_on_both_orbits():
@@ -106,8 +109,8 @@ def test_main_writes_layers_and_numbers(tmp_path, monkeypatch):
         assert src.tags()["after_pass"] == "20260812"
     with rasterio.open(layers / "recovery_left_hv_west_125.tif") as src:
         left = src.read(1)
-        assert np.isclose(left[30, 50], -1.6 + rebound["hv"], atol=1e-4)    # fall plus rebound: what the rain did not bring back
-        assert abs(left[30, 10]) < 1e-4 and src.tags()["start_passes"] == "20260601,20260613"
+        assert np.isclose(left[30, 50] - left[30, 10], -1.6 + rebound["hv"], atol=1e-4)   # against the stable half: what the rain did not bring back
+        assert src.tags()["start_passes"] == "20260601,20260613"
     v = json.loads(vpath.read_text())
     assert v["recovery_blocks_west_125"]["value"] == 12 * 6           # the right half of the blocks
     assert v["recovery_hh_share_regained_west_125"]["value"] > v["recovery_hv_share_regained_west_125"]["value"]
