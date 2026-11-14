@@ -4,6 +4,7 @@
 //   Fly down      tilts the camera low over the place and circles it slowly
 //   Ground look   a small second map of NASA optical imagery of the same spot on a chosen day
 //   Add to list   pins the place to "My places", kept in this browser, with CSV and GeoJSON export
+//   Take me there coordinates to copy, and a link that opens the spot in OpenStreetMap
 import { Map as MapLibreMap, Marker } from "maplibre-gl";
 import { formatDay } from "../data";
 import { h } from "../dom";
@@ -271,7 +272,32 @@ export function bindPlaceActions(root: HTMLElement, map: MapLibreMap, overlays: 
         setSaved(isSaved ? saved.filter((p) => key(p) !== key(place)) : [...saved, { lat, lon, added: isoDay(new Date()) }]);
       });
       renderActions();
-      return h("div", {}, h("div", { class: "place-actions" }, flyButton, lookButton, saveButton), lookSlot);
+
+      // Take me there: the coordinates to copy into a GPS, and the spot in OpenStreetMap.
+      const coordinates = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+      const copyButton = h("button", { type: "button", class: "text-button small", text: "Copy coordinates" });
+      const copied = h("span", { class: "copied", role: "status" });
+      copyButton.addEventListener("click", () => {
+        const done = (ok: boolean): void => {
+          copied.textContent = ok ? `Copied ${coordinates}` : coordinates; // if copying is blocked, show them to copy by hand
+        };
+        if (navigator.clipboard) navigator.clipboard.writeText(coordinates).then(() => done(true), () => done(false));
+        else done(false);
+      });
+      const osm = h("a", {
+        class: "text-button small",
+        href: `https://www.openstreetmap.org/?mlat=${lat.toFixed(5)}&mlon=${lon.toFixed(5)}#map=14/${lat.toFixed(5)}/${lon.toFixed(5)}`,
+        target: "_blank",
+        rel: "noopener",
+        text: "Open in OpenStreetMap",
+      });
+      return h(
+        "div",
+        {},
+        h("div", { class: "place-actions" }, flyButton, lookButton, saveButton),
+        h("div", { class: "place-actions" }, copyButton, osm, copied),
+        lookSlot,
+      );
     },
   });
 
