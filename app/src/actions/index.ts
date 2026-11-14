@@ -38,7 +38,7 @@ const absent: ActionsView = { parts: () => [], block: () => null, apply: () => u
 export async function buildActions(
   map: MapLibreMap,
   chart: PlaceChart,
-  hooks: { setTab(tab: string): void; setLegend?(view: LegendRows | null): void; onShown?(on: boolean): void },
+  hooks: { setTab(tab: string): void; setLegend?(view: LegendRows | null): void; onShown?(on: boolean): void; onHow?(on: boolean): void },
 ): Promise<ActionsView> {
   const found = await openStore();
   if (!found) return absent;
@@ -310,6 +310,7 @@ export async function buildActions(
     else drawer.hide();
     render();
     changed();
+    hooks.onHow?.(how);
   }
 
   /** Selects a block by id, or none. The blocks of its site are fetched first when needed. */
