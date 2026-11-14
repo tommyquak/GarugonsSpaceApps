@@ -3826,5 +3826,117 @@
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "fell_1db_km2_on_cifor_peat_east": {
+  "value": 574.26,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "fell by 1 dB or more in HH on both orbits, on CIFOR peat"
+ },
+ "fell_1db_km2_on_cifor_peat_west": {
+  "value": 646.105,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "fell by 1 dB or more in HH on both orbits, on CIFOR peat"
+ },
+ "fire_share_on_cifor_peat_east": {
+  "value": 0.4109,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "CIFOR peat inside the footprint of a 2026 fire detection"
+ },
+ "fire_share_on_cifor_peat_west": {
+  "value": 0.336,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "CIFOR peat inside the footprint of a 2026 fire detection"
+ },
+ "peat_cifor_in_peatmap_east": {
+  "value": 0.2575,
+  "unit": "share of CIFOR peat",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "CIFOR peat that PEATMAP maps as peat too"
+ },
+ "peat_cifor_in_peatmap_west": {
+  "value": 0.7761,
+  "unit": "share of CIFOR peat",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "CIFOR peat that PEATMAP maps as peat too"
+ },
+ "peat_km2_cifor_east": {
+  "value": 1998.17,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "CIFOR peat with radar data on both orbits"
+ },
+ "peat_km2_cifor_west": {
+  "value": 4028.7225,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "CIFOR peat with radar data on both orbits"
+ },
+ "peat_map_agreement_cifor_chance_east": {
+  "value": 0.5065,
+  "unit": "share of cells",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "the agreement two unrelated maps with the same peat shares would reach; compare with peat_map_agreement_cifor"
+ },
+ "peat_map_agreement_cifor_chance_west": {
+  "value": 0.542,
+  "unit": "share of cells",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "the agreement two unrelated maps with the same peat shares would reach; compare with peat_map_agreement_cifor"
+ },
+ "peat_map_agreement_cifor_east": {
+  "value": 0.5,
+  "unit": "share of cells",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "cells where the CIFOR map and PEATMAP say the same; CIFOR is an independent mapping"
+ },
+ "peat_map_agreement_cifor_west": {
+  "value": 0.5686,
+  "unit": "share of cells",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "cells where the CIFOR map and PEATMAP say the same; CIFOR is an independent mapping"
+ },
+ "peatmap_in_cifor_east": {
+  "value": 0.4739,
+  "unit": "share of PEATMAP peat",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "PEATMAP peat that CIFOR maps as peat too"
+ },
+ "peatmap_in_cifor_west": {
+  "value": 0.6006,
+  "unit": "share of PEATMAP peat",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/peat_cifor.py",
+  "note": "PEATMAP peat that CIFOR maps as peat too"
  }
 }
