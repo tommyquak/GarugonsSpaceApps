@@ -5,7 +5,7 @@ Track 2b, owner Reagan. What the first rain brought back, in HH and in HV, on th
 | Script | What it does | Writes |
 |---|---|---|
 | `recovery.py` | Fall, rebound and what is left, per orbit. Compares the two orbits' rebounds once both exist. | `recovery_<pol>_<site>_<track>.tif` (rebound), `recovery_left_<pol>_<site>_<track>.tif` (what the rain did not bring back), `recovery_*` in `validation.json` |
-| `sensitivity.py` | Reruns the recovery with the last dry day one pass earlier, one late pass instead of two, and the second pass after the rain. | `sensitivity_recovery_<site>_<track>.json`, `recovery_*_share_regained_sensitivity_*` in `validation.json` |
+| `sensitivity.py` | Reruns the recovery with one late pass instead of two, the late pair one pass earlier, and the second pass after the rain. Also a placebo: the rain pretended one pass sooner, which should show no rebound. | `sensitivity_recovery_<site>_<track>.json`, `recovery_*_share_regained_sensitivity_*` and `recovery_*_share_regained_placebo_*` in `validation.json` |
 
 Run order, after the dry-down layers and the noise floor exist (`pipeline/run_all.sh` steps 1 to 5):
 

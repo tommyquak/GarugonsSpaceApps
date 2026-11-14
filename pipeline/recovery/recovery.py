@@ -41,11 +41,12 @@ def read(path):
         return src.read(1)
 
 
-def recover(stack, base, dry_until, late_n=2, wet_pass=0):
+def recover(stack, base, dry_until, late_n=2, late_skip=0, wet_pass=0):
     """Fall, rebound and left for HH and HV on 250 m blocks, or None if no pass is after dry_until.
 
-    late_n is how many of the last dry passes make "late season"; wet_pass picks which pass after the
-    rain to use (0 is the first). The defaults are what the layers and validation.json use.
+    late_n is how many of the last dry passes make "late season", and late_skip how many of the very
+    last dry passes to leave out of it; wet_pass picks which pass after the rain to use (0 is the
+    first). The defaults are what the layers and validation.json use.
 
     Returns (out, dry, after): out[pol] holds the three arrays, dry the indices of the dry-season
     passes and after the index of the first pass after the rain."""
@@ -60,7 +61,7 @@ def recover(stack, base, dry_until, late_n=2, wet_pass=0):
     for pol in ("hh", "hv"):
         layers = normalised(stack, base, pol)
         start = np.mean([block_mean(layers[i]) for i in dry[:2]], axis=0)
-        late = np.mean([block_mean(layers[i]) for i in dry[-late_n:]], axis=0)
+        late = np.mean([block_mean(layers[i]) for i in dry[len(dry) - late_skip - late_n:len(dry) - late_skip]], axis=0)
         wet_level = block_mean(layers[after])
         out[pol] = {"fall": late - start, "rebound": wet_level - late, "left": wet_level - start}
     return out, dry, after

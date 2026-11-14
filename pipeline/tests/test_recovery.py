@@ -130,11 +130,26 @@ def test_sensitivity_runs_every_variant_and_flags_a_soaked_pass():
     stack, baseline, fall, rebound = make_stack()
     other = np.where(np.arange(60)[None, :] >= 30, -2.0, 0.0) * np.ones((60, 1))
     rows = sens.run(stack, baseline, other, 0.3, DRY_UNTIL, min_blocks=10)
-    assert [r["variant"] for r in rows] == ["as run", "dry one earlier", "late one pass", "second wet"]
-    assert rows[0]["after_pass"] == "20260812" and rows[1]["dry_until"] == "20260719"
-    assert rows[3]["after_pass"] == "20260824"
+    assert [r["variant"] for r in rows] == ["as run", "late one pass", "late earlier", "second wet", "placebo"]
+    assert rows[0]["after_pass"] == "20260812" and rows[3]["after_pass"] == "20260824"
+    assert rows[4]["dry_until"] == "20260719" and rows[4]["after_pass"] == "20260731"
+    assert rows[4]["hh"]["regained"] < 0                               # before the rain the land is still drying: no rebound
     assert np.isclose(rows[0]["hh"]["regained"], rebound["hh"] / -fall, atol=1e-3)   # as run matches recovery.py
     assert sens.largest_move(rows, "hh") > 1.0                        # the +5 dB soaked pass moves the share a lot
+
+
+def test_late_skip_moves_the_late_pair_back_one_pass():
+    stack, baseline, _, _ = make_stack()
+    out, _, _ = recovery.recover(stack, baseline, DRY_UNTIL, late_skip=1)
+    fall = np.linspace(0, -2, 6)
+    assert np.isclose(out["hh"]["fall"][30, 50], fall[3:5].mean() - fall[:2].mean(), atol=1e-4)
+
+
+def test_placebo_is_not_counted_as_a_variant():
+    sens = load_sensitivity()
+    rows = [{"variant": "as run", "hh": {"regained": 0.6}}, {"variant": "late one pass", "hh": {"regained": 0.65}},
+            {"variant": "placebo", "hh": {"regained": -0.2}}]
+    assert np.isclose(sens.largest_move(rows, "hh"), 0.05)
 
 
 def test_sensitivity_leaves_out_variants_it_cannot_run():
