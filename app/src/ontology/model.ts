@@ -219,7 +219,7 @@ export function buildGraph(ontology: Ontology, block: BlockProps | null): Graph 
       dimmed: block ? !isChosen : undefined,
       note: isChosen && block?.confidence ? `Agreement: ${block.confidence}` : undefined,
       detail: [
-        ...(block ? [isChosen ? "The action of this block." : "Not the action of this block."] : []),
+        ...(block ? [isChosen ? "The class of this block." : "Not the class of this block."] : []),
         `Rule: ${action.rule}`,
         ...(action.advice ? [action.advice] : []),
         ...(stronger.length ? [`Stronger if: ${stronger.join(", ")}`] : []),

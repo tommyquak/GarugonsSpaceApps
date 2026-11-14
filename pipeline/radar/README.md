@@ -4,10 +4,11 @@ Turns NISAR L2 GCOV granules into one stack per site and track, in the format of
 
 ## Get the stacks
 
-The built stacks are attached to the GitHub release `data-v1`. Most people only need this:
+The built stacks are attached to GitHub releases: the dawn orbit (125) in `data-v1`, the dusk orbit (061) in `data-v5`. Most people only need this:
 
 ```
-gh release download data-v1 --repo tommyquak/GarugonsSpaceApps --dir pipeline/out/stacks
+gh release download data-v1 --repo tommyquak/GarugonsSpaceApps --dir pipeline/out/stacks --pattern '*_125.npz'
+gh release download data-v5 --repo tommyquak/GarugonsSpaceApps --dir pipeline/out/stacks --pattern '*_061.npz'
 ```
 
 ```python

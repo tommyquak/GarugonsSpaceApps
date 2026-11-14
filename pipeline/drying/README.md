@@ -30,8 +30,8 @@ python pipeline/drying/one_look_map.py --layers $L --stacks $S --sites west east
 
 ## What we learned while checking
 
-- **Forest edges dry.** The score falls by about 0.5 dB within 250 m of a forest edge and reaches zero only 4 km inside. The reference is therefore deep forest, and edges are part of the signal.
-- **Show the size of the fall, not a yes or no.** In this El Nino year about half of the west box fell beyond the noise floor.
-- **HH for the ground.** HV gives a similar map but follows vegetation as well.
+- **The echo also falls at forest edges.** The median change within 250 m of a forest edge is about -0.3 to -0.4 dB, and it is near zero only about 4 km inside. The reference is therefore deep forest, and edges are part of the signal.
+- **Show the size of the fall, not a yes or no.** A yes-or-no mask at the 5th percentile of change in deep forest colours a large part of the west box.
+- **The map uses HH.** HV gives a similar map; we do not treat the two as separate ground and vegetation channels.
 - **`--start-from` and `--dry-until`** come from the rainfall record by the rules in `pipeline/season.py`: the start is the first rain-free pass, the end is the last day before the rain returned. The first version started from the first two passes of the record, which came just after rain and overstated the fall by almost half.
 - **"Noise floor" in file and key names means the 5th percentile of change in deep forest.** It is not a noise level for open land. See `docs/LIMITS.md`.

@@ -56,7 +56,7 @@ export function buildList(root: HTMLElement, store: BlockStore, firstSite: () =>
   const actions = ontology.actions.filter((a) => a.id !== NO_ACTION);
   const canal = ontology.states.find((s) => s.id === "near_canal");
 
-  const action = select("Action", actions.map((a) => [a.id, a.title]));
+  const action = select("Class", actions.map((a) => [a.id, a.title]));
   const confidence = select("Agreement", [["", "Any"], ...CONFIDENCE_LEVELS.map((c): [string, string] => [c, c.charAt(0).toUpperCase() + c.slice(1)])]);
   const near = select(canal?.title ?? "Near a canal", [
     ["", "Any"],

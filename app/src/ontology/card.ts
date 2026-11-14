@@ -65,7 +65,7 @@ export function buildCard(ontology: Ontology, block: BlockProps, hooks: CardHook
     chips.append(h("span", { class: `chip chip-${block.confidence}`, title: ontology.confidence?.rule ?? "", text: `Agreement: ${block.confidence}` }));
   }
   if (block.rank !== null && block.rank !== undefined) {
-    chips.append(h("span", { class: "chip", title: "Ranked inside this action and site, largest fall in HH first.", text: `${block.rank} of ${hooks.ranked(block)} in ${title}` }));
+    chips.append(h("span", { class: "chip", title: "Ordered inside this class and site by the size of the fall in HH. A bigger fall is not a grade of the land.", text: `${block.rank} of ${hooks.ranked(block)} in ${title}` }));
   }
   chips.append(h("span", { class: "chip", text: `Site: ${block.site}` }));
 
