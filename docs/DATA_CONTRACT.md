@@ -2,7 +2,7 @@
 
 The file formats the tracks hand to each other. If you need to change one, change this file in the same PR and tag the owners it affects on the board.
 
-Nothing in this file is committed to git except the small app files in section 4. Stacks and layers are attached to a GitHub release.
+Nothing in this file is committed to git except the small app files in section 5. Stacks and layers are attached to a GitHub release.
 
 ## 1. Radar stacks (track 1 writes; tracks 2, 3 and 5 read)
 
@@ -29,6 +29,7 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 | File | Owner | Meaning |
 |---|---|---|
 | `drydown_<site>_<track>.tif` | 2 | Change in HH against intact forest, last two passes before the rain minus first two, on 250 m blocks. Decibels. |
+| `hh_<site>_<track>_<YYYYMMDD>.tif` | 2 | One per radar pass, for the season slider. HH on that pass minus HH at the start of the season (mean of the first two passes), scene-wide shift removed, on 250 m blocks. Decibels. Negative means darker than at the start. |
 | `dried_<site>.tif` | 2 | 1 where the dry-down is beyond the noise floor on both orbits, else 0. |
 | `recovery_hh_<site>.tif`, `recovery_hv_<site>.tif` | 2 | Change across the first rain, in decibels. |
 | `fire_days_<site>.tif` | 3 | Number of distinct days with a 2026 fire detection within 200 m. |
@@ -48,7 +49,23 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 
 `status` is `exploratory` until track 5 has rerun it, then `final`. The app and the slides show only `final` numbers.
 
-## 4. App files (track 4 owns; committed)
+## 4. Time series for the click chart (track 1 writes; track 4 reads)
+
+Two files per site in `pipeline/out/series/`, attached to the release: `series_<site>.json` and `series_<site>.bin`.
+
+The grid is regular in longitude and latitude, so the app finds a cell without any map projection: `col = floor((lon - west) / cell_deg)`, `row = floor((north - lat) / cell_deg)`.
+
+```json
+{
+  "site": "west", "bounds": [113.6, -3.2, 114.3, -2.4], "cell_deg": 0.0025, "rows": 320, "cols": 280,
+  "scale": 0.12, "offset": -30.0, "nodata": 0,
+  "bands": [ { "track": "125", "pol": "hh", "date": "2026-06-22" } ]
+}
+```
+
+`series_<site>.bin` is unsigned bytes, one `rows * cols` image per entry of `bands`, in that order, each stored row by row from the north-west corner. Decibels = `byte * scale + offset`. A byte of 0 means no data. Values are backscatter with the scene-wide shift removed, averaged over about 250 m.
+
+## 5. App files (track 4 owns; committed)
 
 - `app/public/layers/<id>.png`: a layer drawn as an image, in Web Mercator.
 - `app/public/layers/layers.json`: the list the app reads.
