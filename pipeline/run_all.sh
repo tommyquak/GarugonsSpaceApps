@@ -87,6 +87,9 @@ for site in $SITES; do   # these two only read what is on disk, so they always r
     $PY pipeline/context/rain.py --site "$site" --start "$SEASON_START" --end "$SEASON_END" --out "$L"
     $PY pipeline/season.py --rain "$L/rain_daily_$site.json" > /dev/null     # writes the season dates to validation.json
   fi
+  if [ -n "${WITH_CONTEXT:-}" ] || [ -f "data/cifor/TROP-SUBTROP_PeatV21_2016_CIFOR.tif" ]; then
+    $PY pipeline/context/peat_cifor.py --site "$site" --layers "$L"     # an independent peat map, local cross-check only
+  fi
 done
 
 echo "== 6. recovery after the rain"

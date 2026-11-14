@@ -37,7 +37,7 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 | `fire_days_1km_<site>.tif` | 3 | The same with every detection widened to 1 km, for the cautious reading of "no fire nearby". |
 | `fire_before_rain_<site>.tif`, `fire_before_rain_1km_<site>.tif` | 3 | As `fire_days` and `fire_days_1km`, counting only days on or before the last dry day (`last_dry_day_<site>`). Use these when comparing burnt and unburnt land on the pass after the rain: fire detected after the rain returned cannot explain that pass. |
 | `peat_peatmap_<site>.tif`, `peat_peatmap_<site>.geojson` | 3 | 1 on mapped peat, else 0, and its outline in lon/lat. From PEATMAP (Xu et al. 2018, doi 10.5518/252), CC BY 4.0: may be released and shown with that citation. This is the peat layer every number uses. |
-| `peat_official_<site>.tif`, `peat_cifor_<site>.tif` | 3 | Other peat maps as cross-checks. Local use only: no stated licence, so not committed and not released. |
+| `peat_official_<site>.tif`, `peat_cifor_<site>.tif` | 3 | Other peat maps as cross-checks. Local use only: the official map has no stated licence, and the CIFOR map's terms conflict (CC BY 4.0 on its dataset page, written permission for commercial use in the file itself), so neither is committed or released. Only numbers computed from them are reported. |
 | `canals_osm_<site>.geojson`, `canal_distance_<site>.tif` | 3 | Canals, drains and ditches from OpenStreetMap (ODbL), and metres to the nearest one. |
 | `rain_daily_<site>.json` | 3 | `{ "YYYY-MM-DD": mm }`, box mean. |
 

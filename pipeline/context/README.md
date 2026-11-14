@@ -8,13 +8,15 @@ Fire, rain, peat and canals: the layers that say what the radar signal means and
 | `rain.py` | NASA GPM IMERG Late daily | `rain_daily_<site>.json`, the last dry day | Earthdata login with GES DISC approved |
 | `peatmap.py` | PEATMAP (Xu et al. 2018), CC BY 4.0 | `peat_peatmap_<site>.tif`, `peat_peatmap_<site>.geojson` | nothing |
 | `peat.py` | Indonesia Ministry of Agriculture peat map, via Global Forest Watch | `peat_official_<site>.tif`, local only, as a cross-check | nothing |
+| `peat_cifor.py` | CIFOR tropical peatland map (Gumbricht et al. 2017), modelled at 231 m | `peat_cifor_<site>.tif`, local only, and its agreement with PEATMAP | `py7zr` once, to unpack the 41 MB download |
 | `canals.py` | OpenStreetMap | `canals_osm_<site>.geojson`, `canal_distance_<site>.tif` | nothing |
 
 Run them all with `WITH_CONTEXT=1 SKIP_PULL=1 pipeline/run_all.sh`, or one at a time (each file starts with its command).
 
 ## Rules of this folder
 
-- **Two peat layers, one of them public.** `peat_peatmap_*` comes from PEATMAP, which is CC BY 4.0, so it can be released and shown in the app with its citation. `peat_official_*` has no stated licence and never leaves your machine. On our sites the two agree on 99% (west) and 98% (east) of the grid, so the public one is used for every number.
+- **Two peat layers, one of them public.** `peat_peatmap_*` comes from PEATMAP, which is CC BY 4.0, so it can be released and shown in the app with its citation. `peat_official_*` has no stated licence and never leaves your machine. On our sites the two agree on 99% (west) and 98% (east) of the grid, so the public one is used for every number. They draw on the same national mapping, so that agreement is not an independent check.
+- **The independent peat map does not confirm the boundary.** CIFOR's map is modelled from hydrology, satellite soil moisture and landforms, not from the national survey. On our grids it agrees with PEATMAP about as often as two unrelated maps would (`peat_map_agreement_cifor_*` against `peat_map_agreement_cifor_chance_*`). Redrawn on CIFOR peat, the fall of 1 dB or more moves from 755 to 646 km2 in the west and from 292 to 574 km2 in the east (`fell_1db_km2_on_cifor_peat_*`). CIFOR is a coarse model that its authors matched to soil profiles 65% of the time, so this does not say PEATMAP is wrong; it says the peat boundary is a real source of uncertainty, largest in the east. Its terms conflict (CC BY 4.0 on the dataset page, written permission for commercial use in the file), so `peat_cifor_*` stays local.
 - **Low-confidence fire detections are dropped.** A detection is a satellite pixel of 0.4 to 1 km or more, so each one marks every cell within half its own pixel size. A second layer marks everything within 1 km. These are active-fire detections, not burnt area.
 - **Fire after the rain is kept apart.** `fire_days` counts every detection from 1 May to the day of the pull. `fire_before_rain` counts only those on or before the last dry day, so a comparison of burnt and unburnt land on the pass after the rain is not mixed with fire that came later.
 - **The last dry day is read from the rainfall record by a fixed rule,** not chosen by eye: the day before the first day of 5 mm or more that opens a 5-day window of 25 mm or more, after the driest 30 days.
@@ -22,4 +24,4 @@ Run them all with `WITH_CONTEXT=1 SKIP_PULL=1 pipeline/run_all.sh`, or one at a 
 
 ## Still to do
 
-The CIFOR peat map (Gumbricht et al. 2017) as a second opinion on the boundary, repeat-fire layers from earlier years, and the coherence burn flag. The recovery and fusion steps still read `fire_days`; their owners switch to `fire_before_rain` where the comparison is after the rain.
+Repeat-fire layers from earlier years, and the coherence burn flag. The recovery and fusion steps still read `fire_days`; their owners switch to `fire_before_rain` where the comparison is after the rain.

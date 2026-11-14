@@ -10,6 +10,7 @@ rasterio
 pyproj
 matplotlib
 pillow
+py7zr        # unpacks the CIFOR peat map once (pipeline/context/peat_cifor.py)
 
 # Tests: python -m pytest pipeline/tests
 pytest
