@@ -67,9 +67,9 @@ async function start(): Promise<void> {
   setTab("");
   const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
   bindPlaceActions(byId("panel-place"), map, overlays, chart);
-  await buildActions(map, chart, { setTab });
+  const actions = await buildActions(map, chart, { setTab });
   // Last, so that a link someone was sent restores its view over the defaults set above.
-  bindLink(map, overlays, chart);
+  bindLink(map, overlays, chart, actions);
 }
 
 void start();
