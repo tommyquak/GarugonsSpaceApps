@@ -925,6 +925,14 @@ button:disabled {
 
 /* ==== Actions view, evidence drawer and ontology graph (src/actions, src/ontology). Keep this block last. ==== */
 
+/* Season slider: the way back to the whole season is always in view, and loud while one pass shows. */
+#season .season-whole[aria-pressed="false"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #12161a;
+  font-weight: 600;
+}
+
 /* Actions panel: legend, 3D switch, ranked list. */
 .act-bar {
   display: flex;

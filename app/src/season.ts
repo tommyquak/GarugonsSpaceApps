@@ -26,7 +26,8 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
 
   const playButton = h("button", { type: "button", class: "icon-button" });
   const slider = h("input", { type: "range", min: 0, max: last, step: 1, value: 0, "aria-label": "Radar pass" });
-  const wholeButton = h("button", { type: "button", class: "text-button", text: "Whole season" });
+  // Always in view: pressed while the whole season shows, a filled call to return while one pass does.
+  const wholeButton = h("button", { type: "button", class: "text-button season-whole", text: "Whole season" });
   const label = h("div", { class: "season-label", "aria-live": "polite" });
   const detail = h("div", { class: "season-detail" });
   root.replaceChildren(
@@ -78,16 +79,17 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
     playButton.innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
     playButton.setAttribute("aria-label", playing ? "Pause" : "Play the season pass by pass");
     playButton.title = playing ? "Pause" : "Play the season";
-    wholeButton.hidden = overlays.mode !== "pass";
+    wholeButton.setAttribute("aria-pressed", String(overlays.mode !== "pass"));
+    wholeButton.title = overlays.mode === "pass" ? "Back to the whole season: brings the whole-season layers back" : "The whole season is showing";
     root.classList.toggle("is-pass", overlays.mode === "pass");
     if (overlays.mode === "pass") {
       const step = steps[overlays.stepIndex];
       slider.value = String(overlays.stepIndex);
       slider.setAttribute("aria-valuetext", passLabel(step));
-      label.textContent = passLabel(step);
-      detail.textContent = `Radar pass ${overlays.stepIndex + 1} of ${steps.length}. Colour: fall in HH since the start of the season.`;
+      label.textContent = `One pass only: ${passLabel(step)}`;
+      detail.textContent = `Radar pass ${overlays.stepIndex + 1} of ${steps.length}. Colour: fall in HH since the start of the season. Whole-season layers are hidden.`;
     } else {
-      label.textContent = "Whole dry season";
+      label.textContent = "Showing the whole dry season";
       detail.textContent = `Press play or drag the slider to step through ${steps.length} radar passes.`;
     }
     if (waiting) detail.textContent = `Loading radar passes, ${loaded} of ${total}.`;
