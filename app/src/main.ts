@@ -21,7 +21,7 @@ import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
 import { buildSeason } from "./season";
 import { buildOpening } from "./opening";
-import { reducedMotion, viewPadding } from "./view";
+import { firstLook, reducedMotion, viewPadding } from "./view";
 
 // MapLibre runs part of its work in a web worker; this is the address of that file in the build.
 setWorkerUrl(workerUrl);
@@ -173,7 +173,7 @@ async function start(): Promise<void> {
   });
   setExplore(actions.parts().includes("class") && !actions.parts().includes("how"));
   // Without a link, the map opens on the one view made for a first look.
-  if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
+  if (!shared && actions.parts().length === 0) actions.apply(firstLook(), null);
   // A visitor who came in through "Enter dashboard" gets the story once; "Skip to map" and a
   // shared link mean they chose where to go. The intro may end before or after
   // this point, so both the mark it leaves and its event are read.

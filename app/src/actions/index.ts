@@ -16,7 +16,7 @@ import { actionColor, CONFIDENCE_LEVELS, confidenceStrength, NO_ACTION } from ".
 import { openStore, type BlockStore } from "./data";
 import { BlockLayer, METRES_PER_DB } from "./layer";
 import { buildList } from "./list";
-import { LEVELS, LEVELS_NOTE, levelOf } from "./levels";
+import { LEVELS, LEVELS_HEIGHT_NOTE, LEVELS_NOTE, levelOf } from "./levels";
 import type { LegendRows } from "../maplegend";
 
 const PITCH = 55;
@@ -167,7 +167,8 @@ export async function buildActions(
     swatch.style.opacity = String(confidenceStrength(level));
     strengths.append(h("span", { class: "act-strength" }, swatch, level));
   }
-  const heightNote = h("p", { class: "note", text: `Height shows how far HH fell, in dB: ${METRES_PER_DB.toLocaleString("en")} m of column for each dB.` });
+  const FALL_HEIGHT_NOTE = `Height shows how far HH fell, in dB: ${METRES_PER_DB.toLocaleString("en")} m of column for each dB.`;
+  const heightNote = h("p", { class: "note", text: LEVELS_HEIGHT_NOTE });
   const howLink = h("button", { type: "button", class: "text-button small", text: "How it decides" });
   const classBox = h("div", {});
   const legendBox = h(
@@ -244,6 +245,7 @@ export async function buildActions(
     hooks.setLegend?.(on ? { title: glance ? "How affected" : "Class of each 1 km block", rows, note: glance ? LEVELS_NOTE : "A screening result. Not checked on the ground." } : null);
     columnsInput.checked = columns;
     heightNote.hidden = !columns;
+    heightNote.textContent = glance ? LEVELS_HEIGHT_NOTE : FALL_HEIGHT_NOTE;
   };
 
   function setOn(value: boolean): void {
@@ -351,6 +353,7 @@ export async function buildActions(
   actionsButton.addEventListener("click", () => {
     setOn(!on);
     if (on) hooks.setTab("actions");
+    if (on && wide()) setColumns(true); // the view opens as columns where there is room for them
   });
   tabButton.addEventListener("click", () => {
     if (!on) setOn(true);

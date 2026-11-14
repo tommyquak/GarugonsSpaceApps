@@ -13,7 +13,7 @@ import type { ActionsView } from "./actions";
 import { asset, fetchJson } from "./data";
 import { h } from "./dom";
 import type { Overlays } from "./overlays";
-import { reducedMotion, viewPadding } from "./view";
+import { firstLook, reducedMotion, viewPadding } from "./view";
 
 const BEAT_MS = 6500;
 const SHORTEST_MS = 3000; // with sound, a beat still stays long enough to look at
@@ -325,7 +325,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       // Whatever beat it was left on, the story ends on the map made for a first look: that is
       // set up underneath first, then the story fades away over it.
       overlays.setMode("season");
-      actions.apply(["map"], null);
+      actions.apply(firstLook(), null);
       if (extent) map.fitBounds(extent, { padding: viewPadding(), animate: false });
       app.classList.remove("is-story");
       app.removeAttribute("inert");

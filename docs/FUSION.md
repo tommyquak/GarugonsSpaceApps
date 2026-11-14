@@ -67,6 +67,8 @@ The "Where to check" view opens coloured by level, for a first look. The levels 
 | Affected | Fell, and still low after the rain; or fire detected with HV still low after the rain |
 | Changed, then recovered | Every other classed block: fire, or a fall, with no lasting change seen after the rain |
 
+As columns, a block's height is its level and nothing else: three fixed drawing heights, so that colour and height say the same thing. Coloured by class, the height is the fall in HH instead, at 1,200 m of column per dB. On a wide screen the view opens as columns.
+
 The order is by signs of lasting change, not by harm. Nothing here was checked on the ground, and the size of the fall plays no part: land beside a canal can fall a long way and recover with the first rain.
 
 ## The fire-prone test

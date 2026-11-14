@@ -9,6 +9,11 @@ export function viewPadding(): { top: number; bottom: number; left: number; righ
   return wide ? { top: 24, bottom: 130, left: 384, right: 24 } : { top: 16, bottom: 16, left: 16, right: 16 };
 }
 
+/** The view made for a first look: the blocks to check, as columns where the screen has room for them. */
+export function firstLook(): string[] {
+  return window.matchMedia(WIDE).matches ? ["map", "3d"] : ["map"];
+}
+
 export function reducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }

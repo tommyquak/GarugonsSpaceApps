@@ -17,15 +17,18 @@ export interface Level {
   strength: number;
   /** The colour of a column, which cannot vary its opacity. */
   solid: string;
+  /** Height of a column in metres. A drawing height only: taller is a higher level, nothing more. */
+  height: number;
 }
 
 export const LEVELS: Level[] = [
-  { id: 3, title: "Most affected", text: "Fire on several days, and the vegetation echo (HV) was still low after the rain.", color: "#ff3b30", strength: 0.95, solid: "#ff3b30" },
-  { id: 2, title: "Affected", text: "The echo fell and was still low after the rain, or fire with the vegetation echo still low.", color: "#ff9f0a", strength: 0.92, solid: "#ff9f0a" },
-  { id: 1, title: "Changed, then recovered", text: "Fire was detected or the echo fell, and the radar saw no lasting change after the rain.", color: "#f2d98a", strength: 0.16, solid: "#454031" },
+  { id: 3, title: "Most affected", text: "Fire on several days, and the vegetation echo (HV) was still low after the rain.", color: "#ff3b30", strength: 0.95, solid: "#ff3b30", height: 2600 },
+  { id: 2, title: "Affected", text: "The echo fell and was still low after the rain, or fire with the vegetation echo still low.", color: "#ff9f0a", strength: 0.92, solid: "#ff9f0a", height: 1500 },
+  { id: 1, title: "Changed, then recovered", text: "Fire was detected or the echo fell, and the radar saw no lasting change after the rain.", color: "#f2d98a", strength: 0.16, solid: "#454031", height: 350 },
 ];
 
 export const LEVELS_NOTE = "Ranked by signs of lasting change in the radar and fire data. Not checked on the ground.";
+export const LEVELS_HEIGHT_NOTE = "Height shows the level: the taller a block, the stronger the signs of lasting change.";
 
 export function levelOf(block: { action: string; confidence: string | null; states?: Record<string, boolean | null> }): number {
   if (block.action === NO_ACTION) return 0;

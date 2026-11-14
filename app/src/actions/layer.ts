@@ -1,7 +1,8 @@
 // Written with Super Intelligence (SI) assistance.
 // The blocks on the map: one GeoJSON source per site, drawn flat (a fill coloured by action,
 // stronger where the confidence is higher) or as columns whose height is the fall in HH. In the
-// at-a-glance view the same blocks are coloured by level instead (levels.ts). The block under
+// at-a-glance view the same blocks are coloured by level instead (levels.ts), and a column's
+// height is its level too, so that colour and height say the same thing. The block under
 // the pointer lights up and the pointer becomes a hand, flat and as columns, so it is plain
 // that a block can be clicked.
 import type { ExpressionSpecification, GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
@@ -90,7 +91,7 @@ export class BlockLayer {
       })),
     };
     this.map.addSource(id, { type: "geojson", data, promoteId: "id" });
-    const { color, strength, solid } = this.paints();
+    const { color, strength, solid, height } = this.paints();
 
     // Blocks without an action: a faint grey grid once the map is close enough to pick one.
     this.map.addLayer({ id: `${id}-rest`, type: "fill", source: id, minzoom: GRID_FROM_ZOOM, filter: notActed, paint: { "fill-color": NONE_COLOR, "fill-opacity": 0.03 } }, ANCHOR);
@@ -110,8 +111,7 @@ export class BlockLayer {
         filter: acted,
         paint: {
           "fill-extrusion-color": ["case", isSelected, "#ffffff", isHovered, HOVER_COLOR, solid],
-          // A block that did not fall still gets a thin slab, so its colour is on the map.
-          "fill-extrusion-height": ["*", METRES_PER_DB, ["max", 0.05, ["coalesce", ["get", "fall_db"], 0]]],
+          "fill-extrusion-height": height,
           "fill-extrusion-base": 0,
           "fill-extrusion-opacity": 0.92,
         },
@@ -123,9 +123,9 @@ export class BlockLayer {
     this.sync();
   }
 
-  /** Colour, opacity and column colour of a block, by level or by class and agreement. */
-  private paints(): { color: ExpressionSpecification; strength: ExpressionSpecification; solid: ExpressionSpecification } {
-    if (this.glance) return { color: byLevel((l) => l.color), strength: byLevel((l) => l.strength), solid: byLevel((l) => l.solid) };
+  /** Colour, opacity, column colour and column height of a block, by level or by class and agreement. */
+  private paints(): { color: ExpressionSpecification; strength: ExpressionSpecification; solid: ExpressionSpecification; height: ExpressionSpecification } {
+    if (this.glance) return { color: byLevel((l) => l.color), strength: byLevel((l) => l.strength), solid: byLevel((l) => l.solid), height: byLevel((l) => l.height) };
     const actions = this.store.ontology.actions.map((a) => a.id).filter((a) => a !== NO_ACTION);
     return {
       color: match(["get", "action"], actions.map((a) => [a, actionColor(a)]), NONE_COLOR),
@@ -135,12 +135,14 @@ export class BlockLayer {
         actions.flatMap((a) => CONFIDENCE_LEVELS.map((level): [string, string] => [`${a}|${level}`, solidColor(a, level)])),
         NONE_COLOR,
       ),
+      // By class the height is the fall in HH. A block that did not fall still gets a thin slab, so its colour is on the map.
+      height: ["*", METRES_PER_DB, ["max", 0.05, ["coalesce", ["get", "fall_db"], 0]]],
     };
   }
 
   /** Repaints and refilters every site for the current way of colouring. */
   private applyMode(): void {
-    const { color, strength, solid } = this.paints();
+    const { color, strength, solid, height } = this.paints();
     // The classes switched off in the legend only apply when the blocks are coloured by class.
     const filter: ExpressionSpecification = !this.glance && this.hidden.size ? ["all", acted, ["!", ["in", ["get", "action"], ["literal", [...this.hidden]]]]] : acted;
     for (const site of this.sites) {
@@ -153,6 +155,7 @@ export class BlockLayer {
       }
       if (this.map.getLayer(columns)) {
         this.map.setPaintProperty(columns, "fill-extrusion-color", ["case", isSelected, "#ffffff", isHovered, HOVER_COLOR, solid]);
+        this.map.setPaintProperty(columns, "fill-extrusion-height", height);
         this.map.setFilter(columns, filter);
       }
     }
