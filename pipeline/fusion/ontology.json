@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "about": "The vocabulary and the decision table that turn several sources into one screening class per 1 km block. blocks.py reads its thresholds and rules from this file, and the app draws its evidence graph from it, so the code, the documentation and the picture cannot drift apart. Version 2 was rewritten after an independent audit: class names now say what was seen, not what to do about it.",
+  "about": "The vocabulary and the decision table that turn several sources into one screening class per 1 km block. blocks.py reads its thresholds and rules from this file, and the app draws its evidence graph from it, so the code, the documentation and the picture cannot drift apart. Class names say what was seen, not what to do about it.",
   "object_types": {
     "Source": "A dataset from one instrument or one mapping effort.",
     "Block": "A 1 km square of ground inside a site.",
@@ -54,7 +54,7 @@
     {"id": "still_low", "title": "Still low after the first rain", "needs": ["left_asc", "left_desc"], "rule": "left_asc >= left_db and left_desc >= left_db",
      "why": "On the first pass after the rain, HH was still at least half a decibel below its dry-start level on both orbits. This rests on one pass per orbit taken within days of heavy rain, and we do not know why some land stayed low."},
     {"id": "canopy_low", "title": "HV low after the rain", "needs": ["fire_share", "hv_left_asc", "hv_left_desc"], "rule": "fire and hv_left_asc >= hv_left_db and hv_left_desc >= hv_left_db",
-     "why": "HV comes mostly from woody vegetation. After the rain, HV on peat with fire detections sat about half a decibel below peat without them, on both orbits. HV is used as measured, without the forest baseline."},
+     "why": "HV comes mostly from woody vegetation. After the rain, HV on peat with fire detections sat 0.3 to 0.5 dB below peat without them, on both orbits in both study areas. Only the western dawn figure has been recomputed by a second team member. HV is used as measured, without the forest baseline."},
     {"id": "persistent_fire", "title": "Fire on several days", "needs": ["fire_days"], "rule": "fire_days >= persistent_fire_days",
      "why": "Detections on three or more separate days at one spot, which a single false detection cannot produce."},
     {"id": "clear_of_fire", "title": "No fire detected within 1 km", "needs": ["fire_share_1km"], "rule": "fire_share_1km == 0",
