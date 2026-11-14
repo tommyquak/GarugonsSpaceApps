@@ -1,5 +1,22 @@
 {
-  "west": {"bbox": [113.6, -3.2, 114.3, -2.4], "tracks": [125, 61], "note": "Central Kalimantan, Sebangau forest and the land west of the Kahayan"},
-  "east": {"bbox": [114.21, -3.0, 114.83, -2.42], "tracks": [125, 61], "note": "Central Kalimantan, east of the Sebangau river"},
-  "oki": {"bbox": [105.25, -3.55, 105.95, -2.95], "tracks": [10, 119], "note": "Ogan Komering Ilir, South Sumatra"}
+  "west": {
+    "bbox": [113.6, -3.2, 114.3, -2.4],
+    "tracks": [125, 61],
+    "note": "Central Kalimantan, Sebangau forest and the land west of the Kahayan"
+  },
+  "east": {
+    "bbox": [114.21, -3.0, 114.83, -2.42],
+    "tracks": [125, 61],
+    "note": "Central Kalimantan, east of the Sebangau river"
+  },
+  "oki": {
+    "bbox": [105.25, -3.55, 105.95, -2.95],
+    "tracks": [10, 119],
+    "note": "Ogan Komering Ilir, South Sumatra"
+  },
+  "gauges": {
+    "bbox": [113.8, -2.45, 114.15, -2.25],
+    "tracks": [125, 61],
+    "note": "Peat swamp forest near Palangka Raya with published daily groundwater levels, 2013 to 2018 (Hirano, doi 10.6084/m9.figshare.22321129). Used only to compare the radar with a water-table model."
+  }
 }
