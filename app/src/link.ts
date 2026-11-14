@@ -8,9 +8,12 @@
 //   l  ids of the whole-season layers that are switched on ("-" when none is)
 //   d  date and track of the radar pass on show; absent for the whole season
 //   p  latitude, longitude of the place whose chart is open; absent when none is
+//   a  open parts of the Actions view: map, 3d, list, how ("How it decides"); absent when none is
+//   b  id of the selected block, as in west-042-017; absent when none is
 //
 // A part that is missing or cannot be read is ignored and the default stays.
 import type { Map as MapLibreMap } from "maplibre-gl";
+import type { ActionsView } from "./actions";
 import type { PlaceChart } from "./chart/placeChart";
 import type { Overlays } from "./overlays";
 
@@ -25,6 +28,8 @@ export interface LinkState {
   layers?: string[];
   pass?: { date: string; track: string };
   place?: { lat: number; lon: number };
+  actions?: string[];
+  block?: string;
 }
 
 const inRange = (lat: number, lon: number): boolean => Math.abs(lat) <= 90 && Math.abs(lon) <= 180;
@@ -48,6 +53,10 @@ export function parseLink(hash: string): LinkState {
   if (d) state.pass = { date: d[1], track: d[2] };
   const p = numbers(params.get("p") ?? "", ",", 2);
   if (p && inRange(p[0], p[1])) state.place = { lat: p[0], lon: p[1] };
+  const a = (params.get("a") ?? "").split(",").filter((part) => /^\w+$/.test(part));
+  if (a.length) state.actions = a;
+  const b = params.get("b") ?? "";
+  if (/^[\w-]+$/.test(b)) state.block = b;
   return state;
 }
 
@@ -58,11 +67,13 @@ export function formatLink(state: LinkState): string {
   if (state.layers) parts.push(`l=${state.layers.length ? state.layers.map(encodeURIComponent).join(",") : "-"}`);
   if (state.pass) parts.push(`d=${state.pass.date}.${encodeURIComponent(state.pass.track)}`);
   if (state.place) parts.push(`p=${state.place.lat.toFixed(4)},${state.place.lon.toFixed(4)}`);
+  if (state.actions?.length) parts.push(`a=${state.actions.join(",")}`);
+  if (state.block) parts.push(`b=${state.block}`);
   return `#${parts.join("&")}`;
 }
 
 /** Restores the view named in the address, then keeps the address in step with the app. */
-export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart): void {
+export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart, actions?: ActionsView): void {
   const apply = (state: LinkState): void => {
     if (state.view) map.jumpTo({ center: [state.view.lon, state.view.lat], zoom: state.view.zoom });
     // Layer ids the app does not know are dropped; a list with none it knows changes nothing.
@@ -85,6 +96,7 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
     } else if (!state.place && at) {
       chart.close(); // the address names no place, so none stays open
     }
+    actions?.apply(state.actions ?? [], state.block ?? null);
   };
 
   const current = (): string => {
@@ -95,6 +107,8 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
       layers: overlays.statics.filter((entry) => overlays.on.has(entry.id)).map((entry) => entry.id),
       pass: step ? { date: step.date, track: step.track } : undefined,
       place: chart.place ?? undefined,
+      actions: actions?.parts(),
+      block: actions?.block() ?? undefined,
     });
   };
 
@@ -114,6 +128,7 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
   map.on("moveend", writeSoon);
   overlays.onChange(write);
   chart.onPick(write);
+  actions?.onChange(write);
   // Someone pasted another link into the same tab, or edited the address by hand.
   window.addEventListener("hashchange", () => {
     if (window.location.hash === current()) return;
