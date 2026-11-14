@@ -413,7 +413,7 @@
   "value": 292.365,
   "unit": "km2",
   "site": "east",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/split.py",
   "note": "fell by 1 dB or more in HH on both orbits"
  },
@@ -421,7 +421,7 @@
   "value": 755.405,
   "unit": "km2",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/split.py",
   "note": "fell by 1 dB or more in HH on both orbits"
  },
@@ -1715,14 +1715,14 @@
   "value": 1.1188,
   "unit": "dB",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_rebound_west_125": {
   "value": 1.1494,
   "unit": "dB",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_back_within_noise_east_061": {
