@@ -12,6 +12,10 @@
 //   b  id of the selected block, as in west-042-017; absent when none is
 //
 // A part that is missing or cannot be read is ignored and the default stays.
+//
+// The browser's Back and Forward buttons step through the views: opening or closing "Where to
+// check", "How it decides", a block, or the pass-by-pass slider adds a step. Moving the map or
+// stepping the slider does not.
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { ActionsView } from "./actions";
 import type { PlaceChart } from "./chart/placeChart";
@@ -72,8 +76,13 @@ export function formatLink(state: LinkState): string {
   return `#${parts.join("&")}`;
 }
 
+export interface LinkControl {
+  /** While quiet, changes of view add no step to the browser's history (the opening story uses it). */
+  setQuiet(on: boolean): void;
+}
+
 /** Restores the view named in the address, then keeps the address in step with the app. */
-export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart, actions?: ActionsView): void {
+export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart, actions?: ActionsView): LinkControl {
   const apply = (state: LinkState): void => {
     if (state.view) map.jumpTo({ center: [state.view.lon, state.view.lat], zoom: state.view.zoom });
     // Layer ids the app does not know are dropped; a list with none it knows changes nothing.
@@ -112,10 +121,24 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
     });
   };
 
-  // replaceState: moving the map must not fill the Back button with a step per move.
+  // Which view is open, as far as Back and Forward are concerned.
+  const viewKey = (): string => {
+    const parts = (actions?.parts() ?? []).filter((part) => part === "map" || part === "how");
+    return `${parts.join(",")}|${actions?.block() ?? ""}|${overlays.step ? "pass" : "season"}`;
+  };
+  let lastKey = "";
+  let quiet = true; // nothing is added to the history while the first view is being set up
+  let quietUntil = 0;
+  // A new view is a step in the history; anything else (moving the map, stepping the slider)
+  // rewrites the current step, or Back would be buried under a step per move.
   const write = (): void => {
     const hash = current();
-    if (hash !== window.location.hash) window.history.replaceState(null, "", hash);
+    const key = viewKey();
+    const step = !quiet && performance.now() > quietUntil && key !== lastKey;
+    lastKey = key;
+    if (hash === window.location.hash) return;
+    if (step) window.history.pushState(null, "", hash);
+    else window.history.replaceState(null, "", hash);
   };
   // The fly-down turns the camera every frame, and browsers limit how often the address may change.
   let pending = 0;
@@ -129,11 +152,19 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
   overlays.onChange(write);
   chart.onPick(write);
   actions?.onChange(write);
-  // Someone pasted another link into the same tab, or edited the address by hand.
+  // Back or Forward, a link pasted into the same tab, or an address edited by hand.
   window.addEventListener("hashchange", () => {
     if (window.location.hash === current()) return;
+    quietUntil = performance.now() + 900; // restoring a step must not add one
     apply(parseLink(window.location.hash));
-    write(); // puts back whatever the pasted address left out or got wrong
+    write(); // puts back whatever the address left out or got wrong
   });
   write();
+  window.setTimeout(() => (quiet = false), 1500);
+  return {
+    setQuiet(on) {
+      quiet = on;
+      if (!on) lastKey = viewKey();
+    },
+  };
 }
