@@ -1,6 +1,6 @@
 // Written with Super Intelligence (SI) assistance.
 // The opening story: seven beats that say what the problem is and what this map adds, before the
-// tools appear. Five are real images (ground photographs and satellite images, credited from
+// tools appear. Five are real pictures (ground photographs and satellite images, credited from
 // story/credits.json); the last two are the live map itself. It plays once on a first visit,
 // can be skipped at any moment, and is replayed from "Story" in the header.
 //
@@ -20,6 +20,7 @@ const SHORTEST_MS = 4500; // with sound, a beat still stays long enough to look 
 const VOICE_LEAD_MS = 900; // the picture settles before the voice starts
 const AFTER_VOICE_MS = 2100; // and the last word has room before the next beat
 const FADE_MS = 450;
+const SECOND_AT = 0.36; // how far into a two-picture beat the second picture takes over
 
 interface Credit {
   author: string;
@@ -31,6 +32,8 @@ interface Credit {
 interface Beat {
   /** A file under story/, or a view of the live map. */
   image?: string;
+  /** A second picture that takes over part way through the beat, with its own line under the heading. */
+  then?: { image: string; sub: string };
   map?: "season" | "check";
   head: string;
   sub: (numbers: Numbers) => string;
@@ -57,12 +60,21 @@ const BEATS: Beat[] = [
         : "A drainage canal of the Mega Rice Project, Central Kalimantan.";
     },
   },
-  { image: "smoke", head: "From space, a camera sees smoke.", sub: () => "Southern Borneo on 19 September 2026, in true colour." },
-  { image: "radar", head: "NISAR's radar sees the ground through it.", sub: () => "The Sebangau area on 14 September 2026 by L-band radar: rivers, canals and forest edges." },
+  {
+    image: "smoke",
+    head: "From space, a camera sees smoke. NISAR's radar sees the ground through it.",
+    sub: () => "Southern Borneo on 19 September 2026, in true colour.",
+    then: { image: "radar", sub: "The Sebangau area on 14 September 2026 by L-band radar: rivers, canals and forest edges." },
+  },
   {
     image: "open",
     head: "A wetter surface sends back a stronger echo. As open peat dries, the echo falls.",
     sub: () => "A fall is a sign of drying, not a measurement of the water table. Clearing and farming can cause it too.",
+  },
+  {
+    image: "burnt",
+    head: "Dry peat is the peat that burns. It also sinks, and gives up its carbon.",
+    sub: () => "Sebangau after fire, September 2019. Smoke from peat fires reaches cities across the region.",
   },
   {
     map: "season",
@@ -112,6 +124,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     let timer = 0;
     let swap = 0;
     let lead = 0;
+    let second = 0;
     let front = 0;
     let sound = false;
     const voice = new Audio();
@@ -158,6 +171,28 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       }
     };
 
+    const creditOf = (image: string | undefined, onMap: boolean): string => {
+      const by = image ? credits[image] : undefined;
+      return by ? `${by.kind === "photograph" ? "Photo" : "Image"}: ${by.author}, ${by.date.slice(0, 4)}. ${by.licence}.` : onMap ? "The live map: NISAR, NASA FIRMS, Sentinel-2 mosaic 2016." : "";
+    };
+    const picture = (image: string): void => {
+      front = 1 - front;
+      layers[front].src = asset(`story/${image}.jpg`);
+      layers[front].classList.add("is-on");
+      layers[1 - front].classList.remove("is-on");
+    };
+    // The second picture of a beat takes over after `ms`, with its own line and credit.
+    const follow = (beat: Beat, ms: number): void => {
+      const then = beat.then;
+      if (!then) return;
+      window.clearTimeout(second);
+      second = window.setTimeout(() => {
+        picture(then.image);
+        sub.textContent = then.sub;
+        credit.textContent = creditOf(then.image, false);
+      }, ms);
+    };
+
     const fill = (beat: Beat): void => {
       head.textContent = beat.head;
       sub.textContent = beat.sub(numbers);
@@ -168,9 +203,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
           return h("span", { class: "op-key-item" }, swatch, item.label);
         }),
       );
-      const by = beat.image ? credits[beat.image] : undefined;
-      const source = by ? `${by.kind === "photograph" ? "Photo" : "Image"}: ${by.author}, ${by.date.slice(0, 4)}. ${by.licence}.` : beat.map ? "The live map: NISAR, NASA FIRMS, Sentinel-2 mosaic 2016." : "";
-      credit.textContent = source;
+      credit.textContent = creditOf(beat.image, Boolean(beat.map));
     };
 
     // The line of the current beat fills over the time the beat will stay.
@@ -188,6 +221,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       window.clearTimeout(timer);
       window.clearTimeout(swap);
       window.clearTimeout(lead);
+      window.clearTimeout(second);
       voice.pause();
       const first = index < 0;
       index = Math.max(0, Math.min(BEATS.length - 1, to));
@@ -195,10 +229,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       const lastBeat = index === BEATS.length - 1;
       made.classList.toggle("is-map", Boolean(beat.map));
       if (beat.image) {
-        front = 1 - front;
-        layers[front].src = asset(`story/${beat.image}.jpg`);
-        layers[front].classList.add("is-on");
-        layers[1 - front].classList.remove("is-on");
+        picture(beat.image);
       } else if (beat.map) {
         showMap(beat.map);
       }
@@ -222,7 +253,9 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
         const started = performance.now();
         voice.src = asset(`story/voice/beat-${index + 1}.mp3`);
         voice.onloadedmetadata = () => {
-          if (!still && !lastBeat && Number.isFinite(voice.duration)) run(Math.max(SHORTEST_MS, VOICE_LEAD_MS + voice.duration * 1000 + AFTER_VOICE_MS));
+          if (!Number.isFinite(voice.duration)) return;
+          if (!still && !lastBeat) run(Math.max(SHORTEST_MS, VOICE_LEAD_MS + voice.duration * 1000 + AFTER_VOICE_MS));
+          follow(beat, VOICE_LEAD_MS + voice.duration * 1000 * SECOND_AT); // as the second sentence begins
         };
         voice.onended = () => {
           // The clock above already moves on; this only covers a clip whose length was not known.
@@ -234,8 +267,11 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
             if (!still && !lastBeat) run(BEAT_MS);
           });
         }, VOICE_LEAD_MS);
-      } else if (!still && !lastBeat) {
-        run(BEAT_MS);
+      } else {
+        // A beat with two pictures stays longer, and changes picture part way.
+        const stay = beat.then ? BEAT_MS * 1.45 : BEAT_MS;
+        if (!still && !lastBeat) run(stay);
+        follow(beat, stay * SECOND_AT + 900);
       }
     }
 
@@ -251,6 +287,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       window.clearTimeout(timer);
       window.clearTimeout(swap);
       window.clearTimeout(lead);
+      window.clearTimeout(second);
       voice.pause();
       document.removeEventListener("keydown", onKey, true);
       document.removeEventListener("visibilitychange", onHide);
