@@ -38,6 +38,7 @@ function screen(name: keyof typeof SCREENS, label: string, body: string): HTMLEl
   const el = document.createElement("div");
   el.className = "intro-wall";
   el.dataset.open = opens;
+  el.dataset.screen = name; // intro.css moves the screen to its place in the photo room
   el.title = opens === "check" ? "Open Where to check" : "Open How it decides";
   el.style.cssText = `left:${left}%;top:${top}%;width:${width}%;height:${height}%`;
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(label)}" font-family="inherit">${body}${OPEN_HINT}</svg>`;

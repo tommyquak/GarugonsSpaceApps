@@ -21,7 +21,7 @@ import { buildScene } from "./scene";
 import "./intro.css";
 
 const SEEN_KEY = "dsw-intro-seen";
-const START_SCALE = 0.36; // intro.css places the room for exactly this value
+const START_SCALE = 0.36; // used only if the value in intro.css cannot be read
 const LINE = "Come see what this season\u2019s radar found over Borneo.";
 
 let finishCurrent: (() => void) | null = null;
@@ -86,7 +86,7 @@ export function playIntro(): void {
   const ui = h(
     "div",
     { class: "intro-ui", role: "dialog", "aria-modal": "true", "aria-label": "Introduction: a made-up observation room with this map on its wall screen" },
-    h("p", { class: "intro-mark", text: "Illustrative scene, drawn with Super Intelligence (SI)" }),
+    h("p", { class: "intro-mark", text: "Illustrative scene, made with Super Intelligence (SI)" }),
     card,
   );
   let room: HTMLElement | null = null;
@@ -139,6 +139,14 @@ export function playIntro(): void {
   }
   finishCurrent = finish;
 
+  /** Where the camera starts: the scale of the stage and the point it is scaled about, both set in intro.css. */
+  function startView(): { scale: number; x: number; y: number } {
+    const style = window.getComputedStyle(root!);
+    const scale = Number(style.getPropertyValue("--intro-scale")) || START_SCALE;
+    const [x, y] = style.transformOrigin.split(" ").map(parseFloat);
+    return { scale, x: Number.isFinite(x) ? x : window.innerWidth * 0.5, y: Number.isFinite(y) ? y : window.innerHeight * 0.375 };
+  }
+
   /** The camera move into one side screen of the wall: it grows until it fills the view. */
   function goInto(wall: HTMLElement): void {
     if (done || moving) return;
@@ -153,12 +161,12 @@ export function playIntro(): void {
       // the middle of the clicked screen ends in the middle of the view.
       const box = wall.getBoundingClientRect();
       const view = { w: window.innerWidth, h: window.innerHeight };
-      const origin = { x: view.w * 0.5, y: view.h * 0.375 };
+      const origin = startView();
       const grow = Math.min(view.w / box.width, view.h / box.height) * 0.88;
       const dx = view.w / 2 - origin.x - grow * (box.left + box.width / 2 - origin.x);
       const dy = view.h / 2 - origin.y - grow * (box.top + box.height / 2 - origin.y);
       const push = root!.animate(
-        [{ transform: `translate(0px, 0px) scale(${START_SCALE})` }, { transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${(START_SCALE * grow).toFixed(4)})` }],
+        [{ transform: `translate(0px, 0px) scale(${origin.scale})` }, { transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${(origin.scale * grow).toFixed(4)})` }],
         { duration, easing, fill: "forwards" },
       );
       animations.push(push);
@@ -192,7 +200,7 @@ export function playIntro(): void {
       timer = window.setTimeout(finish, duration + 400); // the move can never outstay its time
       enter.disabled = true;
       skip.focus({ preventScroll: true });
-      const push = root!.animate([{ transform: `scale(${START_SCALE})` }, { transform: "scale(1)" }], { duration, easing, fill: "forwards" });
+      const push = root!.animate([{ transform: `scale(${startView().scale})` }, { transform: "scale(1)" }], { duration, easing, fill: "forwards" });
       animations.push(push);
       for (const el of foreground) {
         animations.push(el.animate([{ transform: "scale(1)", opacity: 1 }, { transform: "scale(2.4)", opacity: 0, offset: 0.75 }, { transform: "scale(2.4)", opacity: 0 }], { duration, easing, fill: "forwards" }));

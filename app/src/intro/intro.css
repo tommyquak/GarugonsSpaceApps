@@ -6,11 +6,13 @@
   inset: 0;
 }
 
-/* While the intro is up, the stage is scaled about this point. A scale of 0.36 (START_SCALE
-   in index.ts) puts the app, shrunk, in the middle of the view and a little above centre. */
+/* While the intro is up, the stage is scaled about this point. A scale of 0.36 puts the app,
+   shrunk, in the middle of the view and a little above centre. index.ts reads both the scale
+   and the point from here, so the camera moves start from whatever these rules say. */
 #intro-stage.intro-playing {
+  --intro-scale: 0.36;
   transform-origin: 50% 37.5%;
-  transform: scale(0.36);
+  transform: scale(var(--intro-scale));
   will-change: transform;
 }
 
@@ -211,4 +213,95 @@
   background: #0b0f14;
   opacity: 0;
   pointer-events: none;
+}
+
+/* Wide screens: a photo-real room (room.png, 1672 x 941, generated with SI) instead of the
+   drawn one. Its five wall screens are blank. Measured in the image, as shares of its size:
+     centre glass   left 30.084%  top 20.617%  width 39.952%  height 35.919%  (middle at 50.06%, 38.576%)
+     side screens   left 9.51% or 72.43%, top 21.36% or 41.02%
+   The photo is sized from the viewport so that #app, at its own size, fits inside the centre
+   glass and is centred on it: the glass is 1.98 to 1, so a narrower view leaves a dark margin
+   of blank screen at the sides and a wider one at the top and bottom. #app is lifted over the
+   photo, so the image needs no hole. Below 3:2 the sides of the photo would be cut past the
+   side screens, so the drawn room stays for those views and for phones. */
+@media (min-aspect-ratio: 3/2) and (min-width: 900px) {
+  /* The image is 2.784 times the height of the view here, so 0.36 just covers the view. */
+  #intro-stage.intro-playing {
+    transform-origin: 50% 32.25%;
+  }
+
+  #intro-stage.intro-playing > #app {
+    z-index: 1;
+  }
+
+  .intro-room {
+    --iw: max(250.3vw, 494.67vh);
+    z-index: auto;
+    left: calc(50vw - 0.5006 * var(--iw));
+    top: calc(50vh - 0.21711 * var(--iw));
+    width: var(--iw);
+    height: calc(0.5628 * var(--iw));
+    background: #050607 url("./room.png") center / 100% 100% no-repeat;
+  }
+
+  .intro-room > .intro-layer,
+  .intro-room > .intro-person {
+    display: none;
+  }
+
+  .intro-screen {
+    z-index: 2;
+    left: 30.084%;
+    top: 20.617%;
+    width: 39.952%;
+    height: 35.919%;
+  }
+
+  /* wall.ts places the four screens for the drawn room; these are their places in the photo. */
+  .intro-wall {
+    z-index: 2;
+  }
+  .intro-wall[data-screen="sources"],
+  .intro-wall[data-screen="graph"] {
+    left: 9.51% !important;
+    width: 18.24% !important;
+  }
+  .intro-wall[data-screen="classes"],
+  .intro-wall[data-screen="rule"] {
+    left: 72.43% !important;
+    width: 18.48% !important;
+  }
+  .intro-wall[data-screen="sources"],
+  .intro-wall[data-screen="classes"] {
+    top: 21.36% !important;
+    height: 17.32% !important;
+  }
+  .intro-wall[data-screen="graph"],
+  .intro-wall[data-screen="rule"] {
+    top: 41.02% !important;
+    height: 15.62% !important;
+  }
+
+  /* One line on the plain wall between the ceiling and the centre screen. */
+  .intro-sign {
+    z-index: 2;
+    left: 25%;
+    width: 50%;
+    top: 14.4%;
+    height: 4.8%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-end;
+    gap: 0 28px;
+    font-size: 28px;
+  }
+}
+
+/* From 16:9 up the photo is narrower against the view, so the start is a little closer in. */
+@media (min-aspect-ratio: 16/9) and (min-width: 900px) {
+  #intro-stage.intro-playing {
+    --intro-scale: 0.401;
+    transform-origin: 50% 34%;
+  }
 }
