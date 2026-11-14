@@ -99,6 +99,7 @@ done
 
 echo "== 6b. split by peat and fire (skips a site until track 3's layers are in $L)"
 $PY pipeline/drying/split.py --layers "$L" --sites $SITES --tracks $ASC $DESC
+$PY pipeline/drying/by_cover.py --stacks "$S" --layers "$L" --sites $SITES --tracks $ASC $DESC --start-from "$START_FROM"
 
 echo "== 6c. fusion: one record per 1 km block (skips a site until the fire, peat and canal layers exist)"
 for site in $SITES; do
