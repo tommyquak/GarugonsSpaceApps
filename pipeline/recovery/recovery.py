@@ -3,7 +3,8 @@
 
 When the rain comes back, wet ground brightens again in HH. Vegetation that was lost does
 not come back in days, so HV tells a different story. For one site and one track with at
-least one pass after the rain, on 250 m blocks and with the scene-wide shift removed:
+least one pass after the rain, on 250 m blocks and with the scene-wide shift removed from HH
+(HV is used as measured, docs/AUDIT.md finding 5):
 
   fall      late dry season minus start of season   (the dry-down, as in pipeline/drying)
   rebound   first pass after the rain minus late dry season
@@ -62,7 +63,9 @@ def recover(stack, base, dry_until, late_n=2, late_skip=0, wet_pass=0, start_fro
     after = wet[wet_pass]
     out = {}
     for pol in ("hh", "hv"):
-        layers = normalised(stack, base, pol)
+        # HH has the scene-wide shift removed against deep forest. HV is used as measured: the audit
+        # (docs/AUDIT.md, finding 5) found the forest shift adds about 0.5 dB of apparent HV loss.
+        layers = normalised(stack, base, pol) if pol == "hh" else stack[pol]
         start = np.mean([block_mean(layers[i]) for i in start_passes(stack["dates"], start_from)], axis=0)
         late = np.mean([block_mean(layers[i]) for i in dry[len(dry) - late_skip - late_n:len(dry) - late_skip]], axis=0)
         wet_level = block_mean(layers[after])
@@ -161,6 +164,14 @@ def main():
                 put(f"recovery_{pol}_median_left_{zone}_{tag}", m["left"], "dB", a.site, ME, note="level after the rain against the start of the season")
                 line += f"  {pol.upper()} {m['regained']:.0%} regained, {m['left']:+.2f} dB left"
             print(line)
+        # The contrast the audit kept (docs/AUDIT.md, claim 4): after the rain, HV on peat with fire
+        # detections against peat without. Both groups share the scene, so the HV calibration cancels.
+        burnt, clear = strong & peat & fire, strong & peat & ~fire
+        if min(burnt.sum(), clear.sum()) >= MIN_ZONE_BLOCKS:
+            gap = float(np.median(out["hv"]["left"][burnt]) - np.median(out["hv"]["left"][clear]))
+            put(f"recovery_hv_left_fire_minus_no_fire_on_peat_{tag}", gap, "dB", a.site, ME,
+                note="median HV after the rain against the start, peat with fire detections minus peat without; HV as measured")
+            print(f"   HV after the rain, peat with fire minus peat without: {gap:+.2f} dB")
     else:
         print(f"   {peat_file.name} or {fire_file.name} is not there yet, no split by peat and fire")
 
