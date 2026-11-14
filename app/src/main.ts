@@ -137,7 +137,11 @@ async function start(): Promise<void> {
   // Last, so that a link someone was sent restores its view over the defaults set above.
   const shared = window.location.hash.length > 1;
   const link = bindLink(map, overlays, chart, actions);
-  opening.onRun((running) => link.setQuiet(running)); // the story's own changes of view are not steps in the history
+  opening.onRun((running) => {
+    link.setQuiet(running); // the story's own changes of view are not steps in the history
+    // The story frames the map beside its caption, which the usual limits on panning would not allow.
+    if (extent) map.setMaxBounds(running ? null : studyLimits(map, extent));
+  });
   setExplore(actions.parts().includes("class"));
   // Without a link, the map opens on the one view made for a first look.
   if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
