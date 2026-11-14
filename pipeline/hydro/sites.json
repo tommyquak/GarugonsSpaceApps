@@ -1,0 +1,10 @@
+{
+  "source": "Hirano, daily groundwater level at undrained and drained peat swamp forest near Palangkaraya, figshare, doi 10.6084/m9.figshare.22321129, CC BY 4.0",
+  "download": "https://ndownloader.figshare.com/files/39709879",
+  "rain_box": [113.85, -2.40, 114.10, -2.28],
+  "sites": {
+    "UF": {"title": "Forest with little drainage", "sheet": 1, "lon": 113.90, "lat": -2.32, "years": "2015 to 2018"},
+    "DF": {"title": "Drained forest", "sheet": 2, "lon": 114.04, "lat": -2.35, "years": "2013 to 2017"}
+  },
+  "note": "Coordinates from Hirano et al. 2015, Global Change Biology, author manuscript: UF 2.32 S, 113.90 E. That text prints DF as 114.14 E, which is 27 km from UF and contradicts its own statement that the sites lie within 15 km; the burnt site next to DF on the same canal is given as 114.04 E. We use 114.04 E for DF and say so wherever the site is shown."
+}
