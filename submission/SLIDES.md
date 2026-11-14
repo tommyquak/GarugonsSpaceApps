@@ -14,7 +14,7 @@ The deck is made by `submission/build_slides.py` (a `.pptx` for Google Slides) a
 4. The app in four recordings: the season, "Where to check" in 3D, the ontology under "How it decides", the field assessment.
 5. Why believe it: two orbits agree, and the audit.
 6. The limits, each with our answer, and the water-table bridge.
-7. What comes next, and the links.
+7. What comes next (ground truth; subsidence as a second layer, as a plan; more seasons and other peatlands), and the links.
 
 Build the final deck with `--final`; all eight keys it reads are final. The outline below is the earlier plan, kept for reference.
 

@@ -47,7 +47,8 @@ We are a student team at a hackathon, and this is a prototype. Honest next steps
 
 1. **Ground truth,** as above. Until then the list is a screening result.
 2. **A second and third season.** One El Nino year cannot show how the method behaves in a wet year.
-3. **Someone to hand it to.** The outputs are in formats a GIS or a GPS reads. It needs an agency or a field group to pull on it.
+3. **Subsidence, as a second layer.** This season's map shows drying, which comes and goes with the rain. The slower signal is the ground itself: drained peat sinks as it oxidises, and that sinking is carbon lost to the air (Hooijer et al. 2012). L-band radar interferometry has measured peat subsidence in Central Kalimantan and been checked against field instruments (Tay et al. 2025). NISAR records the same kind of pairs every 12 days, and we already use their coherence for the burn flag. One season is too short to show centimetres a year, so this is a plan and not a result: with two to three years of passes, a subsidence layer beside the drying layer would say which land is drying this season and which has been losing peat for years.
+4. **Someone to hand it to.** The outputs are in formats a GIS or a GPS reads. It needs an agency or a field group to pull on it.
 
 ## What we do not promise
 
@@ -70,3 +71,5 @@ Peat fires send haze across the region, and the ground they start on is hidden b
 5. Mongabay (2022), Indonesia on track with peatland restoration but bogged down with mangroves. https://news.mongabay.com/2022/02/indonesia-on-track-with-peatland-restoration-but-bogged-down-with-mangroves/ Press coverage; the agency's own report would be a better source.
 6. Hirano and colleagues, daily groundwater level in drained and undrained peat swamp forest near Palangka Raya, 2013 to 2018. figshare, doi 10.6084/m9.figshare.22321129, CC BY 4.0.
 7. Putra, Holden and Baird, water level, rainfall and evapotranspiration at forested, dammed and drained sites in Sebangau, from August 2019. University of Leeds, doi 10.5518/960, CC BY 4.0.
+8. Hooijer, A., Page, S., Jauhiainen, J., Lee, W. A., Lu, X. X., Idris, A., and Anshari, G. (2012), Subsidence and carbon loss in drained tropical peatlands, Biogeosciences 9, 1053 to 1071. doi 10.5194/bg-9-1053-2012.
+9. Tay, C., et al. (2025), Satellite radar advances carbon emissions accountability over tropical peat, Communications Earth and Environment 6, 971. doi 10.1038/s43247-025-02926-6.

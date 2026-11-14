@@ -51,6 +51,9 @@ CHOICES = [
     ("Levels, not the size of the fall.", "Peat beside a canal falls far and recovers, so blocks are ranked by lasting change."),
     ("One ontology.", "Sources, observations, states and classes, with their thresholds, live in one file that the pipeline and the app both read."),
 ]
+# What comes next (slide 7), also used by build_html_deck.py. The papers are in docs/REFERENCES.md.
+SUBSIDENCE = ("Drained peat sinks as it oxidises, and that sinking is carbon lost (Hooijer et al. 2012). L-band radar has measured it in Central Kalimantan, checked in the field (Tay et al. 2025). NISAR's 12-day pairs, whose coherence we already use, could do the same with two to three years of passes.")
+MORE_SEASONS = "Every dry season set against wet years. The pipeline takes any bounding box; not yet run on a second site."
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
 CODE_URL = "https://github.com/tommyquak/GarugonsSpaceApps"
 
@@ -433,10 +436,10 @@ def build(a):
     title(s, "What NISAR could do next")
     nxt = [
         [("Ground truth first. ", {"bold": True, "color": INK}), "A sixty-visit field protocol, in the late dry season and after the first rain."],
-        [("Years, not months. ", {"bold": True, "color": INK}), "Subsidence by interferometry over whole peat domes, and every dry season set against wet years."],
-        [("Anywhere. ", {"bold": True, "color": INK}), "The pipeline takes any bounding box; not yet run on a second site."],
+        [("Subsidence, a second layer. ", {"bold": True, "color": INK}), SUBSIDENCE],
+        [("More seasons, other peatlands. ", {"bold": True, "color": INK}), MORE_SEASONS],
     ]
-    text(s, M, Inches(1.8), Inches(5.6), Inches(3.6), nxt, size=17, color=DIM, space_after=16)
+    text(s, M, Inches(1.75), Inches(5.6), Inches(3.6), nxt, size=15, color=DIM, space_after=14)
     framed(s, fig / "app_room.jpg", Inches(6.55), Inches(1.75), Inches(6.18), "App entry view")   # 1915 x 900 px
     text(s, Inches(6.55), Inches(4.75), Inches(6.18), Inches(0.5),
          "The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.",
@@ -447,7 +450,8 @@ def build(a):
     ]
     text(s, M, Inches(5.45), Inches(12.0), Inches(0.9), links, size=15, color=DIM, space_after=6)
     footer(s, 7, "Made with Super Intelligence (SI) assistance from NASA and ISRO NISAR L2 GCOV data. All code and data open.", draft)
-    s.notes_slide.notes_text_frame.text = "Next steps and links."
+    s.notes_slide.notes_text_frame.text = ("Next steps and links. Subsidence is a plan, not a result: one season is too short "
+                                           "to show it, and nothing in this deck measures it.")
 
     link_colour(prs, "5AA9EE")
     prs.save(a.out)
