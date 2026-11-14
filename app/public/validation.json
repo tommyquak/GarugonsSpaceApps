@@ -3938,5 +3938,197 @@
   "status": "exploratory",
   "made_by": "pipeline/context/peat_cifor.py",
   "note": "PEATMAP peat that CIFOR maps as peat too"
+ },
+ "fire_earlier_share_off_peat_east": {
+  "value": 0.5495,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "fire in any of 2015, 2019, 2023"
+ },
+ "fire_earlier_share_off_peat_west": {
+  "value": 0.4831,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "fire in any of 2015, 2019, 2023"
+ },
+ "fire_earlier_share_on_peat_east": {
+  "value": 0.8108,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "fire in any of 2015, 2019, 2023"
+ },
+ "fire_earlier_share_on_peat_west": {
+  "value": 0.4717,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "fire in any of 2015, 2019, 2023"
+ },
+ "fire_new_km2_off_peat_east": {
+  "value": 220.3925,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land with no fire in any of 2015, 2019, 2023"
+ },
+ "fire_new_km2_off_peat_west": {
+  "value": 124.33,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land with no fire in any of 2015, 2019, 2023"
+ },
+ "fire_new_km2_on_peat_east": {
+  "value": 93.5475,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land with no fire in any of 2015, 2019, 2023"
+ },
+ "fire_new_km2_on_peat_west": {
+  "value": 278.6075,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land with no fire in any of 2015, 2019, 2023"
+ },
+ "fire_repeat_share_off_peat_east": {
+  "value": 0.7748,
+  "unit": "share of the 2026 fire in the zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land that also had fire in any of 2015, 2019, 2023; compare with fire_earlier_share"
+ },
+ "fire_repeat_share_off_peat_west": {
+  "value": 0.7544,
+  "unit": "share of the 2026 fire in the zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land that also had fire in any of 2015, 2019, 2023; compare with fire_earlier_share"
+ },
+ "fire_repeat_share_on_peat_east": {
+  "value": 0.8672,
+  "unit": "share of the 2026 fire in the zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land that also had fire in any of 2015, 2019, 2023; compare with fire_earlier_share"
+ },
+ "fire_repeat_share_on_peat_west": {
+  "value": 0.8561,
+  "unit": "share of the 2026 fire in the zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "2026 fire on land that also had fire in any of 2015, 2019, 2023; compare with fire_earlier_share"
+ },
+ "fire_share_off_peat_2015_east": {
+  "value": 0.42,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2015 files pulled"
+ },
+ "fire_share_off_peat_2015_west": {
+  "value": 0.3982,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2015 files pulled"
+ },
+ "fire_share_off_peat_2019_east": {
+  "value": 0.204,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2019 files pulled"
+ },
+ "fire_share_off_peat_2019_west": {
+  "value": 0.0987,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2019 files pulled"
+ },
+ "fire_share_off_peat_2023_east": {
+  "value": 0.204,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2023 files pulled"
+ },
+ "fire_share_off_peat_2023_west": {
+  "value": 0.1407,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2023 files pulled"
+ },
+ "fire_share_on_peat_2015_east": {
+  "value": 0.5361,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2015 files pulled"
+ },
+ "fire_share_on_peat_2015_west": {
+  "value": 0.4163,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2015 files pulled"
+ },
+ "fire_share_on_peat_2019_east": {
+  "value": 0.4926,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2019 files pulled"
+ },
+ "fire_share_on_peat_2019_west": {
+  "value": 0.2075,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2019 files pulled"
+ },
+ "fire_share_on_peat_2023_east": {
+  "value": 0.2896,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2023 files pulled"
+ },
+ "fire_share_on_peat_2023_west": {
+  "value": 0.1309,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/repeat_fire.py",
+  "note": "inside the footprint of a fire detection in the 2023 files pulled"
  }
 }
