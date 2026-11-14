@@ -2,9 +2,8 @@
 // A skippable way in: the view opens on a made-up peatland observation room, and the large
 // screen on its far wall is this app itself, shrunk. The view holds there until the visitor
 // clicks that screen or "Enter dashboard"; then the camera moves through the screen and the
-// room is thrown away. "Skip to map" does the same with no camera move. Clicking one of the
-// side screens on the wall (wall.ts) moves the camera into that screen instead, then opens the
-// view it shows.
+// room is thrown away. "Skip to map" does the same with no camera move. The side screens on
+// the wall (wall.ts) are displays only: the main screen is the one way in.
 //
 // How it stays out of the map's way:
 //   - #app and the room share one parent, the stage, and only the stage is scaled. The app is
@@ -93,7 +92,6 @@ export function playIntro(): void {
   let foreground: HTMLElement[] = [];
   let timer = 0;
   let moving = false;
-  let openAfter: string | null = null; // the view a clicked wall screen leads to
 
   const onKey = (event: KeyboardEvent): void => {
     if (event.key === "Escape") {
@@ -114,8 +112,8 @@ export function playIntro(): void {
     if (done) return;
     done = true;
     finishCurrent = null;
-    // How the visitor left, for main.ts: through the main screen ("enter"), a wall screen, or Skip.
-    document.documentElement.dataset.introExit = openAfter ? "wall" : moving ? "enter" : "skip";
+    // How the visitor left, for main.ts: through the main screen ("enter") or by Skip.
+    document.documentElement.dataset.introExit = moving ? "enter" : "skip";
     window.dispatchEvent(new Event("intro:exit"));
     window.clearTimeout(timer);
     document.removeEventListener("keydown", onKey, true);
@@ -133,12 +131,6 @@ export function playIntro(): void {
       story.classList.add("intro-ready");
       window.setTimeout(() => story.classList.remove("intro-ready"), 1700);
     }
-    // A wall screen was clicked: press the header button for its view, as a visitor would.
-    if (openAfter) {
-      const ids = openAfter === "check" ? ["btn-actions", "tab-actions"] : ["btn-how", "btn-actions", "tab-actions"];
-      const button = ids.map((id) => document.getElementById(id)).find((el) => el && el.offsetParent !== null);
-      if (button && button.getAttribute("aria-pressed") !== "true") button.click();
-    }
   }
   finishCurrent = finish;
 
@@ -148,49 +140,6 @@ export function playIntro(): void {
     const scale = Number(style.getPropertyValue("--intro-scale")) || START_SCALE;
     const [x, y] = style.transformOrigin.split(" ").map(parseFloat);
     return { scale, x: Number.isFinite(x) ? x : window.innerWidth * 0.5, y: Number.isFinite(y) ? y : window.innerHeight * 0.375 };
-  }
-
-  /** The camera move into one side screen of the wall: it grows until it fills the view. */
-  function goInto(wall: HTMLElement): void {
-    if (done || moving) return;
-    moving = true;
-    try {
-      const duration = 1300;
-      const easing = "cubic-bezier(0.6, 0, 0.3, 1)";
-      timer = window.setTimeout(finish, duration + 900); // the move can never outstay its time
-      enter.disabled = true;
-      skip.focus({ preventScroll: true });
-      // The stage is scaled about a fixed point (intro.css). Scale it further and shift it, so
-      // the middle of the clicked screen ends in the middle of the view.
-      const box = wall.getBoundingClientRect();
-      const view = { w: window.innerWidth, h: window.innerHeight };
-      const origin = startView();
-      const grow = Math.min(view.w / box.width, view.h / box.height) * 0.88;
-      const dx = view.w / 2 - origin.x - grow * (box.left + box.width / 2 - origin.x);
-      const dy = view.h / 2 - origin.y - grow * (box.top + box.height / 2 - origin.y);
-      const push = root!.animate(
-        [{ transform: `translate(0px, 0px) scale(${origin.scale})` }, { transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${(origin.scale * grow).toFixed(4)})` }],
-        { duration, easing, fill: "forwards" },
-      );
-      animations.push(push);
-      animations.push(ui.animate([{ opacity: 1 }, { opacity: 0, offset: 0.4 }, { opacity: 0 }], { duration, fill: "forwards" }));
-      // The screen has filled the view: dip to dark, swap the room for the app with that view open, and come back.
-      push.addEventListener("finish", () => {
-        const veil = h("div", { class: "intro-veil" });
-        document.body.append(veil);
-        const dip = veil.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, fill: "forwards" });
-        const lift = (): void => {
-          finish();
-          const out = veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, fill: "forwards" });
-          out.addEventListener("finish", () => veil.remove());
-          window.setTimeout(() => veil.remove(), 600);
-        };
-        dip.addEventListener("finish", lift);
-        window.setTimeout(() => !done && lift(), 400);
-      });
-    } catch {
-      finish();
-    }
   }
 
   /** The one camera move, through the wall screen. */
@@ -227,12 +176,6 @@ export function playIntro(): void {
 
     enter.addEventListener("click", go);
     scene.screen.addEventListener("click", go);
-    scene.room.addEventListener("click", (event) => {
-      const wall = (event.target as Element | null)?.closest<HTMLElement>(".intro-wall");
-      if (!wall) return;
-      openAfter = wall.dataset.open ?? null;
-      goInto(wall);
-    });
     skip.addEventListener("click", finish);
     document.addEventListener("keydown", onKey, true);
     document.addEventListener("visibilitychange", onHide);
