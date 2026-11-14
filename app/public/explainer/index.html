@@ -11,29 +11,34 @@
 </style>
 </head>
 <body>
-<canvas id="stage" width="1280" height="720" aria-label="Animation: an L-band radar pulse meets wet ground, dry ground, burnt forest and rewetted ground, and the HH and HV echoes change. A schematic, not data."></canvas>
+<canvas id="stage" width="1280" height="720" aria-label="Animation: an L-band radar pulse meets open drained peat and closed forest through a dry season. The echo from open peat falls as it dries, falls in HV where fire burns the scrub, and rises in HH after rain, while the forest echo hardly changes. A schematic, not data."></canvas>
 <script>
-// An animated schematic of the two L-band echoes over one dry season, in four acts:
-// wet, fall, fire, rain. Every frame is a pure function of time, so the page can be played
-// live or stepped frame by frame (window.seek) when a GIF is recorded from it.
+// An animated schematic of the L-band echoes over one dry season, in four acts: wet, fall,
+// fire, rain. Left: open, drained peat, where the echo changes. Right: closed forest, which
+// hardly changes and is the yardstick the map is measured against. Every frame is a pure
+// function of time, so the page can be played live or stepped frame by frame (window.seek)
+// when a GIF is recorded from it.
 "use strict";
 const canvas = document.getElementById("stage");
 const g = canvas.getContext("2d");
 const W = 1280, H = 720, GROUND = 548;
 const ACT = 4.2, ACTS = 4, LOOP = ACT * ACTS;
 const C = { sky0: "#0b0f14", sky1: "#17222e", ink: "#eef2f6", muted: "#9aa7b4", wet: "#2d6fb3", dry: "#b28c57", peat: "#3b2a1c",
-            trunk: "#6f4d2e", leaf: "#2f8a5f", leaf2: "#46a877", hh: "#f2b25a", hv: "#63d9a0", fire: "#ff6a3d", rain: "#8fc4f0", char: "#2a2a2e" };
+            trunk: "#6f4d2e", leaf: "#2f8a5f", leaf2: "#46a877", scrub: "#7fa650", hh: "#f2b25a", hv: "#63d9a0", forest: "#9fb3c8",
+            fire: "#ff6a3d", rain: "#8fc4f0", char: "#2a2a2e" };
 const SAT = { x: 150, y: 96 };
-const TREES = [{ x: 500, h: 200, r: 78 }, { x: 715, h: 232, r: 90 }, { x: 915, h: 190, r: 74 }];
+const OPEN = { x0: 250, x1: 650 }, CANAL = { x: 548, w: 46 }, FOREST = { x0: 676, x1: 1040 };
+const TREES = [{ x: 744, h: 214, r: 76 }, { x: 852, h: 246, r: 86 }, { x: 956, h: 206, r: 72 }];
+const SNAGS = [{ x: 330, h: 120 }, { x: 486, h: 96 }];
 const ACT_TEXT = [
-  ["Wet", "Wet ground: a strong HH echo bounces between ground and trunk."],
-  ["Fall", "The surface dries, and the HH echo falls."],
-  ["Fire", "Fire takes the canopy, and the HV echo falls."],
-  ["Rain", "Rain returns. HH rises again. HV stays lower where the fire was."],
+  ["Wet", "Wet season: open peat returns a strong HH echo.", "Closed forest echoes mostly from its canopy."],
+  ["Fall", "The peat dries, and the HH echo from open peat falls.", "Closed forest hardly changes, so it serves as the yardstick."],
+  ["Fire", "Fire burns the dry scrub, and the HV echo falls there.", "Smoke hides the ground from optical satellites. The radar still sees it."],
+  ["Rain", "Rain returns, and HH rises again.", "HV stays lower where the fire was."],
 ];
-// What each act ends as: how wet the ground is, how much canopy is left, and the two echo strengths (0 to 1).
-const END = [{ wet: 1.0, canopy: 1.0, hh: 0.9, hv: 0.72 }, { wet: 0.12, canopy: 1.0, hh: 0.42, hv: 0.68 },
-             { wet: 0.12, canopy: 0.18, hh: 0.46, hv: 0.3 }, { wet: 0.95, canopy: 0.18, hh: 0.84, hv: 0.33 }];
+// What each act ends as: how wet the ground is, how much scrub is left, and three echo strengths (0 to 1).
+const END = [{ wet: 1.0, scrub: 1.0, hh: 0.88, hv: 0.5, forest: 0.8 }, { wet: 0.1, scrub: 1.0, hh: 0.4, hv: 0.46, forest: 0.79 },
+             { wet: 0.1, scrub: 0.12, hh: 0.42, hv: 0.2, forest: 0.79 }, { wet: 0.95, scrub: 0.12, hh: 0.82, hv: 0.24, forest: 0.8 }];
 
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const ease = (v) => { v = clamp(v); return v * v * (3 - 2 * v); };
@@ -49,10 +54,10 @@ function noise(n) { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s
 function stateAt(t) {
   const act = Math.floor(t / ACT) % ACTS, u = (t % ACT) / ACT;
   const to = END[act], from = act === 0 ? to : END[act - 1];
-  const scene = ease(u / 0.3);                 // the ground and the canopy change in the first third of an act
+  const scene = ease(u / 0.3);                 // the ground and the scrub change in the first third of an act
   const echo = ease((u - 0.62) / 0.14);        // the meters move when the echoes arrive back
-  return { act, u, wet: lerp(from.wet, to.wet, scene), canopy: lerp(from.canopy, to.canopy, scene),
-           hh: lerp(from.hh, to.hh, echo), hv: lerp(from.hv, to.hv, echo), hhOut: to.hh, hvOut: to.hv };
+  return { act, u, wet: lerp(from.wet, to.wet, scene), scrub: lerp(from.scrub, to.scrub, scene),
+           hh: lerp(from.hh, to.hh, echo), hv: lerp(from.hv, to.hv, echo), forest: lerp(from.forest, to.forest, echo), out: to };
 }
 
 function along(points, s) {                    // a point and its direction at distance s along a path
@@ -92,7 +97,7 @@ function faintPath(points, colour) {
   g.beginPath(); points.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke(); g.restore();
 }
 
-function drawSky(t) {
+function drawSky() {
   const sky = g.createLinearGradient(0, 0, 0, GROUND);
   sky.addColorStop(0, C.sky0); sky.addColorStop(1, C.sky1);
   g.fillStyle = sky; g.fillRect(0, 0, W, H);
@@ -112,67 +117,105 @@ function drawSatellite(t) {
   g.restore();
   g.fillStyle = C.muted; g.font = "15px system-ui, sans-serif"; g.fillText("NISAR, L-band", SAT.x - 52, y + 62);
 }
+// How far below the surface the water sits at x: canals pull it down on the open side, the forest holds it up.
+function waterDepth(x, wet) {
+  const forestSide = ease((x - 640) / 140);
+  return 34 + (1 - wet) * lerp(96, 30, forestSide);
+}
 function drawGround(s) {
   g.fillStyle = C.peat; g.fillRect(0, GROUND, W, H - GROUND);
-  g.fillStyle = mix(C.dry, C.wet, s.wet); g.fillRect(0, GROUND, W, 30);
-  const table = GROUND + 34 + (1 - s.wet) * 70;                                            // the water in the peat, as a level
-  g.fillStyle = "rgba(45,111,179,0.55)"; g.fillRect(0, table, W, H - table);
-  g.strokeStyle = "rgba(143,196,240,0.8)"; g.lineWidth = 1.5; g.setLineDash([10, 8]);
-  g.beginPath(); g.moveTo(0, table); g.lineTo(W, table); g.stroke(); g.setLineDash([]);
-  g.fillStyle = "rgba(238,242,246,0.75)"; g.font = "14px system-ui, sans-serif"; g.fillText("water in the peat", 22, table + 20);
-  g.fillStyle = "rgba(13,17,23,0.55)"; g.fillRect(1040, GROUND, 6, H - GROUND);              // a canal
-  g.fillRect(1040, GROUND, 60, 30 + (1 - s.wet) * 40);
-  g.fillStyle = mix("#1c2a3a", C.wet, s.wet * 0.9); g.fillRect(1046, GROUND + 6 + (1 - s.wet) * 44, 48, 60);
-}
-function drawTree(tree, s, t, burning) {
-  const top = GROUND - tree.h;
-  g.fillStyle = mix(C.char, C.trunk, clamp(s.canopy * 1.4));
-  g.fillRect(tree.x - 9, top + 30, 18, tree.h - 30);
-  g.strokeStyle = g.fillStyle; g.lineWidth = 6; g.lineCap = "round";
-  for (const [dx, dy] of [[-46, -34], [40, -44], [-22, -70], [26, -78]]) { g.beginPath(); g.moveTo(tree.x, top + 60); g.lineTo(tree.x + dx, top + 60 + dy); g.stroke(); }
-  const sway = Math.sin(t * 1.1 + tree.x) * 4;
-  const blobs = [[0, 0, 1], [-0.72, 0.34, 0.74], [0.72, 0.3, 0.76], [-0.3, -0.5, 0.7], [0.36, -0.46, 0.66]];
-  blobs.forEach(([bx, by, br], i) => {
-    const keep = clamp(s.canopy * 1.25 - i * 0.05);
-    if (keep <= 0.02) return;
-    g.globalAlpha = 0.9 * keep;
-    g.fillStyle = i % 2 ? C.leaf2 : C.leaf;
-    g.beginPath(); g.arc(tree.x + bx * tree.r + sway, top + by * tree.r, tree.r * br * (0.55 + 0.45 * keep), 0, Math.PI * 2); g.fill();
-  });
-  g.globalAlpha = 1;
-  if (burning > 0) {                                                                        // flames, glow and smoke
-    g.save();
-    g.globalCompositeOperation = "lighter";
-    const glow = g.createRadialGradient(tree.x, top + 40, 10, tree.x, top + 40, tree.r * 2.4);
-    glow.addColorStop(0, `rgba(255,120,40,${0.5 * burning})`); glow.addColorStop(1, "rgba(255,120,40,0)");
-    g.fillStyle = glow; g.fillRect(tree.x - tree.r * 2.4, top - tree.r * 2, tree.r * 4.8, tree.r * 4.4);
-    for (let i = 0; i < 34; i++) {                                                          // tongues of flame, rising and narrowing
-      const life = (t * 1.4 + noise(i * 1.7 + tree.x)) % 1;
-      const x = tree.x + (noise(i * 7 + tree.x) - 0.5) * tree.r * 2 + Math.sin(t * 6 + i) * 6 * life;
-      const y = top + 70 - life * (150 + 60 * noise(i * 2.3)) + (noise(i * 3) - 0.5) * 60;
-      const w = (16 + 14 * noise(i * 5)) * (1 - life * 0.75), h = w * 2.4;
-      const flame = g.createRadialGradient(x, y, 0, x, y, h);
-      flame.addColorStop(0, `rgba(255,236,170,${0.85 * burning * (1 - life)})`);
-      flame.addColorStop(0.35, `rgba(255,150,50,${0.6 * burning * (1 - life)})`);
-      flame.addColorStop(1, "rgba(255,70,20,0)");
-      g.fillStyle = flame;
-      g.beginPath(); g.ellipse(x, y, w, h, 0, 0, Math.PI * 2); g.fill();
-    }
-    for (let i = 0; i < 16; i++) {                                                          // sparks
-      const life = (t * 0.9 + noise(i * 9.1 + tree.x)) % 1;
-      const x = tree.x + (noise(i * 4 + tree.x) - 0.5) * tree.r * 2.4 + Math.sin(t * 3 + i * 2) * 20 * life, y = top + 20 - life * 240;
-      g.fillStyle = `rgba(255,210,120,${burning * (1 - life)})`; g.fillRect(x, y, 2.4, 2.4);
-    }
-    g.restore();
+  for (let x = 0; x < W; x += 8) {                                                           // the surface: sand where dry, blue where wet, damp under the forest
+    const forestSide = ease((x - 640) / 140);
+    g.fillStyle = mix(C.dry, C.wet, Math.max(s.wet, forestSide * 0.45));
+    g.fillRect(x, GROUND, 8, 30);
   }
+  g.fillStyle = "rgba(45,111,179,0.55)";                                                      // the water in the peat
+  g.beginPath(); g.moveTo(0, H);
+  for (let x = 0; x <= W; x += 16) g.lineTo(x, GROUND + waterDepth(x, s.wet));
+  g.lineTo(W, H); g.closePath(); g.fill();
+  g.strokeStyle = "rgba(143,196,240,0.85)"; g.lineWidth = 1.5; g.setLineDash([10, 8]);
+  g.beginPath(); for (let x = 0; x <= W; x += 16) { const y = GROUND + waterDepth(x, s.wet); x ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); g.setLineDash([]);
+  g.fillStyle = "rgba(238,242,246,0.8)"; g.font = "14px system-ui, sans-serif"; g.fillText("water in the peat", 1092, GROUND + waterDepth(1092, s.wet) + 20);
+  const depth = waterDepth(CANAL.x, s.wet);                                                   // the canal: a cut that drains the peat
+  g.fillStyle = "#0f1620"; g.fillRect(CANAL.x, GROUND, CANAL.w, Math.max(depth + 26, 64));
+  g.fillStyle = mix("#22405f", C.wet, s.wet); g.fillRect(CANAL.x, GROUND + depth - 26 * s.wet, CANAL.w, Math.max(depth + 26, 64) - depth + 26 * s.wet);
+  g.fillStyle = C.muted; g.font = "13px system-ui, sans-serif"; g.fillText("canal", CANAL.x + 5, GROUND - 8);
+  g.font = "600 15px system-ui, sans-serif";                                                  // the two kinds of land
+  g.fillStyle = C.ink; g.shadowColor = "rgba(0,0,0,0.9)"; g.shadowBlur = 6;
+  g.fillText("Open, drained peat", OPEN.x0 + 14, GROUND + 21);
+  g.fillText("Closed forest: the yardstick", FOREST.x0 + 44, GROUND + 21);
+  g.shadowBlur = 0;
 }
-function drawSmoke(amount, t) {                    // smoke that drifts off after the fire
+function drawScrub(s, t) {                                                                    // ferns, shrubs and a few dead stems on the open peat
+  const alive = clamp(s.scrub * 1.15);
+  for (const snag of SNAGS) {
+    g.strokeStyle = mix(C.char, C.trunk, alive); g.lineWidth = 6; g.lineCap = "round";
+    g.beginPath(); g.moveTo(snag.x, GROUND); g.lineTo(snag.x, GROUND - snag.h); g.stroke();
+    g.lineWidth = 3.5;
+    for (const [dx, dy, at] of [[-22, -20, 0.55], [18, -24, 0.75], [-12, -16, 0.92]]) {
+      g.beginPath(); g.moveTo(snag.x, GROUND - snag.h * at); g.lineTo(snag.x + dx, GROUND - snag.h * at + dy); g.stroke();
+    }
+    if (alive > 0.2) { g.globalAlpha = 0.85 * alive; g.fillStyle = C.scrub; g.beginPath(); g.arc(snag.x + 2, GROUND - snag.h - 6, 20 * alive, 0, Math.PI * 2); g.fill(); g.globalAlpha = 1; }
+  }
+  for (let i = 0; i < 46; i++) {                                                              // tufts
+    const x = OPEN.x0 + 12 + noise(i * 2.7) * (OPEN.x1 - OPEN.x0 - 24);
+    if (x > CANAL.x - 8 && x < CANAL.x + CANAL.w + 8) continue;
+    const size = (9 + 15 * noise(i * 5.3)) * (0.3 + 0.7 * alive), sway = Math.sin(t * 1.4 + i) * 2 * alive;
+    g.fillStyle = mix(C.char, i % 3 ? C.scrub : C.leaf2, alive); g.globalAlpha = 0.95;
+    g.beginPath(); g.moveTo(x - size * 0.7, GROUND);
+    g.quadraticCurveTo(x - size * 0.5 + sway, GROUND - size * 1.5, x + sway, GROUND - size * 1.9);
+    g.quadraticCurveTo(x + size * 0.5 + sway, GROUND - size * 1.5, x + size * 0.7, GROUND); g.closePath(); g.fill();
+  }
+  g.globalAlpha = 1;
+}
+function drawForest(t) {                                                                      // closed canopy, the same in every act
+  for (let i = 0; i < 22; i++) {                                                              // understorey
+    const x = FOREST.x0 + 8 + noise(i * 3.9) * (FOREST.x1 - FOREST.x0 - 16), size = 12 + 16 * noise(i * 6.1);
+    g.fillStyle = i % 2 ? "#256e4c" : "#2f8a5f"; g.beginPath(); g.arc(x, GROUND - size * 0.5, size, Math.PI, 0); g.fill();
+  }
+  for (const tree of TREES) {
+    const top = GROUND - tree.h, sway = Math.sin(t * 1.1 + tree.x) * 4;
+    g.fillStyle = C.trunk; g.fillRect(tree.x - 9, top + 30, 18, tree.h - 30);
+    [[0, 0, 1], [-0.72, 0.34, 0.74], [0.72, 0.3, 0.76], [-0.3, -0.5, 0.7], [0.36, -0.46, 0.66], [0, 0.62, 0.7]].forEach(([bx, by, br], i) => {
+      g.globalAlpha = 0.92; g.fillStyle = i % 2 ? C.leaf2 : C.leaf;
+      g.beginPath(); g.arc(tree.x + bx * tree.r + sway, top + by * tree.r, tree.r * br, 0, Math.PI * 2); g.fill();
+    });
+  }
+  g.globalAlpha = 1;
+}
+function drawFire(burning, t) {                                                               // flames, glow and sparks over the scrub
+  if (burning <= 0) return;
+  g.save();
+  g.globalCompositeOperation = "lighter";
+  const mid = (OPEN.x0 + OPEN.x1) / 2, glow = g.createRadialGradient(mid, GROUND - 30, 20, mid, GROUND - 30, 330);
+  glow.addColorStop(0, `rgba(255,120,40,${0.5 * burning})`); glow.addColorStop(1, "rgba(255,120,40,0)");
+  g.fillStyle = glow; g.fillRect(mid - 340, GROUND - 330, 680, 360);
+  for (let i = 0; i < 70; i++) {                                                              // tongues of flame, rising and narrowing
+    const life = (t * 1.4 + noise(i * 1.7)) % 1;
+    const x = OPEN.x0 + 16 + noise(i * 7.3) * (OPEN.x1 - OPEN.x0 - 32) + Math.sin(t * 6 + i) * 6 * life;
+    if (x > CANAL.x - 4 && x < CANAL.x + CANAL.w + 4) continue;
+    const y = GROUND - 6 - life * (90 + 80 * noise(i * 2.3));
+    const w = (13 + 13 * noise(i * 5)) * (1 - life * 0.75), h = w * 2.5;
+    const flame = g.createRadialGradient(x, y, 0, x, y, h);
+    flame.addColorStop(0, `rgba(255,236,170,${0.85 * burning * (1 - life)})`);
+    flame.addColorStop(0.35, `rgba(255,150,50,${0.6 * burning * (1 - life)})`);
+    flame.addColorStop(1, "rgba(255,70,20,0)");
+    g.fillStyle = flame; g.beginPath(); g.ellipse(x, y, w, h, 0, 0, Math.PI * 2); g.fill();
+  }
+  for (let i = 0; i < 30; i++) {                                                              // sparks
+    const life = (t * 0.9 + noise(i * 9.1)) % 1;
+    const x = OPEN.x0 + noise(i * 4.4) * (OPEN.x1 - OPEN.x0) + Math.sin(t * 3 + i * 2) * 20 * life, y = GROUND - 30 - life * 260;
+    g.fillStyle = `rgba(255,210,120,${burning * (1 - life)})`; g.fillRect(x, y, 2.4, 2.4);
+  }
+  g.restore();
+}
+function drawSmoke(amount, t) {                                                               // smoke that drifts off over the forest
   if (amount <= 0) return;
-  for (let i = 0; i < 46; i++) {
-    const tree = TREES[i % TREES.length], life = (t * 0.22 + noise(i * 3.3)) % 1;
-    const x = tree.x + (noise(i * 6.1) - 0.5) * 120 + life * 170, y = GROUND - tree.h - 20 - life * 330, r = 26 + life * 70;
+  for (let i = 0; i < 60; i++) {
+    const life = (t * 0.2 + noise(i * 3.3)) % 1;
+    const x = OPEN.x0 + noise(i * 6.1) * (OPEN.x1 - OPEN.x0) + life * 260, y = GROUND - 60 - life * 400, r = 30 + life * 90;
     const puff = g.createRadialGradient(x, y, 0, x, y, r);
-    puff.addColorStop(0, `rgba(150,150,158,${0.26 * amount * (1 - life)})`); puff.addColorStop(1, "rgba(150,150,158,0)");
+    puff.addColorStop(0, `rgba(150,150,158,${0.24 * amount * (1 - life)})`); puff.addColorStop(1, "rgba(150,150,158,0)");
     g.fillStyle = puff; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
   }
 }
@@ -187,19 +230,20 @@ function drawRain(amount, t) {
   g.globalAlpha = 1;
 }
 function drawMeters(s) {
-  const x = 1106, top = 190, h = 250;
-  g.fillStyle = "rgba(13,17,23,0.78)"; g.strokeStyle = "rgba(154,167,180,0.35)"; g.lineWidth = 1;
-  g.beginPath(); g.roundRect(x - 26, top - 62, 182, h + 134, 14); g.fill(); g.stroke();
-  g.fillStyle = C.ink; g.font = "600 16px system-ui, sans-serif"; g.textAlign = "center"; g.fillText("Echo strength", x + 65, top - 32);
-  [["HH", s.hh, C.hh, ["ground", "and trunk"]], ["HV", s.hv, C.hv, ["branches"]]].forEach(([name, value, colour, what], i) => {
-    const bx = x + 8 + i * 80;
-    g.fillStyle = "rgba(154,167,180,0.18)"; g.beginPath(); g.roundRect(bx, top, 34, h, 8); g.fill();
+  const x = 1090, top = 196, h = 236;
+  g.fillStyle = "rgba(13,17,23,0.8)"; g.strokeStyle = "rgba(154,167,180,0.35)"; g.lineWidth = 1;
+  g.beginPath(); g.roundRect(x - 12, top - 62, 190, h + 140, 14); g.fill(); g.stroke();
+  g.textAlign = "center";
+  g.fillStyle = C.ink; g.font = "600 16px system-ui, sans-serif"; g.fillText("Echo strength", x + 83, top - 32);
+  [["HH", s.hh, C.hh, ["open", "peat"]], ["HV", s.hv, C.hv, ["open", "peat"]], ["HH", s.forest, C.forest, ["closed", "forest"]]].forEach(([name, value, colour, where], i) => {
+    const bx = x + 10 + i * 56 + (i === 2 ? 6 : 0);
+    g.fillStyle = "rgba(154,167,180,0.18)"; g.beginPath(); g.roundRect(bx, top, 32, h, 8); g.fill();
     g.fillStyle = colour; g.shadowColor = colour; g.shadowBlur = 14;
-    g.beginPath(); g.roundRect(bx, top + h * (1 - value), 34, h * value, 8); g.fill(); g.shadowBlur = 0;
-    g.fillStyle = C.ink; g.font = "700 20px system-ui, sans-serif"; g.fillText(name, bx + 17, top + h + 28);
-    g.fillStyle = C.muted; g.font = "12px system-ui, sans-serif";
-    what.forEach((line, k) => g.fillText(line, bx + 17, top + h + 46 + k * 15));
+    g.beginPath(); g.roundRect(bx, top + h * (1 - value), 32, h * value, 8); g.fill(); g.shadowBlur = 0;
+    g.fillStyle = C.ink; g.font = "700 19px system-ui, sans-serif"; g.fillText(name, bx + 16, top + h + 27);
+    g.fillStyle = C.muted; g.font = "12px system-ui, sans-serif"; where.forEach((line, k) => g.fillText(line, bx + 16, top + h + 44 + k * 14));
   });
+  g.strokeStyle = "rgba(154,167,180,0.3)"; g.beginPath(); g.moveTo(x + 123, top - 6); g.lineTo(x + 123, top + h + 62); g.stroke();   // the forest bar stands apart
   g.textAlign = "left";
 }
 function drawText(s) {
@@ -210,57 +254,63 @@ function drawText(s) {
     g.fillStyle = on ? C.hh : "rgba(154,167,180,0.16)"; g.beginPath(); g.roundRect(x, 78, 118, 34, 17); g.fill();
     g.fillStyle = on ? "#1a1205" : C.muted; g.font = `${on ? 700 : 500} 16px system-ui, sans-serif`; g.fillText(`${i + 1}  ${name}`, x + 26, 100);
   });
-  const fade = Math.min(ease(s.u / 0.08), ease((1 - s.u) / 0.06));
-  g.globalAlpha = fade; g.font = "600 24px system-ui, sans-serif";
-  const words = ACT_TEXT[s.act][1];
-  g.fillStyle = "rgba(11,15,20,0.82)"; g.beginPath(); g.roundRect(288, 124, g.measureText(words).width + 24, 40, 10); g.fill();
-  g.fillStyle = C.ink; g.fillText(words, 300, 152); g.globalAlpha = 1;
-  g.fillStyle = "rgba(238,242,246,0.7)"; g.font = "13.5px system-ui, sans-serif";
-  g.fillText("A schematic, not data. On real land the two echoes often rise and fall together.", 24, H - 34);
+  const fade = Math.min(ease(s.u / 0.08), ease((1 - s.u) / 0.06)), [, main, sub] = ACT_TEXT[s.act];
+  g.globalAlpha = fade;
+  g.font = "600 24px system-ui, sans-serif"; const wide = g.measureText(main).width;
+  g.font = "17px system-ui, sans-serif"; const wideSub = g.measureText(sub).width;
+  g.fillStyle = "rgba(11,15,20,0.84)"; g.beginPath(); g.roundRect(288, 124, Math.max(wide, wideSub) + 24, 68, 10); g.fill();
+  g.fillStyle = C.ink; g.font = "600 24px system-ui, sans-serif"; g.fillText(main, 300, 152);
+  g.fillStyle = "#c3ccd6"; g.font = "17px system-ui, sans-serif"; g.fillText(sub, 300, 178);
+  g.globalAlpha = 1;
+  g.fillStyle = "rgba(238,242,246,0.72)"; g.font = "13.5px system-ui, sans-serif";
+  g.fillText("A schematic, not data. The map measures the fall against closed forest, so drying under closed forest is not seen.", 24, H - 34);
   g.fillText("Animation made with Super Intelligence (SI) assistance", 24, H - 14);
 }
 
 function render(time) {
   const t = ((time % LOOP) + LOOP) % LOOP, s = stateAt(t);
   g.clearRect(0, 0, W, H);
-  drawSky(t);
+  drawSky();
   drawRain(s.act === 3 ? Math.min(ease(s.u / 0.1), ease((0.55 - s.u) / 0.2)) : 0, t);
   drawGround(s);
-  const burning = s.act === 2 ? Math.min(ease(s.u / 0.06), ease((0.4 - s.u) / 0.15)) : 0;
-  TREES.forEach((tree) => drawTree(tree, s, t, burning));
-  drawSmoke(s.act === 2 ? ease((s.u - 0.1) / 0.3) : s.act === 3 ? 1 - ease(s.u / 0.25) : 0, t);
+  drawForest(t);
+  drawScrub(s, t);
+  drawFire(s.act === 2 ? Math.min(ease(s.u / 0.06), ease((0.42 - s.u) / 0.15)) : 0, t);
+  drawSmoke(s.act === 2 ? ease((s.u - 0.08) / 0.3) : s.act === 3 ? 1 - ease(s.u / 0.25) : 0, t);
   drawSatellite(t);
   const beam = g.createLinearGradient(SAT.x, SAT.y, 640, GROUND);                           // the radar's beam, faint
   beam.addColorStop(0, "rgba(242,178,90,0.16)"); beam.addColorStop(1, "rgba(242,178,90,0)");
-  g.fillStyle = beam; g.beginPath(); g.moveTo(SAT.x + 10, SAT.y + 24); g.lineTo(330, GROUND); g.lineTo(980, GROUND); g.closePath(); g.fill();
+  g.fillStyle = beam; g.beginPath(); g.moveTo(SAT.x + 10, SAT.y + 24); g.lineTo(OPEN.x0 + 20, GROUND); g.lineTo(FOREST.x1 - 40, GROUND); g.closePath(); g.fill();
 
-  // Two pulses per act: one to the ground and back by way of a trunk (HH), one to the branches and back (HV).
-  const ground = [430, GROUND], trunk = [TREES[0].x - 9, GROUND - 92], crown = [TREES[1].x - 30, GROUND - TREES[1].h + 8];
-  const outHH = [[SAT.x + 26, SAT.y + 30], ground], backHH = [ground, trunk, [SAT.x + 70, SAT.y + 22]];
-  const outHV = [[SAT.x + 40, SAT.y + 16], crown], backHV = [crown, [SAT.x + 96, SAT.y + 4]];
-  [outHH, backHH, outHV, backHV].forEach((p, i) => faintPath(p, i < 2 ? C.hh : C.hv));
+  // Two pulses per act: one to the open peat, which comes back from the ground itself, and one
+  // to the forest, which comes back from the canopy.
+  const ground = [420, GROUND], crown = [TREES[1].x - 44, GROUND - TREES[1].h - 34];
+  const outOpen = [[SAT.x + 26, SAT.y + 30], ground], backHH = [ground, [SAT.x + 62, SAT.y + 26]], backHV = [[ground[0] + 26, GROUND - 6], [SAT.x + 92, SAT.y + 14]];
+  const outForest = [[SAT.x + 44, SAT.y + 14], crown], backForest = [crown, [SAT.x + 104, SAT.y - 2]];
+  [[outOpen, C.hh], [backHV, C.hv], [outForest, C.forest]].forEach(([p, colour]) => faintPath(p, colour));
   const go = clamp(s.u / 0.3), back = clamp((s.u - 0.34) / 0.3);
-  if (s.u < 0.31) { packet(outHH, go * pathLength(outHH), 15, C.ink, t); packet(outHV, go * pathLength(outHV), 15, C.ink, t); }
-  if (s.u > 0.3 && s.u < 0.4) {                                                             // the bounce
+  if (s.u < 0.31) { packet(outOpen, go * pathLength(outOpen), 15, C.ink, t); packet(outForest, go * pathLength(outForest), 15, C.ink, t); }
+  if (s.u > 0.3 && s.u < 0.4) {                                                             // the moment the pulse lands
     const pop = 1 - Math.abs((s.u - 0.35) / 0.05);
-    [[ground, C.hh, s.hhOut], [crown, C.hv, s.hvOut]].forEach(([p, colour, strength]) => {
+    [[ground, C.hh, s.out.hh], [crown, C.forest, s.out.forest * 0.7]].forEach(([p, colour, strength]) => {
       g.globalAlpha = 0.7 * pop; g.fillStyle = colour; g.beginPath(); g.arc(p[0], p[1], 10 + 30 * strength * pop, 0, Math.PI * 2); g.fill();
     });
     g.globalAlpha = 1;
   }
-  if (s.u > 0.3 && s.u < 0.6) {                                                             // ripples along the ground where the pulse lands
+  if (s.u > 0.3 && s.u < 0.6) {                                                             // ripples along the ground, stronger when it is wet
     const k = (s.u - 0.3) / 0.3;
     for (const delay of [0, 0.25]) {
       const q = clamp(k - delay, 0, 1);
       if (q <= 0) continue;
-      g.strokeStyle = C.hh; g.globalAlpha = 0.55 * (1 - q) * (0.35 + 0.65 * s.wet); g.lineWidth = 2;
+      g.strokeStyle = C.hh; g.globalAlpha = 0.6 * (1 - q) * (0.3 + 0.7 * s.wet); g.lineWidth = 2;
       g.beginPath(); g.ellipse(ground[0], GROUND + 2, 20 + 130 * q, 4 + 14 * q, 0, 0, Math.PI * 2); g.stroke();
     }
     g.globalAlpha = 1;
   }
   if (s.u > 0.34 && s.u < 0.66) {
-    packet(backHH, back * pathLength(backHH), 4 + 20 * s.hhOut, C.hh, t);
-    packet(backHV, back * pathLength(backHV), 4 + 20 * s.hvOut, C.hv, t, true);
+    packet(backHH, back * pathLength(backHH), 4 + 20 * s.out.hh, C.hh, t);
+    packet(backHV, back * pathLength(backHV), 3 + 18 * s.out.hv, C.hv, t, true);
+    packet(backForest, back * pathLength(backForest), 4 + 14 * s.out.forest, C.forest, t);
   }
   drawMeters(s);
   drawText(s);
