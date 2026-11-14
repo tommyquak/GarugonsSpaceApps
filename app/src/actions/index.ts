@@ -38,7 +38,7 @@ const absent: ActionsView = { parts: () => [], block: () => null, apply: () => u
 export async function buildActions(
   map: MapLibreMap,
   chart: PlaceChart,
-  hooks: { setTab(tab: string): void; setLegend?(view: LegendRows | null): void },
+  hooks: { setTab(tab: string): void; setLegend?(view: LegendRows | null): void; onShown?(on: boolean): void },
 ): Promise<ActionsView> {
   const found = await openStore();
   if (!found) return absent;
@@ -238,6 +238,9 @@ export async function buildActions(
     const rows = glance
       ? LEVELS.map((level) => ({ color: level.color, label: level.title }))
       : ontology.actions.filter((a) => a.id !== NO_ACTION).map((a) => ({ color: actionColor(a.id), label: a.title }));
+    // While this view is open it has the map to itself: the fall layers and the season slider step aside.
+    app.classList.toggle("is-check", on);
+    hooks.onShown?.(on);
     hooks.setLegend?.(on ? { title: glance ? "How affected" : "Class of each 1 km block", rows, note: glance ? LEVELS_NOTE : "A screening result. Not checked on the ground." } : null);
     columnsInput.checked = columns;
     heightNote.hidden = !columns;

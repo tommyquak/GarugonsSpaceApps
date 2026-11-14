@@ -88,9 +88,14 @@ async function start(): Promise<void> {
   };
   const toggleTab = (tab: string): void => setTab(sheet.dataset.tab === tab ? "" : tab);
 
+  // Set once the Where to check view exists: the story and the season need the map to themselves.
+  let closeCheck = (): void => undefined;
   const story = buildStory(byId("panel-story"), byId("btn-story"), map, overlays, {
     stopPlayback: season.stop,
-    onOpen: () => setTab("story"),
+    onOpen: () => {
+      closeCheck();
+      setTab("story");
+    },
     onClose: () => setTab(""),
   });
   byId("tab-layers").addEventListener("click", () => toggleTab("layers"));
@@ -99,10 +104,34 @@ async function start(): Promise<void> {
   setTab("");
   const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
   bindPlaceActions(byId("panel-place"), map, overlays, chart);
-  const legend = buildMapLegend(sheet, layers);
-  const actions = await buildActions(map, chart, { setTab, setLegend: (view) => legend.setBlocks(view) });
+  const legend = buildMapLegend(sheet, layers, overlays);
+  const app = byId("app");
+  const seasonButton = byId("btn-season");
+  const exploreButton = byId("btn-explore");
+  const actions = await buildActions(map, chart, {
+    setTab,
+    setLegend: (view) => legend.setBlocks(view),
+    onShown: (on) => {
+      overlays.setSuppressed(on);
+      if (on) season.stop();
+      seasonButton.setAttribute("aria-pressed", String(!on));
+    },
+  });
+  closeCheck = () => actions.apply(actions.parts().filter((part) => part === "how"), null);
+  seasonButton.addEventListener("click", closeCheck);
+  // The raw layers and the class colours are for people who want to dig: off until asked for.
+  const setExplore = (on: boolean): void => {
+    app.classList.toggle("is-explore", on);
+    exploreButton.setAttribute("aria-pressed", String(on));
+    if (!on && actions.parts().includes("class")) actions.apply(actions.parts().filter((part) => part !== "class"), actions.block());
+  };
+  exploreButton.addEventListener("click", () => setExplore(!app.classList.contains("is-explore")));
   // Last, so that a link someone was sent restores its view over the defaults set above.
+  const shared = window.location.hash.length > 1;
   bindLink(map, overlays, chart, actions);
+  setExplore(actions.parts().includes("class"));
+  // Without a link, the map opens on the one view made for a first look.
+  if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
 }
 
 // Optional and never awaited: the map below starts whether or not the intro plays.
