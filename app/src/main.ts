@@ -28,7 +28,7 @@ async function start(): Promise<void> {
     center: [114.0, -2.8],
     zoom: 9,
     minZoom: 4,
-    maxZoom: 13,
+    maxZoom: 15,
     attributionControl: false,
   });
   map.addControl(new AttributionControl({ customAttribution: sources }), "bottom-right");
