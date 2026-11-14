@@ -38,11 +38,11 @@ To be added: seven slides with animated GIFs (public link).
 
 ### What we found
 
-- The two orbits agree on where the land dried: r = [v: two-orbit agreement, west] in the west box and [v: two-orbit agreement, east] in the east.
+- The two orbits agree on where the land dried: Spearman r = [v: track5_west_orbit_spearman] in the west box and [v: track5_east_orbit_spearman] in the east.
 - Deep forest holds still: the noise floor is [v: noise_floor_hh_125] dB and [v: noise_floor_hh_061] dB, and [v: reference_flagged_share] of the reference forest is flagged.
 - Forest edges dry too: the fall is about [v: selfcheck_forest_edge_median_125] dB within 250 m of a forest edge and reaches zero only about 4 km inside.
 - On mapped peat in the west box, [v: fell_1db_km2_on_peat_west] km2 fell by 1 dB or more; [v: fell_1db_no_fire_km2_on_peat_west] km2 of that had no fire nearby.
-- After the first rain, land that had fallen by 1 dB or more regained [v: recovery_hh_share_regained_west_125] of the fall in HH and [v: recovery_hv_share_regained_west_125] in HV.
+- After the first rain, land that had fallen by 1 dB or more regained [v: recovery_hh_share_regained_west_125] of the fall in HH and [v: recovery_hv_share_regained_west_125] in HV on the ascending orbit, and [v: recovery_hh_share_regained_west_061] and [v: recovery_hv_share_regained_west_061] on the descending one. The two orbits' rebound maps agree at r = [v: recovery_hh_two_orbit_r_west_061_125].
 
 ### The physics, and the polarisations
 
@@ -55,7 +55,7 @@ At L-band the wave passes through leaves and reaches branches, trunks and the gr
 - Five months of NISAR cannot yet show peat subsidence. That needs years.
 - The radar does not predict where fire will start.
 - Peat fires are not the only fires in Indonesia. The map shows fire off peat as well.
-- Only one pass after the rain exists so far, on one orbit, so the recovery result is a single-pass result.
+- Each orbit has only one pass after the rain so far (1 Nov ascending, 28 Oct descending), so the recovery is a first look. Both orbits see it on their own, and the share regained moves by up to [v: recovery_hh_share_regained_sensitivity_west_061] in HH when the choice of passes changes. Pretending the rain came one pass sooner shows no rebound ([v: recovery_hh_share_regained_placebo_west_061]), so the rebound comes with the rain.
 
 ### What NISAR could do next
 
@@ -79,6 +79,7 @@ Team to confirm before submission. Draft: We used SI coding assistants throughou
 ## 8. Space agency partner and other data, and references
 
 - OpenStreetMap contributors, waterways and base map, https://www.openstreetmap.org
+- Sentinel-2 cloudless 2016 by EOX, the default base map (contains modified Copernicus Sentinel data 2016), CC BY 4.0, https://s2maps.eu
 - Peat boundary: Indonesian Ministry of Agriculture peat map, viewed through Global Forest Watch; and Gumbricht et al. 2017, doi 10.17528/CIFOR/DATA.00058. Linked, not redistributed.
 - Jaenicke, Englhart and Siegert 2011, monitoring the effect of restoration measures in Indonesian peatlands by radar satellite imagery, doi 10.1016/j.jenvman.2010.09.029
 - Hess, Melack and Simonett 1990, radar detection of flooding beneath the forest canopy, doi 10.1080/01431169008955095

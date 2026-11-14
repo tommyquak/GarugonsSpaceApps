@@ -32,6 +32,7 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 | `hh_<site>_<track>_<YYYYMMDD>.tif` | 2 | One per radar pass, for the season slider. HH on that pass minus HH at the start of the season (mean of the first two passes), scene-wide shift removed, on 250 m blocks. Decibels. Negative means darker than at the start. |
 | `dried_<site>.tif` | 2 | 1 where the dry-down is beyond the noise floor on both orbits, else 0. |
 | `recovery_hh_<site>_<track>.tif`, `recovery_hv_<site>_<track>.tif` | 2 | Change across the first rain, in decibels: first pass after the rain minus the last two dry passes. One per orbit that has a pass after the rain. |
+| `recovery_left_hh_<site>_<track>.tif`, `recovery_left_hv_<site>_<track>.tif` | 2b | What the rain did not bring back, in decibels: first pass after the rain minus the start of the season (mean of the first two passes). Negative means still darker than in June. One per orbit that has a pass after the rain. |
 | `fire_days_<site>.tif` | 3 | Number of distinct days with a 2026 fire detection within 200 m. |
 | `peat_peatmap_<site>.tif`, `peat_peatmap_<site>.geojson` | 3 | 1 on mapped peat, else 0, and its outline in lon/lat. From PEATMAP (Xu et al. 2018, doi 10.5518/252), CC BY 4.0: may be released and shown with that citation. This is the peat layer every number uses. |
 | `peat_official_<site>.tif`, `peat_cifor_<site>.tif` | 3 | Other peat maps as cross-checks. Local use only: no stated licence, so not committed and not released. |
