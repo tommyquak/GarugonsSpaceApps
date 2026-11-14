@@ -1,0 +1,12 @@
+{
+ "east": {
+  "series": "series/series_east.json",
+  "bin": "series/series_east.bin",
+  "rain": null
+ },
+ "west": {
+  "series": "series/series_west.json",
+  "bin": "series/series_west.bin",
+  "rain": null
+ }
+}
