@@ -1315,6 +1315,19 @@ a.text-button {
   font-weight: 500;
 }
 
+/* A chip inside the reading sits in a running sentence. On a touch screen chip.css makes chips
+   44 px tall, which would push the lines of the sentence apart, so here they keep their text size. */
+.reading .num-chip {
+  min-height: 0;
+  padding: 1px 6px;
+}
+
+/* The chip's card is not part of the sentence: it keeps its own weight and spacing. */
+.reading .num-chip-note,
+.reading .num-chip-note p {
+  font-weight: 400;
+}
+
 .chart-legend {
   display: flex;
   flex-wrap: wrap;
