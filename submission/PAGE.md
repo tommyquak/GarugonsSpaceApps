@@ -79,6 +79,7 @@ Team to confirm before submission. Draft: We used SI coding assistants throughou
 ## 8. Space agency partner and other data, and references
 
 - OpenStreetMap contributors, waterways and base map, https://www.openstreetmap.org
+- Sentinel-2 cloudless 2016 by EOX, the default base map (contains modified Copernicus Sentinel data 2016), CC BY 4.0, https://s2maps.eu
 - Peat boundary: Indonesian Ministry of Agriculture peat map, viewed through Global Forest Watch; and Gumbricht et al. 2017, doi 10.17528/CIFOR/DATA.00058. Linked, not redistributed.
 - Jaenicke, Englhart and Siegert 2011, monitoring the effect of restoration measures in Indonesian peatlands by radar satellite imagery, doi 10.1016/j.jenvman.2010.09.029
 - Hess, Melack and Simonett 1990, radar detection of flooding beneath the forest canopy, doi 10.1080/01431169008955095
