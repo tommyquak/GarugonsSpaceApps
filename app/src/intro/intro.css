@@ -48,6 +48,14 @@
   background: #1b2128;
   outline: 3px solid #07090b;
   animation: intro-wall-on 600ms ease-out both;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.intro-wall:hover {
+  outline: 6px solid var(--accent);
+}
+.intro-wall:hover .intro-wall-hint {
+  fill: var(--accent);
 }
 .intro-wall svg {
   display: block;
