@@ -115,6 +115,30 @@
     .summary-card:nth-child(3) { border-color:var(--rewet); }
     .summary-card strong { display:block; font:29px Georgia,serif; color:#3f4b44; }
     .summary-card span { color:#6d7771; font-size:10px; }
+    .handoff-table { width:100%; margin:24px 0 8px; border-collapse:collapse; font-size:11.5px; font-variant-numeric:tabular-nums; }
+    .handoff-table th { padding:0 8px 7px 0; border-bottom:1.5px solid #2a312e; color:#4f5a54; font-size:9px; font-weight:600; letter-spacing:.08em; text-align:left; text-transform:uppercase; }
+    .handoff-table td { padding:7px 8px 7px 0; border-bottom:1px solid #d0d0c7; vertical-align:top; line-height:1.35; }
+    .handoff-table .num { text-align:right; white-space:nowrap; }
+    .handoff-table .tick { width:46px; padding-right:0; text-align:center; }
+    .handoff-table td.tick::before { content:""; display:inline-block; width:15px; height:15px; border:1.3px solid #2a312e; }
+    .handoff-table .rank { width:30px; color:#4f5a54; }
+    .handoff-table .block { white-space:nowrap; font-weight:600; }
+    .handoff-table .block i { display:inline-block; width:8px; height:8px; margin-right:6px; border-radius:1px; }
+    .handoff-table .where { white-space:nowrap; }
+    .handoff-empty { padding:18px 0; color:#727c75; }
+    .lv3 { background:#c8372d; }
+    .lv2 { background:#d98a1f; }
+    .handoff-key { display:flex; flex-wrap:wrap; gap:4px 18px; color:#64716a; font-size:10px; }
+    .handoff-key span { display:flex; align-items:center; gap:6px; }
+    .handoff-key i { width:8px; height:8px; border-radius:1px; }
+    .record-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .record-row div { border-top:1.5px solid #2a312e; padding-top:8px; }
+    .record-row strong { display:block; font:17px Georgia,serif; margin-bottom:3px; }
+    .record-row span { color:#64716a; font-size:10.5px; line-height:1.4; }
+    .record-note { margin:12px 0 0; color:#3d4642; font-size:11.5px; }
+    .limits-list { margin:0; padding:0; list-style:none; font-size:11.5px; color:#3d4642; }
+    .limits-list li { padding:5px 0; border-bottom:1px solid #d0d0c7; }
+    .limits-list li:first-child { border-top:1px solid #d0d0c7; }
     .page-bottom { position:absolute; bottom:25px; left:70px; right:70px; display:flex; justify-content:space-between; border-top:1px solid #d0d0c7; padding-top:11px; color:#7a847c; font-size:8px; letter-spacing:.06em; text-transform:uppercase; }
     .page-two-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin:20px 0; }
     .evidence-card { border:1px solid #d0d2c9; padding:17px; min-height:190px; background:#eeece4; }
@@ -161,6 +185,8 @@
       .summary-row { grid-template-columns:1fr; }
       .summary-card { min-height:auto; }
       .page-two-grid { grid-template-columns:1fr; }
+      .record-row { grid-template-columns:1fr 1fr; }
+      .handoff-table th:nth-child(5), .handoff-table td:nth-child(5) { display:none; }
       .page-bottom { left:25px; right:25px; }
       .map-key { gap:7px; font-size:8px; }
     }
@@ -305,21 +331,29 @@
         </article>
 
         <article class="report-page" id="page-3">
-          <div class="page-kicker"><span>Proposed field handoff · review before use</span><span>03 / next steps and limits</span></div>
-          <h2 class="page-title">Verify the signal before acting.</h2>
-          <p class="page-deck">Use the ranked blocks to choose a small, reachable set of sites and nearby comparisons for field verification.</p>
-          <div class="caveat"><strong>Decision boundary.</strong> This screening map identifies places to investigate. It does not measure water-table depth, identify a cause, predict fire, or recommend canal work or another intervention.</div>
-          <div class="section-label">Suggested field checks</div>
-          <ol class="handoff-list">
-            <li><div><strong>Confirm the location</strong><span>Use the selected block ID and coordinates; check access and whether the location is actually on mapped peat.</span></div></li>
-            <li><div><strong>Measure what radar cannot</strong><span>Record water-table depth if a dipwell is available, canal condition, visible fire evidence and vegetation condition.</span></div></li>
-            <li><div><strong>Capture a comparison</strong><span>Visit a nearby block with a different screening class under similar field conditions; record date, GPS and photographs.</span></div></li>
-            <li><div><strong>Review with local teams</strong><span>Compare field observations with the radar dates, rainfall timing and fire detections before prioritising any response.</span></div></li>
-          </ol>
-          <div class="section-label">What this report cannot establish</div>
-          <div class="method-note"><strong>One season, no ground truth.</strong> HH fall is not a measured water-table drop. Fire detections can miss small or obscured fires. Changes after rain are based on limited passes; differences in processing between releases add uncertainty. PEATMAP has its own boundary errors. A block label is a screening class produced by explicit thresholds, not a diagnosis.</div>
-          <div class="section-label">Sources and provenance</div>
-          <p class="sources">NISAR L2 GCOV HH/HV, NASA and ISRO, via Alaska Satellite Facility DAAC; FIRMS active fire detections, NASA; GPM IMERG rainfall, NASA; PEATMAP (Xu et al., 2018, CC BY 4.0); waterways from OpenStreetMap contributors. Processing, thresholds, validation and full limits are documented in the project repository. Generated as a demonstration report preview; not an official NASA or agency product.</p>
+          <div class="page-kicker"><span>Proposed field handoff · review before use</span><span>03 / where to go and what to record</span></div>
+          <h2 class="page-title">Twelve blocks to visit first.</h2>
+          <p class="page-deck">The six highest-ranked blocks of each of the two upper levels, west box. Each is one kilometre square; the point given is its centre.</p>
+          <table class="handoff-table" aria-label="Blocks to visit first">
+            <thead><tr><th>No.</th><th>Block</th><th>Centre</th><th>Why it is listed</th><th class="num">Canal</th><th class="tick">Visited</th></tr></thead>
+            <tbody id="handoff-rows"><tr><td colspan="6" class="handoff-empty">The block list is not available in this preview.</td></tr></tbody>
+          </table>
+          <div class="handoff-key"><span><i class="lv3"></i>Fire on several days, and the vegetation echo still low after the rain</span><span><i class="lv2"></i>No fire, and the ground echo still low after the rain</span></div>
+          <div class="section-label">At each block, record</div>
+          <div class="record-row">
+            <div><strong>Water</strong><span>Depth to water in a dipwell or a hand-dug pit, in centimetres.</span></div>
+            <div><strong>Canal</strong><span>Nearest canal: flowing, blocked or dry. Photograph it.</span></div>
+            <div><strong>Fire</strong><span>Char, ash or burnt stems. How deep the peat burned.</span></div>
+            <div><strong>Cover</strong><span>What grows there now, and roughly how tall.</span></div>
+          </div>
+          <p class="record-note">Visit one unlisted block nearby on the same day, and record the same four things, so there is something to compare with.</p>
+          <div class="section-label">What this list cannot tell you</div>
+          <ul class="limits-list">
+            <li><strong>Nothing here was checked on the ground.</strong> It is one season of satellite data.</li>
+            <li><strong>It does not say why a block changed</strong>, measure the water table, or recommend any work on a canal.</li>
+            <li><strong>The pass after the rain is a single pass per orbit</strong>, and fire detections can miss small or hidden fires.</li>
+          </ul>
+          <p class="sources">NISAR L2 GCOV, NASA and ISRO, from the Alaska Satellite Facility DAAC. FIRMS active fire detections, NASA. PEATMAP, Xu et al. 2018, CC BY 4.0. Canals from OpenStreetMap contributors. A demonstration brief, not an official NASA or agency product.</p>
           <div class="page-bottom"><span>Dry Season Waltz · field assessment preview</span><span>Review with local partners before use</span></div>
         </article>
       </div>
@@ -389,6 +423,31 @@
         svg.innerHTML = html;
       }).catch(() => { svg.innerHTML = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/><text x="50%" y="50%" text-anchor="middle" fill="#6d7771" font-size="12">Block layer unavailable in this preview</text>`; });
     }
+    // Page 3: the blocks to visit first, read from the block file. The six highest-ranked blocks of
+    // each of the two upper levels: fire on several days with the vegetation echo still low, and
+    // no fire with the ground echo still low. The same grouping as the app's at-a-glance view.
+    function drawHandoff(body) {
+      fetch("../blocks/blocks_west.app.json").then((r) => r.ok ? r.json() : Promise.reject()).then((data) => {
+        const at = (list, name) => list.indexOf(name);
+        const P = data.props, O = data.obs, S = data.states;
+        const prop = (row, name) => row[at(P, name)];
+        const obs = (row, name) => row[P.length][at(O, name)];
+        const state = (row, name) => row[P.length + 1][at(S, name)] === 1;
+        const level = (row) => prop(row, "action") === "fire_detected" && prop(row, "confidence") === "high" ? 3
+          : prop(row, "action") === "fell_still_low" || (prop(row, "action") === "fire_detected" && state(row, "canopy_low")) ? 2 : 0;
+        const pick = (lv) => data.rows.filter((row) => level(row) === lv).sort((a, b) => prop(a, "rank") - prop(b, "rank")).slice(0, 6);
+        const rows = [...pick(3), ...pick(2)];
+        if (!rows.length) return;
+        const one = (v) => Number(v).toFixed(1);
+        const why = (row) => level(row) === 3
+          ? `Fire on ${Math.round(obs(row, "fire_days"))} days. Vegetation echo ${one(Math.max(obs(row, "hv_left_asc"), obs(row, "hv_left_desc")))} dB below the dry start.`
+          : `Echo fell ${one(prop(row, "fall_db"))} dB and is still ${one(Math.max(obs(row, "left_asc"), obs(row, "left_desc")))} dB low. No fire detected.`;
+        const where = (row) => `${Math.abs(prop(row, "lat")).toFixed(4)}\u00b0 ${prop(row, "lat") < 0 ? "S" : "N"}, ${prop(row, "lon").toFixed(4)}\u00b0 E`;
+        const canal = (row) => { const m = obs(row, "canal_m"); return m === null ? "" : m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`; };
+        body.innerHTML = rows.map((row, k) => `<tr><td class="rank">${k + 1}</td><td class="block"><i class="lv${level(row)}"></i>${prop(row, "id")}</td><td class="where">${where(row)}</td><td>${why(row)}</td><td class="num">${canal(row)}</td><td class="tick"></td></tr>`).join("");
+      }).catch(() => undefined);
+    }
+    drawHandoff(document.getElementById("handoff-rows"));
     drawBlockMap(document.getElementById("cover-map"), 400, 180);
     drawBlockMap(document.getElementById("report-map"), 700, 330);
   </script>
