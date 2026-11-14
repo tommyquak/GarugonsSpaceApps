@@ -40,6 +40,8 @@ Edit only your own folders. To change something in someone else's, ask for a han
 | 5. Checks and limits | Anson (`@iians0n`) | `pipeline/checks/`, `docs/LIMITS.md`, `docs/REFERENCES.md` |
 | 6. Story and submission | Reagan (`@D0bui`) | `submission/`, `README.md` |
 
+**Cover for owners who have not joined yet.** Until an owner has accepted the repo invitation, the lead's agent builds a first version of their track so that nothing waits. Each such PR says "Covering track N for <name>". The moment the owner posts on the board, the track is theirs again, with whatever has been built.
+
 Shared files (`AGENTS.md`, `PLAN.md`, `docs/DATA_CONTRACT.md`, `tools/`, `.claude/`, `LICENSE`, `.gitignore`) belong to the lead. Propose changes to them on the board.
 
 ## 4. Workflow
