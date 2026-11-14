@@ -25,21 +25,19 @@ from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.oxml.ns import qn
 from pptx.util import Emu, Inches, Pt
 
-INK = RGBColor(0x16, 0x19, 0x1D)
-PAPER = RGBColor(0xFF, 0xFF, 0xFF)
-MUTED = RGBColor(0x5B, 0x63, 0x6B)
-MUTED_ON_INK = RGBColor(0xA9, 0xB0, 0xB8)
-SOFT_ON_INK = RGBColor(0xE6, 0xE8, 0xEB)
-RULE = RGBColor(0xD9, 0xDC, 0xE0)
-CANOPY = RGBColor(0xC9, 0xD3, 0xC4)
-TRUNK = RGBColor(0x8C, 0x93, 0x99)
-FALL = RGBColor(0x8A, 0x5A, 0x2B)   # the fall in HH: sand to brown, as in the app
-SAND = RGBColor(0xE8, 0xC9, 0x8E)
-FIRE = RGBColor(0xD9, 0x3A, 0x2B)   # fire detections only
-RAIN = RGBColor(0x3D, 0x8F, 0xD6)   # rain
-DRAFT = RGBColor(0xB2, 0x6A, 0x00)
+# A dark ground with panels and hairlines, after the team's SDTH pitch deck; colours keep their meaning from the app.
+BG = RGBColor(0x0B, 0x0F, 0x14)
+PANEL = RGBColor(0x12, 0x18, 0x22)
+LINE = RGBColor(0x23, 0x30, 0x3E)
+INK = RGBColor(0xE8, 0xED, 0xF2)
+DIM = RGBColor(0x93, 0xA1, 0xB0)
+SAND = RGBColor(0xE8, 0xC9, 0x8E)   # the fall in HH: sand to brown, as in the app
+FIRE = RGBColor(0xFF, 0x5A, 0x3C)   # fire detections only
+RAIN = RGBColor(0x5A, 0xA9, 0xEE)   # rain, and the rise after it
+WARN = RGBColor(0xF2, 0xC1, 0x4E)   # the draft badge
 
 FONT = "Archivo"
+MONO = "JetBrains Mono"   # numbers only: they are measurements
 W, H = Inches(13.333), Inches(7.5)
 M = Inches(0.6)
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
@@ -75,7 +73,7 @@ class Numbers:
 
 
 def text(slide, x, y, w, h, runs, size=16, color=INK, bold=False, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP,
-         space_after=0, name=None):
+         space_after=0, name=None, font=None):
     """A text box. runs is a string, or a list of paragraphs, each a string or a list of (text, options) runs."""
     box = slide.shapes.add_textbox(x, y, w, h)
     if name:
@@ -94,7 +92,7 @@ def text(slide, x, y, w, h, runs, size=16, color=INK, bold=False, align=PP_ALIGN
             r = p.add_run()
             r.text = t
             f = r.font
-            f.name = FONT
+            f.name = o.get("font", font or FONT)
             f.size = Pt(o.get("size", size))
             f.bold = o.get("bold", bold)
             f.color.rgb = o.get("color", color)
@@ -157,19 +155,86 @@ def picture(slide, path, x, y, w=None, h=None, name=None):
     return pic
 
 
-def title(slide, words, color=INK):
-    text(slide, M, Inches(0.45), W - 2 * M, Inches(1.0), words, size=30, bold=True, color=color,
+def title(slide, words):
+    text(slide, M, Inches(0.45), W - 2 * M, Inches(1.0), words, size=30, bold=True, color=INK,
          anchor=MSO_ANCHOR.TOP, name="Title")
 
 
-def footer(slide, n, source, draft, dark=False):
-    c = MUTED_ON_INK if dark else MUTED
-    text(slide, M, H - Inches(0.5), Inches(10.5), Inches(0.3), source, size=10, color=c, name="Source")
-    text(slide, W - M - Inches(1.0), H - Inches(0.5), Inches(1.0), Inches(0.3), f"{n} / 7", size=10, color=c,
-         align=PP_ALIGN.RIGHT, name="Page")
+def footer(slide, n, source, draft):
+    line(slide, M, H - Inches(0.62), W - M, H - Inches(0.62), LINE, 0.75)
+    text(slide, M, H - Inches(0.5), Inches(10.5), Inches(0.3), source, size=10, color=DIM, name="Source")
+    text(slide, W - M - Inches(1.2), H - Inches(0.5), Inches(1.2), Inches(0.3), f"{n:02d} / 07",
+         size=10, color=DIM, align=PP_ALIGN.RIGHT, name="Page", font=MONO)
     if draft:
-        text(slide, W - M - Inches(3.0), Inches(0.12), Inches(3.0), Inches(0.25), "Draft: exploratory numbers",
-             size=10, bold=True, color=DRAFT, align=PP_ALIGN.RIGHT, name="Draft tag")
+        badge = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, W - M - Inches(2.75), Inches(0.12), Inches(2.75), Inches(0.28),
+                      BG, WARN)
+        badge.adjustments[0] = 0.5
+        badge.name = "Draft badge"
+        text(slide, W - M - Inches(2.75), Inches(0.15), Inches(2.75), Inches(0.22), "draft: exploratory numbers",
+             size=9, color=WARN, align=PP_ALIGN.CENTER, font=MONO)
+
+
+def framed(slide, path, x, y, w, name):
+    """A picture with a hairline frame, like a screen on the wall."""
+    pic = picture(slide, path, x, y, w=w, name=name)
+    pic.line.color.rgb = LINE
+    pic.line.width = Pt(0.75)
+    return pic
+
+
+def tile(slide, x, y, w, h, number, label, colour):
+    """A panel with a measured number over a short label."""
+    t = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, y, w, h, PANEL, LINE)
+    t.adjustments[0] = 0.08
+    text(slide, x + Inches(0.18), y + Inches(0.15), w - Inches(0.36), Inches(0.45), number, size=22, color=colour,
+         font=MONO, bold=True)
+    text(slide, x + Inches(0.18), y + Inches(0.62), w - Inches(0.36), h - Inches(0.7), label, size=12, color=DIM)
+
+
+def limits_table(slide, x, y, w, rows):
+    """Limit | Our answer, with hairlines under each row and no fills."""
+    t = slide.shapes.add_table(len(rows) + 1, 2, x, y, w, Inches(0.4) * (len(rows) + 1)).table
+    t.columns[0].width = int(w * 0.42)
+    t.columns[1].width = w - int(w * 0.42)
+    tbl = t._tbl
+    tbl.tblPr.set("firstRow", "0")
+    tbl.tblPr.set("bandRow", "0")
+    style = tbl.tblPr.find(qn("a:tableStyleId"))
+    if style is None:
+        style = tbl.tblPr.makeelement(qn("a:tableStyleId"), {})
+        tbl.tblPr.append(style)
+    style.text = "{2D5ABB26-0587-4C30-8999-92F81FD0307C}"   # built-in "No Style, No Grid"
+    for r, row in enumerate([("Limit", "Our answer")] + rows):
+        for c, content in enumerate(row):
+            cell = t.cell(r, c)
+            cell.fill.solid()
+            cell.fill.fore_color.rgb = BG
+            cell.margin_left = Inches(0.08)
+            cell.margin_right = Inches(0.12)
+            cell.margin_top = cell.margin_bottom = Inches(0.07)
+            tf = cell.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            runs = [(content.upper(), {"bold": True, "color": DIM, "size": 10})] if r == 0 else (
+                content if isinstance(content, list) else [(content, {})])
+            for t_, o in runs:
+                run = p.add_run()
+                run.text = t_
+                run.font.name = FONT
+                run.font.size = Pt(o.get("size", 13))
+                run.font.bold = o.get("bold", False)
+                run.font.color.rgb = o.get("color", INK)
+            tcPr = cell._tc.get_or_add_tcPr()
+            for k, edge in enumerate(("a:lnL", "a:lnR", "a:lnT", "a:lnB")):   # borders come before the fill
+                ln = tcPr.makeelement(qn(edge), {"w": "9525" if edge == "a:lnB" else "0"})
+                if edge == "a:lnB":
+                    fill = ln.makeelement(qn("a:solidFill"), {})
+                    fill.append(fill.makeelement(qn("a:srgbClr"), {"val": "23303E"}))
+                else:
+                    fill = ln.makeelement(qn("a:noFill"), {})
+                ln.append(fill)
+                tcPr.insert(k, ln)
+    return t
 
 
 def line(slide, x1, y1, x2, y2, color, width=2.0, arrow=False):
@@ -193,32 +258,6 @@ def shape(slide, kind, x, y, w, h, fill, line_color=None):
         s.line.color.rgb = line_color
     s.shadow.inherit = False
     return s
-
-
-def radar_diagram(slide, x, y):
-    """How the two echoes come back: HH bounces between ground and trunk, HV comes mostly from the woody canopy."""
-    ground_y = y + Inches(3.9)
-    shape(slide, MSO_SHAPE.RECTANGLE, x, ground_y, Inches(5.6), Inches(0.5), SAND)
-    text(slide, x + Inches(0.15), ground_y + Inches(0.1), Inches(3.5), Inches(0.3), "peat surface, drying", size=12, color=FALL)
-    for i, tx in enumerate((0.9, 2.5, 4.1)):
-        cx = x + Inches(tx)
-        shape(slide, MSO_SHAPE.RECTANGLE, cx, y + Inches(1.9), Inches(0.14), Inches(2.0), TRUNK)
-        shape(slide, MSO_SHAPE.OVAL, cx - Inches(0.62), y + Inches(1.1), Inches(1.38), Inches(1.0), CANOPY)
-    shape(slide, MSO_SHAPE.RECTANGLE, x + Inches(4.4), y + Inches(0.1), Inches(0.38), Inches(0.12), TRUNK)
-    shape(slide, MSO_SHAPE.RECTANGLE, x + Inches(5.42), y + Inches(0.1), Inches(0.38), Inches(0.12), TRUNK)
-    shape(slide, MSO_SHAPE.RECTANGLE, x + Inches(4.8), y, Inches(0.6), Inches(0.32), INK)
-    text(slide, x + Inches(2.0), y + Inches(0.02), Inches(2.3), Inches(0.3), "NISAR, L-band", size=12, color=MUTED,
-         align=PP_ALIGN.RIGHT)
-    # HH: down to the ground, across to the trunk, back up
-    line(slide, x + Inches(4.9), y + Inches(0.32), x + Inches(3.3), ground_y, FALL, 2.5, arrow=True)
-    line(slide, x + Inches(3.3), ground_y, x + Inches(2.64), y + Inches(3.2), FALL, 2.5, arrow=True)
-    line(slide, x + Inches(2.64), y + Inches(3.2), x + Inches(4.95), y + Inches(0.32), FALL, 2.5, arrow=True)
-    text(slide, x + Inches(1.15), y + Inches(2.55), Inches(1.25), Inches(0.9),
-         [[("HH", {"bold": True, "color": FALL})], "ground", "and trunk"], size=12, color=FALL)
-    # HV: down into the canopy and back
-    line(slide, x + Inches(5.3), y + Inches(0.32), x + Inches(4.6), y + Inches(1.35), INK, 2.0, arrow=True)
-    text(slide, x + Inches(5.25), y + Inches(0.75), Inches(1.0), Inches(0.6),
-         [[("HV", {"bold": True})], "woody", "canopy"], size=12, color=INK)
 
 
 def link_colour(prs, hex6):
@@ -246,142 +285,137 @@ def build(a):
 
     # 1. The problem, and the takeaway
     s = prs.slides.add_slide(blank)
-    background(s, INK)
-    picture(s, fig / "fig_map.png", Inches(6.55), Inches(1.6), w=Inches(6.2), name="One-look map")   # 1617 x 1032 px
-    text(s, M, Inches(0.9), Inches(5.6), Inches(1.0), "Dry Season Waltz", size=44, bold=True, color=PAPER)
+    background(s, BG)
+    framed(s, fig / "fig_map.png", Inches(6.55), Inches(1.6), Inches(6.2), "One-look map")   # 1617 x 1032 px
+    text(s, M, Inches(0.9), Inches(5.6), Inches(1.0), "Dry Season Waltz", size=44, bold=True, color=INK)
     text(s, M, Inches(1.95), Inches(5.6), Inches(2.2),
          "NISAR lets anyone watch a peat dry season through cloud and smoke: an open map of where the radar "
          "echo fell, where fire was detected and what changed with the rain, with its evidence and its limits attached.",
-         size=17, color=SOFT_ON_INK)
+         size=17, color=INK)
     text(s, M, Inches(4.0), Inches(5.6), Inches(1.6),
-         ["Every dry season, drained peat in Borneo is at its most flammable, some of it burns, and the haze reaches "
-          "cities across the region. Cloud, then smoke, hides the ground from optical satellites just then."],
-         size=14, color=MUTED_ON_INK)
-    text(s, M, Inches(6.35), Inches(5.6), Inches(0.3), "Team Garugons · NASA Space Apps 2026 · Dancing with the SARs",
-         size=12, color=MUTED_ON_INK)
-    footer(s, 1, "", draft, dark=True)
-    s.notes_slide.notes_text_frame.text = (
-        "The problem and the one takeaway. Map: where HH fell by 1 dB or more, mid July to mid October 2026, "
-        "Central Kalimantan, with the PEATMAP outline.")
+         "Every dry season, drained peat in Borneo is at its most flammable, some of it burns, and the haze reaches "
+         "cities across the region. Cloud, then smoke, hides the ground from optical satellites just then.",
+         size=14, color=DIM)
+    text(s, M, Inches(6.05), Inches(5.6), Inches(0.3), "Team Garugons · NASA Space Apps 2026 · Dancing with the SARs",
+         size=12, color=DIM)
+    footer(s, 1, "Map: where HH fell by 1 dB or more, mid July to mid October 2026, with the PEATMAP outline.", draft)
+    s.notes_slide.notes_text_frame.text = "The problem and the one takeaway."
 
     # 2. What NISAR sees: the problem in one picture, and how the radar gets through
     s = prs.slides.add_slide(blank)
-    background(s, PAPER)
+    background(s, BG)
     title(s, "Cloud and smoke hide the ground from optical satellites. NISAR's radar sees through them")
-    picture(s, fig / "fig_cloud.png", M, Inches(1.6), w=Inches(5.95), name="Cloud against radar figure")
-    picture(s, fig / "explainer.gif", Inches(6.78), Inches(1.6), w=Inches(5.95), name="Radar explainer animation")
+    framed(s, fig / "fig_cloud.png", M, Inches(1.6), Inches(5.95), "Cloud against radar figure")
+    framed(s, fig / "explainer.gif", Inches(6.78), Inches(1.6), Inches(5.95), "Radar explainer animation")
     text(s, M, Inches(5.1), Inches(5.95), Inches(1.5),
-         [[("Every 12 days, day or night. ", {"bold": True}),
+         [[("Every 12 days, day or night. ", {"bold": True, "color": INK}),
            "The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar."]],
-         size=14, color=INK)
+         size=14, color=DIM)
     text(s, Inches(6.78), Inches(5.1), Inches(5.95), Inches(1.5),
-         [[("HH ", {"bold": True, "color": FALL}),
+         [[("HH ", {"bold": True, "color": SAND}),
            "carries a bounce between the ground and the trunks that weakens as the surface dries (Hess et al. 1990; "
-           "Kim et al. 2017). "], [("HV ", {"bold": True}),
+           "Kim et al. 2017). "], [("HV ", {"bold": True, "color": INK}),
            "comes mostly from woody vegetation, but responds to moisture too. A schematic, not data."]],
-         size=14, color=INK, space_after=4)
+         size=14, color=DIM, space_after=4)
     footer(s, 2, "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.", draft)
     s.notes_slide.notes_text_frame.text = "The problem in one picture, and how the radar sees the ground. Physics claims are the audited ones only."
 
     # 3. The season in one picture
     s = prs.slides.add_slide(blank)
-    background(s, PAPER)
+    background(s, BG)
     title(s, "Through the dry season HH fell steadily on peat, then rose within days of the first heavy rain")
-    picture(s, fig / "fig_season.png", M, Inches(1.65), w=Inches(8.9), name="Season figure")
+    framed(s, fig / "fig_season.png", M, Inches(1.65), Inches(8.9), "Season figure")
     dawn, dusk = num.db("recovery_hh_median_rebound_west_125"), num.db("recovery_hh_median_rebound_west_061")
-    rise, rise_where = (dawn, "on both orbits") if dawn == dusk else (f"{dawn} and {dusk}", "dawn and dusk orbits")
-    side = [
-        [(num.km2("fell_1db_km2_on_peat_west"), {"bold": True, "size": 22, "color": FALL})],
-        ["of mapped peat in the west box fell by 1 dB or more on both orbits"],
-        [(num.km2("fell_1db_km2_on_peat_east"), {"bold": True, "size": 22, "color": FALL})],
-        ["in the east box"],
-        [(rise, {"bold": True, "size": 22, "color": RAIN})],
-        [f"rise in HH on the first pass after the rain, {rise_where}, and not on the pass before"],
-    ]
-    text(s, Inches(9.85), Inches(1.9), Inches(2.9), Inches(4.8), side, size=14, color=INK, space_after=6)
+    rise, rise_where = (dawn, "on both orbits") if dawn == dusk else (f"{dawn} / {dusk}", "dawn / dusk orbit")
+    tx, tw, th, gap = Inches(9.85), Inches(2.88), Inches(1.5), Inches(0.2)
+    tile(s, tx, Inches(1.65), tw, th, num.km2("fell_1db_km2_on_peat_west"),
+         "of mapped peat in the west box where HH fell 1 dB or more, on both orbits", SAND)
+    tile(s, tx, Inches(1.65) + th + gap, tw, th, num.km2("fell_1db_km2_on_peat_east"), "the same, in the east box", SAND)
+    tile(s, tx, Inches(1.65) + 2 * (th + gap), tw, th, rise,
+         f"HH rise on the first pass after the rain, {rise_where}; none on the pass before", RAIN)
     footer(s, 3, "Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), PEATMAP (CC BY 4.0).", draft)
     s.notes_slide.notes_text_frame.text = "The season at a glance: the fall, deep forest flat as the yardstick, daily rain underneath."
 
     # 4. The app
     s = prs.slides.add_slide(blank)
-    background(s, PAPER)
+    background(s, BG)
     title(s, "An open map anyone can play through the season, then check place by place")
-    picture(s, fig / "demo_season.gif", M, Inches(1.65), w=Inches(8.0), name="Season demo")
-    picture(s, fig / "demo_check.gif", Inches(9.0), Inches(4.05), w=Inches(3.73), name="Where to check demo")
+    framed(s, fig / "demo_season.gif", M, Inches(1.65), Inches(8.0), "Season demo")
+    framed(s, fig / "demo_check.gif", Inches(9.0), Inches(4.05), Inches(3.73), "Where to check demo")
     items = [
-        [("Play the season. ", {"bold": True}), "Every pass on both orbits; fire builds up beside the fall."],
-        [("Where to check. ", {"bold": True}),
+        [("Play the season. ", {"bold": True, "color": INK}), "Every pass on both orbits; fire builds up beside the fall."],
+        [("Where to check. ", {"bold": True, "color": INK}),
          "1 km blocks labelled by what was seen, ranked, with the evidence behind each, as CSV or GeoJSON."],
         [("Open the map", {"bold": True, "link": APP_URL})],
     ]
-    text(s, Inches(9.0), Inches(1.7), Inches(3.73), Inches(2.3), items, size=14, color=INK, space_after=8)
+    text(s, Inches(9.0), Inches(1.7), Inches(3.73), Inches(2.3), items, size=14, color=DIM, space_after=8)
     footer(s, 4, "Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.", draft)
     s.notes_slide.notes_text_frame.text = "GIFs recorded from the live app (figures-v3): the season with fire building up, and Where to check."
 
     # 5. Why believe it
     s = prs.slides.add_slide(blank)
-    background(s, PAPER)
+    background(s, BG)
     title(s, "Why believe it: two orbits agree, and an audit we asked for made the answer smaller")
-    picture(s, fig / "fig_orbits.png", M, Inches(1.7), w=Inches(5.95), name="Orbits figure")
-    picture(s, fig / "fig_start.png", Inches(6.78), Inches(1.7), w=Inches(5.95), name="Start figure")
+    framed(s, fig / "fig_orbits.png", M, Inches(1.7), Inches(5.95), "Orbits figure")
+    framed(s, fig / "fig_start.png", Inches(6.78), Inches(1.7), Inches(5.95), "Start figure")
     text(s, M, Inches(5.2), Inches(5.95), Inches(1.4),
-         f"Dawn and dusk orbits look from opposite sides, hours apart, and agree block by block on where HH fell: "
-         f"Spearman r = {num.get('track5_west_orbit_spearman'):.2f} in the west box, {num.get('track5_east_orbit_spearman'):.2f} "
-         f"in the east (the scatter shows Pearson r).",
-         size=14, color=INK)
+         [[("Two orbits, one answer. ", {"bold": True, "color": INK}),
+           f"Dawn and dusk look from opposite sides, hours apart, and agree block by block: Spearman r = "
+           f"{num.get('track5_west_orbit_spearman'):.2f} in the west box, {num.get('track5_east_orbit_spearman'):.2f} "
+           f"in the east (the scatter shows Pearson r)."]], size=14, color=DIM)
     text(s, Inches(6.78), Inches(5.2), Inches(5.95), Inches(1.4),
-         "Half way through, an independent audit found our first start date came just after rain. We now start "
-         "from the first rain-free passes, and published the audit with our response.",
-         size=14, color=INK)
+         [[("Audited half way. ", {"bold": True, "color": INK}),
+           "An independent audit found our first start date came just after rain. We now start from the first "
+           "rain-free passes, and published the audit with our response."]], size=14, color=DIM)
     footer(s, 5, "Figures: pipeline/figures.py. Audit and response: docs/AUDIT.md.", draft)
     s.notes_slide.notes_text_frame.text = "Validity: independent orbits, and the audit as evidence, not as the headline."
 
-    # 6. What we do not see
+    # 6. The honest limits, with our answers
     s = prs.slides.add_slide(blank)
-    background(s, PAPER)
-    title(s, "What the radar cannot tell us yet")
-    limits = [
-        [("Not checked on the ground. ", {"bold": True}),
-         "A fall in HH is not a measured water table. About sixty dipwell visits would calibrate the map or prove it wrong."],
-        [("One pass after the rain per orbit, ", {"bold": True}),
-         "from a later NASA processing release than the dry passes."],
-        [("No fire forecast, no canal advice. ", {"bold": True}),
-         "An early fall did not separate later fire from no fire inside drained land."],
-        [("Fire returns, but we cannot say why. ", {"bold": True}),
-         f"On western peat, {num.share('fire_repeat_share_on_peat_west')} of this year's fire fell on the "
-         f"{num.share('fire_earlier_share_on_peat_west')} that burned in 2015, 2019 or 2023. Fire off peat is mapped too."],
-    ]
-    text(s, M, Inches(1.75), Inches(5.4), Inches(4.8), limits, size=15, color=INK, space_after=14)
-    picture(s, fig / "fig_water_table.png", Inches(6.35), Inches(1.75), w=Inches(6.4), name="Water table figure")
-    text(s, Inches(6.35), Inches(5.45), Inches(6.4), Inches(0.9),
-         "The closest we can get without fieldwork: a rainfall-driven water-table model from a published gauge "
-         "record. Support, not validation.", size=13, color=MUTED)
-    footer(s, 6, "Hirano groundwater record (CC BY 4.0), GPM IMERG, NISAR L2 GCOV. Limits: docs/LIMITS.md.", draft)
-    s.notes_slide.notes_text_frame.text = "The limits, and the ground truth still missing."
+    background(s, BG)
+    title(s, "What the radar cannot tell us yet, and our answers")
+    limits_table(s, M, Inches(1.6), Inches(7.45), [
+        ([("Not checked on the ground. ", {"bold": True}), ("A fall in HH is not a measured water table.", {})],
+         "A rainfall model from a published gauge record bridges the gap (right), as support only. About sixty "
+         "dipwell visits would calibrate the map or prove it wrong."),
+        ([("One pass after the rain per orbit, ", {"bold": True}), ("from a later NASA processing release.", {})],
+         "We report the rise only where both orbits see it on their own, and the release change is in our limits."),
+        ([("No fire forecast, no canal advice.", {"bold": True})],
+         "Inside drained land an early fall did not separate later fire from no fire, so we withdrew the claim."),
+        ([("Fire returns, but we cannot say why.", {"bold": True})],
+         f"{num.share('fire_repeat_share_on_peat_west')} of this year's fire on western peat fell on the "
+         f"{num.share('fire_earlier_share_on_peat_west')} that burned in 2015, 2019 or 2023. Fire off peat is mapped too."),
+    ])
+    framed(s, fig / "fig_water_table.png", Inches(8.3), Inches(1.65), Inches(4.43), "Water table figure")
+    text(s, Inches(8.3), Inches(4.25), Inches(4.43), Inches(1.0),
+         "The bridge: a rainfall-driven water-table model, run on 2026 rain beside the radar. Support, not validation.",
+         size=12, color=DIM)
+    footer(s, 6, "Hirano groundwater record (CC BY 4.0), GPM IMERG, NISAR L2 GCOV. Full limits: docs/LIMITS.md.", draft)
+    s.notes_slide.notes_text_frame.text = "The limits, each with what we did about it."
 
     # 7. What comes next
     s = prs.slides.add_slide(blank)
-    background(s, INK)
-    title(s, "What NISAR could do next", color=PAPER)
+    background(s, BG)
+    title(s, "What NISAR could do next")
     nxt = [
-        [("Ground truth first. ", {"bold": True, "color": PAPER}), "A sixty-visit field protocol, in the late dry season and after the first rain."],
-        [("Years, not months. ", {"bold": True, "color": PAPER}), "Subsidence by interferometry over whole peat domes, and every dry season set against wet years."],
-        [("Anywhere. ", {"bold": True, "color": PAPER}), "The pipeline takes any bounding box: another peatland is one command away."],
+        [("Ground truth first. ", {"bold": True, "color": INK}), "A sixty-visit field protocol, in the late dry season and after the first rain."],
+        [("Years, not months. ", {"bold": True, "color": INK}), "Subsidence by interferometry over whole peat domes, and every dry season set against wet years."],
+        [("Anywhere. ", {"bold": True, "color": INK}), "The pipeline takes any bounding box: another peatland is one command away."],
     ]
-    text(s, M, Inches(1.8), Inches(5.6), Inches(3.6), nxt, size=17, color=SOFT_ON_INK, space_after=16)
-    picture(s, fig / "app_room.jpg", Inches(6.55), Inches(1.75), w=Inches(6.18), name="App entry view")   # 1915 x 900 px
+    text(s, M, Inches(1.8), Inches(5.6), Inches(3.6), nxt, size=17, color=DIM, space_after=16)
+    framed(s, fig / "app_room.jpg", Inches(6.55), Inches(1.75), Inches(6.18), "App entry view")   # 1915 x 900 px
     text(s, Inches(6.55), Inches(4.75), Inches(6.18), Inches(0.5),
          "The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.",
-         size=12, color=MUTED_ON_INK)
+         size=12, color=DIM)
     links = [
-        [("Open the map  ", {"bold": True, "color": PAPER}), (APP_URL, {"bold": True, "link": APP_URL})],
-        [("Code and data  ", {"bold": True, "color": PAPER}), (CODE_URL, {"bold": True, "link": CODE_URL})],
+        [("Open the map  ", {"bold": True, "color": INK}), (APP_URL, {"bold": True, "link": APP_URL})],
+        [("Code and data  ", {"bold": True, "color": INK}), (CODE_URL, {"bold": True, "link": CODE_URL})],
     ]
-    text(s, M, Inches(5.45), Inches(12.0), Inches(0.9), links, size=15, color=SOFT_ON_INK, space_after=6)
-    footer(s, 7, "Made with Super Intelligence (SI) assistance from NASA and ISRO NISAR L2 GCOV data. All code and data open.", draft, dark=True)
+    text(s, M, Inches(5.45), Inches(12.0), Inches(0.9), links, size=15, color=DIM, space_after=6)
+    footer(s, 7, "Made with Super Intelligence (SI) assistance from NASA and ISRO NISAR L2 GCOV data. All code and data open.", draft)
     s.notes_slide.notes_text_frame.text = "Next steps and links."
 
-    link_colour(prs, "2B78BD")
+    link_colour(prs, "5AA9EE")
     prs.save(a.out)
     print(f"wrote {a.out} ({'final' if a.final else 'draft'}); numbers from {len(set(num.used))} validation keys:")
     for k in sorted(set(num.used)):
