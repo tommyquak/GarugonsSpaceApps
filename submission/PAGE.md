@@ -42,7 +42,7 @@ To be added: seven slides with animated GIFs (public link).
 - Deep forest holds still: the noise floor is [v: noise_floor_hh_125] dB and [v: noise_floor_hh_061] dB, and [v: reference_flagged_share] of the reference forest is flagged.
 - Forest edges dry too: the fall is about [v: selfcheck_forest_edge_median_125] dB within 250 m of a forest edge and reaches zero only about 4 km inside.
 - On mapped peat in the west box, [v: fell_1db_km2_on_peat_west] km2 fell by 1 dB or more; [v: fell_1db_no_fire_km2_on_peat_west] km2 of that had no fire nearby.
-- After the first rain, land that had fallen by 1 dB or more regained [v: recovery_hh_share_regained_west_125] of the fall in HH and [v: recovery_hv_share_regained_west_125] in HV.
+- After the first rain, land that had fallen by 1 dB or more regained [v: recovery_hh_share_regained_west_125] of the fall in HH and [v: recovery_hv_share_regained_west_125] in HV on the ascending orbit, and [v: recovery_hh_share_regained_west_061] and [v: recovery_hv_share_regained_west_061] on the descending one. The two orbits' rebound maps agree at r = [v: recovery_hh_two_orbit_r_west_061_125].
 
 ### The physics, and the polarisations
 
@@ -55,7 +55,7 @@ At L-band the wave passes through leaves and reaches branches, trunks and the gr
 - Five months of NISAR cannot yet show peat subsidence. That needs years.
 - The radar does not predict where fire will start.
 - Peat fires are not the only fires in Indonesia. The map shows fire off peat as well.
-- Only one pass after the rain exists so far, on one orbit, so the recovery result is a single-pass result.
+- Each orbit has only one pass after the rain so far (1 Nov ascending, 28 Oct descending), so the recovery is a first look. Both orbits see it on their own, and the numbers move by up to [v: recovery_hh_share_regained_sensitivity_west_125] when the choice of passes changes.
 
 ### What NISAR could do next
 
