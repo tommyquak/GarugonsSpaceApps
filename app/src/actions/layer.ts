@@ -1,9 +1,11 @@
 // Written with Super Intelligence (SI) assistance.
 // The blocks on the map: one GeoJSON source per site, drawn flat (a fill coloured by action,
-// stronger where the confidence is higher) or as columns whose height is the fall in HH.
+// stronger where the confidence is higher) or as columns whose height is the fall in HH. In the
+// at-a-glance view the same blocks are coloured by level instead (levels.ts).
 import type { ExpressionSpecification, GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import { actionColor, confidenceStrength, CONFIDENCE_LEVELS, NONE_COLOR, NO_ACTION, solidColor } from "./colors";
 import type { BlockFeature, BlockStore } from "./data";
+import { LEVELS, levelOf } from "./levels";
 
 /** Metres of column per decibel of fall in HH. */
 export const METRES_PER_DB = 1200;
@@ -17,6 +19,12 @@ function match(input: unknown, cases: [string, string | number][], otherwise: st
   return ["match", input, ...cases.flat(), otherwise] as unknown as ExpressionSpecification;
 }
 
+// A value per level, for a paint property.
+function byLevel<T extends string | number>(pick: (level: (typeof LEVELS)[number]) => T): ExpressionSpecification {
+  const lowest = LEVELS[LEVELS.length - 1];
+  return ["match", ["get", "level"], ...LEVELS.slice(0, -1).flatMap((level) => [level.id, pick(level)]), pick(lowest)] as unknown as ExpressionSpecification;
+}
+
 const acted: ExpressionSpecification = ["!=", ["get", "action"], NO_ACTION];
 const notActed: ExpressionSpecification = ["==", ["get", "action"], NO_ACTION];
 
@@ -26,6 +34,7 @@ export class BlockLayer {
   private columns = false;
   private selected: BlockFeature | null = null;
   private hidden = new Set<string>();   // actions switched off in the legend
+  private glance = true;                // coloured by level, not by class
 
   constructor(
     private map: MapLibreMap,
@@ -48,25 +57,17 @@ export class BlockLayer {
     if (this.sites.has(site) || !features.length) return;
     this.sites.add(site);
     const id = `blocks-${site}`;
-    const actions = this.store.ontology.actions.map((a) => a.id).filter((a) => a !== NO_ACTION);
-    // The map needs four properties only; the card and the list read the rest from the store.
+    // The map needs five properties only; the card and the list read the rest from the store.
     const data = {
       type: "FeatureCollection" as const,
       features: features.map((f) => ({
         type: "Feature" as const,
         geometry: f.geometry,
-        properties: { id: f.properties.id, action: f.properties.action, confidence: f.properties.confidence, fall_db: f.properties.fall_db },
+        properties: { id: f.properties.id, action: f.properties.action, confidence: f.properties.confidence, fall_db: f.properties.fall_db, level: levelOf(f.properties) },
       })),
     };
     this.map.addSource(id, { type: "geojson", data, promoteId: "id" });
-
-    const color = match(["get", "action"], actions.map((a) => [a, actionColor(a)]), NONE_COLOR);
-    const strength = match(["coalesce", ["get", "confidence"], ""], CONFIDENCE_LEVELS.map((level) => [level, confidenceStrength(level)]), confidenceStrength(null));
-    const solid = match(
-      ["concat", ["get", "action"], "|", ["coalesce", ["get", "confidence"], ""]],
-      actions.flatMap((a) => CONFIDENCE_LEVELS.map((level): [string, string] => [`${a}|${level}`, solidColor(a, level)])),
-      NONE_COLOR,
-    );
+    const { color, strength, solid } = this.paints();
 
     // Blocks without an action: a faint grey grid once the map is close enough to pick one.
     this.map.addLayer({ id: `${id}-rest`, type: "fill", source: id, minzoom: GRID_FROM_ZOOM, filter: notActed, paint: { "fill-color": NONE_COLOR, "fill-opacity": 0.03 } }, ANCHOR);
@@ -94,9 +95,50 @@ export class BlockLayer {
       },
       ANCHOR,
     );
-    for (const action of [...this.hidden]) this.setActionShown(action, false);
+    this.applyMode();
     this.mark(this.selected, true);
     this.sync();
+  }
+
+  /** Colour, opacity and column colour of a block, by level or by class and agreement. */
+  private paints(): { color: ExpressionSpecification; strength: ExpressionSpecification; solid: ExpressionSpecification } {
+    if (this.glance) return { color: byLevel((l) => l.color), strength: byLevel((l) => l.strength), solid: byLevel((l) => l.solid) };
+    const actions = this.store.ontology.actions.map((a) => a.id).filter((a) => a !== NO_ACTION);
+    return {
+      color: match(["get", "action"], actions.map((a) => [a, actionColor(a)]), NONE_COLOR),
+      strength: match(["coalesce", ["get", "confidence"], ""], CONFIDENCE_LEVELS.map((level) => [level, confidenceStrength(level)]), confidenceStrength(null)),
+      solid: match(
+        ["concat", ["get", "action"], "|", ["coalesce", ["get", "confidence"], ""]],
+        actions.flatMap((a) => CONFIDENCE_LEVELS.map((level): [string, string] => [`${a}|${level}`, solidColor(a, level)])),
+        NONE_COLOR,
+      ),
+    };
+  }
+
+  /** Repaints and refilters every site for the current way of colouring. */
+  private applyMode(): void {
+    const { color, strength, solid } = this.paints();
+    // The classes switched off in the legend only apply when the blocks are coloured by class.
+    const filter: ExpressionSpecification = !this.glance && this.hidden.size ? ["all", acted, ["!", ["in", ["get", "action"], ["literal", [...this.hidden]]]]] : acted;
+    for (const site of this.sites) {
+      const fill = `blocks-${site}-fill`;
+      const columns = `blocks-${site}-columns`;
+      if (this.map.getLayer(fill)) {
+        this.map.setPaintProperty(fill, "fill-color", color);
+        this.map.setPaintProperty(fill, "fill-opacity", strength);
+        this.map.setFilter(fill, filter);
+      }
+      if (this.map.getLayer(columns)) {
+        this.map.setPaintProperty(columns, "fill-extrusion-color", ["case", ["boolean", ["feature-state", "selected"], false], "#ffffff", solid]);
+        this.map.setFilter(columns, filter);
+      }
+    }
+  }
+
+  /** Colours the blocks by level (true) or by class and agreement (false). */
+  setGlance(on: boolean): void {
+    this.glance = on;
+    this.applyMode();
   }
 
   private mark(feature: BlockFeature | null, selected: boolean): void {
@@ -133,14 +175,7 @@ export class BlockLayer {
   setActionShown(action: string, on: boolean): void {
     if (on) this.hidden.delete(action);
     else this.hidden.add(action);
-    const filter: ExpressionSpecification = this.hidden.size
-      ? ["all", acted, ["!", ["in", ["get", "action"], ["literal", [...this.hidden]]]]]
-      : acted;
-    for (const site of this.sites) {
-      for (const kind of ["fill", "columns"]) {
-        if (this.map.getLayer(`blocks-${site}-${kind}`)) this.map.setFilter(`blocks-${site}-${kind}`, filter);
-      }
-    }
+    this.applyMode();
   }
 
   isActionShown(action: string): boolean {
