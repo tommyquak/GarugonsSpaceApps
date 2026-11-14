@@ -55,8 +55,8 @@ export function buildStory(
       },
       text: () =>
         fire.length
-          ? "Black marks land with a fire detection this year, from NASA FIRMS, on peat and off it. Compare it with the dried land around it; the map does not predict where fire will start."
-          : "The fire layer is not loaded yet. When it is, this step will show this year's NASA FIRMS fire detections next to the dried land, on peat and off it.",
+          ? "Black marks land with a fire detection this year, from NASA FIRMS, on peat and off it. Compare it with the nearby radar echo fall; the map does not predict where fire will start."
+          : "The fire layer is not loaded yet. When it is, this step will show this year's NASA FIRMS fire detections next to areas where the radar echo fell, on peat and off it.",
     },
     {
       title: "Rewet",
@@ -73,7 +73,7 @@ export function buildStory(
       text: () => {
         const last = overlays.steps[overlays.steps.length - 1];
         if (recovery.length) {
-          return "Blue marks land where the radar signal (HH) rose again across the first rain. Dried land that stays clear here did not come back in that pass; it is a place to look at, not a measured water level.";
+          return "Blue marks land where the HH radar signal rose across the first rain. This shows a change in radar echo, not a measured water level.";
         }
         return last
           ? `The recovery layer is not loaded yet, so this is the latest radar pass, on ${formatDay(last.date)}. Land still coloured is still darker than at the start of the season.`
