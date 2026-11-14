@@ -51,7 +51,7 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 }
 ```
 
-`status` is `exploratory` until track 5 has rerun it, then `final`. The app and the slides show only `final` numbers.
+`status` is `exploratory` until track 5 has rerun it, then `final`. The app and the slides show only `final` numbers. Independent checks add `track5_<site>_*` entries with the source period. The [Track 5 guide](../pipeline/checks/README.md) identifies the matching release, reproduction commands, exclusions and key names. A missing peat map produces no area result for that map.
 
 ## 4. Time series for the click chart (track 1 writes; track 4 reads)
 

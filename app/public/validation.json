@@ -79,6 +79,262 @@
   "made_by": "pipeline/fusion/blocks.py",
   "note": "everything else"
  },
+ "cover_fell_share_hv_above_m11_east": {
+  "value": 0.0386,
+  "unit": "share of class",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_above_m11_west": {
+  "value": 0.0229,
+  "unit": "share of class",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_below_m15_east": {
+  "value": 0.2956,
+  "unit": "share of class",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_below_m15_west": {
+  "value": 0.3348,
+  "unit": "share of class",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_m13_m11_east": {
+  "value": 0.1601,
+  "unit": "share of class",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_m13_m11_west": {
+  "value": 0.1248,
+  "unit": "share of class",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_m15_m13_east": {
+  "value": 0.3738,
+  "unit": "share of class",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_fell_share_hv_m15_m13_west": {
+  "value": 0.2892,
+  "unit": "share of class",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "fell by 1 dB or more on both orbits"
+ },
+ "cover_median_hh_change_hv_above_m11_east_061": {
+  "value": -0.1523,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_above_m11_east_125": {
+  "value": -0.1834,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_above_m11_west_061": {
+  "value": -0.0706,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_above_m11_west_125": {
+  "value": -0.0638,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_below_m15_east_061": {
+  "value": -0.6915,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_below_m15_east_125": {
+  "value": -0.7879,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_below_m15_west_061": {
+  "value": -0.7612,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_below_m15_west_125": {
+  "value": -0.9868,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m13_m11_east_061": {
+  "value": -0.435,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m13_m11_east_125": {
+  "value": -0.6084,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m13_m11_west_061": {
+  "value": -0.2103,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m13_m11_west_125": {
+  "value": -0.3119,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m15_m13_east_061": {
+  "value": -0.8267,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m15_m13_east_125": {
+  "value": -1.0639,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m15_m13_west_061": {
+  "value": -0.6646,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_median_hh_change_hv_m15_m13_west_125": {
+  "value": -0.9086,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "median HH change over the dry season, against closed forest"
+ },
+ "cover_peat_share_hv_above_m11_east": {
+  "value": 0.11,
+  "unit": "share of mapped peat",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV at or above -11 dB: closed forest"
+ },
+ "cover_peat_share_hv_above_m11_west": {
+  "value": 0.3643,
+  "unit": "share of mapped peat",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV at or above -11 dB: closed forest"
+ },
+ "cover_peat_share_hv_below_m15_east": {
+  "value": 0.2113,
+  "unit": "share of mapped peat",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV below -15 dB: open or thinly vegetated"
+ },
+ "cover_peat_share_hv_below_m15_west": {
+  "value": 0.0956,
+  "unit": "share of mapped peat",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV below -15 dB: open or thinly vegetated"
+ },
+ "cover_peat_share_hv_m13_m11_east": {
+  "value": 0.2961,
+  "unit": "share of mapped peat",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV -13 to -11 dB: open forest and regrowth"
+ },
+ "cover_peat_share_hv_m13_m11_west": {
+  "value": 0.3135,
+  "unit": "share of mapped peat",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV -13 to -11 dB: open forest and regrowth"
+ },
+ "cover_peat_share_hv_m15_m13_east": {
+  "value": 0.3826,
+  "unit": "share of mapped peat",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV -15 to -13 dB: low or broken woody cover"
+ },
+ "cover_peat_share_hv_m15_m13_west": {
+  "value": 0.2265,
+  "unit": "share of mapped peat",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV -15 to -13 dB: low or broken woody cover"
+ },
  "dried_both_orbits_km2_east": {
   "value": 2889.0025,
   "unit": "km2",
@@ -288,6 +544,98 @@
   "status": "exploratory",
   "made_by": "pipeline/context/fire_layers.py",
   "note": "within the footprint of a detection, 2026-05-07 to 2026-11-13"
+ },
+ "fire_before_rain_km2_east": {
+  "value": 1662.3625,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "within the footprint of a detection, 2026-05-04 to 2026-10-25, the last dry day"
+ },
+ "fire_before_rain_km2_off_peat_east": {
+  "value": 968.96,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "fire detected up to 2026-10-25"
+ },
+ "fire_before_rain_km2_off_peat_west": {
+  "value": 504.515,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "fire detected up to 2026-10-25"
+ },
+ "fire_before_rain_km2_on_peat_east": {
+  "value": 693.4025,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "fire detected up to 2026-10-25"
+ },
+ "fire_before_rain_km2_on_peat_west": {
+  "value": 1914.6975,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "fire detected up to 2026-10-25"
+ },
+ "fire_before_rain_km2_west": {
+  "value": 2419.2125,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "within the footprint of a detection, 2026-05-07 to 2026-10-25, the last dry day"
+ },
+ "fire_before_rain_share_off_peat_east": {
+  "value": 0.2964,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py"
+ },
+ "fire_before_rain_share_off_peat_west": {
+  "value": 0.2949,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py"
+ },
+ "fire_before_rain_share_on_peat_east": {
+  "value": 0.5908,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py"
+ },
+ "fire_before_rain_share_on_peat_west": {
+  "value": 0.3668,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py"
+ },
+ "fire_detections_after_dry_east": {
+  "value": 520,
+  "unit": "detections",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "after the last dry day 2026-10-25, left out of fire_before_rain"
+ },
+ "fire_detections_after_dry_west": {
+  "value": 786,
+  "unit": "detections",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "after the last dry day 2026-10-25, left out of fire_before_rain"
  },
  "fire_detections_east": {
   "value": 38890,
@@ -650,6 +998,180 @@
   "status": "exploratory",
   "made_by": "pipeline/fusion/hindcast.py",
   "note": "95% range -0.09 to +0.18, resampling 61 tiles of 10 km"
+ },
+ "hydro_held_out_r_max_DF": {
+  "value": 0.923,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py"
+ },
+ "hydro_held_out_r_max_UF": {
+  "value": 0.936,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py"
+ },
+ "hydro_held_out_r_min_DF": {
+  "value": 0.397,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "worst left-out year of 5; daily water table, drained forest"
+ },
+ "hydro_held_out_r_min_UF": {
+  "value": 0.738,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "worst left-out year of 4; daily water table, forest with little drainage"
+ },
+ "hydro_held_out_rmse_max_m_DF": {
+  "value": 0.207,
+  "unit": "m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "largest error on a left-out year"
+ },
+ "hydro_held_out_rmse_max_m_UF": {
+  "value": 0.26,
+  "unit": "m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "largest error on a left-out year"
+ },
+ "hydro_modelled_days_below_40cm_2026_DF": {
+  "value": 222,
+  "unit": "days",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "MODELLED, not measured: water table below 0.4 m, driven by 2026 rainfall; first such day 2026-01-22"
+ },
+ "hydro_modelled_days_below_40cm_2026_UF": {
+  "value": 125,
+  "unit": "days",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "MODELLED, not measured: water table below 0.4 m, driven by 2026 rainfall; first such day 2026-07-11"
+ },
+ "hydro_modelled_lowest_m_2026_DF": {
+  "value": -1.345,
+  "unit": "m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "MODELLED, not measured"
+ },
+ "hydro_modelled_lowest_m_2026_UF": {
+  "value": -1.345,
+  "unit": "m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/model.py",
+  "note": "MODELLED, not measured"
+ },
+ "hydro_radar_db_per_metre_DF_061": {
+  "value": 1.1012,
+  "unit": "dB per m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "slope of HH on the modelled water table; not a calibration"
+ },
+ "hydro_radar_db_per_metre_DF_125": {
+  "value": 1.8767,
+  "unit": "dB per m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "slope of HH on the modelled water table; not a calibration"
+ },
+ "hydro_radar_db_per_metre_UF_061": {
+  "value": 0.4353,
+  "unit": "dB per m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "slope of HH on the modelled water table; not a calibration"
+ },
+ "hydro_radar_db_per_metre_UF_125": {
+  "value": 0.2021,
+  "unit": "dB per m",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "slope of HH on the modelled water table; not a calibration"
+ },
+ "hydro_radar_r_DF_061": {
+  "value": 0.4238,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "HH against the MODELLED water table over 11 passes; two seasonal curves, so read r_of_changes too"
+ },
+ "hydro_radar_r_DF_125": {
+  "value": 0.8745,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "HH against the MODELLED water table over 10 passes; two seasonal curves, so read r_of_changes too"
+ },
+ "hydro_radar_r_UF_061": {
+  "value": 0.7162,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "HH against the MODELLED water table over 11 passes; two seasonal curves, so read r_of_changes too"
+ },
+ "hydro_radar_r_UF_125": {
+  "value": 0.6791,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "HH against the MODELLED water table over 10 passes; two seasonal curves, so read r_of_changes too"
+ },
+ "hydro_radar_r_of_changes_DF_061": {
+  "value": 0.652,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "pass-to-pass change in HH against pass-to-pass change in the modelled water table"
+ },
+ "hydro_radar_r_of_changes_DF_125": {
+  "value": 0.5261,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "pass-to-pass change in HH against pass-to-pass change in the modelled water table"
+ },
+ "hydro_radar_r_of_changes_UF_061": {
+  "value": -0.0027,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "pass-to-pass change in HH against pass-to-pass change in the modelled water table"
+ },
+ "hydro_radar_r_of_changes_UF_125": {
+  "value": 0.7329,
+  "unit": "Pearson r",
+  "site": "gauges",
+  "status": "exploratory",
+  "made_by": "pipeline/hydro/compare.py",
+  "note": "pass-to-pass change in HH against pass-to-pass change in the modelled water table"
  },
  "last_dry_day_east": {
   "value": "2026-10-25",
@@ -1467,36 +1989,68 @@
   "made_by": "pipeline/recovery/recovery.py",
   "note": "HH rebound of one orbit against the other, all blocks"
  },
+ "recovery_hv_left_fire_minus_no_fire_on_peat_east_061": {
+  "value": -0.2899,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "median HV after the rain against the start, peat with fire detections minus peat without; HV as measured"
+ },
+ "recovery_hv_left_fire_minus_no_fire_on_peat_east_125": {
+  "value": -0.4035,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "median HV after the rain against the start, peat with fire detections minus peat without; HV as measured"
+ },
+ "recovery_hv_left_fire_minus_no_fire_on_peat_west_061": {
+  "value": -0.3387,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "median HV after the rain against the start, peat with fire detections minus peat without; HV as measured"
+ },
+ "recovery_hv_left_fire_minus_no_fire_on_peat_west_125": {
+  "value": -0.5363,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "median HV after the rain against the start, peat with fire detections minus peat without; HV as measured"
+ },
  "recovery_hv_median_fall_east_061": {
-  "value": -1.5623,
+  "value": -0.9918,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_fall_east_125": {
-  "value": -2.1088,
+  "value": -1.5788,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_fall_west_061": {
-  "value": -1.2367,
+  "value": -0.6662,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_fall_west_125": {
-  "value": -1.3875,
+  "value": -0.8575,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_left_east_061": {
-  "value": -1.0308,
+  "value": -0.6273,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1504,7 +2058,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_east_125": {
-  "value": -1.2371,
+  "value": -0.6731,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1512,7 +2066,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_fire_east_061": {
-  "value": -1.8602,
+  "value": -1.4567,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1520,7 +2074,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_fire_east_125": {
-  "value": -2.4397,
+  "value": -1.8757,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1528,7 +2082,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_fire_west_061": {
-  "value": -0.6661,
+  "value": -0.2626,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1536,7 +2090,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_fire_west_125": {
-  "value": -0.8344,
+  "value": -0.2704,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1544,7 +2098,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_no_fire_east_061": {
-  "value": -0.8459,
+  "value": -0.4424,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1552,7 +2106,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_no_fire_east_125": {
-  "value": -0.9755,
+  "value": -0.4115,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1560,7 +2114,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_no_fire_west_061": {
-  "value": -0.6252,
+  "value": -0.2217,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1568,7 +2122,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_off_peat_no_fire_west_125": {
-  "value": -0.6943,
+  "value": -0.1303,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1576,7 +2130,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_fire_east_061": {
-  "value": -1.1141,
+  "value": -0.7106,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1584,7 +2138,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_fire_east_125": {
-  "value": -1.0682,
+  "value": -0.5042,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1592,7 +2146,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_fire_west_061": {
-  "value": -0.8756,
+  "value": -0.4721,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1600,7 +2154,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_fire_west_125": {
-  "value": -0.8269,
+  "value": -0.2629,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1608,7 +2162,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_no_fire_east_061": {
-  "value": -0.8242,
+  "value": -0.4207,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1616,7 +2170,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_no_fire_east_125": {
-  "value": -0.6648,
+  "value": -0.1008,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -1624,7 +2178,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_no_fire_west_061": {
-  "value": -0.5369,
+  "value": -0.1334,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1632,7 +2186,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_on_peat_no_fire_west_125": {
-  "value": -0.2906,
+  "value": 0.2734,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1640,7 +2194,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_west_061": {
-  "value": -0.6359,
+  "value": -0.2324,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1648,7 +2202,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_west_125": {
-  "value": -0.5819,
+  "value": -0.0179,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -1656,189 +2210,189 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_rebound_east_061": {
-  "value": 0.5408,
+  "value": 0.3738,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_rebound_east_125": {
-  "value": 0.9097,
+  "value": 0.9437,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_rebound_west_061": {
-  "value": 0.5949,
+  "value": 0.4279,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_rebound_west_125": {
-  "value": 0.8014,
+  "value": 0.8354,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_east_061": {
-  "value": 0.1712,
+  "value": 0.3345,
   "unit": "share of blocks",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_east_125": {
-  "value": 0.1016,
+  "value": 0.35,
   "unit": "share of blocks",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_west_061": {
-  "value": 0.3002,
+  "value": 0.5466,
   "unit": "share of blocks",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_west_125": {
-  "value": 0.3207,
+  "value": 0.6372,
   "unit": "share of blocks",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_east_061": {
-  "value": 0.3461,
+  "value": 0.3768,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_east_125": {
-  "value": 0.4314,
+  "value": 0.5978,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_fire_east_061": {
-  "value": 0.2199,
+  "value": 0.1985,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_fire_east_125": {
-  "value": 0.2715,
+  "value": 0.3318,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_fire_west_061": {
-  "value": 0.5574,
+  "value": 0.7048,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_fire_west_125": {
-  "value": 0.5499,
+  "value": 0.7861,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_no_fire_east_061": {
-  "value": 0.3999,
+  "value": 0.4782,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_no_fire_east_125": {
-  "value": 0.4443,
+  "value": 0.6519,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_no_fire_west_061": {
-  "value": 0.5126,
+  "value": 0.6853,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_off_peat_no_fire_west_125": {
-  "value": 0.4599,
+  "value": 0.7788,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_fire_east_061": {
-  "value": 0.36,
+  "value": 0.3933,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_fire_east_125": {
-  "value": 0.5092,
+  "value": 0.6868,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_fire_west_061": {
-  "value": 0.3529,
+  "value": 0.3979,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_fire_west_125": {
-  "value": 0.4512,
+  "value": 0.7066,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_no_fire_east_061": {
-  "value": 0.3762,
+  "value": 0.4471,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_no_fire_east_125": {
-  "value": 0.6108,
+  "value": 0.9066,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_no_fire_west_061": {
-  "value": 0.5043,
+  "value": 0.7326,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_on_peat_no_fire_west_125": {
-  "value": 0.7743,
+  "value": 1.4419,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_placebo_east_061": {
-  "value": -0.224,
+  "value": -0.1974,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
@@ -1846,7 +2400,7 @@
   "note": "rain pretended one pass sooner, so the 'rebound' is 20261016 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
  },
  "recovery_hv_share_regained_placebo_east_125": {
-  "value": -0.0771,
+  "value": -0.0937,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
@@ -1854,7 +2408,7 @@
   "note": "rain pretended one pass sooner, so the 'rebound' is 20261020 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
  },
  "recovery_hv_share_regained_placebo_west_061": {
-  "value": -0.2318,
+  "value": -0.1978,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
@@ -1862,7 +2416,7 @@
   "note": "rain pretended one pass sooner, so the 'rebound' is 20261016 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
  },
  "recovery_hv_share_regained_placebo_west_125": {
-  "value": -0.1441,
+  "value": -0.2233,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
@@ -1870,7 +2424,7 @@
   "note": "rain pretended one pass sooner, so the 'rebound' is 20261020 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
  },
  "recovery_hv_share_regained_sensitivity_east_061": {
-  "value": 0.0972,
+  "value": 0.0906,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
@@ -1878,7 +2432,7 @@
   "note": "largest move from the as-run value over: late one pass, late earlier"
  },
  "recovery_hv_share_regained_sensitivity_east_125": {
-  "value": 0.0297,
+  "value": 0.0256,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
@@ -1886,7 +2440,7 @@
   "note": "largest move from the as-run value over: late one pass, late earlier"
  },
  "recovery_hv_share_regained_sensitivity_west_061": {
-  "value": 0.0978,
+  "value": 0.1362,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
@@ -1894,7 +2448,7 @@
   "note": "largest move from the as-run value over: late one pass, late earlier"
  },
  "recovery_hv_share_regained_sensitivity_west_125": {
-  "value": 0.0444,
+  "value": 0.0117,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
@@ -1902,14 +2456,14 @@
   "note": "largest move from the as-run value over: late one pass, late earlier"
  },
  "recovery_hv_share_regained_west_061": {
-  "value": 0.4811,
+  "value": 0.6424,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_west_125": {
-  "value": 0.5776,
+  "value": 0.9742,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
@@ -1982,6 +2536,14 @@
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py",
   "note": "share of the intact reference forest that the dried rule flags; a false-alarm rate"
+ },
+ "reference_start_hv_median_125": {
+  "value": -10.449,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/by_cover.py",
+  "note": "HV of the closed reference forest at the start of the dry season"
  },
  "selfcheck_forest_edge_median_061": {
   "value": -0.33,
@@ -2146,6 +2708,1094 @@
   "status": "exploratory",
   "made_by": "pipeline/season.py",
   "note": "start passes are taken from this day on: 7 days after the last wet day"
+ },
+ "track5_east_061_date_shuffle_block_count": {
+  "value": 67019,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 67019 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_061_date_shuffle_exact_p_one_sided": {
+  "value": 0.0024,
+  "unit": "exact permutation fraction",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 67019 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_061_date_shuffle_observed_median_change": {
+  "value": -0.7355,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 67019 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_061_date_shuffle_pairing_count": {
+  "value": 420,
+  "unit": "disjoint dry-start/late assignments",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 67019 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_061_date_shuffle_reconstruction_max_error": {
+  "value": 0.0,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 67019 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_061_date_shuffle_tail_count": {
+  "value": 1,
+  "unit": "assignments at least as dark as observed",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 67019 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_125_date_shuffle_block_count": {
+  "value": 70932,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 70932 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_125_date_shuffle_exact_p_one_sided": {
+  "value": 0.0095,
+  "unit": "exact permutation fraction",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 70932 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_125_date_shuffle_observed_median_change": {
+  "value": -0.9493,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 70932 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_125_date_shuffle_pairing_count": {
+  "value": 105,
+  "unit": "disjoint dry-start/late assignments",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 70932 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_125_date_shuffle_reconstruction_max_error": {
+  "value": 0.0,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 70932 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_125_date_shuffle_tail_count": {
+  "value": 1,
+  "unit": "assignments at least as dark as observed",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 70932 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_east_dried_peat_official_off_km2": {
+  "value": 2168.42,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_official_off_share": {
+  "value": 0.7142,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_official_off_valid_km2": {
+  "value": 3036.3225,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_official_on_km2": {
+  "value": 716.4125,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_official_on_share": {
+  "value": 0.6261,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_official_on_valid_km2": {
+  "value": 1144.2925,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_official_unknown_valid_km2": {
+  "value": 7.2375,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area footprint without mapped peat coverage; excluded from both denominators; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_dried_peat_peatmap_off_km2": {
+  "value": 2176.225,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_dried_peat_peatmap_off_share": {
+  "value": 0.7133,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_dried_peat_peatmap_off_valid_km2": {
+  "value": 3050.895,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_dried_peat_peatmap_on_km2": {
+  "value": 712.7775,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_dried_peat_peatmap_on_share": {
+  "value": 0.6269,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_dried_peat_peatmap_on_valid_km2": {
+  "value": 1136.9575,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_dried_peat_peatmap_unknown_valid_km2": {
+  "value": 0.0,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area footprint without mapped peat coverage; excluded from both denominators; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_official_off_km2": {
+  "value": 971.13,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_official_off_share": {
+  "value": 0.299,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_official_off_valid_km2": {
+  "value": 3248.405,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_official_on_km2": {
+  "value": 706.5725,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_official_on_share": {
+  "value": 0.5998,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_official_on_valid_km2": {
+  "value": 1178.0,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_official_unknown_valid_km2": {
+  "value": 16.725,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area footprint without mapped peat coverage; excluded from both denominators; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_east_fire_peat_peatmap_off_km2": {
+  "value": 978.5075,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_peatmap_off_share": {
+  "value": 0.2993,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_peatmap_off_valid_km2": {
+  "value": 3269.4925,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_peatmap_on_km2": {
+  "value": 704.38,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_peatmap_on_share": {
+  "value": 0.6002,
+  "unit": "share",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_peatmap_on_valid_km2": {
+  "value": 1173.6375,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_fire_peat_peatmap_unknown_valid_km2": {
+  "value": 0.0,
+  "unit": "km\u00b2",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area footprint without mapped peat coverage; excluded from both denominators; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_east_orbit_blocks": {
+  "value": 67019,
+  "unit": "paired blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "Paired complete 250 m blocks across the common radar footprint; orbits 125 and 061. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_east_orbit_driest_tenth_overlap": {
+  "value": 0.7967,
+  "unit": "fraction of track-125 driest tenth",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "5339 of 6701 track-125 blocks; lowest floor(n/10) per orbit; ties in row-major order. Whole-site agreement diagnostic. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_east_orbit_pearson": {
+  "value": 0.892,
+  "unit": "Pearson r",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "Paired complete 250 m blocks across the common radar footprint; orbits 125 and 061. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_east_orbit_spearman": {
+  "value": 0.8703,
+  "unit": "Spearman rho",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "Paired complete 250 m blocks across the common radar footprint; orbits 125 and 061. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_east_recovery_061_hh_driest_decile_median_db": {
+  "value": 1.2551,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-125 dry-down decile; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hh_driest_decile_n": {
+  "value": 6701,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-125 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hh_drydown_spearman_r": {
+  "value": 0.2788,
+  "unit": "Spearman r",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-125 dry-down; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hh_median_db": {
+  "value": 0.8331,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hh_paired_n": {
+  "value": 67019,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hv_driest_decile_median_db": {
+  "value": 0.5127,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-125 dry-down decile; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hv_driest_decile_n": {
+  "value": 6701,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-125 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hv_drydown_spearman_r": {
+  "value": 0.2817,
+  "unit": "Spearman r",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-125 dry-down; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hv_median_db": {
+  "value": 0.1727,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_061_hv_paired_n": {
+  "value": 67019,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hh_driest_decile_median_db": {
+  "value": 1.142,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-061 dry-down decile; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hh_driest_decile_n": {
+  "value": 6701,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-061 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hh_drydown_spearman_r": {
+  "value": 0.3221,
+  "unit": "Spearman r",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-061 dry-down; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hh_median_db": {
+  "value": 0.6279,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hh_paired_n": {
+  "value": 67019,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hv_driest_decile_median_db": {
+  "value": 0.9331,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-061 dry-down decile; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hv_driest_decile_n": {
+  "value": 6701,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-061 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hv_drydown_spearman_r": {
+  "value": 0.3626,
+  "unit": "Spearman r",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-061 dry-down; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hv_median_db": {
+  "value": 0.5721,
+  "unit": "dB",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_east_recovery_125_hv_paired_n": {
+  "value": 67019,
+  "unit": "250 m blocks",
+  "site": "east",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 7.06 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_east, verified against east daily IMERG totals."
+ },
+ "track5_west_061_date_shuffle_block_count": {
+  "value": 110521,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 110521 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_061_date_shuffle_exact_p_one_sided": {
+  "value": 0.0024,
+  "unit": "exact permutation fraction",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 110521 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_061_date_shuffle_observed_median_change": {
+  "value": -0.2719,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 110521 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_061_date_shuffle_pairing_count": {
+  "value": 420,
+  "unit": "disjoint dry-start/late assignments",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 110521 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_061_date_shuffle_reconstruction_max_error": {
+  "value": 0.0,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 110521 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_061_date_shuffle_tail_count": {
+  "value": 1,
+  "unit": "assignments at least as dark as observed",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 420 disjoint unordered assignments preserving group sizes (2 dry-start, 2 late); 110521 complete 250 m block centres; dry-start 20260712,20260724, late 20261004,20261016; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_061_forest_blocks": {
+  "value": 10124,
+  "unit": "reference blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 061 through 20261025; first/late passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_west_061_forest_p05": {
+  "value": -0.2982,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 061 through 20261025; first/late passes 20260712,20260724/20261004,20261016. Agrees with noise_floor_hh_061 at tolerance 0.001 dB (absolute difference 1.40554e-05 dB)."
+ },
+ "track5_west_061_forest_p50": {
+  "value": -0.0059,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 061 through 20261025; first/late passes 20260712,20260724/20261004,20261016. Agrees with reference_drydown_median_061 at tolerance 0.001 dB (absolute difference 2.92316e-05 dB)."
+ },
+ "track5_west_061_forest_p95": {
+  "value": 0.3748,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 061 through 20261025; first/late passes 20260712,20260724/20261004,20261016. Agrees with reference_drydown_p95_061 at tolerance 0.001 dB (absolute difference 1.23646e-05 dB)."
+ },
+ "track5_west_125_date_shuffle_block_count": {
+  "value": 110760,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 110760 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_125_date_shuffle_exact_p_one_sided": {
+  "value": 0.0095,
+  "unit": "exact permutation fraction",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 110760 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_125_date_shuffle_observed_median_change": {
+  "value": -0.3803,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 110760 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_125_date_shuffle_pairing_count": {
+  "value": 105,
+  "unit": "disjoint dry-start/late assignments",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 110760 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_125_date_shuffle_reconstruction_max_error": {
+  "value": 0.0,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 110760 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_125_date_shuffle_tail_count": {
+  "value": 1,
+  "unit": "assignments at least as dark as observed",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/date_shuffle.py",
+  "note": "Exact enumeration of 105 disjoint unordered assignments preserving group sizes (1 dry-start, 2 late); 110760 complete 250 m block centres; dry-start 20260716, late 20261008,20261020; candidate dates through 20261025; drydown reconstruction max error 0.000000 dB. Pair shuffling assumes exchangeable acquisition conditions, which seasonal weather may violate."
+ },
+ "track5_west_125_forest_blocks": {
+  "value": 10124,
+  "unit": "reference blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 125 through 20261025; first/late passes 20260716/20261008,20261020."
+ },
+ "track5_west_125_forest_p05": {
+  "value": -0.282,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 125 through 20261025; first/late passes 20260716/20261008,20261020. Agrees with noise_floor_hh_125 at tolerance 0.001 dB (absolute difference 3.65562e-05 dB)."
+ },
+ "track5_west_125_forest_p50": {
+  "value": 0.0046,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 125 through 20261025; first/late passes 20260716/20261008,20261020. Agrees with reference_drydown_median_125 at tolerance 0.001 dB (absolute difference 1.21113e-05 dB)."
+ },
+ "track5_west_125_forest_p95": {
+  "value": 0.2672,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/forest.py",
+  "note": "Shared west reference, >=24/25 forest pixels, full 250 m blocks. Internal stability; p05 is the drying threshold. Track 125 through 20261025; first/late passes 20260716/20261008,20261020. Agrees with reference_drydown_p95_125 at tolerance 0.001 dB (absolute difference 4.82252e-05 dB)."
+ },
+ "track5_west_dried_peat_official_off_km2": {
+  "value": 1065.335,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_official_off_share": {
+  "value": 0.6291,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_official_off_valid_km2": {
+  "value": 1693.4275,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_official_on_km2": {
+  "value": 1988.545,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_official_on_share": {
+  "value": 0.382,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_official_on_valid_km2": {
+  "value": 5205.2875,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_official_unknown_valid_km2": {
+  "value": 13.4525,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area footprint without mapped peat coverage; excluded from both denominators; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_dried_peat_peatmap_off_km2": {
+  "value": 1067.925,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_dried_peat_peatmap_off_share": {
+  "value": 0.6276,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_dried_peat_peatmap_off_valid_km2": {
+  "value": 1701.7275,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_dried_peat_peatmap_on_km2": {
+  "value": 1992.245,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_dried_peat_peatmap_on_share": {
+  "value": 0.3824,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "dried area share of valid area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_dried_peat_peatmap_on_valid_km2": {
+  "value": 5210.44,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area coverage on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_dried_peat_peatmap_unknown_valid_km2": {
+  "value": 0.0,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid dried area footprint without mapped peat coverage; excluded from both denominators; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_official_off_km2": {
+  "value": 507.3,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_official_off_share": {
+  "value": 0.2995,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_official_off_valid_km2": {
+  "value": 1693.7725,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage off mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_official_on_km2": {
+  "value": 1920.805,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_official_on_share": {
+  "value": 0.369,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_official_on_valid_km2": {
+  "value": 5205.38,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage on mapped peat; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_official_unknown_valid_km2": {
+  "value": 32.2225,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area footprint without mapped peat coverage; excluded from both denominators; map source: Indonesia Ministry of Agriculture via Global Forest Watch; MapServer layer 10"
+ },
+ "track5_west_fire_peat_peatmap_off_km2": {
+  "value": 506.285,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_peatmap_off_share": {
+  "value": 0.2959,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_peatmap_off_valid_km2": {
+  "value": 1710.8025,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage off mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_peatmap_on_km2": {
+  "value": 1935.55,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_peatmap_on_share": {
+  "value": 0.3708,
+  "unit": "share",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "fire-detected area share of valid area on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_peatmap_on_valid_km2": {
+  "value": 5220.5725,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area coverage on mapped peat; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_fire_peat_peatmap_unknown_valid_km2": {
+  "value": 0.0,
+  "unit": "km\u00b2",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/peat_split.py",
+  "note": "Valid fire-detected area footprint without mapped peat coverage; excluded from both denominators; map source: PEATMAP, Xu et al. 2018, doi 10.5518/252, CC BY 4.0"
+ },
+ "track5_west_orbit_blocks": {
+  "value": 110521,
+  "unit": "paired blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "Paired complete 250 m blocks across the common radar footprint; orbits 125 and 061. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_west_orbit_driest_tenth_overlap": {
+  "value": 0.7505,
+  "unit": "fraction of track-125 driest tenth",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "8295 of 11052 track-125 blocks; lowest floor(n/10) per orbit; ties in row-major order. Whole-site agreement diagnostic. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_west_orbit_pearson": {
+  "value": 0.8985,
+  "unit": "Pearson r",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "Paired complete 250 m blocks across the common radar footprint; orbits 125 and 061. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_west_orbit_spearman": {
+  "value": 0.8279,
+  "unit": "Spearman rho",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/two_orbit.py",
+  "note": "Paired complete 250 m blocks across the common radar footprint; orbits 125 and 061. Seasonal cutoff 20261025; first/late 125 passes 20260716/20261008,20261020; 061 passes 20260712,20260724/20261004,20261016."
+ },
+ "track5_west_recovery_061_hh_driest_decile_median_db": {
+  "value": 1.3904,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-125 dry-down decile; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hh_driest_decile_n": {
+  "value": 11052,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-125 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hh_drydown_spearman_r": {
+  "value": 0.4189,
+  "unit": "Spearman r",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-125 dry-down; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hh_median_db": {
+  "value": 0.3495,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hh_paired_n": {
+  "value": 110521,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hv_driest_decile_median_db": {
+  "value": 0.5364,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-125 dry-down decile; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hv_driest_decile_n": {
+  "value": 11052,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-125 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hv_drydown_spearman_r": {
+  "value": 0.3273,
+  "unit": "Spearman r",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-125 dry-down; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hv_median_db": {
+  "value": -0.0388,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_061_hv_paired_n": {
+  "value": 110521,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261004,20261016 then 20261028; comparison track-125 dry-down passes 20261008,20261020; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hh_driest_decile_median_db": {
+  "value": 1.1905,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-061 dry-down decile; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hh_driest_decile_n": {
+  "value": 11052,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-061 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hh_drydown_spearman_r": {
+  "value": 0.3738,
+  "unit": "Spearman r",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-061 dry-down; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hh_median_db": {
+  "value": 0.4037,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hh_paired_n": {
+  "value": 110521,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hv_driest_decile_median_db": {
+  "value": 0.8711,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response among strongest track-061 dry-down decile; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hv_driest_decile_n": {
+  "value": 11052,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Floor(n/10) strongest track-061 dry-down centres; ties break row-major. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hv_drydown_spearman_r": {
+  "value": 0.3708,
+  "unit": "Spearman r",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Association with negative track-061 dry-down; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hv_median_db": {
+  "value": 0.2689,
+  "unit": "dB",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Median response across source passes; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
+ },
+ "track5_west_recovery_125_hv_paired_n": {
+  "value": 110521,
+  "unit": "250 m blocks",
+  "site": "west",
+  "status": "final",
+  "made_by": "pipeline/checks/recovery.py",
+  "note": "Paired valid centres; Recovery passes 20261008,20261020 then 20261101; comparison track-061 dry-down passes 20261004,20261016; positive daily total 15.67 mm on supplied date 2026-10-26; this does not by itself establish the onset. Onset 2026-10-26; source: last_dry_day_west, verified against west daily IMERG totals."
  },
  "two_orbit_r_peat_no_fire_east": {
   "value": 0.8751,

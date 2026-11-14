@@ -121,6 +121,9 @@ echo "== 7. checks"
 $PY pipeline/drying/selfcheck.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL" > "$L/selfcheck_report.json"
 $PY pipeline/drying/sensitivity.py --stacks "$S" --layers "$L" --start-from "$START_FROM" --dry-until "$DRY_UNTIL"
 
+# Independent Track 5 checks. Write the results only when both calculations agree.
+$PY -m pipeline.checks.run --repeat
+
 echo "== 8. the map"
 $PY pipeline/drying/one_look_map.py --layers "$L" --stacks "$S" --sites $SITES --tracks $ASC $DESC --min-db 1 --out pipeline/out/one_look_map.png > /dev/null
 
