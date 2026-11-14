@@ -1,0 +1,178 @@
+/* Written with Super Intelligence (SI) assistance. */
+/* The stage holds #app for good. Outside the intro it has no transform and changes nothing:
+   it is the same box as the viewport, so the fixed #app inside it lays out as before. */
+#intro-stage {
+  position: fixed;
+  inset: 0;
+}
+
+/* While the intro is up, the stage is scaled about this point. A scale of 0.36 (START_SCALE
+   in index.ts) puts the app, shrunk, in the middle of the view and a little above centre. */
+#intro-stage.intro-playing {
+  transform-origin: 50% 37.5%;
+  transform: scale(0.36);
+  will-change: transform;
+}
+
+/* 1 / 0.36 times the app, placed so the hole in the back wall lies exactly over #app. */
+.intro-room {
+  position: absolute;
+  z-index: 10;
+  left: -88.889%;
+  top: -66.667%;
+  width: 277.778%;
+  height: 277.778%;
+  pointer-events: none;
+}
+
+.intro-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Near things grow about the same point as the stage, which sits here in the room's own box. */
+.intro-fg {
+  transform-origin: 50% 37.5%;
+  will-change: transform, opacity;
+}
+
+.intro-person {
+  position: absolute;
+}
+
+/* Sizes inside the room are in the app's own pixels: on screen they show at 0.36 of this. */
+.intro-sign {
+  position: absolute;
+  left: 20%;
+  width: 60%;
+  top: 13.2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  font-size: 36px;
+  line-height: 1.25;
+  color: var(--muted);
+}
+
+.intro-sign strong {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* The wall screen itself: a clear button over the hole, so a click on the map enters. */
+.intro-screen {
+  position: absolute;
+  left: 32%;
+  top: 24%;
+  width: 36%;
+  height: 36%;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.intro-screen:hover {
+  box-shadow: inset 0 0 0 8px var(--accent);
+}
+
+/* The caption and buttons. They sit outside the stage, so the camera move does not touch
+   them, and only the card takes clicks: the wall screen stays clickable around it. */
+.intro-ui {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px 16px max(24px, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.intro-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: min(760px, 100%);
+  padding: 12px 14px 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  pointer-events: auto;
+}
+
+.intro-line {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.intro-buttons {
+  flex: none;
+  display: flex;
+  gap: 8px;
+}
+
+.intro-buttons .text-button {
+  min-height: 44px;
+  padding: 4px 16px;
+}
+
+.intro-enter {
+  border-color: var(--accent);
+  background: rgba(240, 160, 75, 0.14);
+  color: var(--accent);
+}
+
+.intro-mark {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  margin: 0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(13, 16, 19, 0.8);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* The handoff: one ring around the Story button, then nothing. */
+.intro-ready {
+  animation: intro-ready 1.6s ease-out 1;
+}
+
+@keyframes intro-ready {
+  0% {
+    box-shadow: 0 0 0 0 rgba(240, 160, 75, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(240, 160, 75, 0);
+  }
+}
+
+/* Phone: the line stacks over two full-width buttons. */
+@media (max-width: 699px) {
+  .intro-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+  }
+
+  .intro-line {
+    font-size: 18px;
+  }
+
+  .intro-buttons .text-button {
+    flex: 1;
+  }
+}

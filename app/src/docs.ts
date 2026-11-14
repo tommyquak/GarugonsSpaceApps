@@ -6,6 +6,7 @@ import readmeText from "../../README.md?raw";
 import { baseStyle } from "./basemaps";
 import { fetchJson, type LayerEntry } from "./data";
 import { h } from "./dom";
+import { canReplayIntro, playIntro } from "./intro";
 import { renderMarkdown, section } from "./markdown";
 
 interface NumberEntry {
@@ -86,6 +87,14 @@ export function buildDocs(limitsButton: HTMLElement, aboutButton: HTMLElement, l
   about.body.append(h("h3", { text: "Checked numbers" }), checked);
   const si = section(readmeText, "Use of Super Intelligence (SI)");
   if (si) about.body.append(h("h3", { text: "Use of Super Intelligence (SI)" }), renderMarkdown(si, 1));
+  if (canReplayIntro()) {
+    const replay = h("button", { type: "button", class: "text-button", text: "Replay intro" });
+    replay.addEventListener("click", () => {
+      about.root.close();
+      playIntro();
+    });
+    about.body.append(h("p", {}, replay));
+  }
   let filled = false;
   aboutButton.addEventListener("click", () => {
     if (!filled) {

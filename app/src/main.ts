@@ -9,6 +9,7 @@ import { bindPlaceActions } from "./chart/actions";
 import { createPlaceChart } from "./chart/placeChart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
+import { maybePlayIntro } from "./intro";
 import { bindLink } from "./link";
 import { byId } from "./dom";
 import { Overlays } from "./overlays";
@@ -102,4 +103,6 @@ async function start(): Promise<void> {
   bindLink(map, overlays, chart, actions);
 }
 
+// Optional and never awaited: the map below starts whether or not the intro plays.
+maybePlayIntro();
 void start();
