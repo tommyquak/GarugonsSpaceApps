@@ -1,5 +1,6 @@
 // Written with Super Intelligence (SI) assistance.
 // The season slider: steps through the radar passes in date order, both orbits interleaved.
+// The fire detected up to each date builds up with it, unless switched off here.
 import { passLabel } from "./data";
 import { h } from "./dom";
 import type { Overlays } from "./overlays";
@@ -28,10 +29,12 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
   const slider = h("input", { type: "range", min: 0, max: last, step: 1, value: 0, "aria-label": "Radar pass" });
   // Always in view: pressed while the whole season shows, a filled call to return while one pass does.
   const wholeButton = h("button", { type: "button", class: "text-button season-whole", text: "Whole season" });
+  const fireButton = h("button", { type: "button", class: "text-button season-fire", text: "Fire", title: "Show the fire detected up to each date" });
+  fireButton.hidden = !overlays.hasPassFire;
   const label = h("div", { class: "season-label", "aria-live": "polite" });
   const detail = h("div", { class: "season-detail" });
   root.replaceChildren(
-    h("div", { class: "season-row" }, playButton, slider, wholeButton),
+    h("div", { class: "season-row" }, playButton, slider, fireButton, wholeButton),
     h("div", { class: "season-text" }, label, detail),
   );
 
@@ -68,13 +71,16 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
     void ensurePreload();
     overlays.setStep(Number(slider.value));
   });
+  fireButton.addEventListener("click", () => overlays.setPassFire(!overlays.passFire));
   wholeButton.addEventListener("click", () => {
     if (playing) stop();
     overlays.setMode("season");
   });
 
   function render(): void {
-    const total = steps.reduce((n, s) => n + s.layers.length, 0);
+    const total = overlays.preloadTotal;
+    const fire = overlays.hasPassFire && overlays.passFire;
+    fireButton.setAttribute("aria-pressed", String(fire));
     const waiting = playing && loaded < total;
     playButton.innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
     playButton.setAttribute("aria-label", playing ? "Pause" : "Play the season pass by pass");
@@ -87,12 +93,12 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
       slider.value = String(overlays.stepIndex);
       slider.setAttribute("aria-valuetext", passLabel(step));
       label.textContent = `One pass only: ${passLabel(step)}`;
-      detail.textContent = `Radar pass ${overlays.stepIndex + 1} of ${steps.length}. Colour: fall in HH since the start of the season. Whole-season layers are hidden.`;
+      detail.textContent = `Radar pass ${overlays.stepIndex + 1} of ${steps.length}. Brown: fall in HH since the start of the season.${fire ? " Red: fire detected up to this date." : ""}`;
     } else {
       label.textContent = "Showing the whole dry season";
       detail.textContent = `Press play or drag the slider to step through ${steps.length} radar passes.`;
     }
-    if (waiting) detail.textContent = `Loading radar passes, ${loaded} of ${total}.`;
+    if (waiting) detail.textContent = `Loading the season, ${loaded} of ${total} images.`;
   }
 
   overlays.onChange(render);

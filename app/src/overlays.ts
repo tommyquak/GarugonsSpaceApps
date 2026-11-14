@@ -31,12 +31,25 @@ export class Overlays {
   private loading = new Map<string, Promise<void>>();
   private ready = new Map<string, string>();
   private shownPass = new Map<string, string>();
+  private shownFire = new Map<string, string>();
+  /** Fire up to each pass date, per site, oldest first: drawn while the map steps through passes. */
+  private fireUntil = new Map<string, LayerEntry[]>();
+  /** Whether the fire builds up on the map while stepping through passes. */
+  passFire = true;
+  /** True while another view has the map to itself: nothing of this class is drawn. */
+  private suppressed = false;
 
   constructor(
     private map: MapLibreMap,
     readonly layers: LayerEntry[],
   ) {
-    this.statics = layers.filter((l) => !l.date);
+    this.statics = layers.filter((l) => !l.date && l.kind !== "fire-until");
+    for (const l of layers.filter((x) => x.kind === "fire-until" && x.until)) {
+      const list = this.fireUntil.get(l.site ?? "") ?? [];
+      list.push(l);
+      this.fireUntil.set(l.site ?? "", list);
+    }
+    for (const list of this.fireUntil.values()) list.sort((a, b) => (a.until ?? "").localeCompare(b.until ?? ""));
     this.steps = passSteps(layers);
     this.sites = [...new Set(layers.filter((l) => l.date).map((l) => l.site ?? ""))];
     for (const l of this.statics) {
@@ -65,6 +78,27 @@ export class Overlays {
     this.changed();
   }
 
+  get hasPassFire(): boolean {
+    return this.fireUntil.size > 0;
+  }
+
+  setPassFire(on: boolean): void {
+    this.passFire = on;
+    this.changed();
+  }
+
+  /** Hides every layer of this class, or brings them back as they were. */
+  setSuppressed(on: boolean): void {
+    if (this.suppressed === on) return;
+    this.suppressed = on;
+    this.changed();
+  }
+
+  /** How many images preloadPasses fetches. */
+  get preloadTotal(): number {
+    return this.steps.reduce((n, s) => n + s.layers.length, 0) + [...this.fireUntil.values()].reduce((n, list) => n + list.length, 0);
+  }
+
   setMode(mode: Mode): void {
     if (mode === "pass" && !this.steps.length) return;
     this.mode = mode;
@@ -80,12 +114,12 @@ export class Overlays {
 
   // A whole-season layer is hidden while the map steps through single passes.
   isShown(entry: LayerEntry): boolean {
-    return this.on.has(entry.id) && !(this.mode === "pass" && entry.kind === "season");
+    return !this.suppressed && this.on.has(entry.id) && !(this.mode === "pass" && entry.kind === "season");
   }
 
   // Fetches every per-pass image once and keeps it in memory, so stepping does not wait on the network.
   preloadPasses(progress?: (done: number, total: number) => void): Promise<void> {
-    const all = this.steps.flatMap((s) => s.layers);
+    const all = [...this.steps.flatMap((s) => s.layers), ...[...this.fireUntil.values()].flat()];
     let done = 0;
     const queue = [...all];
     const worker = async (): Promise<void> => {
@@ -136,13 +170,28 @@ export class Overlays {
         }
         this.shownPass.set(site, entry.id);
       }
-      this.show(id, Boolean(entry));
+      this.show(id, Boolean(entry) && !this.suppressed);
+    }
+    // Fire detected up to the date of the pass on screen.
+    for (const [site, list] of this.fireUntil) {
+      const id = `fire-until-${site}`;
+      const entry = step && this.passFire ? [...list].reverse().find((l) => (l.until ?? "") <= step.date) : undefined;
+      if (entry) {
+        const url = this.ready.get(entry.id) ?? asset(entry.url);
+        if (!this.map.getLayer(id)) {
+          this.addImage(id, entry, url);
+        } else if (this.shownFire.get(site) !== entry.id) {
+          (this.map.getSource(id) as ImageSource).updateImage({ url, coordinates: corners(entry.bounds) });
+        }
+        this.shownFire.set(site, entry.id);
+      }
+      this.show(id, Boolean(entry) && !this.suppressed);
     }
   }
 
   private addImage(id: string, entry: LayerEntry, url: string): void {
     this.map.addSource(id, { type: "image", url, coordinates: corners(entry.bounds) });
-    const marks = entry.kind === "reference" || entry.kind === "fire";
+    const marks = entry.kind === "reference" || entry.kind === "fire" || entry.kind === "fire-until";
     this.map.addLayer(
       {
         id,
