@@ -37,8 +37,9 @@ from PIL import Image
 from rasterio.transform import array_bounds
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform_bounds
 
-# Same colours and full scale as pipeline/drying/one_look_map.py (RAMP, FULL_SCALE_DB).
-RAMP = ["#f6e27a", "#f0a04b", "#d9502e", "#8f1d1d", "#4a0d12"]
+# A fall in the echo is drawn from sand to dark brown. Red is kept for fire detections, so the
+# two are not confused (docs/DESIGN.md, "one colour, one meaning").
+RAMP = ["#f4e3b1", "#e0bd7c", "#bd8a4a", "#8b5a2b", "#4e2f17"]
 FULL_SCALE_DB = 3.0
 RAMP_RISE = ["#d6ecff", "#8cc5f2", "#3f97d9", "#1f5fa8", "#12305e"]  # light to deep blue, for a rise
 MIN_DB = 1.0
@@ -47,7 +48,7 @@ LEVELS = 48  # colour steps between --min-db and --full-db
 SOURCE_RADAR = "NISAR L2 GCOV, ASF DAAC"
 SOURCE_FIRE = "NASA FIRMS active fire detections"
 REFERENCE_RGB = (159, 214, 184)
-FIRE_RGB = (8, 8, 10)
+FIRE_RGB = (222, 54, 38)   # red is kept for fire detections
 
 
 def hex_rgb(h):
@@ -179,7 +180,7 @@ def main():
         fall_m = grid.warp(fall, Resampling.bilinear)
         dried_m = grid.warp(dried, Resampling.nearest)
         show = (dried_m == 1) & (fall_m >= a.min_db)
-        path = add(f"dried_{site}", f"Dried over the season, {site}", grid, kind="season", site=site,
+        path = add(f"dried_{site}", f"Fall in HH over the dry season, {site}", grid, kind="season", site=site,
                    tracks=[d.stem.rsplit("_", 1)[1] for d in drydowns], ramp=ramp_entry(a.min_db, a.full_db))
         save_fall(path, fall_m, show, a.min_db, a.full_db)
 
@@ -220,11 +221,13 @@ def main():
                    unit=None, legend="outline", color="#%02x%02x%02x" % REFERENCE_RGB)
         save_mask(path, grid.warp(ref, Resampling.nearest) == 1, REFERENCE_RGB, 40, 235, 2)
     for fire_path in sorted(a.layers.glob("fire_days_*.tif")):
+        if fire_path.stem.startswith("fire_days_1km_"):    # the wide layer is for numbers, not for the map
+            continue
         site = fire_path.stem.split("_", 2)[2]
         days, grid = grids.get(site, fire_path, a.res)
-        path = add(f"fire_{site}", f"Fire detected this year, {site}", grid, kind="fire", site=site,
+        path = add(f"fire_{site}", f"Fire detected, May to November, {site}", grid, kind="fire", site=site,
                    unit=None, legend="fill", color="#%02x%02x%02x" % FIRE_RGB, source=SOURCE_FIRE)
-        save_mask(path, grid.warp(days, Resampling.nearest) >= 1, FIRE_RGB, 225, 255, 1)
+        save_mask(path, grid.warp(days, Resampling.nearest) >= 1, FIRE_RGB, 150, 235, 1)
 
     for stale in out_layers.glob("*.png"):
         if stale.name not in written:
