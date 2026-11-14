@@ -17,8 +17,8 @@ import { reducedMotion, viewPadding } from "./view";
 
 const BEAT_MS = 6500;
 const SHORTEST_MS = 4500; // with sound, a beat still stays long enough to look at
-const VOICE_LEAD_MS = 700; // the picture settles before the voice starts
-const AFTER_VOICE_MS = 1700; // and the last word has room before the next beat
+const VOICE_LEAD_MS = 900; // the picture settles before the voice starts
+const AFTER_VOICE_MS = 2100; // and the last word has room before the next beat
 const FADE_MS = 450;
 
 interface Credit {
