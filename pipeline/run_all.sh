@@ -94,6 +94,9 @@ echo "== 6c. fusion: one record per 1 km block (skips a site until the fire, pea
 for site in $SITES; do
   if [ -f "$L/fire_days_$site.tif" ] && [ -f "$L/peat_peatmap_$site.tif" ] && [ -f "$L/canal_distance_$site.tif" ]; then
     $PY pipeline/fusion/blocks.py --site "$site" --tracks $ASC $DESC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L" --out pipeline/out/blocks
+    if [ -d "data/firms/$site" ]; then
+      $PY pipeline/fusion/hindcast.py --site "$site" --tracks $ASC $DESC --layers "$L" --firms "data/firms/$site" --out pipeline/out/blocks
+    fi
   fi
 done
 
