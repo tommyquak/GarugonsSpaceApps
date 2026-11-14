@@ -36,7 +36,7 @@ Track 6. Checked on 14 November 2026, 22:00 SGT, against the repository at that 
 | `app/public/story/voice/beat-1.mp3` to `beat-7.mp3` | Made with a text-to-speech service, in a synthetic copy of a team member's own voice | Ours | **Not labelled where it plays.** Logged in `submission/si_use/tommyquak.md` as a draft to be replaced. See the open point below |
 | App recordings and screenshots in `figures-v3` | Recorded from our own app | Ours, MIT | Release notes |
 
-The CC BY-SA pictures are shown unchanged apart from cropping and resizing, with author, licence and source beside them. They stay under CC BY-SA 4.0; our MIT licence does not cover them.
+The photographs were resized and re-compressed and are otherwise unchanged; `CREDITS.md` records that, with author, licence and source for each. They stay under CC BY-SA 4.0; our MIT licence does not cover them.
 
 ## Software and services
 
