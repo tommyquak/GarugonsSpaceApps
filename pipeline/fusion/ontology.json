@@ -1,12 +1,12 @@
 {
-  "version": 1,
-  "about": "The vocabulary and the decision table that turn several independent sources into one recommended action per 1 km block. blocks.py reads its thresholds and rules from this file, and the app draws its evidence graph from it, so the code, the documentation and the picture cannot drift apart.",
+  "version": 2,
+  "about": "The vocabulary and the decision table that turn several sources into one screening class per 1 km block. blocks.py reads its thresholds and rules from this file, and the app draws its evidence graph from it, so the code, the documentation and the picture cannot drift apart. Version 2 was rewritten after an independent audit: class names now say what was seen, not what to do about it.",
   "object_types": {
     "Source": "A dataset from one instrument or one mapping effort.",
     "Block": "A 1 km square of ground inside a site.",
     "Observation": "One number about a block, taken from one source.",
     "State": "A yes or no statement about a block, decided by a rule over observations.",
-    "Action": "What a restoration team could do about a block, decided by a rule over states."
+    "Action": "A screening class: what was seen on the block and what a field team could check there. It is not a recommendation to intervene."
   },
   "link_types": [
     {"from": "Source", "to": "Observation", "name": "measures"},
@@ -22,56 +22,63 @@
     {"id": "osm", "title": "Canals, drains and ditches", "provider": "OpenStreetMap contributors"}
   ],
   "observations": [
-    {"id": "fall_asc", "source": "nisar_asc", "unit": "dB", "title": "Fall in HH over the dry season, dawn orbit"},
-    {"id": "fall_desc", "source": "nisar_desc", "unit": "dB", "title": "Fall in HH over the dry season, dusk orbit"},
-    {"id": "left_asc", "source": "nisar_asc", "unit": "dB", "title": "HH still missing after the rain, dawn orbit"},
-    {"id": "left_desc", "source": "nisar_desc", "unit": "dB", "title": "HH still missing after the rain, dusk orbit"},
-    {"id": "hv_left_asc", "source": "nisar_asc", "unit": "dB", "title": "HV still missing after the rain, dawn orbit"},
-    {"id": "hv_left_desc", "source": "nisar_desc", "unit": "dB", "title": "HV still missing after the rain, dusk orbit"},
-    {"id": "fire_share", "source": "firms", "unit": "share", "title": "Share of the block within 200 m of a fire detection"},
+    {"id": "fall_asc", "source": "nisar_asc", "unit": "dB", "title": "Fall in HH from the dry start to the late dry season, dawn orbit"},
+    {"id": "fall_desc", "source": "nisar_desc", "unit": "dB", "title": "Fall in HH from the dry start to the late dry season, dusk orbit"},
+    {"id": "left_asc", "source": "nisar_asc", "unit": "dB", "title": "HH still below the start on the first pass after the rain, dawn orbit"},
+    {"id": "left_desc", "source": "nisar_desc", "unit": "dB", "title": "HH still below the start on the first pass after the rain, dusk orbit"},
+    {"id": "hv_left_asc", "source": "nisar_asc", "unit": "dB", "title": "HV still below the start on the first pass after the rain, dawn orbit"},
+    {"id": "hv_left_desc", "source": "nisar_desc", "unit": "dB", "title": "HV still below the start on the first pass after the rain, dusk orbit"},
+    {"id": "fire_share", "source": "firms", "unit": "share", "title": "Share of the block inside the footprint of a fire detection"},
     {"id": "fire_days", "source": "firms", "unit": "days", "title": "Most days with a fire detection at one spot in the block"},
+    {"id": "fire_share_1km", "source": "firms", "unit": "share", "title": "Share of the block within 1 km of a fire detection"},
     {"id": "peat_share", "source": "peatmap", "unit": "share", "title": "Share of the block on mapped peat"},
     {"id": "canal_m", "source": "osm", "unit": "m", "title": "Typical distance to a mapped canal"}
   ],
   "thresholds": {
     "fall_db": 1.0,
+    "left_db": 0.5,
     "hv_left_db": 0.5,
     "burnt_share": 0.25,
     "persistent_fire_days": 3,
     "peat_share": 0.5,
     "canal_m": 1000,
-    "note": "The HH noise floor of each orbit is read from validation.json (noise_floor_hh_<track>), not fixed here."
+    "note": "These are choices made on 14 Nov 2026, the day of the first results, and not derived from a reference. docs/LIMITS.md shows how the counts move when each one moves."
   },
   "states": [
     {"id": "on_peat", "title": "On mapped peat", "needs": ["peat_share"], "rule": "peat_share >= peat_share threshold",
-     "why": "Drying matters most where the soil is peat: dry peat burns and loses carbon."},
-    {"id": "dried", "title": "Dried", "needs": ["fall_asc", "fall_desc"], "rule": "fall_asc >= fall_db and fall_desc >= fall_db",
-     "why": "At L-band, HH carries the echo from the ground under the vegetation and falls as that ground dries. Two orbits that look from opposite sides at different times of day must both see it."},
-    {"id": "burnt", "title": "Burnt", "needs": ["fire_share"], "rule": "fire_share >= burnt_share",
-     "why": "A thermal detection from another instrument, independent of the radar."},
-    {"id": "not_back", "title": "Did not come back after the rain", "needs": ["left_asc", "left_desc"], "rule": "left_asc > noise floor and left_desc > noise floor",
-     "why": "Wet ground brightens again within days. Ground that stays dark after rain on both orbits lost more than surface moisture."},
-    {"id": "canopy_lost", "title": "Canopy not recovering", "needs": ["fire_share", "hv_left_asc", "hv_left_desc"], "rule": "burnt and hv_left_asc >= hv_left_db and hv_left_desc >= hv_left_db",
-     "why": "HV comes from the woody canopy. Rain does not bring back branches, so HV that stays low where fire was detected points to lost vegetation."},
-    {"id": "drained", "title": "Near a canal", "needs": ["canal_m"], "rule": "canal_m <= canal_m threshold",
-     "why": "Canals are what drain peat. The map of canals is incomplete, so far from a mapped canal does not mean undrained."}
+     "why": "The classes are given on mapped peat only. PEATMAP here is the national peat mapping; it has its own errors."},
+    {"id": "fell", "title": "HH fell on both orbits", "needs": ["fall_asc", "fall_desc"], "rule": "fall_asc >= fall_db and fall_desc >= fall_db",
+     "why": "Over open and thinly vegetated land, L-band HH falls as the surface dries. It also changes with clearing, harvest and standing water, which this rule cannot tell apart. Two orbits that look from opposite sides must both see the fall, which shows it is on the ground and not in one orbit."},
+    {"id": "fire", "title": "Fire detected", "needs": ["fire_share"], "rule": "fire_share >= burnt_share",
+     "why": "A thermal detection from another instrument. It marks active fire seen from space, with pixels of 0.4 to 1 km or more, and misses some fire under smoke. It is not a burnt-area map."},
+    {"id": "still_low", "title": "Still low after the first rain", "needs": ["left_asc", "left_desc"], "rule": "left_asc >= left_db and left_desc >= left_db",
+     "why": "On the first pass after the rain, HH was still at least half a decibel below its dry-start level on both orbits. This rests on one pass per orbit taken within days of heavy rain, and we do not know why some land stayed low."},
+    {"id": "canopy_low", "title": "HV low after the rain", "needs": ["fire_share", "hv_left_asc", "hv_left_desc"], "rule": "fire and hv_left_asc >= hv_left_db and hv_left_desc >= hv_left_db",
+     "why": "HV comes mostly from woody vegetation. After the rain, HV on peat with fire detections sat about half a decibel below peat without them, on both orbits. HV is used as measured, without the forest baseline."},
+    {"id": "persistent_fire", "title": "Fire on several days", "needs": ["fire_days"], "rule": "fire_days >= persistent_fire_days",
+     "why": "Detections on three or more separate days at one spot, which a single false detection cannot produce."},
+    {"id": "clear_of_fire", "title": "No fire detected within 1 km", "needs": ["fire_share_1km"], "rule": "fire_share_1km == 0",
+     "why": "The cautious reading of no fire nearby: nothing detected within 1 km of any part of the block."},
+    {"id": "near_canal", "title": "Near a mapped canal", "needs": ["canal_m"], "rule": "canal_m <= canal_m threshold",
+     "why": "Shown for context only and not used in any class. In our data the fall in HH does not change with distance to a mapped canal, and OpenStreetMap is incomplete here."}
   ],
   "actions": [
-    {"id": "assess_burn", "title": "Assess the burn", "rule": "on_peat and burnt",
-     "advice": "Fire was detected on peat here. Check the ground for lost canopy and plan rewetting and replanting.",
-     "stronger_if": ["canopy_lost", "persistent_fire", "dried"]},
-    {"id": "rewet_first", "title": "Rewet first", "rule": "on_peat and dried and not burnt and not_back",
-     "advice": "Peat that dried on both orbits, has not burned, and stayed low after the rain. A first candidate for canal blocking.",
-     "stronger_if": ["drained", "strong_fall"]},
-    {"id": "watch", "title": "Watch", "rule": "on_peat and dried and not burnt and not not_back",
-     "advice": "Peat that dried and came back with the rain. It will dry again next season: a place to patrol.",
-     "stronger_if": ["drained", "strong_fall"]},
-    {"id": "none", "title": "No action flagged", "rule": "everything else",
-     "advice": "Steady, or outside mapped peat. Fire outside peat is still shown.", "stronger_if": []}
+    {"id": "fire_detected", "title": "Fire detected on peat", "rule": "on_peat and fire",
+     "advice": "Fire was detected on this peat during the season. A place to check for burn damage and lost vegetation.",
+     "stronger_if": ["persistent_fire", "canopy_low"]},
+    {"id": "fell_still_low", "title": "Fell, and still low after the rain", "rule": "on_peat and fell and not fire and still_low",
+     "advice": "The radar echo fell on both orbits, no fire was detected on the block, and it was still low on the first pass after the rain. Worth a field check: we do not know why it stayed low.",
+     "stronger_if": ["clear_of_fire"]},
+    {"id": "fell_came_back", "title": "Fell, and came back with the rain", "rule": "on_peat and fell and not fire and not still_low",
+     "advice": "The radar echo fell on both orbits, no fire was detected on the block, and it was back near its dry-start level on the first pass after the rain.",
+     "stronger_if": ["clear_of_fire"]},
+    {"id": "none", "title": "No class", "rule": "everything else",
+     "advice": "The echo did not fall by 1 dB on both orbits, or the block is outside mapped peat. Fire outside peat is still shown on the map.", "stronger_if": []}
   ],
   "confidence": {
-    "rule": "Start at 1 when the action's own rule holds. Add 1 for each condition in the action's stronger_if list that also holds. 3 or more is high, 2 is medium, 1 is low.",
-    "extra_conditions": {"persistent_fire": "fire_days >= persistent_fire_days", "strong_fall": "fall_asc and fall_desc both at least twice fall_db"}
+    "label": "Agreement",
+    "rule": "A count, not a probability. One point when the class's own rule holds, plus one for each further condition in its stronger_if list that also holds. Three or more is high, two is medium, one is low.",
+    "extra_conditions": {}
   },
-  "caveat": "A screening result. It says where to look first, never what is certainly there. No ground measurements were used."
+  "caveat": "A screening result from one season with no ground measurements. It shows where the radar echo changed and where fire was detected, and where a field visit would be most informative. It does not measure the water table and does not recommend an intervention."
 }
