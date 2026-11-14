@@ -7,8 +7,7 @@
 // Motion is kept to fades (in, between beats, out) and a thin line that fills while a beat
 // shows. Under reduced motion nothing fades and nothing advances by itself.
 //
-// Sound is off until asked for. The narration is a synthetic copy of a team member's own
-// voice, made with their consent (app/scripts/make_story_voice.py), and the control says so.
+// Sound is off until asked for. The clips are made by app/scripts/make_story_voice.py.
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { ActionsView } from "./actions";
 import { asset, fetchJson } from "./data";
@@ -18,9 +17,9 @@ import { reducedMotion, viewPadding } from "./view";
 
 const BEAT_MS = 6500;
 const SHORTEST_MS = 4500; // with sound, a beat still stays long enough to look at
-const AFTER_VOICE_MS = 800;
+const VOICE_LEAD_MS = 700; // the picture settles before the voice starts
+const AFTER_VOICE_MS = 1700; // and the last word has room before the next beat
 const FADE_MS = 450;
-const VOICE_NOTE = "Narration in a synthetic copy of a team member's voice, made with SI";
 
 interface Credit {
   author: string;
@@ -77,7 +76,7 @@ const BEATS: Beat[] = [
   {
     map: "check",
     head: "After the rain, some land had not come back. Start there.",
-    sub: () => "A screening map from one season. Nothing here was checked on the ground.",
+    sub: () => "A screening map from one season.",
     key: [
       { color: "#ff3b30", label: "Most affected" },
       { color: "#ff9f0a", label: "Affected" },
@@ -112,6 +111,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     let index = -1;
     let timer = 0;
     let swap = 0;
+    let lead = 0;
     let front = 0;
     let sound = false;
     const voice = new Audio();
@@ -128,10 +128,10 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     const sub = h("p", { class: "op-sub" });
     const key = h("div", { class: "op-key" });
     const credit = h("p", { class: "op-credit" });
-    const soundButton = h("button", { type: "button", class: "text-button op-sound", "aria-pressed": "false", title: VOICE_NOTE, text: "Sound off" });
+    const soundButton = h("button", { type: "button", class: "text-button op-sound", "aria-pressed": "false", text: "Sound off" });
     const skip = h("button", { type: "button", class: "text-button op-skip", text: "Skip" });
     const back = h("button", { type: "button", class: "text-button", text: "Back" });
-    const withSound = h("button", { type: "button", class: "text-button", title: VOICE_NOTE, text: "Play with sound" });
+    const withSound = h("button", { type: "button", class: "text-button", text: "Play with sound" });
     const next = h("button", { type: "button", class: "text-button op-next" });
     const text = h("div", { class: "op-text", "aria-live": "polite" }, head, sub, key);
     const made = h(
@@ -170,7 +170,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       );
       const by = beat.image ? credits[beat.image] : undefined;
       const source = by ? `${by.kind === "photograph" ? "Photo" : "Image"}: ${by.author}, ${by.date.slice(0, 4)}. ${by.licence}.` : beat.map ? "The live map: NISAR, NASA FIRMS, Sentinel-2 mosaic 2016." : "";
-      credit.textContent = sound ? `${source} Voice: synthetic (SI).` : source;
+      credit.textContent = source;
     };
 
     // The line of the current beat fills over the time the beat will stay.
@@ -187,6 +187,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     function show(to: number): void {
       window.clearTimeout(timer);
       window.clearTimeout(swap);
+      window.clearTimeout(lead);
       voice.pause();
       const first = index < 0;
       index = Math.max(0, Math.min(BEATS.length - 1, to));
@@ -221,16 +222,18 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
         const started = performance.now();
         voice.src = asset(`story/voice/beat-${index + 1}.mp3`);
         voice.onloadedmetadata = () => {
-          if (!still && !lastBeat && Number.isFinite(voice.duration)) run(Math.max(SHORTEST_MS, voice.duration * 1000 + AFTER_VOICE_MS));
+          if (!still && !lastBeat && Number.isFinite(voice.duration)) run(Math.max(SHORTEST_MS, VOICE_LEAD_MS + voice.duration * 1000 + AFTER_VOICE_MS));
         };
         voice.onended = () => {
           // The clock above already moves on; this only covers a clip whose length was not known.
           if (!still && !lastBeat && !bars[index].classList.contains("is-now")) run(Math.max(AFTER_VOICE_MS, SHORTEST_MS - (performance.now() - started)));
         };
         // No sound after all (blocked or missing): carry on silently at the usual pace.
-        void voice.play().catch(() => {
-          if (!still && !lastBeat) run(BEAT_MS);
-        });
+        lead = window.setTimeout(() => {
+          void voice.play().catch(() => {
+            if (!still && !lastBeat) run(BEAT_MS);
+          });
+        }, VOICE_LEAD_MS);
       } else if (!still && !lastBeat) {
         run(BEAT_MS);
       }
@@ -247,6 +250,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     const close = (): void => {
       window.clearTimeout(timer);
       window.clearTimeout(swap);
+      window.clearTimeout(lead);
       voice.pause();
       document.removeEventListener("keydown", onKey, true);
       document.removeEventListener("visibilitychange", onHide);
@@ -274,6 +278,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     const onHide = (): void => {
       if (document.hidden) {
         window.clearTimeout(timer); // a hidden tab does not run the story on
+        window.clearTimeout(lead);
         voice.pause();
       } else if (index < BEATS.length - 1) show(index);
     };
