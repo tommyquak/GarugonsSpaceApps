@@ -20,11 +20,12 @@ The map colours show how much the HH radar echo fell from the dry start in July 
 - **A different processing release.** The two passes after the rain were produced by a later NASA processing release than every dry-season pass, and the forest baseline moves most on exactly those passes. The size of the rise is uncertain by about 0.3 to 0.4 dB.
 - **"Still low after the rain" is unexplained.** Those blocks tend to be woodier and farther from mapped canals than the ones that came back. We do not know why they stayed low, and we attach no recommendation to them.
 - **Timing of the HH rise.** In western blocks where HH fell by 1 dB or more on both orbits, it rose by about 1 dB on each orbit’s first pass after the rain. The preceding pass did not show a comparable rise.
-- **Fire and the HV echo.** Among those western blocks on mapped peat, the median change in HV from July to the first dawn pass after rain was 0.54 dB lower in blocks with fire detections than in those without. The other three comparisons, across the two study areas and orbits, gave smaller differences in the same direction (0.29 to 0.40 dB). Those three figures are exploratory. Fire detections cover the full study period and can postdate the radar pass, so this comparison cannot establish cause.
+- **Fire and the HV echo.** Among those western blocks on mapped peat, the median change in HV from July to the first dawn pass after rain was 0.54 dB lower in blocks with fire detections than in those without. The other three comparisons, across the two study areas and orbits, gave smaller differences in the same direction (0.29 to 0.40 dB). Those three figures are exploratory. The comparison cannot establish that fire caused the difference.
 
 ## Limits of the fire layer
 
 - **Active fire, not burnt area.** Detections are satellite pixels of 0.4 to 1 km or more. Each is buffered by its own size. Fire under thick smoke or cloud and low smouldering fire in peat can be missed.
+- **When fire was detected matters.** The recovery comparison and the map’s block labels use fire detections from the whole study period. A block can therefore count as having fire even if its first detection came after the radar pass.
 - **Fire changes the echo both ways.** Burnt open peat fell less in HH than unburnt open peat, and some burnt land brightened.
 - **Peat fires are not the only fires.** Fire was detected on 37% of mapped peat and 30% of the land outside it in the west box.
 
