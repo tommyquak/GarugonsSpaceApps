@@ -158,3 +158,43 @@ def test_sensitivity_leaves_out_variants_it_cannot_run():
     other = np.full((60, 60), -2.0)
     rows = sens.run(stack, baseline, other, 0.3, "20260812", min_blocks=10)   # only one pass after this date
     assert "second wet" not in [r["variant"] for r in rows]
+
+
+def test_zones_cover_every_cell_once():
+    peat = np.array([[True, True], [False, False]])
+    fire = np.array([[True, False], [True, False]])
+    z = recovery.zones(peat, fire)
+    assert sorted(z) == ["off_peat_fire", "off_peat_no_fire", "on_peat_fire", "on_peat_no_fire"]
+    assert (sum(m.astype(int) for m in z.values()) == 1).all()
+    assert z["on_peat_fire"][0, 0] and z["off_peat_no_fire"][1, 1]
+
+
+def test_main_splits_by_peat_and_fire_when_the_layers_exist(tmp_path, monkeypatch):
+    stack, baseline, _, _ = make_stack()
+    stacks, layers = tmp_path / "stacks", tmp_path / "layers"
+    stacks.mkdir()
+    layers.mkdir()
+    np.savez(stacks / "west_125.npz", hh=stack["hh"], hv=stack["hv"], cov=stack["cov"], T=np.array(stack["T"])[:6],
+             crs=stack["epsg"], dates=np.array(stack["dates"]))
+    (layers / "baseline_125.json").write_text(json.dumps(baseline))
+    other = np.where(np.arange(60)[None, :] >= 30, -2.0, 0.0) * np.ones((60, 1))
+    common.write_layer(layers / "drydown_west_061.tif", other.astype("float32"), stack)
+    peat = np.zeros((60, 60), "float32")
+    peat[:30] = 1                                                     # top half is mapped peat
+    fire = np.zeros((60, 60), "float32")
+    fire[:, 45:] = 3                                                  # right quarter burned
+    common.write_layer(layers / "peat_peatmap_west.tif", peat, stack)
+    common.write_layer(layers / "fire_days_west.tif", fire, stack)
+    monkeypatch.chdir(tmp_path)
+    vpath = tmp_path / "pipeline/out/validation.json"
+    vpath.parent.mkdir(parents=True)
+    vpath.write_text(json.dumps({"noise_floor_hh_125": {"value": -0.3}}))
+    monkeypatch.setattr(sys, "argv", ["recovery.py", "--site", "west", "--track", "125", "--other-track", "061",
+                                      "--dry-until", DRY_UNTIL, "--stacks", str(stacks), "--layers", str(layers)])
+    monkeypatch.setattr(recovery, "MIN_ZONE_BLOCKS", 5)
+    recovery.main()
+    v = json.loads(vpath.read_text())
+    counts = {z: v[f"recovery_blocks_{z}_west_125"]["value"] for z in ("on_peat_no_fire", "on_peat_fire", "off_peat_no_fire", "off_peat_fire")}
+    assert sum(counts.values()) == v["recovery_blocks_west_125"]["value"]
+    assert counts["on_peat_no_fire"] == 6 * 3 and counts["on_peat_fire"] == 6 * 3
+    assert "recovery_hv_share_regained_on_peat_fire_west_125" in v
