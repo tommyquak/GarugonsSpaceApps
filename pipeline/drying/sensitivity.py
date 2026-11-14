@@ -1,7 +1,7 @@
 # Written with Super Intelligence (SI) assistance.
 """How much do the drying results depend on choices we made?
 
-  passes   which passes count as "start" and "late"
+  passes   which passes count as "start" and "late", including the first version's rain-wet start
   block    the block size the score is averaged over
   pol      HH (our choice) against HV
   class    do the two orbits pick the same strongly dried land?
@@ -20,19 +20,23 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from common import block_mean, load_reference, load_stack  # noqa: E402
+from season import start_passes  # noqa: E402
 from drydown import normalised  # noqa: E402
 
 
-def score(stack, base, dry_until, pol="hh", first=(0, 1), late=(-2, -1), size=5, slope=False):
+def score(stack, base, dry_until, pol="hh", start=None, late=(-2, -1), size=5, slope=False):
+    """The dry-down score with chosen start passes (absolute indices) and late passes (counted from the last dry pass)."""
     use = [i for i, d in enumerate(stack["dates"]) if d <= dry_until]
+    start = list(start) if start is not None else use[:2]
     layers = normalised(stack, base, pol)
-    sm = {i: block_mean(layers[i], size) for i in (use if slope else {use[j] for j in first + late})}
-    if slope:   # straight-line fit through every dry-season pass, scaled to the length of the season
-        days = np.array([(np.datetime64(f"{d[:4]}-{d[4:6]}-{d[6:]}") - np.datetime64("2026-01-01")).astype(int) for d in (stack["dates"][i] for i in use)], dtype="float32")
+    if slope:   # straight-line fit through every pass from the first start pass to the last dry one, scaled to that span
+        span = [i for i in use if i >= start[0]]
+        days = np.array([(np.datetime64(f"{d[:4]}-{d[4:6]}-{d[6:]}") - np.datetime64("2026-01-01")).astype(int) for d in (stack["dates"][i] for i in span)], dtype="float32")
         t = days - days.mean()
-        cube = np.array([sm[i] for i in use])
+        cube = np.array([block_mean(layers[i], size) for i in span])
         return ((cube * t[:, None, None]).sum(0) / (t ** 2).sum() * (days.max() - days.min())).astype("float32")
-    return (np.mean([sm[use[j]] for j in late], axis=0) - np.mean([sm[use[j]] for j in first], axis=0)).astype("float32")
+    late_idx = [use[j] for j in late]
+    return (np.mean([block_mean(layers[i], size) for i in late_idx], axis=0) - np.mean([block_mean(layers[i], size) for i in start], axis=0)).astype("float32")
 
 
 def summarise(sa, sd, ref, size):
@@ -55,16 +59,21 @@ def main():
     p.add_argument("--site", default="west")
     p.add_argument("--tracks", nargs=2, default=["125", "061"])
     p.add_argument("--dry-until", required=True)
+    p.add_argument("--start-from", help="YYYYMMDD, earliest day for a start pass; default: the first two passes")
     a = p.parse_args()
     S = [load_stack(a.stacks / f"{a.site}_{t}.npz") for t in a.tracks]
     B = [json.loads((a.layers / f"baseline_{t}.json").read_text()) for t in a.tracks]
     ref = load_reference(a.layers)
+    rule = [start_passes(st["dates"], a.start_from) for st in S]          # one list of start passes per orbit
+    shift = lambda k: [[i + k for i in r] for r in rule]                    # the same passes moved k passes later
     variants = {
-        "default: HH, first two against last two, 250 m": {},
-        "passes: first one against last one": {"first": (0,), "late": (-1,)},
-        "passes: first three against last three": {"first": (0, 1, 2), "late": (-3, -2, -1)},
-        "passes: second and third against last two": {"first": (1, 2)},
-        "passes: straight-line fit through every pass": {"slope": True},
+        "default: HH, start by the rain rule, last two dry passes, 250 m": {},
+        "start: the first two passes of the record (taken after rain)": {"start": [[0, 1], [0, 1]]},
+        "start: the first pass of the record only": {"start": [[0], [0]]},
+        "start: one pass later than the rule": {"start": shift(1)},
+        "late: the last dry pass only": {"late": (-1,)},
+        "late: the last three dry passes": {"late": (-3, -2, -1)},
+        "fit: straight line from the start to the last dry pass": {"slope": True},
         "block: 150 m": {"size": 3},
         "block: 550 m": {"size": 11},
         "block: none (50 m pixels)": {"size": 1},
@@ -72,7 +81,8 @@ def main():
     }
     out, default = {}, None
     for name, kw in variants.items():
-        sa, sd = (score(s, b, a.dry_until, **kw) for s, b in zip(S, B))
+        starts = kw.pop("start", rule)
+        sa, sd = (score(st, b, a.dry_until, start=first, **kw) for st, b, first in zip(S, B, starts))
         out[name] = summarise(sa, sd, ref, kw.get("size", 5))
         if default is None:
             default = sa
