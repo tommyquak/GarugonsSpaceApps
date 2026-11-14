@@ -106,3 +106,21 @@ def test_window_areas_on_and_off_peat(tmp_path, monkeypatch):
 def test_bad_date_is_refused(tmp_path, monkeypatch):
     with pytest.raises(SystemExit):
         run(tmp_path, monkeypatch, "--dry-until", "2026-10-25")
+
+
+def test_first_day_marks_the_same_cells_as_fire_days_and_keeps_the_earliest(tmp_path, monkeypatch):
+    layers, _ = run(tmp_path, monkeypatch)
+    first, days = read(layers / "fire_first_day_west.tif"), read(layers / "fire_days_west.tif")
+    assert np.array_equal(np.isfinite(first), days > 0)
+    assert first[20, 20] == 213     # 1 August 2026
+    assert first[40, 80] == 298     # 25 October 2026
+    assert first[60, 70] == 303     # 30 October 2026
+    assert np.isnan(first[80, 30])  # a low-confidence detection leaves no mark
+
+
+def test_first_day_is_the_earliest_where_two_days_overlap():
+    by_day = {"2026-09-02": [((5, 5), 2)], "2026-08-20": [((5, 6), 2)]}
+    first = fire_layers.first_day(by_day, (12, 12))
+    assert first[5, 5] == first[5, 6] == 232   # 20 August reaches both cells
+    assert first[5, 3] == 245                  # only 2 September reaches this one
+    assert np.isnan(first[0, 0])
