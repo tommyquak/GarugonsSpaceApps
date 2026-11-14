@@ -3,7 +3,7 @@
 // the evidence graph of that block; without one it shows the schema of the vocabulary, reached
 // from "How it decides". It can be folded down to its title bar to give the map back.
 import { h } from "../dom";
-import { buildCard, buildVocabulary, type CardHooks } from "./card";
+import { buildCard, type CardHooks } from "./card";
 import { drawGraph } from "./graph";
 import type { BlockProps, Ontology } from "./model";
 
@@ -79,7 +79,9 @@ export function buildEvidencePanel(parent: HTMLElement, ontology: Ontology, hook
       fill("block", "Block", block.id, block.confidence ? `${action}, agreement ${block.confidence}` : action, buildCard(ontology, block, hooks), drawGraph(ontology, block, hooks.color));
     },
     showSchema() {
-      fill("schema", "Vocabulary", "How it decides", "", buildVocabulary(ontology), drawGraph(ontology, null, hooks.color));
+      // No block: the details of a clicked box take the place the block card has.
+      const side = h("aside", {});
+      fill("schema", "Vocabulary", "How it decides", "", side, drawGraph(ontology, null, hooks.color, side));
     },
     hide() {
       mode = null;
