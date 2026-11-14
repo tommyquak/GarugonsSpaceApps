@@ -24,6 +24,7 @@ python pipeline/drying/one_look_map.py --layers $L --stacks $S --sites west east
 | 2 | `drydown.py` | HH late in the dry season minus HH at its start, on 250 m blocks, shift removed. |
 | 3 | `noise_floor.py` | How far the score moves on the reference forest, and which blocks went beyond that on both orbits. |
 | 4 | `one_look_map.py` | The map. |
+| 5 | `split.py` | Areas on and off mapped peat, near and away from fire. Needs track 3's peat and fire layers. |
 | - | `selfcheck.py` | Seven checks for artefacts we could have introduced. |
 | - | `sensitivity.py` | How much the result depends on choices we made. |
 
