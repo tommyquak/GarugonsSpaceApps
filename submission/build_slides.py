@@ -10,6 +10,7 @@ what we do not see, what comes next. Claims stay inside docs/AUDIT.md "What we c
     python submission/build_slides.py ... --final   # only keys marked final; stops if one is missing
 
 Figures and app GIFs come from Tommy's release: gh release download figures-v3 --dir submission/figures
+slide 7 also needs app_room.jpg, a screenshot of the app's entry view (Kalent), in the same folder.
 """
 import argparse
 import io
@@ -116,6 +117,8 @@ def compact(path):
         return lit_first(path)               # animated: keep every frame
     img = Image.open(path).convert("RGB")
     buf = io.BytesIO()
+    if path.suffix.lower() in (".jpg", ".jpeg"):
+        return str(path)
     if path.stem == "fig_map":
         img.save(buf, "JPEG", quality=86, optimize=True)
     else:
@@ -365,7 +368,11 @@ def build(a):
         [("Years, not months. ", {"bold": True, "color": PAPER}), "Subsidence by interferometry over whole peat domes, and every dry season set against wet years."],
         [("Anywhere. ", {"bold": True, "color": PAPER}), "The pipeline takes any bounding box: another peatland is one command away."],
     ]
-    text(s, M, Inches(1.8), Inches(7.4), Inches(3.6), nxt, size=18, color=SOFT_ON_INK, space_after=18)
+    text(s, M, Inches(1.8), Inches(5.6), Inches(3.6), nxt, size=17, color=SOFT_ON_INK, space_after=16)
+    picture(s, fig / "app_room.jpg", Inches(6.55), Inches(1.75), w=Inches(6.18), name="App entry view")   # 1915 x 900 px
+    text(s, Inches(6.55), Inches(4.75), Inches(6.18), Inches(0.5),
+         "The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.",
+         size=12, color=MUTED_ON_INK)
     links = [
         [("Open the map  ", {"bold": True, "color": PAPER}), (APP_URL, {"bold": True, "link": APP_URL})],
         [("Code and data  ", {"bold": True, "color": PAPER}), (CODE_URL, {"bold": True, "link": CODE_URL})],
