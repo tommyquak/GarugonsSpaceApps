@@ -92,7 +92,9 @@ function reading(passes: Pass[], orbit: string): string | null {
   let text = `${name} pass: HH fell ${fall.toFixed(1)} dB from ${monthName(v[0].date)} to ${monthName(v[lowAt].date)}`;
   const last = v[v.length - 1];
   const rise = Math.round((last.hh - low) * 10) / 10;
-  if (lowAt < v.length - 1 && rise >= 0.1) text += `, then rose ${rise.toFixed(1)} dB by ${monthName(last.date)}`;
+  // When the lowest level and the last pass share a month, name the day so the sentence still reads.
+  const until = monthName(last.date) === monthName(v[lowAt].date) ? `${parseDay(last.date).getUTCDate()} ${monthName(last.date)}` : monthName(last.date);
+  if (lowAt < v.length - 1 && rise >= 0.1) text += `, then rose ${rise.toFixed(1)} dB by ${until}`;
   return `${text}.`;
 }
 
