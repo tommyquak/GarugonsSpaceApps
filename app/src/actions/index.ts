@@ -16,6 +16,8 @@ import { actionColor, CONFIDENCE_LEVELS, confidenceStrength, NO_ACTION } from ".
 import { openStore, type BlockStore } from "./data";
 import { BlockLayer, METRES_PER_DB } from "./layer";
 import { buildList } from "./list";
+import { LEVELS, LEVELS_NOTE, levelOf } from "./levels";
+import type { LegendRows } from "../maplegend";
 
 const PITCH = 55;
 const BEARING = -18;
@@ -33,7 +35,11 @@ export interface ActionsView {
 
 const absent: ActionsView = { parts: () => [], block: () => null, apply: () => undefined, onChange: () => undefined };
 
-export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: { setTab(tab: string): void }): Promise<ActionsView> {
+export async function buildActions(
+  map: MapLibreMap,
+  chart: PlaceChart,
+  hooks: { setTab(tab: string): void; setLegend?(view: LegendRows | null): void },
+): Promise<ActionsView> {
   const found = await openStore();
   if (!found) return absent;
   const store: BlockStore = found;
@@ -49,6 +55,7 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
   let on = false;
   let columns = false;
   let listOpen = false;
+  let glance = true; // the blocks are coloured by level; false colours them by class
   let how = false;
   let blockId: string | null = null;
   const listeners: (() => void)[] = [];
@@ -104,6 +111,31 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
   const columnsInput = h("input", { type: "checkbox", role: "switch" });
   const columnsSwitch = h("label", { class: "switch" }, columnsInput, h("span", { class: "knob" }), h("span", { class: "switch-text", text: "3D" }));
 
+  // Two ways to colour the blocks: three levels for a first look, or the classes themselves.
+  const glanceTab = h("button", { type: "button", class: "text-button small", text: "At a glance" });
+  const classTab = h("button", { type: "button", class: "text-button small", text: "By class" });
+  const levelCounts = new Map<number, HTMLElement>();
+  const levelBox = h("div", { class: "act-legend" });
+  for (const level of LEVELS) {
+    const swatch = h("span", { class: "act-swatch", "aria-hidden": "true" });
+    swatch.style.background = level.color;
+    const count = h("span", { class: "act-legend-count" });
+    levelCounts.set(level.id, count);
+    levelBox.append(h("div", { class: "act-legend-item" }, h("div", { class: "act-legend-head" }, swatch, h("strong", { text: level.title }), count), h("p", { text: level.text })));
+  }
+  levelBox.append(h("p", { class: "note", text: LEVELS_NOTE }));
+  const countLevels = (): void => {
+    const totals = new Map<number, number>();
+    for (const site of store.sites) {
+      for (const f of store.features(site.id)) {
+        const level = levelOf(f.properties);
+        totals.set(level, (totals.get(level) ?? 0) + 1);
+      }
+    }
+    for (const [id, el] of levelCounts) el.textContent = totals.has(id) ? `${(totals.get(id) ?? 0).toLocaleString("en")} blocks` : "";
+  };
+  store.onLoad(countLevels);
+
   const legend = h("div", { class: "act-legend" });
   for (const action of ontology.actions) {
     const none = action.id === NO_ACTION;
@@ -137,15 +169,21 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
   }
   const heightNote = h("p", { class: "note", text: `Height shows how far HH fell, in dB: ${METRES_PER_DB.toLocaleString("en")} m of column for each dB.` });
   const howLink = h("button", { type: "button", class: "text-button small", text: "How it decides" });
+  const classBox = h("div", {});
   const legendBox = h(
     "div",
     {},
-    legend,
-    strengths,
-    h("p", { class: "note", text: "A stronger colour means more of the conditions for that class hold. It is a count, not a probability. Blocks without a class are a faint grid when you zoom in. The other layers are dimmed while this view is open." }),
+    h("div", { class: "act-tabs act-mode", role: "group", "aria-label": "How the blocks are coloured" }, glanceTab, classTab),
+    levelBox,
+    classBox,
     heightNote,
     ontology.caveat ? h("p", { class: "note", text: ontology.caveat }) : null,
     h("div", { class: "place-actions" }, howLink),
+  );
+  classBox.append(
+    legend,
+    strengths,
+    h("p", { class: "note", text: "A stronger colour means more of the conditions for that class hold. It is a count, not a probability. Blocks without a class are a faint grid when you zoom in. The other layers are dimmed while this view is open." }),
   );
   const listBox = h("div", { class: "act-list" });
   panel.replaceChildren(
@@ -191,6 +229,16 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
     listTab.setAttribute("aria-pressed", String(listOpen));
     legendBox.hidden = listOpen;
     listBox.hidden = !listOpen;
+    glanceTab.setAttribute("aria-pressed", String(glance));
+    classTab.setAttribute("aria-pressed", String(!glance));
+    levelBox.hidden = !glance;
+    classBox.hidden = glance;
+    countLevels();
+    // The legend on the map follows what is drawn: levels, classes, or the fall in HH when this view is closed.
+    const rows = glance
+      ? LEVELS.map((level) => ({ color: level.color, label: level.title }))
+      : ontology.actions.filter((a) => a.id !== NO_ACTION).map((a) => ({ color: actionColor(a.id), label: a.title }));
+    hooks.setLegend?.(on ? { title: glance ? "How affected" : "Class of each 1 km block", rows, note: glance ? LEVELS_NOTE : "A screening result. Not checked on the ground." } : null);
     columnsInput.checked = columns;
     heightNote.hidden = !columns;
   };
@@ -228,6 +276,14 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
     const camera = columns ? { pitch: PITCH, bearing: BEARING } : { pitch: 0, bearing: 0 };
     if (!animate || reducedMotion()) map.jumpTo(camera);
     else map.easeTo({ ...camera, duration: 1200, essential: true });
+    render();
+    changed();
+  }
+
+  function setGlance(value: boolean): void {
+    if (glance === value) return;
+    glance = value;
+    layer.setGlance(glance);
     render();
     changed();
   }
@@ -303,6 +359,8 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
   });
   howButton.addEventListener("click", () => setHow(!how));
   howLink.addEventListener("click", () => setHow(true));
+  glanceTab.addEventListener("click", () => setGlance(true));
+  classTab.addEventListener("click", () => setGlance(false));
   legendTab.addEventListener("click", () => setList(false));
   listTab.addEventListener("click", () => setList(true));
   columnsInput.addEventListener("change", () => setColumns(columnsInput.checked));
@@ -330,13 +388,14 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
   render();
 
   return {
-    parts: () => [...(on ? ["map"] : []), ...(on && columns ? ["3d"] : []), ...(on && listOpen ? ["list"] : []), ...(how ? ["how"] : [])],
+    parts: () => [...(on ? ["map"] : []), ...(on && columns ? ["3d"] : []), ...(on && listOpen ? ["list"] : []), ...(on && !glance ? ["class"] : []), ...(how ? ["how"] : [])],
     block: () => blockId,
     apply(parts, block) {
       const want = new Set(parts);
       setOn(want.has("map") || block !== null);
       setColumns(on && want.has("3d"), false);
       setList(want.has("list"));
+      setGlance(!want.has("class"));
       if (on && listOpen && !wide()) hooks.setTab("actions");
       void select(block).then(() => setHow(want.has("how")));
     },
