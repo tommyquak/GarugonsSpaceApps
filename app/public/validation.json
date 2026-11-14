@@ -1,0 +1,442 @@
+{
+ "dried_both_orbits_km2_east": {
+  "value": 3138.25,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py",
+  "note": "not yet split into on and off mapped peat"
+ },
+ "dried_both_orbits_km2_west": {
+  "value": 3498.96,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py",
+  "note": "not yet split into on and off mapped peat"
+ },
+ "dried_both_orbits_share_east": {
+  "value": 0.7494,
+  "unit": "share of valid area",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "dried_both_orbits_share_west": {
+  "value": 0.5062,
+  "unit": "share of valid area",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "dried_one_orbit_share_east_061": {
+  "value": 0.7833,
+  "unit": "share of valid area",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "dried_one_orbit_share_east_125": {
+  "value": 0.8366,
+  "unit": "share of valid area",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "dried_one_orbit_share_west_061": {
+  "value": 0.5455,
+  "unit": "share of valid area",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "dried_one_orbit_share_west_125": {
+  "value": 0.5978,
+  "unit": "share of valid area",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "noise_floor_hh_061": {
+  "value": -0.3318,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py",
+  "note": "5th percentile of the dry-down score over 10121 intact-forest blocks of 250 m"
+ },
+ "noise_floor_hh_125": {
+  "value": -0.2878,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py",
+  "note": "5th percentile of the dry-down score over 10121 intact-forest blocks of 250 m"
+ },
+ "recovery_blocks_east_125": {
+  "value": 32729,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits; pass after the rain: 20261101"
+ },
+ "recovery_blocks_west_125": {
+  "value": 31198,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits; pass after the rain: 20261101"
+ },
+ "recovery_hh_median_fall_east_125": {
+  "value": -2.0173,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_median_fall_west_125": {
+  "value": -1.7679,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_median_left_east_125": {
+  "value": -1.0023,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_west_125": {
+  "value": -0.735,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_rebound_east_125": {
+  "value": 1.0188,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_median_rebound_west_125": {
+  "value": 1.0761,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_back_within_noise_east_125": {
+  "value": 0.1739,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_back_within_noise_west_125": {
+  "value": 0.3292,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_east_125": {
+  "value": 0.505,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_west_125": {
+  "value": 0.6087,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_median_fall_east_125": {
+  "value": -2.0941,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_median_fall_west_125": {
+  "value": -1.3669,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_median_left_east_125": {
+  "value": -1.1936,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_west_125": {
+  "value": -0.5953,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_rebound_east_125": {
+  "value": 0.8395,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_median_rebound_west_125": {
+  "value": 0.7229,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_back_within_noise_east_125": {
+  "value": 0.084,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_back_within_noise_west_125": {
+  "value": 0.3117,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_east_125": {
+  "value": 0.4009,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_west_125": {
+  "value": 0.5289,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_rebound_vs_other_orbit_fall_r_east_125": {
+  "value": -0.3092,
+  "unit": "Pearson r",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most"
+ },
+ "recovery_rebound_vs_other_orbit_fall_r_west_125": {
+  "value": -0.3034,
+  "unit": "Pearson r",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most"
+ },
+ "reference_drydown_median_061": {
+  "value": 0.0174,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "reference_drydown_median_125": {
+  "value": 0.0133,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "reference_drydown_p95_061": {
+  "value": 0.3228,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "reference_drydown_p95_125": {
+  "value": 0.259,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "reference_flagged_share": {
+  "value": 0.0273,
+  "unit": "share of reference forest",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py",
+  "note": "share of the intact reference forest that the dried rule flags; a false-alarm rate"
+ },
+ "selfcheck_forest_edge_median_061": {
+  "value": -0.52,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "median dry-down of forest within 250 m of an edge"
+ },
+ "selfcheck_forest_edge_median_125": {
+  "value": -0.51,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "median dry-down of forest within 250 m of an edge"
+ },
+ "selfcheck_forest_interior_median_061": {
+  "value": -0.02,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "median dry-down of forest 6 to 99 km inside"
+ },
+ "selfcheck_forest_interior_median_125": {
+  "value": -0.01,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "median dry-down of forest 6 to 99 km inside"
+ },
+ "selfcheck_orbit_alignment_best_shift_west": {
+  "value": "0,0",
+  "unit": "pixels (rows, cols)",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "shift of the descending image that best matches the ascending one; 0,0 means registered"
+ },
+ "selfcheck_orbit_ramp_end_to_end_east": {
+  "value": 0.2109,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "largest drift between the two orbits' scores from one side of the site to the other"
+ },
+ "selfcheck_orbit_ramp_end_to_end_west": {
+  "value": 0.3493,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "largest drift between the two orbits' scores from one side of the site to the other"
+ },
+ "selfcheck_overlap_p95_abs_diff_061": {
+  "value": 0.0975,
+  "unit": "dB",
+  "site": "west and east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py"
+ },
+ "selfcheck_overlap_p95_abs_diff_125": {
+  "value": 0.1248,
+  "unit": "dB",
+  "site": "west and east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py"
+ },
+ "selfcheck_overlap_r_061": {
+  "value": 0.997,
+  "unit": "Pearson r",
+  "site": "west and east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "same ground in both boxes, 650 km2"
+ },
+ "selfcheck_overlap_r_125": {
+  "value": 0.9964,
+  "unit": "Pearson r",
+  "site": "west and east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "same ground in both boxes, 656 km2"
+ },
+ "selfcheck_rebound_after_rain_125": {
+  "value": 1.45,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "change in HH of strongly dried land from the last dry pass to 20261101"
+ },
+ "selfcheck_reference_max_offset_shift_061": {
+  "value": 0.105,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "largest change in any date's offset across eight ways of drawing the reference forest"
+ },
+ "selfcheck_reference_max_offset_shift_125": {
+  "value": 0.1,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "largest change in any date's offset across eight ways of drawing the reference forest"
+ },
+ "selfcheck_tilt_east_061": {
+  "value": 0.0435,
+  "unit": "dB per 10 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "slope of the score across the reference forest, west to east"
+ },
+ "selfcheck_tilt_east_125": {
+  "value": -0.0286,
+  "unit": "dB per 10 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py",
+  "note": "slope of the score across the reference forest, west to east"
+ },
+ "selfcheck_tilt_north_061": {
+  "value": -0.1122,
+  "unit": "dB per 10 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py"
+ },
+ "selfcheck_tilt_north_125": {
+  "value": -0.0202,
+  "unit": "dB per 10 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/selfcheck.py"
+ },
+ "valid_km2_east": {
+  "value": 4187.8525,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ },
+ "valid_km2_west": {
+  "value": 6912.1675,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/noise_floor.py"
+ }
+}
