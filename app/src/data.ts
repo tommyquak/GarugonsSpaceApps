@@ -9,7 +9,7 @@ export interface Ramp {
   full_at: number;
 }
 
-export type LayerKind = "season" | "pass" | "reference" | "fire" | "recovery";
+export type LayerKind = "season" | "pass" | "reference" | "fire" | "fire-until" | "recovery";
 
 // One entry of layers/layers.json (docs/DATA_CONTRACT.md section 5, plus a few fields).
 export interface LayerEntry {
@@ -27,6 +27,8 @@ export interface LayerEntry {
   orbit?: string | null;
   ramp?: Ramp;
   color?: string;
+  /** A fire-until layer: fire detected on or before this day, YYYY-MM-DD. */
+  until?: string;
 }
 
 // One radar pass: a date and a track, with one image per site.
