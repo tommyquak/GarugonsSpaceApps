@@ -922,3 +922,702 @@ button:disabled {
     max-height: 88dvh;
   }
 }
+
+/* ==== Actions view, evidence drawer and ontology graph (src/actions, src/ontology). Keep this block last. ==== */
+
+/* Actions panel: legend, 3D switch, ranked list. */
+.act-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.act-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.act-bar .switch {
+  gap: 8px;
+}
+
+.act-swatch {
+  flex: none;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.act-swatch.is-none {
+  border: 1px solid #8b949e;
+}
+
+.act-swatch.is-level {
+  background: var(--text);
+}
+
+.act-legend-item {
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+
+.act-legend-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.act-legend-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.act-legend-head strong {
+  flex: 1;
+  font-weight: 600;
+}
+
+.act-legend-count {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.act-legend-item p {
+  margin: 3px 0 0 22px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.act-strengths {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.act-strength {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.act-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.act-field {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.act-select {
+  width: 100%;
+  min-height: 30px;
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #171b20;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.act-count-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 8px;
+}
+
+.act-count {
+  flex: 1 0 100%;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.act-rows {
+  position: relative;
+  height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.act-rows-inner {
+  position: relative;
+}
+
+.act-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px 0 6px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  text-align: left;
+}
+
+.act-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.act-row:focus-visible {
+  outline-offset: -2px;
+}
+
+.act-row[aria-current="true"] {
+  background: rgba(240, 160, 75, 0.14);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.act-rank {
+  flex: none;
+  width: 34px;
+  text-align: right;
+  color: var(--muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.act-row-text {
+  display: grid;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+.act-row-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.act-row-sub {
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.act-dot {
+  width: 9px;
+  height: 9px;
+  margin-left: 4px;
+  border-radius: 50%;
+}
+
+.act-dot.is-high {
+  opacity: 0.92;
+}
+
+.act-dot.is-medium {
+  opacity: 0.64;
+}
+
+.act-dot.is-low {
+  opacity: 0.4;
+}
+
+/* Evidence drawer: a wide sheet along the bottom, with a close button and a way to fold it. */
+#drawer {
+  position: absolute;
+  z-index: 3;
+  left: 12px;
+  right: 12px;
+  bottom: 34px;
+  max-height: min(62vh, 620px);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  background: #12161a;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
+}
+
+#app.has-drawer #col-left,
+#app.has-drawer #panel-place {
+  max-height: calc(100% - var(--bar-h) - 58px - var(--drawer-h, 0px));
+}
+
+.drawer-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* The schema is read for itself, not beside a block on the map: it may stand taller. */
+#drawer.is-schema {
+  max-height: min(78vh, 720px);
+}
+
+/* Folded, it is a title bar the width of the season slider, just above it. */
+#drawer.is-folded {
+  left: 296px;
+  max-width: 620px;
+  bottom: var(--over-season, 34px);
+}
+
+#drawer.is-folded .drawer-head {
+  border-bottom: 0;
+}
+
+.object-type {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#drawer .drawer-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The card and the graph sit side by side and scroll separately. */
+.drawer-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(264px, 1fr) minmax(0, 980px);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 18px;
+  padding: 12px 6px 12px 14px;
+}
+
+.drawer-body > * {
+  min-width: 0;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.block-card {
+  font-size: 13px;
+}
+
+#drawer .object-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+#drawer h4 {
+  margin: 10px 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.chip {
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #1b2026;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.object-id {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.object-id code,
+.object-terms code {
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+.object-advice {
+  margin: 0 0 8px;
+}
+
+.object-caveat {
+  margin: 0 0 8px;
+  padding: 6px 8px;
+  border-left: 2px solid var(--accent);
+  background: rgba(240, 160, 75, 0.08);
+}
+
+.object-reasons {
+  margin: 0 0 10px;
+  padding-left: 18px;
+}
+
+.object-reasons li {
+  margin-bottom: 3px;
+}
+
+.object-terms {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+
+.object-terms dt {
+  font-weight: 600;
+}
+
+.object-terms dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.object-terms.is-values dd {
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.offscreen {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+}
+
+/* Evidence graph. One colour per kind of thing: sources slate, observations teal, states pink. */
+.graph-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.graph-svg {
+  display: block;
+  width: 100%;
+  min-width: 900px;
+  height: auto;
+}
+
+.g-head {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.g-link-name {
+  fill: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+}
+
+.g-node {
+  outline: none;
+}
+
+.g-card {
+  fill: #181c22;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.g-stripe {
+  fill: #8b949e;
+}
+
+.g-source .g-stripe {
+  fill: #8b98a8;
+}
+
+.g-observation .g-stripe {
+  fill: #45b8a6;
+}
+
+.g-state .g-stripe,
+.g-condition .g-stripe {
+  fill: #d98ac0;
+}
+
+.g-condition .g-card {
+  stroke-dasharray: 4 3;
+}
+
+.g-title {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.g-source .g-title {
+  font-weight: 600;
+}
+
+.g-action:not(.is-dimmed) .g-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.g-sub {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.g-rule {
+  fill: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+}
+
+.g-value {
+  fill: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.g-value.is-quiet {
+  fill: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.g-pill {
+  fill: none;
+  stroke: #4a5360;
+}
+
+.g-pill-text {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.g-node.is-yes .g-pill {
+  fill: var(--text);
+  stroke: var(--text);
+}
+
+.g-node.is-yes .g-pill-text {
+  fill: #12161a;
+}
+
+.g-node.is-dimmed {
+  opacity: 0.5;
+}
+
+.g-node.is-chosen .g-card {
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+
+.g-node:focus-visible .g-card,
+.g-node.is-active .g-card {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.g-edge {
+  fill: none;
+  stroke: #56606c;
+  stroke-width: 1.2;
+  opacity: 0.5;
+}
+
+.g-edge.is-negated {
+  stroke-dasharray: 6 4;
+}
+
+.g-edge.is-strengthens {
+  stroke-dasharray: 1.5 4.5;
+  stroke-linecap: round;
+  stroke-width: 1.7;
+}
+
+.g-edge.is-lit {
+  opacity: 1;
+  stroke-width: 2;
+}
+
+.g-edge.is-lit.from-source {
+  stroke: #aab6c5;
+}
+
+.g-edge.is-lit.from-observation {
+  stroke: #45b8a6;
+}
+
+.g-edge.is-lit.from-state,
+.g-edge.is-lit.from-condition {
+  stroke: #d98ac0;
+}
+
+.is-schema .g-edge.is-lit {
+  stroke-width: 1.4;
+  opacity: 0.8;
+}
+
+.g-edge.is-hot {
+  stroke: var(--text);
+  stroke-width: 2.4;
+  opacity: 1;
+}
+
+.graph-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.graph-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Stays in view at the bottom of the graph while the rest scrolls. */
+.graph-detail {
+  position: sticky;
+  bottom: 0;
+  min-height: 3.2em;
+  margin: 6px 0 0;
+  padding: 6px 0 2px;
+  border-top: 1px solid var(--line);
+  background: #12161a;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.graph-detail strong {
+  color: var(--text);
+}
+
+.graph-text {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.graph-text summary {
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.graph-text ul {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+@media (max-width: 699px) {
+  #btn-actions,
+  #btn-how {
+    display: none;
+  }
+
+  #sheet[data-tab="actions"] #panel-actions {
+    display: block;
+  }
+
+  /* In the bottom sheet, above the slider: one sheet at a time. */
+  #drawer,
+  #drawer.is-folded,
+  #drawer.is-schema {
+    position: static;
+    max-width: none;
+    max-height: 58vh;
+    max-height: 58dvh;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  #sheet.drawer-open #season,
+  .drawer-head .object-type {
+    display: none;
+  }
+
+  .drawer-body {
+    display: block;
+    overflow-y: auto;
+    padding-right: 14px;
+  }
+
+  .drawer-body > * {
+    overflow-y: visible;
+    padding-right: 0;
+  }
+
+  /* The graph keeps its full size and scrolls sideways inside its own box. */
+  .graph-svg {
+    width: 980px;
+    max-width: none;
+  }
+
+  .graph-detail {
+    position: static;
+  }
+
+  .act-select {
+    min-height: 44px;
+  }
+
+  .act-rows {
+    height: 256px;
+  }
+}

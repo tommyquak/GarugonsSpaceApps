@@ -3,6 +3,7 @@ import { AttributionControl, Map as MapLibreMap, NavigationControl, ScaleControl
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
+import { buildActions } from "./actions";
 import { baseStyle } from "./basemaps";
 import { bindPlaceActions } from "./chart/actions";
 import { createPlaceChart } from "./chart/placeChart";
@@ -48,7 +49,7 @@ async function start(): Promise<void> {
 
   // On a phone the panels share one bottom sheet, one at a time. A wide screen ignores the tab.
   const sheet = byId("sheet");
-  const tabs = ["layers", "place", "story"];
+  const tabs = ["layers", "place", "story", "actions"];
   const setTab = (tab: string): void => {
     sheet.dataset.tab = tab;
     for (const name of tabs) byId(`tab-${name}`).setAttribute("aria-expanded", String(name === tab));
@@ -66,6 +67,7 @@ async function start(): Promise<void> {
   setTab("");
   const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
   bindPlaceActions(byId("panel-place"), map, overlays, chart);
+  await buildActions(map, chart, { setTab });
   // Last, so that a link someone was sent restores its view over the defaults set above.
   bindLink(map, overlays, chart);
 }
