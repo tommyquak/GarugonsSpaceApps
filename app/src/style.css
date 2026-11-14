@@ -369,6 +369,7 @@ button {
 }
 
 a.text-button {
+  color: inherit;
   text-decoration: none;
 }
 
