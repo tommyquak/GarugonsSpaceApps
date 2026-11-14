@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Written with Super Intelligence (SI) assistance.
 # SessionStart hook: show unread board posts and explain the board loop. Always exits 0.
 cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || exit 0
 [ -x tools/board ] || exit 0
