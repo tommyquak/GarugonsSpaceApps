@@ -40,7 +40,8 @@ export class Overlays {
     this.steps = passSteps(layers);
     this.sites = [...new Set(layers.filter((l) => l.date).map((l) => l.site ?? ""))];
     for (const l of this.statics) {
-      if (l.kind !== "reference" && l.kind !== "recovery") this.on.add(l.id);
+      // Fire, recovery and the reference start switched off: the map opens on one thing, the fall in the echo.
+      if (l.kind !== "reference" && l.kind !== "recovery" && l.kind !== "fire") this.on.add(l.id);
     }
     this.sync();
   }
