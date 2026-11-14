@@ -28,12 +28,13 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 
 | File | Owner | Meaning |
 |---|---|---|
-| `drydown_<site>_<track>.tif` | 2 | Change in HH against intact forest, last two passes before the rain minus first two, on 250 m blocks. Decibels. |
-| `hh_<site>_<track>_<YYYYMMDD>.tif` | 2 | One per radar pass, for the season slider. HH on that pass minus HH at the start of the season (mean of the first two passes), scene-wide shift removed, on 250 m blocks. Decibels. Negative means darker than at the start. |
-| `dried_<site>.tif` | 2 | 1 where the dry-down is beyond the noise floor on both orbits, else 0. |
+| `drydown_<site>_<track>.tif` | 2 | Change in HH against intact forest, last two passes before the rain minus the dry start passes, on 250 m blocks. Decibels. The start passes are the first rain-free ones, chosen by `pipeline/season.py`. |
+| `hh_<site>_<track>_<YYYYMMDD>.tif` | 2 | One per radar pass, for the season slider. HH on that pass minus HH on the dry start passes, scene-wide shift removed, on 250 m blocks. Decibels. Negative means darker than at the start. |
+| `dried_<site>.tif` | 2 | 1 where the dry-down is below the 5th percentile of change in deep forest on both orbits, else 0. A loose mask: draw the size of the fall instead. |
 | `recovery_hh_<site>_<track>.tif`, `recovery_hv_<site>_<track>.tif` | 2 | Change across the first rain, in decibels: first pass after the rain minus the last two dry passes. One per orbit that has a pass after the rain. |
 | `recovery_left_hh_<site>_<track>.tif`, `recovery_left_hv_<site>_<track>.tif` | 2b | What the rain did not bring back, in decibels: first pass after the rain minus the start of the season (mean of the first two passes). Negative means still darker than in June. One per orbit that has a pass after the rain. |
-| `fire_days_<site>.tif` | 3 | Number of distinct days with a 2026 fire detection within 200 m. |
+| `fire_days_<site>.tif` | 3 | Number of distinct days with a 2026 fire detection whose pixel footprint reaches the cell (half the detection's pixel size, at least 200 m, at most 1 km). Active fire, not burnt area. |
+| `fire_days_1km_<site>.tif` | 3 | The same with every detection widened to 1 km, for the cautious reading of "no fire nearby". |
 | `peat_peatmap_<site>.tif`, `peat_peatmap_<site>.geojson` | 3 | 1 on mapped peat, else 0, and its outline in lon/lat. From PEATMAP (Xu et al. 2018, doi 10.5518/252), CC BY 4.0: may be released and shown with that citation. This is the peat layer every number uses. |
 | `peat_official_<site>.tif`, `peat_cifor_<site>.tif` | 3 | Other peat maps as cross-checks. Local use only: no stated licence, so not committed and not released. |
 | `canals_osm_<site>.geojson`, `canal_distance_<site>.tif` | 3 | Canals, drains and ditches from OpenStreetMap (ODbL), and metres to the nearest one. |
@@ -71,23 +72,26 @@ The grid is regular in longitude and latitude, so the app finds a cell without a
 
 ## 6. Fused blocks (lead writes; tracks 4, 5 and 6 read)
 
-`pipeline/out/blocks/blocks_<site>.geojson`, `blocks_<site>.csv` and `ontology.json`, attached to the release. How the fusion works: `docs/FUSION.md`.
+`pipeline/out/blocks/blocks_<site>.geojson`, `blocks_<site>.csv` and `ontology.json`, attached to the release. How the fusion works, and what a class does not mean: `docs/FUSION.md`.
 
 Each feature is a 1 km square in lon/lat:
 
 ```json
 { "id": "west-042-017", "site": "west", "lon": 113.95, "lat": -2.81,
-  "action": "rewet_first", "confidence": "medium", "rank": 12, "fall_db": 2.1,
+  "action": "fell_still_low", "confidence": "medium", "rank": 12, "fall_db": 2.1,
   "obs": { "fall_asc": 2.2, "fall_desc": 2.0, "left_asc": 0.9, "left_desc": 1.1, "hv_left_asc": 0.3, "hv_left_desc": 0.4,
-           "fire_share": 0.0, "fire_days": 0, "peat_share": 1.0, "canal_m": 300 },
-  "states": { "on_peat": true, "dried": true, "burnt": false, "not_back": true, "canopy_lost": false, "drained": true },
-  "reasons": ["100% of the block is on mapped peat.", "HH fell 2.2 dB on the dawn orbit and 2.0 dB on the dusk orbit over the dry season."] }
+           "fire_share": 0.0, "fire_days": 0, "fire_share_1km": 0.0, "peat_share": 1.0, "canal_m": 300 },
+  "states": { "on_peat": true, "fell": true, "fire": false, "still_low": true, "canopy_low": false,
+              "persistent_fire": false, "clear_of_fire": true, "near_canal": true },
+  "reasons": ["100% of the block is on mapped peat.", "HH fell 2.2 dB on the dawn orbit and 2.0 dB on the dusk orbit between the dry start in July and mid October."] }
 ```
 
-- `action` is `assess_burn`, `rewet_first`, `watch` or `none`. `confidence` is `high`, `medium`, `low`, or null when the action is `none`. `rank` counts from 1 inside each action, largest fall first.
+- `action` holds the screening class: `fire_detected`, `fell_still_low`, `fell_came_back` or `none`. A class says what was seen. It is not a recommendation.
+- `confidence` is the agreement count as `high`, `medium`, `low`, or null when the class is `none`. Show it as "agreement", never as a probability.
+- `rank` counts from 1 inside each class and site, largest fall first.
 - Falls and "left" values are in decibels and positive when the echo is lower. A value can be null.
-- `hindcast_<site>.json` (same folder): for each peat block with no fire before the cut date, `id`, `early_fall_db`, `early_dry`, `burned_later` and `fire_days_later`. For a replay of what the radar showed in late July against what burned afterwards. See `docs/FUSION.md` for how to word it.
-- `ontology.json` lists the sources, observations, states and actions with their rules and reasons. Draw legends, the evidence graph and help text from it; do not retype them.
+- `hindcast_<site>.json` (same folder): for each peat block with no fire before the cut date, `id`, `early_fall_db`, `early_dry`, `burned_later` and `fire_days_later`. The test it supports found no clear result; see `docs/LIMITS.md` before showing it.
+- `ontology.json` lists the sources, observations, states and classes with their rules and reasons. Draw legends, the evidence graph and help text from it; do not retype them.
 
 ## 5. App files (track 4 owns; committed)
 
