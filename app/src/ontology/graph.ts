@@ -13,7 +13,7 @@ import { WIDE } from "../view";
 import { buildGraph, formatValue, namedIn, ruleTerms, sentences, yesNo, type BlockProps, type GraphEdge, type GraphNode, type Ontology } from "./model";
 
 const SVG = "http://www.w3.org/2000/svg";
-const SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 const MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
 // Left edge and width of each column, in drawing units (one unit is a pixel at full size).
