@@ -7,6 +7,7 @@ import { baseStyle } from "./basemaps";
 import { createPlaceChart } from "./chart/placeChart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
+import { bindLink } from "./link";
 import { byId } from "./dom";
 import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
@@ -62,7 +63,9 @@ async function start(): Promise<void> {
   byId("tab-place").addEventListener("click", () => toggleTab("place"));
   byId("tab-story").addEventListener("click", () => (story.isOpen() ? toggleTab("story") : story.open()));
   setTab("");
-  createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
+  const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
+  // Last, so that a link someone was sent restores its view over the defaults set above.
+  bindLink(map, overlays, chart);
 }
 
 void start();

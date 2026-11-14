@@ -114,6 +114,9 @@ export class PlaceChart {
   private marker: Marker | undefined;
   private request = 0;
   private drawn: (() => void) | undefined;
+  private pickListeners: (() => void)[] = [];
+  /** The place on show, or null. Read by the link to this view. */
+  place: { lon: number; lat: number } | null = null;
 
   constructor(
     private root: HTMLElement,
@@ -131,12 +134,23 @@ export class PlaceChart {
     this.root.replaceChildren(h("h2", { text: "Place" }), h("p", { class: "note", text: "Click the map to see how the radar signal changed at that place over the season." }));
   }
 
+  /** Calls `fn` whenever a place is picked or the card is closed. */
+  onPick(fn: () => void): void {
+    this.pickListeners.push(fn);
+  }
+
+  private setPlace(place: { lon: number; lat: number } | null): void {
+    this.place = place;
+    for (const fn of this.pickListeners) fn();
+  }
+
   private close(): void {
     this.marker?.remove();
     this.marker = undefined;
     this.drawn = undefined;
     this.request += 1;
     this.hint();
+    this.setPlace(null);
   }
 
   private loadSites(): Promise<Site[]> {
@@ -173,8 +187,10 @@ export class PlaceChart {
     return [...byKey.values()].sort((a, b) => a.date.localeCompare(b.date));
   }
 
-  private async pick(lon: number, lat: number): Promise<void> {
+  /** Shows the chart for a place, as a click on the map does. */
+  async pick(lon: number, lat: number): Promise<void> {
     const request = (this.request += 1);
+    this.setPlace({ lon, lat });
     this.marker ??= new Marker({ element: h("div", { class: "place-marker" }) });
     this.marker.setLngLat([lon, lat]).addTo(this.map);
     const where = `${Math.abs(lat).toFixed(3)} ${lat < 0 ? "S" : "N"}, ${Math.abs(lon).toFixed(3)} ${lon < 0 ? "W" : "E"}`;
