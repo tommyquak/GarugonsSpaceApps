@@ -1,7 +1,9 @@
 // Written with Super Intelligence (SI) assistance.
 // The blocks on the map: one GeoJSON source per site, drawn flat (a fill coloured by action,
 // stronger where the confidence is higher) or as columns whose height is the fall in HH. In the
-// at-a-glance view the same blocks are coloured by level instead (levels.ts).
+// at-a-glance view the same blocks are coloured by level instead (levels.ts). The block under
+// the pointer lights up and the pointer becomes a hand, flat and as columns, so it is plain
+// that a block can be clicked.
 import type { ExpressionSpecification, GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import { actionColor, confidenceStrength, CONFIDENCE_LEVELS, NONE_COLOR, NO_ACTION, solidColor } from "./colors";
 import type { BlockFeature, BlockStore } from "./data";
@@ -13,6 +15,10 @@ const ANCHOR = "z-marks"; // blocks sit over the colour layers and under the out
 const SELECTED = "blocks-selected";
 const VEIL = "blocks-veil";
 const GRID_FROM_ZOOM = 10.5;
+const HOVER_COLOR = "#ece8df"; // the ink of the interface: a hovered block reads as a control
+
+const isSelected: ExpressionSpecification = ["boolean", ["feature-state", "selected"], false];
+const isHovered: ExpressionSpecification = ["boolean", ["feature-state", "hover"], false];
 
 // A "match" expression from a list of cases; the style types cannot follow one built at run time.
 function match(input: unknown, cases: [string, string | number][], otherwise: string | number): ExpressionSpecification {
@@ -35,6 +41,7 @@ export class BlockLayer {
   private selected: BlockFeature | null = null;
   private hidden = new Set<string>();   // actions switched off in the legend
   private glance = true;                // coloured by level, not by class
+  private hovered: { source: string; id: string } | null = null;
 
   constructor(
     private map: MapLibreMap,
@@ -45,6 +52,22 @@ export class BlockLayer {
     map.addSource(SELECTED, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
     map.addLayer({ id: `${SELECTED}-edge`, type: "line", source: SELECTED, paint: { "line-color": "#0d1013", "line-width": 5.5, "line-opacity": 0.85 } });
     map.addLayer({ id: `${SELECTED}-line`, type: "line", source: SELECTED, paint: { "line-color": "#ffffff", "line-width": 2.5 } });
+    // The block under the pointer, at most once per frame.
+    let frame = 0;
+    let at: [number, number] | null = null;
+    map.on("mousemove", (event) => {
+      at = [event.point.x, event.point.y];
+      if (!frame) {
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          if (at) this.hover(at);
+        });
+      }
+    });
+    map.on("mouseout", () => {
+      at = null;
+      this.setHovered(null);
+    });
     store.onLoad((site) => this.add(site));
     for (const site of store.sites) {
       if (store.isLoaded(site.id)) this.add(site.id);
@@ -86,7 +109,7 @@ export class BlockLayer {
         source: id,
         filter: acted,
         paint: {
-          "fill-extrusion-color": ["case", ["boolean", ["feature-state", "selected"], false], "#ffffff", solid],
+          "fill-extrusion-color": ["case", isSelected, "#ffffff", isHovered, HOVER_COLOR, solid],
           // A block that did not fall still gets a thin slab, so its colour is on the map.
           "fill-extrusion-height": ["*", METRES_PER_DB, ["max", 0.05, ["coalesce", ["get", "fall_db"], 0]]],
           "fill-extrusion-base": 0,
@@ -124,12 +147,12 @@ export class BlockLayer {
       const fill = `blocks-${site}-fill`;
       const columns = `blocks-${site}-columns`;
       if (this.map.getLayer(fill)) {
-        this.map.setPaintProperty(fill, "fill-color", color);
-        this.map.setPaintProperty(fill, "fill-opacity", strength);
+        this.map.setPaintProperty(fill, "fill-color", ["case", isHovered, HOVER_COLOR, color]);
+        this.map.setPaintProperty(fill, "fill-opacity", ["case", isHovered, 0.95, strength]);
         this.map.setFilter(fill, filter);
       }
       if (this.map.getLayer(columns)) {
-        this.map.setPaintProperty(columns, "fill-extrusion-color", ["case", ["boolean", ["feature-state", "selected"], false], "#ffffff", solid]);
+        this.map.setPaintProperty(columns, "fill-extrusion-color", ["case", isSelected, "#ffffff", isHovered, HOVER_COLOR, solid]);
         this.map.setFilter(columns, filter);
       }
     }
@@ -139,6 +162,26 @@ export class BlockLayer {
   setGlance(on: boolean): void {
     this.glance = on;
     this.applyMode();
+  }
+
+  /** Lights the classed block at a point of the map canvas, and shows a hand over it. */
+  private hover(point: [number, number]): void {
+    if (!this.shown) {
+      this.setHovered(null);
+      return;
+    }
+    const layers = [...this.sites].flatMap((s) => [`blocks-${s}-fill`, `blocks-${s}-columns`]).filter((id) => this.map.getLayer(id));
+    const found = layers.length ? this.map.queryRenderedFeatures(point, { layers })[0] : undefined;
+    const id = found?.properties?.id;
+    this.setHovered(found && typeof id === "string" ? { source: found.source, id } : null);
+  }
+
+  private setHovered(next: { source: string; id: string } | null): void {
+    if (next?.id === this.hovered?.id) return;
+    if (this.hovered && this.map.getSource(this.hovered.source)) this.map.setFeatureState(this.hovered, { hover: false });
+    this.hovered = next;
+    if (next) this.map.setFeatureState(next, { hover: true });
+    this.map.getCanvas().style.cursor = next ? "pointer" : "";
   }
 
   private mark(feature: BlockFeature | null, selected: boolean): void {
@@ -162,6 +205,7 @@ export class BlockLayer {
   }
 
   setShown(on: boolean): void {
+    if (!on) this.setHovered(null);
     this.shown = on;
     this.sync();
   }
