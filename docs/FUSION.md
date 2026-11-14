@@ -57,6 +57,18 @@ A count, not a probability. One point when the class's rule holds, plus one for 
 
 Three points is high, two is medium, one is low.
 
+## At a glance: three levels
+
+The "Where to check" view opens coloured by level, for a first look. The levels are a grouping of the classes and states above, made in the app (`app/src/actions/levels.ts`). They add no threshold and no number.
+
+| Level | Blocks in it |
+|---|---|
+| Most affected | Fire detected with agreement high: fire on several days, and HV still low after the rain |
+| Affected | Fell, and still low after the rain; or fire detected with HV still low after the rain |
+| Changed, then recovered | Every other classed block: fire, or a fall, with no lasting change seen after the rain |
+
+The order is by signs of lasting change, not by harm. Nothing here was checked on the ground, and the size of the fall plays no part: land beside a canal can fall a long way and recover with the first rain.
+
 ## The fire-prone test
 
 `pipeline/fusion/hindcast.py` asks, after the fact, whether an early fall marked the peat that later burned, using only radar before 1 September and only fire from then on. Across all peat in the west box the difference is large, and it is forest against open land. Inside drained land it is not distinguishable from zero in either box. We make no claim about fire-prone ground; the numbers and their ranges are in `validation.json` under `hindcast_*` and in `docs/LIMITS.md`.
