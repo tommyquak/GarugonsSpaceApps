@@ -18,7 +18,7 @@ import { reducedMotion, viewPadding } from "./view";
 const BEAT_MS = 6500;
 const SHORTEST_MS = 4500; // with sound, a beat still stays long enough to look at
 const VOICE_LEAD_MS = 900; // the picture settles before the voice starts
-const AFTER_VOICE_MS = 2100; // and the last word has room before the next beat
+const AFTER_VOICE_MS = 2800; // the beat moves on this long after the voice stops
 const FADE_MS = 450;
 const SECOND_AT = 0.36; // how far into a two-picture beat the second picture takes over
 
@@ -69,12 +69,12 @@ const BEATS: Beat[] = [
   {
     image: "open",
     head: "A wetter surface sends back a stronger echo. As open peat dries, the echo falls.",
-    sub: () => "A fall is a sign of drying, not a measurement of the water table. Clearing and farming can cause it too.",
+    sub: () => "A fall is a sign of drying. Clearing and farming can cause it too.",
   },
   {
     image: "burnt",
-    head: "Dry peat is the peat that burns. It also sinks, and gives up its carbon.",
-    sub: () => "Sebangau after fire, September 2019. Smoke from peat fires reaches cities across the region.",
+    head: "Dry peat is the peat that burns, and it gives up its carbon as it burns.",
+    sub: () => "Sebangau after fire, September 2019. Drained peat also sinks, and the smoke reaches cities across the region.",
   },
   {
     map: "season",
@@ -212,14 +212,15 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     };
 
     // The line of the current beat fills over the time the beat will stay.
-    const run = (ms: number): void => {
+    // The line of the beat fills over `ms`. Without `hold`, the beat also moves on when it is full.
+    const run = (ms: number, hold = false): void => {
       window.clearTimeout(timer);
       const bar = bars[index];
       bar.classList.remove("is-now");
       bar.style.setProperty("--beat", `${ms}ms`);
       void bar.offsetWidth;
       bar.classList.add("is-now");
-      timer = window.setTimeout(() => show(index + 1), ms);
+      if (!hold) timer = window.setTimeout(() => show(index + 1), ms);
     };
 
     function show(to: number): void {
@@ -257,14 +258,21 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       if (sound) {
         const started = performance.now();
         voice.src = asset(`story/voice/beat-${index + 1}.mp3`);
+        // With sound, the voice sets the pace: the beat moves on a fixed time after the last word,
+        // never on a clock set in advance. The line only shows how far along the beat is.
         voice.onloadedmetadata = () => {
           if (!Number.isFinite(voice.duration)) return;
-          if (!still && !lastBeat) run(Math.max(SHORTEST_MS, VOICE_LEAD_MS + voice.duration * 1000 + AFTER_VOICE_MS));
+          const whole = Math.max(SHORTEST_MS, VOICE_LEAD_MS + voice.duration * 1000 + AFTER_VOICE_MS);
+          if (!still && !lastBeat) {
+            run(whole, true);
+            timer = window.setTimeout(() => show(index + 1), whole + 4000); // only if the end of the clip is never reported
+          }
           follow(beat, VOICE_LEAD_MS + voice.duration * 1000 * SECOND_AT); // as the second sentence begins
         };
         voice.onended = () => {
-          // The clock above already moves on; this only covers a clip whose length was not known.
-          if (!still && !lastBeat && !bars[index].classList.contains("is-now")) run(Math.max(AFTER_VOICE_MS, SHORTEST_MS - (performance.now() - started)));
+          if (still || lastBeat) return;
+          window.clearTimeout(timer);
+          timer = window.setTimeout(() => show(index + 1), Math.max(AFTER_VOICE_MS, SHORTEST_MS - (performance.now() - started)));
         };
         // No sound after all (blocked or missing): carry on silently at the usual pace.
         lead = window.setTimeout(() => {
