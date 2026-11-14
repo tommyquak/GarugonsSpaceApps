@@ -32,18 +32,40 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from vjson import put  # noqa: E402
 
 ME = "pipeline/context/rain.py"
-OPENDAP = ("https://opendap.earthdata.nasa.gov/collections/C2723754859-GES_DISC/granules/"
-           "GPM_3IMERGDL.07%3A3B-DAY-L.MS.MRG.3IMERG.{day}-S000000-E235959.V07C.nc4.dap.nc4")
+OPENDAP = "https://opendap.earthdata.nasa.gov/collections/C2723754859-GES_DISC/granules/GPM_3IMERGDL.07%3A{name}.dap.nc4"
+CMR = "https://cmr.earthdata.nasa.gov/search/granules.json"
 SITES = json.loads((Path(__file__).resolve().parents[1] / "radar" / "sites.json").read_text())
 WINDOW_DAYS, WINDOW_MM, WET_DAY_MM = 5, 25.0, 5.0
 
 
-def one_day(day, lon_range, lat_range):
+def granule_names(first, last):
+    """File name of the daily product for each day, asked from NASA's catalogue.
+
+    The names carry a processing version (V07A, V07B, V07C) that changes over the years, so they
+    are looked up and not guessed."""
+    names = {}
+    for year in range(first.year, last.year + 1):
+        a, b = max(first, dt.date(year, 1, 1)), min(last, dt.date(year, 12, 31))
+        params = {"short_name": "GPM_3IMERGDL", "version": "07", "page_size": 400, "sort_key": "start_date"}
+        for lo, hi in ((a, min(b, dt.date(year, 6, 30))), (max(a, dt.date(year, 7, 1)), b)):
+            if lo > hi:
+                continue
+            r = requests.get(CMR, params={**params, "temporal": f"{lo}T00:00:00Z,{hi}T23:59:59Z"}, timeout=120, verify=certifi.where())
+            r.raise_for_status()
+            for entry in r.json()["feed"]["entry"]:
+                name = entry["title"].split(":")[-1]
+                stamp = name.split(".3IMERG.")[1][:8]
+                names[dt.date(int(stamp[:4]), int(stamp[4:6]), int(stamp[6:8]))] = name
+    return names
+
+
+def one_day(day, lon_range, lat_range, name=None):
     """Site-mean rainfall in mm for one day, or None if the file is not there yet."""
+    name = name or f"3B-DAY-L.MS.MRG.3IMERG.{day.strftime('%Y%m%d')}-S000000-E235959.V07C.nc4"
     query = {"dap4.ce": f"/precipitation[0:0][{lon_range[0]}:{lon_range[1]}][{lat_range[0]}:{lat_range[1]}]"}
     for attempt in range(3):
         try:
-            r = requests.get(OPENDAP.format(day=day.strftime("%Y%m%d")), params=query, timeout=120, verify=certifi.where())
+            r = requests.get(OPENDAP.format(name=name), params=query, timeout=120, verify=certifi.where())
         except requests.RequestException:
             continue
         if r.status_code == 404:
@@ -88,8 +110,9 @@ def main():
     if target.exists() and not a.refresh:
         rain = json.loads(target.read_text())
     else:
+        names = granule_names(first, last)
         with ThreadPoolExecutor(max_workers=6) as pool:
-            values = list(pool.map(lambda d: one_day(d, lon_range, lat_range), days))
+            values = list(pool.map(lambda d: one_day(d, lon_range, lat_range, names.get(d)), days))
         rain = {d.isoformat(): round(v, 2) for d, v in zip(days, values) if v is not None}
         a.out.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(rain, indent=0) + "\n")
