@@ -7,7 +7,11 @@
 // (320, 240) to (680, 600); intro.css places the box so the hole lies exactly over #app.
 //
 // Greys only. The warm, blue and violet families belong to the map (docs/DESIGN.md). The
-// smaller screens carry plain shapes, never digits, axes or anything that reads as a result.
+// console screens carry plain shapes, never digits, axes or anything that reads as a result.
+// The four side screens on the wall are the exception: wall.ts lays the real ontology over
+// them, read from the app's own data files, with the class colours the map uses.
+
+import { fillWall } from "./wall";
 
 type Kind = "lines" | "grid" | "ring" | "bands";
 const KINDS: Kind[] = ["lines", "grid", "bands", "ring"];
@@ -135,6 +139,7 @@ export function buildScene(): Scene {
     person(19, 62.5, 7, 10) +
     `<div class="intro-layer intro-fg">${NEAR}${person(27, 71, 12, 15)}${person(60, 71, 12, 15)}</div>` +
     `<button type="button" class="intro-screen" tabindex="-1"></button>`;
+  void fillWall(room);
   const screen = room.querySelector<HTMLButtonElement>(".intro-screen");
   if (!screen) throw new Error("intro: no screen");
   return { room, foreground: [...room.querySelectorAll<HTMLElement>(".intro-fg")], screen };
