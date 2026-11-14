@@ -1,16 +1,14 @@
 # How the sources are fused
 
-The app's recommendations come from five independent sources. This file says how they are combined, and why it is done this way. The machine-readable version is `pipeline/fusion/ontology.json`; `pipeline/fusion/blocks.py` reads its thresholds and rules from there, and the app draws its evidence graph from the same file.
+The app groups every 1 km block into a screening class. This file says how, and what a class does and does not mean. The machine-readable version is `pipeline/fusion/ontology.json`; `pipeline/fusion/blocks.py` reads its thresholds and rules from there, and the app draws its evidence graph from the same file.
 
-## The principle: agreement, not weights
+This is version 2. The first version called its classes "rewet first", "watch" and "assess the burn" and graded them by "confidence". An independent audit showed those names claimed more than the data supports (`docs/AUDIT.md`). The classes now say what was seen.
 
-We have no ground measurements for 2026, so there is nothing to fit weights or train a model against. Any score with weights would be invented. What can be defended is agreement between sources that do not share errors:
+## The principle: fixed rules, no weights
 
-- two radar orbits that look from opposite sides at different times of day,
-- a thermal fire sensor that has nothing to do with the radar,
-- a peat map and a canal map made by other people for other purposes.
+We have no ground measurements for 2026, so there is nothing to fit weights or train a model against. Any weighted score would be invented. Each statement about a block is therefore a fixed rule over named observations, and each block keeps the numbers that decided it.
 
-So every statement about a block needs the sources named in its rule, and confidence is a count of how many independent lines of evidence agree.
+The sources are of four kinds: the radar (two orbits of one instrument, which share its calibration and our baseline), a thermal fire sensor, a peat map and a canal map. The two radar orbits agreeing shows that a change is on the ground and not in one orbit. It does not show what the change is.
 
 ## The vocabulary
 
@@ -19,56 +17,56 @@ So every statement about a block needs the sources named in its rule, and confid
 | Source | A dataset from one instrument or one mapping effort | NISAR dawn orbit; FIRMS |
 | Block | A 1 km square of ground | `west-042-017` |
 | Observation | One number about a block from one source | HH fell 2.1 dB on the dawn orbit |
-| State | A yes or no statement, decided by a rule over observations | Dried |
-| Action | What a restoration team could do, decided by a rule over states | Rewet first |
+| State | A yes or no statement, decided by a rule over observations | HH fell on both orbits |
+| Class | What was seen, and what a field team could check. Stored as `action` in the data | Fell, and still low after the rain |
 
-The chain is always Source, Observation, State, Action, and a block keeps every link, so each recommendation can show the numbers that produced it.
+The chain is always source, observation, state, class, and a block keeps every link.
 
 ## States
 
-| State | Rule | Why |
+| State | Rule | What it does and does not mean |
 |---|---|---|
-| On mapped peat | Half or more of the block is peat in PEATMAP | Dry peat is what burns and loses carbon |
-| Dried | HH fell 1 dB or more on the dawn orbit and on the dusk orbit | HH carries the ground echo under vegetation and falls as the ground dries; 1 dB is about three times the noise floor |
-| Burnt | A quarter or more of the block lies within 200 m of a fire detection | A thermal detection, independent of the radar |
-| Did not come back | After the rain, HH is still below the start of the season by more than the noise floor, on both orbits | Wet ground brightens within days; ground that stays dark lost more than surface moisture |
-| Canopy not recovering | Burnt, and HV is still 0.5 dB or more down after the rain on both orbits | HV comes from the woody canopy, which rain does not bring back |
-| Near a canal | Typical distance to a mapped canal is 1 km or less | Canals are what drain peat |
+| On mapped peat | Half or more of the block is peat in PEATMAP | Classes are given on mapped peat only |
+| HH fell on both orbits | HH fell 1 dB or more from the dry start to the late dry season, on the dawn orbit and on the dusk orbit | Over open land HH falls as the surface dries; it also changes with clearing, harvest and standing water |
+| Fire detected | A quarter or more of the block lies inside the footprint of a fire detection | Active fire seen from space, not burnt area; some fire is missed |
+| Still low after the first rain | HH still 0.5 dB or more below the dry start on the first pass after the rain, on both orbits | One pass per orbit within days of heavy rain; unexplained |
+| HV low after the rain | Fire detected, and HV still 0.5 dB or more below the dry start on both orbits, HV as measured | HV comes mostly from woody vegetation |
+| Fire on several days | Detections on three or more days at one spot | Not a single false detection |
+| No fire detected within 1 km | Nothing detected within 1 km of any part of the block | The cautious reading of "no fire nearby" |
+| Near a mapped canal | Typical distance to a mapped canal is 1 km or less | Context only, used in no class |
 
-## Actions
+The start of the dry season and its end are read from the rainfall record by the rules in `pipeline/season.py`, so the fall is not measured from a rain-wet surface.
+
+## Classes
 
 The first rule that holds, from the top:
 
-| Action | Rule | What it means for a team |
+| Class | Rule | What a field team could check |
 |---|---|---|
-| Assess the burn | On peat and burnt | Check the ground for lost canopy; plan rewetting and replanting |
-| Rewet first | On peat, dried, not burnt, did not come back | A first candidate for canal blocking |
-| Watch | On peat, dried, not burnt, came back with the rain | It will dry again next season: a place to patrol |
-| No action flagged | Everything else | Steady, or outside mapped peat. Fire outside peat is still shown |
+| Fire detected on peat | On peat, fire detected | Burn damage and lost vegetation |
+| Fell, and still low after the rain | On peat, HH fell on both orbits, no fire detected, still low after the rain | Why it stayed low. We do not know |
+| Fell, and came back with the rain | On peat, HH fell on both orbits, no fire detected, back near the dry start after the rain | Nothing specific |
+| No class | Everything else | Fire outside peat is still shown on the map |
 
-## Confidence
+## Agreement
 
-One point when the action's rule holds, plus one for each further condition that also holds:
+A count, not a probability. One point when the class's rule holds, plus one for each further condition that also holds:
 
-- Assess the burn: canopy not recovering; fire on three or more days; also dried.
-- Rewet first and Watch: near a canal; fell 2 dB or more on both orbits.
+- Fire detected on peat: fire on several days; HV low after the rain.
+- The two "fell" classes: no fire detected within 1 km.
 
-Three points or more is high, two is medium, one is low.
+Three points is high, two is medium, one is low.
 
-## Fire-prone ground: a hindcast, not a forecast
+## The fire-prone test
 
-`pipeline/fusion/hindcast.py` asks one question after the fact: part way through the dry season, had the radar already marked the peat that later burned? It uses only radar passes before a cut date (1 August) and only fire from that date on, on peat blocks with no earlier fire.
-
-How to read the result honestly:
-
-- **Across all peat, the difference is large,** but most of it is the difference between intact forest, which neither dries nor burns, and everything else.
-- **Inside drained peat only** (within 1 km of a mapped canal) the difference is smaller and is the fairer number to quote. It is in `validation.json` under `hindcast_near_canal_*`.
-- **Distance to a canal alone does about as well** at ranking where fire came. The radar's contribution is the condition of the ground this season, updated every 12 days, not a better map of where drainage is.
-- **Fires are lit by people.** Dry ground makes fire possible. Say "ready to burn" or "fire-prone this season", never "predicted".
+`pipeline/fusion/hindcast.py` asks, after the fact, whether an early fall marked the peat that later burned, using only radar before 1 September and only fire from then on. Across all peat in the west box the difference is large, and it is forest against open land. Inside drained land it is not distinguishable from zero in either box. We make no claim about fire-prone ground; the numbers and their ranges are in `validation.json` under `hindcast_*` and in `docs/LIMITS.md`.
 
 ## What this is not
 
-- **Not a measurement of need.** It ranks where to look first. A team on the ground decides.
+- **Not a recommendation.** No class says to block a canal or to intervene.
+- **Not a measurement of need or of water.** It shows where the radar echo changed and where fire was detected.
+- **Not tested against the ground.** No field data exists for this season.
 - **Not complete.** OpenStreetMap misses canals, and the peat map has its own errors.
-- **Not tested against the ground.** No field data exists for this season. The checks are internal: the two orbits agree, intact forest is not flagged, and the rules are fixed before the result is seen.
-- **Peat only, by choice.** Fire and drying outside mapped peat are real and are shown on the map, but no action is attached to them.
+- **Peat only, by choice.** Fire and change outside mapped peat are real and are shown on the map, but no class is attached to them.
+
+The thresholds were written on 14 Nov 2026, the day of the first results, and have not been tuned since. What moves when they move is in `docs/LIMITS.md` and `pipeline/out/layers/sensitivity.json`.
