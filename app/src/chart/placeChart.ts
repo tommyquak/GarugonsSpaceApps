@@ -278,6 +278,12 @@ export class PlaceChart {
     const color = (track: string): string => TRACK_COLORS[tracks.indexOf(track) % TRACK_COLORS.length];
 
     const lines = tracks.map((t) => reading(passes.filter((p) => p.track === t), orbitOf(t))).filter((t): t is string => Boolean(t));
+    // A place that burned brightens for a different reason than a place that got wet again,
+    // so the fire days are said next to the reading, not only drawn under the chart.
+    if (fires?.length) {
+      const span = fires.length === 1 ? `on ${formatDay(fires[0])}` : `on ${fires.length} days, ${formatDay(fires[0])} to ${formatDay(fires[fires.length - 1])}`;
+      lines.push(`Fire was detected here ${span}.`);
+    }
     const readingBox = h("div", { class: "reading" }, ...lines.map((t) => h("p", { text: t })));
 
     const legend = h("div", { class: "chart-legend" });
@@ -358,7 +364,7 @@ export class PlaceChart {
       const top = rainTop;
       const days = Object.entries(rain).filter(([day]) => parseDay(day).getTime() >= t0 && parseDay(day).getTime() <= t1);
       const most = Math.max(1, ...days.map(([, mm]) => mm));
-      chart.append(svg("text", { x: 0, y: top - 6, class: "chart-title" }, "Rain, mm per day"));
+      chart.append(svg("text", { x: 0, y: top - 6, class: "chart-title" }, "Rain over the whole study box, mm per day"));
       chart.append(svg("line", { x1: LEFT, x2: W - RIGHT, y1: top + RAIN_H, y2: top + RAIN_H, class: "grid" }));
       chart.append(svg("text", { x: LEFT - 6, y: top + 8, class: "tick", "text-anchor": "end" }, String(Math.round(most))));
       for (const [day, mm] of days) {
