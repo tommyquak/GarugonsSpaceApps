@@ -43,6 +43,10 @@ The colour is how far the L-band HH radar echo fell between a dry start in mid J
 
 We tested whether an early fall marked the peat that later burned. Across all western peat, blocks that had fallen by 0.5 dB by the end of August burned later more often (56% against 29%). Inside drained land the difference vanishes: 3 points in the west (95% range minus 9 to plus 18) and minus 9 points in the east (minus 28 to plus 8). The all-peat gap is forest against open land. We make no claim about fire-prone ground.
 
+## A bridge to the ground: weak support, not validation
+
+`pipeline/hydro/` fits a small rainfall-driven model to the published 2013 to 2018 water-table record at two sites near Palangka Raya, tests it on years left out of the fit (it follows the gauge with a correlation of 0.74 to 0.94 and an error of 8 to 26 cm, apart from one half year), and runs it on 2026 rainfall. That modelled water table falls below the 0.4 m limit by July at the forest site and to about 1.3 m by late October. At the drained site the radar's HH moves with it on the dawn orbit (r 0.87 over 10 passes) and less clearly at dusk (0.42 over 11); at the forest site the radar barely moves. Both curves answer the same rain and the passes are few, so this is support for the reading of the signal, not a validation of it. The 2026 water table is modelled, not measured.
+
 ## What would test it
 
 - **Water table:** dipwells read on the day of each pass through one dry season, at 40 to 60 blocks spread over the classes and land covers.
