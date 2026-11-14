@@ -4,7 +4,7 @@
 The radar shows where land dried. The peat boundary shows where that matters, and the fire
 layer separates land that burned from land that only dried. This step reads:
 
-  peat_official_<site>.tif   1 on mapped peat, 0 off it        (track 3)
+  peat_peatmap_<site>.tif    1 on mapped peat, 0 off it        (track 3, PEATMAP, CC BY 4.0)
   fire_days_<site>.tif       days with a 2026 fire detection within 200 m   (track 3)
 
 and writes, for every site, the areas and shares to validation.json: mapped peat, land that
@@ -39,7 +39,7 @@ def main():
     p.add_argument("--layers", required=True, type=Path)
     p.add_argument("--sites", nargs="+", required=True)
     p.add_argument("--tracks", nargs=2, required=True)
-    p.add_argument("--peat", default="peat_official", help="name stem of the peat layer")
+    p.add_argument("--peat", default="peat_peatmap", help="name stem of the peat layer; peat_official is the local-only alternative")
     a = p.parse_args()
     for site in a.sites:
         peat_file, fire_file = a.layers / f"{a.peat}_{site}.tif", a.layers / f"fire_days_{site}.tif"

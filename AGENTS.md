@@ -65,7 +65,7 @@ Shared files (`AGENTS.md`, `PLAN.md`, `docs/DATA_CONTRACT.md`, `tools/`, `.claud
 ## 6. Competition rules
 
 - All pipeline and app code is written in this repo, and every number we report is computed by it.
-- All materials must be free and open. No Planet imagery and nothing derived from it. Canals come from OpenStreetMap. Datasets under a non-commercial or unstated licence are linked and cited, never committed.
+- All materials must be free and open. No Planet imagery and nothing derived from it. Canals come from OpenStreetMap. Datasets under a non-commercial or unstated licence are linked and cited, never committed. The peat boundary we publish is PEATMAP (CC BY 4.0), not the official map, whose licence is not stated.
 - Describe AI use as "Super Intelligence (SI)". Every code file an agent wrote starts with a comment line `Written with Super Intelligence (SI) assistance`. Every SI-made image or video carries a visible watermark. Log each use in `submission/SI_USE.md`.
 - Everything is in English.
 - Demo limit: 30 seconds of video or 7 slides.
