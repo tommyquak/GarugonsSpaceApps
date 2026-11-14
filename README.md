@@ -52,6 +52,8 @@ pipeline/run_all.sh
 | Checks | `pipeline/drying/selfcheck.py`, `sensitivity.py` | Tests for artefacts and for our own choices |
 | App data | `pipeline/drying/series.py`, `app/scripts/` | Files the web map reads |
 
+Tests for the processing code: `python -m pytest pipeline/tests`.
+
 Outputs land in `pipeline/out/`. The numbers are in `pipeline/out/validation.json`. The built files are also attached to the releases `data-v1`, `data-v3` and `data-v4`.
 
 ## Data

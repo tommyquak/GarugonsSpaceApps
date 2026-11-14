@@ -10,3 +10,6 @@ rasterio
 pyproj
 matplotlib
 pillow
+
+# Tests: python -m pytest pipeline/tests
+pytest
