@@ -114,6 +114,9 @@ export function playIntro(): void {
     if (done) return;
     done = true;
     finishCurrent = null;
+    // How the visitor left, for main.ts: through the main screen ("enter"), a wall screen, or Skip.
+    document.documentElement.dataset.introExit = openAfter ? "wall" : moving ? "enter" : "skip";
+    window.dispatchEvent(new Event("intro:exit"));
     window.clearTimeout(timer);
     document.removeEventListener("keydown", onKey, true);
     document.removeEventListener("visibilitychange", onHide);

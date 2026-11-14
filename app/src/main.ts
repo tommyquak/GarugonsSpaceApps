@@ -19,7 +19,7 @@ import { byId } from "./dom";
 import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
 import { buildSeason } from "./season";
-import { buildStory } from "./story";
+import { buildOpening } from "./opening";
 import { viewPadding } from "./view";
 
 // MapLibre runs part of its work in a web worker; this is the address of that file in the build.
@@ -91,19 +91,8 @@ async function start(): Promise<void> {
   };
   const toggleTab = (tab: string): void => setTab(sheet.dataset.tab === tab ? "" : tab);
 
-  // Set once the Where to check view exists: the story and the season need the map to themselves.
-  let closeCheck = (): void => undefined;
-  const story = buildStory(byId("panel-story"), byId("btn-story"), map, overlays, {
-    stopPlayback: season.stop,
-    onOpen: () => {
-      closeCheck();
-      setTab("story");
-    },
-    onClose: () => setTab(""),
-  });
   byId("tab-layers").addEventListener("click", () => toggleTab("layers"));
   byId("tab-place").addEventListener("click", () => toggleTab("place"));
-  byId("tab-story").addEventListener("click", () => (story.isOpen() ? toggleTab("story") : story.open()));
   setTab("");
   const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
   bindPlaceActions(byId("panel-place"), map, overlays, chart);
@@ -120,8 +109,11 @@ async function start(): Promise<void> {
       seasonButton.setAttribute("aria-pressed", String(!on));
     },
   });
-  closeCheck = () => actions.apply(actions.parts().filter((part) => part === "how"), null);
-  seasonButton.addEventListener("click", closeCheck);
+  seasonButton.addEventListener("click", () => actions.apply(actions.parts().filter((part) => part === "how"), null));
+  // The opening story: replayed from "Story", and played once after a first-visit intro (below).
+  const opening = buildOpening(map, overlays, actions, extent, season.stop);
+  byId("btn-story").addEventListener("click", () => opening.play());
+  byId("tab-story").addEventListener("click", () => opening.play());
   // The raw layers and the class colours are for people who want to dig: off until asked for.
   const setExplore = (on: boolean): void => {
     app.classList.toggle("is-explore", on);
@@ -135,6 +127,14 @@ async function start(): Promise<void> {
   setExplore(actions.parts().includes("class"));
   // Without a link, the map opens on the one view made for a first look.
   if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
+  // A visitor who came in through "Enter dashboard" gets the story once; "Skip to map", a wall
+  // screen and a shared link all mean they chose where to go. The intro may end before or after
+  // this point, so both the mark it leaves and its event are read.
+  const afterIntro = (how: string | undefined): void => {
+    if (how === "enter" && !shared) opening.play();
+  };
+  if (document.documentElement.dataset.introExit) afterIntro(document.documentElement.dataset.introExit);
+  else window.addEventListener("intro:exit", () => afterIntro(document.documentElement.dataset.introExit), { once: true });
 }
 
 // Optional and never awaited: the map below starts whether or not the intro plays.
