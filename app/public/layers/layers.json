@@ -1670,5 +1670,803 @@
   "kind": "fire",
   "site": "west",
   "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260618",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260618.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-06-18",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260622",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260622.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-06-22",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260630",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260630.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-06-30",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260704",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260704.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-07-04",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260712",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260712.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-07-12",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260716",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260716.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-07-16",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260724",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260724.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-07-24",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260817",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260817.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-08-17",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260821",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260821.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-08-21",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260829",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260829.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-08-29",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260902",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260902.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-09-02",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260910",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260910.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-09-10",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260914",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260914.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-09-14",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260922",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260922.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-09-22",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20260926",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20260926.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-09-26",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20261004",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20261004.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-10-04",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20261008",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20261008.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-10-08",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20261016",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20261016.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-10-16",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20261020",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20261020.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-10-20",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20261028",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20261028.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-10-28",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_east_to_20261101",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_east_to_20261101.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "east",
+  "until": "2026-11-01",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260618",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260618.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-06-18",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260622",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260622.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-06-22",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260630",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260630.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-06-30",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260704",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260704.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-07-04",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260712",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260712.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-07-12",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260716",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260716.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-07-16",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260724",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260724.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-07-24",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260817",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260817.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-08-17",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260821",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260821.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-08-21",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260829",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260829.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-08-29",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260902",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260902.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-09-02",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260910",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260910.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-09-10",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260914",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260914.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-09-14",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260922",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260922.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-09-22",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20260926",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20260926.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-09-26",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20261004",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20261004.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-10-04",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20261008",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20261008.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-10-08",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20261016",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20261016.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-10-16",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20261020",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20261020.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-10-20",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20261028",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20261028.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-10-28",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west_to_20261101",
+  "title": "Fire detected up to this date",
+  "url": "layers/fire_west_to_20261101.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire-until",
+  "site": "west",
+  "until": "2026-11-01",
+  "color": "#de3626"
  }
 ]
