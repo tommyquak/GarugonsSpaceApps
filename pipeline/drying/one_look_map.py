@@ -22,7 +22,7 @@ from matplotlib.colors import LinearSegmentedColormap, Normalize
 from pyproj import Transformer
 from rasterio.features import rasterize
 
-RAMP = LinearSegmentedColormap.from_list("dry", ["#f6e27a", "#f0a04b", "#d9502e", "#8f1d1d", "#4a0d12"])
+RAMP = LinearSegmentedColormap.from_list("fall", ["#f4e3b1", "#e0bd7c", "#bd8a4a", "#8b5a2b", "#4e2f17"])   # sand to brown; red is kept for fire
 FULL_SCALE_DB = 3.0
 
 
@@ -87,9 +87,9 @@ def main():
     ax.set_aspect("equal"); ax.axis("off")
     sm = plt.cm.ScalarMappable(norm=Normalize(0, FULL_SCALE_DB), cmap=RAMP)
     cb = fig.colorbar(sm, ax=ax, fraction=0.025, pad=0.01)
-    cb.set_label("Fall in HH brightness over the dry season (dB)", color="white")
+    cb.set_label("Fall in HH brightness from the dry start (dB)", color="white")
     cb.ax.yaxis.set_tick_params(color="white"); plt.setp(cb.ax.get_yticklabels(), color="white")
-    title = "Where the land dried, June to October 2026"
+    title = "Where the radar echo fell, mid July to mid October 2026"
     if a.min_db:
         title += f" (blocks that fell by {a.min_db:g} dB or more)"
     ax.set_title(title, color="white", fontsize=15, loc="left")
