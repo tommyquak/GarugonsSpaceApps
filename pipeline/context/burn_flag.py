@@ -14,11 +14,15 @@ For one site and one track, from the GUNW coherence pulled by pull_gunw.py:
   3. A cell's drop in a pair is its level in that pair minus its median over the pairs that
      do not span a fire detection at that cell (at least 3 are needed).
   4. A cell is flagged when its largest drop over the season is beyond what 95% of the cells
-     with no fire within 1 km show. Five per cent of such cells are flagged by construction.
+     with no fire within 1 km show. Five per cent of such cells are flagged by construction:
+     that is how the threshold is set, not a measured false-alarm rate, since FIRMS decides
+     which cells count as without fire (and FIRMS also sets each cell's usual level in step 3).
   5. The flag is checked against NASA FIRMS, on mapped peat and off it: how much of the land
-     with fire during the pairs is flagged (hit rate), how much of the flagged land had fire
-     within 1 km (against the share of all land that did), and how often the largest drop is
-     in the pair that spans the first fire.
+     with a fire detection during a 12-day pair is flagged (hit rate); how much of the flagged
+     land had a detection within 1 km between the first and last passes, gaps between pairs
+     included (against the share of all land that did); and, for flagged land with fire during
+     a pair, how often the largest drop is in a pair that spans a detection there (any one,
+     not only the first), against the share of its pairs that do.
 
 Writes <layers>/coh_drop_<site>_<track>.tif (the largest drop) and
 <layers>/burn_flag_<site>_<track>.tif (1 flagged, 0 not, NaN no data), and coh_* keys to
@@ -145,7 +149,7 @@ def main(argv=None):
     fire = fire_masks(by_day, pairs, shape)
     start, end = pairs[0][0], pairs[-1][1]
     season = {d: v for d, v in by_day.items() if start < d.replace("-", "") <= end}
-    near_fire = count_days(season, shape, WIDE_REACH_M // PIXEL_M)[1] > 0      # within 1 km, during the pairs
+    near_fire = count_days(season, shape, WIDE_REACH_M // PIXEL_M)[1] > 0      # within 1 km, first to last pass, gaps included
     never = ~(count_days(by_day, shape, WIDE_REACH_M // PIXEL_M)[1] > 0)       # no fire within 1 km all season
     fire_any = fire.any(0)
 
@@ -177,13 +181,13 @@ def main(argv=None):
           f"{np.median(fire_d) if fire_d.size else float('nan'):+.3f} in pairs spanning a fire against {np.median(clear_d):+.3f} without")
     for zone, mask in zip(ZONES, (peat, ~peat)):
         m = check(largest, flag, fire_any, near_fire, timing_ok, fire_pair_share, mask)
-        put(f"coh_flag_hit_rate_{zone}_{tag}", m["hit_rate"], "share of land with fire", a.site, ME, note="land with a fire detection during the pairs that is flagged")
+        put(f"coh_flag_hit_rate_{zone}_{tag}", m["hit_rate"], "share of land with fire", a.site, ME, note="land with a fire detection during a 12-day pair that is flagged")
         put(f"coh_flag_share_{zone}_{tag}", m["flag_share"], "share of zone", a.site, ME)
         put(f"coh_flag_near_fire_{zone}_{tag}", m["flag_near_fire"], "share of flagged land", a.site, ME,
-            note="flagged land with a fire detection within 1 km during the pairs; compare with coh_all_near_fire")
+            note="flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire")
         put(f"coh_all_near_fire_{zone}_{tag}", m["all_near_fire"], "share of zone", a.site, ME)
         put(f"coh_flag_timing_{zone}_{tag}", m["timing"], "share of flagged fire land", a.site, ME,
-            note="flagged land with fire whose largest drop is in a pair that spans a detection there; compare with coh_flag_timing_chance")
+            note="flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance")
         put(f"coh_flag_timing_chance_{zone}_{tag}", m["timing_chance"], "share of flagged fire land", a.site, ME,
             note="the same if the largest drop fell on a random pair of the cell")
         put(f"coh_flag_no_fire_km2_{zone}_{tag}", m["flag_no_fire_km2"], "km2", a.site, ME,
