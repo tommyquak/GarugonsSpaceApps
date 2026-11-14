@@ -20,7 +20,9 @@ import certifi
 import requests
 
 MODEL = "eleven_multilingual_v2"
-SETTINGS = {"stability": 0.5, "similarity_boost": 0.8, "style": 0.15, "use_speaker_boost": True}
+# A little slower than the default, so sentences do not run into each other; the lines carry
+# their own pauses as <break> tags.
+SETTINGS = {"stability": 0.5, "similarity_boost": 0.8, "style": 0.15, "use_speaker_boost": True, "speed": 0.9}
 
 
 def main():
@@ -36,7 +38,7 @@ def main():
     marks_file = out / "made.json"          # which text each clip was made from
     marks = json.loads(marks_file.read_text()) if marks_file.exists() else {}
     for n, text in enumerate(lines, start=1):
-        clip, mark = out / f"beat-{n}.mp3", hashlib.sha256(text.encode()).hexdigest()[:16]
+        clip, mark = out / f"beat-{n}.mp3", hashlib.sha256((text + json.dumps(SETTINGS, sort_keys=True)).encode()).hexdigest()[:16]
         if clip.exists() and marks.get(clip.name) == mark:
             print(f"{clip.name}: kept")
             continue
