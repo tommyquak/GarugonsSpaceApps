@@ -1,10 +1,6 @@
 # Limits
 
-What this project can and cannot say. The app shows this file in its Limits panel. It was first written from the findings of an independent audit on 14 Nov 2026 (`docs/AUDIT.md`). Track 5 owns it from here.
-
-## What the map shows, exactly
-
-The colour is how far the L-band HH radar echo fell between a dry start in mid July and mid October 2026, relative to deep intact forest, on 250 m blocks, where two orbits both saw it. It is a change in a radar signal. It is not a measurement of soil moisture or of the water table.
+The map colours show how much the HH radar echo fell from the dry start in July to the late dry passes in October 2026. Each 250 m block is compared with deep forest and observed from two orbits. Field measurements would be needed to relate that change to soil moisture or water-table depth.
 
 ## Limits of the measurement
 
@@ -23,7 +19,8 @@ The colour is how far the L-band HH radar echo fell between a dry start in mid J
 - **One pass per orbit after the rain,** taken on or within three days of 20 to 40 mm of rain. Water on vegetation and standing water raise the echo too.
 - **A different processing release.** The two passes after the rain were produced by a later NASA processing release than every dry-season pass, and the forest baseline moves most on exactly those passes. The size of the rise is uncertain by about 0.3 to 0.4 dB.
 - **"Still low after the rain" is unexplained.** Those blocks tend to be woodier and farther from mapped canals than the ones that came back. We do not know why they stayed low, and we attach no recommendation to them.
-- **What does hold:** HH rose by about 1 dB within days of the first rain on both orbits, and not one pass earlier; and after the rain, HV on peat with fire detections sat about half a decibel below peat without them, on both orbits.
+- **Timing of the HH rise.** In western blocks where HH fell by more than 1 dB on both orbits, it rose by about 1 dB on each orbit’s first pass after the rain. The preceding pass did not show a comparable rise.
+- **Fire and the HV echo.** Among those western blocks on mapped peat, the median change in HV from July to the first dawn pass after rain was 0.54 dB lower in blocks with fire detections than in those without. The other three comparisons, across the two study areas and orbits, gave smaller differences in the same direction (0.29 to 0.40 dB). Those three figures are exploratory. Fire detections cover the full study period and can postdate the radar pass, so this comparison cannot establish cause.
 
 ## Limits of the fire layer
 
@@ -54,12 +51,10 @@ We tested whether an early fall marked the peat that later burned. Across all we
 - **Fire:** post-season burn scars from optical imagery.
 - **Everything:** a second season and a second site.
 
-## Reading the independent Track 5 results
+## How to read the checks
 
-Use the JSON for the map release being shown. The original data-v3 comparison used June/July start passes. Data-v9 uses 16 July on track 125 and 12/24 July on 061, with late passes in October. Whole-site orbit agreement measures repeatability of the radar pattern; it does not identify peat or validate the cause. The west forest p05 is an internal reference: the same forest supplied the correction. Edge forest also darkened. Non-overlapping 250 m blocks can still be correlated.
+The two orbits help check whether the same places changed. Nearby 250 m blocks can behave alike, and the forest used to check stability also supplied the baseline. The test that shuffles radar dates assumes the observations could have occurred in any order. Seasonal weather and gaps between passes weaken that assumption.
 
-The date shuffle holds the spatial footprint fixed and counts how often other assignments of whole images produce darkening at least as strong. Its fraction assumes the acquisition dates are exchangeable. Seasonal weather and irregular sampling weaken that assumption. Site-mean rainfall places the first qualifying rain on 26 October; the 061 response on 28 October and the 125 response on 1 November give one observation per orbit. They do not measure lasting recovery.
+Area percentages use only the ground mapped and observed in each group, on peat or off peat. Missing boundary coverage is unknown. The two study areas overlap, so adding their areas would count some ground twice. [How the checks were calculated](https://github.com/tommyquak/GarugonsSpaceApps/tree/main/pipeline/checks)
 
-For land-area comparisons, use each peat boundary separately and divide by valid area in the same on-peat or off-peat class. The Track 5 dried mask uses the forest p05, not the stronger 1 dB fall. Missing mask coverage stays unknown. The study boxes overlap, so do not add the two areas. For both official-map queries we checked the returned feature IDs, excluded centres outside the requested geographic extent, and treated zero inside as “no mapped polygon.” This does not prove peat is absent. Track 3’s exploratory comparison with the independent CIFOR peat map found boundary agreement close to chance at both sites. The eastern peat-area estimates are particularly sensitive to the choice of map. The verified Track 5 data-v9 handoff covers PEATMAP and the official map. [Track 3 comparison and methods](https://github.com/tommyquak/GarugonsSpaceApps/pull/44)
-
-**HV rebound correction in data-v9.** The original HV rebound rasters included a forest baseline shift of +0.167 dB on track 061 and −0.034 dB on track 125 at both sites. Track 5 held the eight affected medians. On 14 November the team replaced the rasters with HV as measured. We checked the replacement files against the release checksums and reproduced the whole-site and driest-tenth medians for both orbits and sites from the radar stacks. All eight are now final. On west track 061 the whole-site median changed from +0.1282 dB to −0.0388 dB, a small change in echo strength. Each orbit contributes only one observation after the rain. [Correction record](https://github.com/tommyquak/GarugonsSpaceApps/issues/1#issuecomment-6873030852)
+**A correction to the HV readings.** An earlier calculation shifted HV using the reference forest. After correcting it, the western dusk median for the whole study area changed from a small rise to a small fall. The current results use HV as measured. [Correction record](https://github.com/tommyquak/GarugonsSpaceApps/issues/1#issuecomment-6873030852)
