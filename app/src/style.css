@@ -448,8 +448,155 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Season slider */
-/* While Where to check is open it has the map to itself: no season slider. */
-#app.is-check #season {
+/* While Where to check is open it has the map to itself: no season slider, and no layer
+   switches, which would change nothing on the map while it is open. */
+#app.is-check #season,
+#app.is-check #panel-layers {
+  display: none;
+}
+
+/* ==== How it was measured (src/measure.ts): the method of the season view, beside the map. ==== */
+#app.is-check #panel-measure {
+  display: none;
+}
+
+.measure-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 2px 0 8px;
+  overflow: visible;
+}
+
+.measure-chart text {
+  font-size: 10px;
+  fill: var(--muted);
+}
+
+.measure-chart .m-title {
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: var(--text);
+}
+
+.measure-chart .m-note.is-open {
+  fill: #e0bd7c;
+}
+
+.measure-chart .m-note.is-forest {
+  fill: #7fc8a0;
+}
+
+.m-grid {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.m-dry {
+  fill: rgba(236, 232, 223, 0.055);
+}
+
+.m-line {
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.m-line.is-dusk {
+  stroke-dasharray: 4 3;
+}
+
+.m-area {
+  opacity: 0.6;
+}
+
+.m-head {
+  stroke: var(--text);
+  stroke-width: 1;
+}
+
+.m-point {
+  fill: var(--panel);
+  stroke: #e0bd7c;
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.m-point.is-before {
+  stroke: var(--line-strong);
+}
+
+.m-point.is-start,
+.m-point.is-late {
+  fill: #e0bd7c;
+}
+
+.m-point:hover,
+.m-point:focus-visible,
+.m-point.is-now {
+  fill: var(--text);
+  stroke: var(--text);
+  outline: none;
+}
+
+.measure-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.measure-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.m-key-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0bd7c;
+}
+
+.m-key-line {
+  width: 18px;
+  border-top: 2px solid #e0bd7c;
+}
+
+.m-key-line.is-dusk {
+  border-top-style: dashed;
+}
+
+.measure-now {
+  margin: 0 0 6px;
+  font-weight: 500;
+}
+
+.measure-role {
+  margin: 0;
+  color: var(--muted);
+}
+
+#col-left {
+  width: 356px;
+}
+
+/* The way back to the control room, at the far left of the header. */
+#btn-room {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 7px;
+  color: var(--muted);
+}
+
+#btn-room:hover {
+  color: var(--text);
+}
+
+#btn-room[hidden] {
   display: none;
 }
 
@@ -470,6 +617,276 @@ input[type="range"]::-moz-range-thumb {
 /* Fire builds up only while the slider steps through passes; the switch is hidden otherwise. */
 #season:not(.is-pass) .season-fire {
   display: none;
+}
+
+/* ==== Opening story (src/opening.ts): full-view images, then the live map, with one caption. ==== */
+#opening {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--text);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+/* It fades in over the app and out again: nothing in the story cuts. */
+#opening.is-in {
+  opacity: 1;
+}
+
+.op-media,
+.op-shade {
+  position: absolute;
+  inset: 0;
+}
+
+/* The pictures sit on a dark ground, which fades away with them over the live map. */
+.op-media {
+  background: var(--bg);
+  transition: opacity 0.9s ease;
+}
+
+.op-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.1s ease;
+}
+
+.op-img.is-on {
+  opacity: 1;
+}
+
+/* Over the live map the story is a caption only: the map shows through. */
+#opening.is-map .op-media {
+  opacity: 0;
+}
+
+/* Dark where the words sit, clear where the picture is. One shade for pictures, one for the map. */
+.op-shade {
+  transition: opacity 0.9s ease;
+}
+
+.op-shade-image {
+  background: linear-gradient(to bottom, rgba(11, 14, 17, 0.72) 0, rgba(11, 14, 17, 0) 18%, rgba(11, 14, 17, 0) 46%, rgba(11, 14, 17, 0.9) 82%, rgba(11, 14, 17, 0.96) 100%);
+}
+
+.op-shade-map {
+  opacity: 0;
+  background: linear-gradient(to bottom, rgba(11, 14, 17, 0.9) 0, rgba(11, 14, 17, 0) 14%, rgba(11, 14, 17, 0) 58%, rgba(11, 14, 17, 0.92) 84%, rgba(11, 14, 17, 0.97) 100%);
+}
+
+#opening.is-map .op-shade-image {
+  opacity: 0;
+}
+
+#opening.is-map .op-shade-map {
+  opacity: 1;
+}
+
+.op-top,
+.op-foot {
+  position: relative;
+  display: flex;
+  gap: 24px;
+  padding: 18px clamp(18px, 4vw, 56px);
+}
+
+.op-top {
+  align-items: center;
+}
+
+.op-bars {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+}
+
+/* Each line is a button with room for a finger; the line itself stays thin. */
+.op-bar {
+  flex: 1;
+  position: relative;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.op-bar::before,
+.op-bar i {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  height: 2px;
+}
+
+.op-bar::before {
+  right: 0;
+  background: rgba(236, 232, 223, 0.28);
+}
+
+.op-bar:hover::before {
+  background: rgba(236, 232, 223, 0.6);
+}
+
+.op-bar i {
+  display: block;
+  width: 0;
+  background: var(--text);
+}
+
+/* The width of each line is set by opening.ts. */
+
+.op-foot {
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: clamp(22px, 5vh, 56px);
+}
+
+.op-text {
+  max-width: 46rem;
+}
+
+.op-text,
+.op-credit {
+  transition: opacity 0.26s ease;
+}
+
+#opening.is-swap .op-text,
+#opening.is-swap .op-credit {
+  opacity: 0;
+}
+
+.op-sound {
+  flex: none;
+}
+
+.op-head {
+  margin: 0;
+  font-size: clamp(26px, 3.4vw, 46px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.op-sub {
+  margin: 14px 0 0;
+  max-width: 38rem;
+  color: #d3d0c8;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.45;
+}
+
+.op-key {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+.op-key:empty,
+.op-sub:empty {
+  display: none;
+}
+
+.op-key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.op-side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.op-nav {
+  display: flex;
+  gap: 8px;
+}
+
+#opening .text-button {
+  min-height: 38px;
+  padding: 6px 16px;
+  border-color: rgba(236, 232, 223, 0.5);
+  background: rgba(11, 14, 17, 0.35);
+}
+
+#opening .text-button:hover {
+  border-color: var(--text);
+  background: rgba(11, 14, 17, 0.6);
+}
+
+#opening .text-button.op-next {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--ink);
+}
+
+.op-credit {
+  margin: 0;
+  max-width: 24rem;
+  color: rgba(236, 232, 223, 0.72);
+  font-size: 12px;
+  text-align: right;
+}
+
+/* While the story is up, the app's own panels and controls stand down. */
+#app.is-story #bar > *,
+#app.is-story #col-left,
+#app.is-story #season,
+#app.is-story #map-legend,
+#app.is-story #panel-place,
+#app.is-story #drawer,
+#app.is-story #tabs,
+#app.is-story .maplibregl-control-container {
+  visibility: hidden;
+}
+
+@media (max-width: 699px) {
+  .op-foot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .op-side {
+    align-items: stretch;
+  }
+
+  .op-nav .text-button {
+    flex: 1;
+    min-height: 44px;
+  }
+
+  .op-credit {
+    max-width: none;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #opening,
+  .op-media,
+  .op-shade,
+  .op-img,
+  .op-text,
+  .op-credit {
+    transition: none;
+  }
 }
 
 /* The legend on the map: bottom right, clear of the season slider. */
@@ -513,7 +930,7 @@ input[type="range"]::-moz-range-thumb {
 #season {
   position: absolute;
   z-index: 2;
-  left: 296px;
+  left: 380px;
   right: 12px;
   bottom: 34px;
   max-width: 620px;
@@ -602,7 +1019,8 @@ a.text-button {
   font-weight: 500;
 }
 
-/* The header is a row of tabs, not buttons: the three views first, then the reference pages. */
+/* The header is a row of tabs, not buttons: the two views first, then the story, the panels
+   that open over a view, and the reference pages. */
 .bar-actions {
   align-self: stretch;
   margin-left: auto;
@@ -632,7 +1050,9 @@ a.text-button {
   font-weight: 500;
 }
 
-.bar-actions .text-button[aria-pressed="true"]::after {
+/* The view on show has a line under it. */
+#btn-actions[aria-pressed="true"]::after,
+#btn-season[aria-pressed="true"]::after {
   content: "";
   position: absolute;
   left: 13px;
@@ -640,6 +1060,26 @@ a.text-button {
   bottom: -1px;
   height: 2px;
   background: var(--text);
+}
+
+/* A panel that is open over the view is a filled chip: several can be open, only one view is on show. */
+#btn-how,
+#btn-explore {
+  isolation: isolate;
+}
+
+#btn-how[aria-pressed="true"]::after,
+#btn-explore[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 4px;
+  right: 4px;
+  top: 11px;
+  bottom: 11px;
+  border-radius: var(--control-radius);
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 
 .bar-actions .text-button:focus-visible {
@@ -662,6 +1102,8 @@ a.text-button {
   order: 4;
 }
 
+/* The hairline sits before Story, which is always there; How it decides appears only with the blocks. */
+
 #btn-explore {
   order: 5;
 }
@@ -674,12 +1116,12 @@ a.text-button {
   order: 7;
 }
 
-/* A hairline between the views and the reference pages. */
-#btn-how {
+/* A hairline between the two views and everything else. */
+#btn-story {
   margin-left: 17px;
 }
 
-#btn-how::before {
+#btn-story::before {
   content: "";
   position: absolute;
   left: -9px;
@@ -1137,8 +1579,14 @@ button:disabled {
   .brand p,
   #btn-story,
   #btn-season,
+  #btn-room span,
   .wide-only {
     display: none;
+  }
+
+  #btn-room {
+    margin-right: 6px;
+    padding: 0 10px;
   }
 
   .bar-actions .text-button {
@@ -1147,9 +1595,9 @@ button:disabled {
     font-size: 13px;
   }
 
-  .bar-actions .text-button[aria-pressed="true"]::after {
-    left: 9px;
-    right: 9px;
+  #btn-explore[aria-pressed="true"]::after {
+    top: 8px;
+    bottom: 8px;
   }
 
   #map {
@@ -1521,7 +1969,7 @@ button:disabled {
 
 /* Folded, it is a title bar the width of the season slider, just above it. */
 #drawer.is-folded {
-  left: 296px;
+  left: 380px;
   max-width: 620px;
   bottom: var(--over-season, 34px);
 }

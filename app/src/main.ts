@@ -12,15 +12,16 @@ import { bindPlaceActions } from "./chart/actions";
 import { createPlaceChart } from "./chart/placeChart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
-import { maybePlayIntro } from "./intro";
+import { canReplayIntro, maybePlayIntro, playIntro } from "./intro";
 import { buildMapLegend } from "./maplegend";
+import { buildMeasure } from "./measure";
 import { bindLink } from "./link";
 import { byId } from "./dom";
 import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
 import { buildSeason } from "./season";
-import { buildStory } from "./story";
-import { viewPadding } from "./view";
+import { buildOpening } from "./opening";
+import { reducedMotion, viewPadding } from "./view";
 
 // MapLibre runs part of its work in a web worker; this is the address of that file in the build.
 setWorkerUrl(workerUrl);
@@ -88,6 +89,7 @@ async function start(): Promise<void> {
   const overlays = new Overlays(map, layers);
   buildPanel(byId("panel-layers"), map, overlays);
   const season = buildSeason(byId("season"), overlays);
+  void buildMeasure(byId("panel-measure"), overlays);
 
   // On a phone the panels share one bottom sheet, one at a time. A wide screen ignores the tab.
   const sheet = byId("sheet");
@@ -98,19 +100,8 @@ async function start(): Promise<void> {
   };
   const toggleTab = (tab: string): void => setTab(sheet.dataset.tab === tab ? "" : tab);
 
-  // Set once the Where to check view exists: the story and the season need the map to themselves.
-  let closeCheck = (): void => undefined;
-  const story = buildStory(byId("panel-story"), byId("btn-story"), map, overlays, {
-    stopPlayback: season.stop,
-    onOpen: () => {
-      closeCheck();
-      setTab("story");
-    },
-    onClose: () => setTab(""),
-  });
   byId("tab-layers").addEventListener("click", () => toggleTab("layers"));
   byId("tab-place").addEventListener("click", () => toggleTab("place"));
-  byId("tab-story").addEventListener("click", () => (story.isOpen() ? toggleTab("story") : story.open()));
   setTab("");
   const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
   bindPlaceActions(byId("panel-place"), map, overlays, chart);
@@ -129,25 +120,57 @@ async function start(): Promise<void> {
       seasonTab.setAttribute("aria-pressed", String(!on));
     },
   });
-  closeCheck = () => actions.apply(actions.parts().filter((part) => part === "how"), null);
-  seasonButton.addEventListener("click", closeCheck);
+  // The season view, from the header and from the phone's bottom bar: it opens playing, from its first pass.
+  const openSeason = (): void => {
+    actions.apply(actions.parts().filter((part) => part === "how"), null);
+    if (!reducedMotion()) season.playFromStart();
+  };
+  seasonButton.addEventListener("click", openSeason);
   seasonTab.addEventListener("click", () => {
-    closeCheck();
+    openSeason();
     setTab(""); // fold the sheet so the slider and the map are in view
   });
+  // The opening story: replayed from "Story", and played once after a first-visit intro (below).
+  const opening = buildOpening(map, overlays, actions, extent, season.stop);
+  byId("btn-story").addEventListener("click", () => opening.play());
+  byId("tab-story").addEventListener("click", () => opening.play());
   // The raw layers and the class colours are for people who want to dig: off until asked for.
   const setExplore = (on: boolean): void => {
     app.classList.toggle("is-explore", on);
     exploreButton.setAttribute("aria-pressed", String(on));
     if (!on && actions.parts().includes("class")) actions.apply(actions.parts().filter((part) => part !== "class"), actions.block());
   };
-  exploreButton.addEventListener("click", () => setExplore(!app.classList.contains("is-explore")));
+  exploreButton.addEventListener("click", () => {
+    const on = !app.classList.contains("is-explore");
+    setExplore(on);
+    // The raw layers belong to the season view, so that is where turning this on leads.
+    if (on && actions.parts().includes("map")) actions.apply(actions.parts().filter((part) => part === "how"), null);
+  });
+  // A way back to the control room from anywhere in the app.
+  const roomButton = byId("btn-room");
+  if (canReplayIntro()) {
+    roomButton.hidden = false;
+    roomButton.addEventListener("click", () => playIntro());
+  }
   // Last, so that a link someone was sent restores its view over the defaults set above.
   const shared = window.location.hash.length > 1;
-  bindLink(map, overlays, chart, actions);
+  const link = bindLink(map, overlays, chart, actions);
+  opening.onRun((running) => {
+    link.setQuiet(running); // the story's own changes of view are not steps in the history
+    // The story frames the map beside its caption, which the usual limits on panning would not allow.
+    if (extent) map.setMaxBounds(running ? null : studyLimits(map, extent));
+  });
   setExplore(actions.parts().includes("class"));
   // Without a link, the map opens on the one view made for a first look.
   if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
+  // A visitor who came in through "Enter dashboard" gets the story once; "Skip to map", a wall
+  // screen and a shared link all mean they chose where to go. The intro may end before or after
+  // this point, so both the mark it leaves and its event are read.
+  const afterIntro = (how: string | undefined): void => {
+    if (how === "enter" && !shared) opening.play();
+  };
+  if (document.documentElement.dataset.introExit) afterIntro(document.documentElement.dataset.introExit);
+  else window.addEventListener("intro:exit", () => afterIntro(document.documentElement.dataset.introExit), { once: true });
 }
 
 // Optional and never awaited: the map below starts whether or not the intro plays.
