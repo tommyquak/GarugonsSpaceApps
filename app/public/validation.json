@@ -4130,5 +4130,629 @@
   "status": "exploratory",
   "made_by": "pipeline/context/repeat_fire.py",
   "note": "inside the footprint of a fire detection in the 2023 files pulled"
+ },
+ "coh_all_near_fire_off_peat_east_061": {
+  "value": 0.5608,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_off_peat_east_125": {
+  "value": 0.5625,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_off_peat_west_061": {
+  "value": 0.4841,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_off_peat_west_125": {
+  "value": 0.4934,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_on_peat_east_061": {
+  "value": 0.6686,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_on_peat_east_125": {
+  "value": 0.7095,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_on_peat_west_061": {
+  "value": 0.385,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_all_near_fire_on_peat_west_125": {
+  "value": 0.4121,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_drop_median_clear_pairs_east_061": {
+  "value": 0.0,
+  "unit": "coherence",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same in never-fire cells"
+ },
+ "coh_drop_median_clear_pairs_east_125": {
+  "value": 0.0,
+  "unit": "coherence",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same in never-fire cells"
+ },
+ "coh_drop_median_clear_pairs_west_061": {
+  "value": 0.0,
+  "unit": "coherence",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same in never-fire cells"
+ },
+ "coh_drop_median_clear_pairs_west_125": {
+  "value": 0.0,
+  "unit": "coherence",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same in never-fire cells"
+ },
+ "coh_drop_median_fire_pairs_east_061": {
+  "value": -0.1628,
+  "unit": "coherence",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "median drop in pairs that span a fire detection at the cell"
+ },
+ "coh_drop_median_fire_pairs_east_125": {
+  "value": -0.173,
+  "unit": "coherence",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "median drop in pairs that span a fire detection at the cell"
+ },
+ "coh_drop_median_fire_pairs_west_061": {
+  "value": -0.2425,
+  "unit": "coherence",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "median drop in pairs that span a fire detection at the cell"
+ },
+ "coh_drop_median_fire_pairs_west_125": {
+  "value": -0.2669,
+  "unit": "coherence",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "median drop in pairs that span a fire detection at the cell"
+ },
+ "coh_drop_two_orbit_spearman_off_peat_east_061_125": {
+  "value": 0.675,
+  "unit": "Spearman r",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest coherence drop of one orbit against the other's"
+ },
+ "coh_drop_two_orbit_spearman_off_peat_west_061_125": {
+  "value": 0.5919,
+  "unit": "Spearman r",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest coherence drop of one orbit against the other's"
+ },
+ "coh_drop_two_orbit_spearman_on_peat_east_061_125": {
+  "value": 0.8024,
+  "unit": "Spearman r",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest coherence drop of one orbit against the other's"
+ },
+ "coh_drop_two_orbit_spearman_on_peat_west_061_125": {
+  "value": 0.6182,
+  "unit": "Spearman r",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest coherence drop of one orbit against the other's"
+ },
+ "coh_flag_hit_rate_off_peat_east_061": {
+  "value": 0.3536,
+  "unit": "share of land with fire",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_off_peat_east_125": {
+  "value": 0.4671,
+  "unit": "share of land with fire",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_off_peat_west_061": {
+  "value": 0.1887,
+  "unit": "share of land with fire",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_off_peat_west_125": {
+  "value": 0.4966,
+  "unit": "share of land with fire",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_on_peat_east_061": {
+  "value": 0.6287,
+  "unit": "share of land with fire",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_on_peat_east_125": {
+  "value": 0.6899,
+  "unit": "share of land with fire",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_on_peat_west_061": {
+  "value": 0.4921,
+  "unit": "share of land with fire",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_hit_rate_on_peat_west_125": {
+  "value": 0.7222,
+  "unit": "share of land with fire",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land with a fire detection during a 12-day pair that is flagged"
+ },
+ "coh_flag_near_fire_off_peat_east_061": {
+  "value": 0.8615,
+  "unit": "share of flagged land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_off_peat_east_125": {
+  "value": 0.8809,
+  "unit": "share of flagged land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_off_peat_west_061": {
+  "value": 0.5805,
+  "unit": "share of flagged land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_off_peat_west_125": {
+  "value": 0.7617,
+  "unit": "share of flagged land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_on_peat_east_061": {
+  "value": 0.9329,
+  "unit": "share of flagged land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_on_peat_east_125": {
+  "value": 0.9424,
+  "unit": "share of flagged land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_on_peat_west_061": {
+  "value": 0.8643,
+  "unit": "share of flagged land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_near_fire_on_peat_west_125": {
+  "value": 0.9019,
+  "unit": "share of flagged land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with a fire detection within 1 km between the first and last passes, gaps included; compare with coh_all_near_fire"
+ },
+ "coh_flag_no_fire_km2_off_peat_east_061": {
+  "value": 63.335,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_off_peat_east_125": {
+  "value": 73.8625,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_off_peat_west_061": {
+  "value": 72.4775,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_off_peat_west_125": {
+  "value": 83.875,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_on_peat_east_061": {
+  "value": 26.54,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_on_peat_east_125": {
+  "value": 27.91,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_on_peat_west_061": {
+  "value": 123.865,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_no_fire_km2_on_peat_west_125": {
+  "value": 141.145,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged with no fire detection within 1 km: clearing, harvest, flooding or fire FIRMS missed"
+ },
+ "coh_flag_share_off_peat_east_061": {
+  "value": 0.1499,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_off_peat_east_125": {
+  "value": 0.1897,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_off_peat_west_061": {
+  "value": 0.1014,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_off_peat_west_125": {
+  "value": 0.2059,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_on_peat_east_061": {
+  "value": 0.3479,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_on_peat_east_125": {
+  "value": 0.4126,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_on_peat_west_061": {
+  "value": 0.1751,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_share_on_peat_west_125": {
+  "value": 0.2759,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py"
+ },
+ "coh_flag_timing_chance_off_peat_east_061": {
+  "value": 0.1649,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_off_peat_east_125": {
+  "value": 0.1809,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_off_peat_west_061": {
+  "value": 0.1686,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_off_peat_west_125": {
+  "value": 0.1963,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_on_peat_east_061": {
+  "value": 0.1897,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_on_peat_east_125": {
+  "value": 0.2134,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_on_peat_west_061": {
+  "value": 0.1901,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_chance_on_peat_west_125": {
+  "value": 0.2303,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "the same if the largest drop fell on a random pair of the cell"
+ },
+ "coh_flag_timing_off_peat_east_061": {
+  "value": 0.7407,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_off_peat_east_125": {
+  "value": 0.734,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_off_peat_west_061": {
+  "value": 0.7425,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_off_peat_west_125": {
+  "value": 0.7935,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_on_peat_east_061": {
+  "value": 0.9051,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_on_peat_east_125": {
+  "value": 0.8826,
+  "unit": "share of flagged fire land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_on_peat_west_061": {
+  "value": 0.956,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_timing_on_peat_west_125": {
+  "value": 0.9232,
+  "unit": "share of flagged fire land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "flagged land with fire during a 12-day pair whose largest drop is in a pair that spans a detection there (any one, not only the first); compare with coh_flag_timing_chance"
+ },
+ "coh_flag_two_orbit_overlap_off_peat_east_061_125": {
+  "value": 0.6217,
+  "unit": "share of flagged land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land flagged on track 125 that track 061 flags too; compare with coh_flag_share_off_peat_east_061"
+ },
+ "coh_flag_two_orbit_overlap_off_peat_west_061_125": {
+  "value": 0.4016,
+  "unit": "share of flagged land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land flagged on track 125 that track 061 flags too; compare with coh_flag_share_off_peat_west_061"
+ },
+ "coh_flag_two_orbit_overlap_on_peat_east_061_125": {
+  "value": 0.7442,
+  "unit": "share of flagged land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land flagged on track 125 that track 061 flags too; compare with coh_flag_share_on_peat_east_061"
+ },
+ "coh_flag_two_orbit_overlap_on_peat_west_061_125": {
+  "value": 0.5577,
+  "unit": "share of flagged land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "land flagged on track 125 that track 061 flags too; compare with coh_flag_share_on_peat_west_061"
+ },
+ "coh_pairs_east_061": {
+  "value": 8,
+  "unit": "12-day pairs",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "20260618 to 20261016"
+ },
+ "coh_pairs_east_125": {
+  "value": 7,
+  "unit": "12-day pairs",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "20260622 to 20261020"
+ },
+ "coh_pairs_west_061": {
+  "value": 8,
+  "unit": "12-day pairs",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "20260618 to 20261016"
+ },
+ "coh_pairs_west_125": {
+  "value": 7,
+  "unit": "12-day pairs",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "20260622 to 20261020"
+ },
+ "coh_threshold_east_061": {
+  "value": -0.3147,
+  "unit": "coherence",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest drop beyond which 5% of never-fire cells fall"
+ },
+ "coh_threshold_east_125": {
+  "value": -0.2726,
+  "unit": "coherence",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest drop beyond which 5% of never-fire cells fall"
+ },
+ "coh_threshold_west_061": {
+  "value": -0.4058,
+  "unit": "coherence",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest drop beyond which 5% of never-fire cells fall"
+ },
+ "coh_threshold_west_125": {
+  "value": -0.2785,
+  "unit": "coherence",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/burn_flag.py",
+  "note": "largest drop beyond which 5% of never-fire cells fall"
  }
 }

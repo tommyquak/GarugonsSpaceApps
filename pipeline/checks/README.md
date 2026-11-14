@@ -2,7 +2,7 @@
 
 **Use the same release as the map.** The app’s data-v9 uses a rain-free July start; data-v3 includes earlier, wetter passes. Their metrics have the same names but different observation periods. Keep their JSON files separate and use only rows marked `final` from the matching handoff. Run from the repository root with its Python dependencies installed.
 
-The checked-in [validation.json](../../app/public/validation.json) is the app and slides handoff. The corrected data-v9 recovery files were reissued on 14 November. The result contains 395 upstream entries (the 357 that were checked, then 14 exploratory CIFOR entries from `pipeline/context/peat_cifor.py` and 24 exploratory repeat-fire entries from `pipeline/context/repeat_fire.py`, both added afterwards) and 136 final Track 5 entries. To list the exact final keys, use the filter below.
+The checked-in [validation.json](../../app/public/validation.json) is the app and slides handoff. The corrected data-v9 recovery files were reissued on 14 November. The result contains 475 upstream entries (the 357 that were checked, then exploratory entries added afterwards: 14 from `pipeline/context/peat_cifor.py`, 24 from `pipeline/context/repeat_fire.py` and 80 from `pipeline/context/burn_flag.py`) and 136 final Track 5 entries. To list the exact final keys, use the filter below.
 
 To reproduce the **v9 app handoff** from public releases:
 
