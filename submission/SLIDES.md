@@ -34,7 +34,7 @@ The thread through all seven: the dry season as a dance in three beats, **dry, b
 
 Three beats, one row each:
 
-- **Dry.** The two orbits look from opposite sides at dawn and dusk, and agree on where land dried: r = [v: track5_west_orbit_spearman]. Deep forest holds still: noise floor [v: noise_floor_hh_125] and [v: noise_floor_hh_061] dB.
+- **Dry.** The two orbits look from opposite sides at dawn and dusk, and agree on where land dried: Spearman r = [v: track5_west_orbit_spearman]. Deep forest holds still: noise floor [v: noise_floor_hh_125] and [v: noise_floor_hh_061] dB.
 - **Burn.** [v: fell_1db_no_fire_km2_on_peat_west] km2 of the dried peat had no fire nearby; the rest is shown separately, on peat and off it.
 - **Rewet.** After the first rain, both orbits see the rebound on their own and their rebound maps agree (r = [v: recovery_hh_two_orbit_r_west_061_125]). HH regained [v: recovery_hh_share_regained_west_125] and [v: recovery_hh_share_regained_west_061] of the fall; HV only [v: recovery_hv_share_regained_west_125] and [v: recovery_hv_share_regained_west_061]. What the rain did not bring back is the story.
 - Visual: GIF of the click chart on one strongly dried block, HH and HV with rain and fire dates under it.

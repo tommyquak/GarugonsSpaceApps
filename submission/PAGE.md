@@ -38,7 +38,7 @@ To be added: seven slides with animated GIFs (public link).
 
 ### What we found
 
-- The two orbits agree on where the land dried: r = [v: track5_west_orbit_spearman] in the west box and [v: track5_east_orbit_spearman] in the east.
+- The two orbits agree on where the land dried: Spearman r = [v: track5_west_orbit_spearman] in the west box and [v: track5_east_orbit_spearman] in the east.
 - Deep forest holds still: the noise floor is [v: noise_floor_hh_125] dB and [v: noise_floor_hh_061] dB, and [v: reference_flagged_share] of the reference forest is flagged.
 - Forest edges dry too: the fall is about [v: selfcheck_forest_edge_median_125] dB within 250 m of a forest edge and reaches zero only about 4 km inside.
 - On mapped peat in the west box, [v: fell_1db_km2_on_peat_west] km2 fell by 1 dB or more; [v: fell_1db_no_fire_km2_on_peat_west] km2 of that had no fire nearby.
