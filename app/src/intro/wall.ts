@@ -6,6 +6,9 @@
 //
 // It loads on its own and never holds the intro up. If a file is missing, the grey shapes
 // drawn by scene.ts stay as they are.
+//
+// Each screen can be clicked. It carries the name of the view it leads to in data-open ("how"
+// for How it decides, "check" for Where to check); index.ts enters the dashboard and opens it.
 import { actionColor, NO_ACTION } from "../actions/colors";
 import { fetchJson } from "../data";
 import { buildGraph, isOntology, ruleTerms, type Ontology } from "../ontology/model";
@@ -26,14 +29,18 @@ const FAINT = "#5b6570";
 const esc = (text: string): string => text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] ?? c);
 const clip = (text: string, most: number): string => (text.length > most ? text.slice(0, most - 1).trimEnd() + "…" : text);
 const heading = (text: string): string => `<text x="10" y="17" font-size="9" letter-spacing="1.2" fill="${MUTED}">${esc(text.toUpperCase())}</text>`;
+const OPEN_HINT = `<text class="intro-wall-hint" x="${W - 10}" y="17" font-size="8.5" text-anchor="end" fill="${MUTED}">open \u203a</text>`;
 
 /** One screen: an SVG of fixed proportions laid over a grey monitor. */
 function screen(name: keyof typeof SCREENS, label: string, body: string): HTMLElement {
+  const opens = name === "classes" ? "check" : "how";
   const [left, top, width, height] = SCREENS[name];
   const el = document.createElement("div");
   el.className = "intro-wall";
+  el.dataset.open = opens;
+  el.title = opens === "check" ? "Open Where to check" : "Open How it decides";
   el.style.cssText = `left:${left}%;top:${top}%;width:${width}%;height:${height}%`;
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(label)}" font-family="inherit">${body}</svg>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(label)}" font-family="inherit">${body}${OPEN_HINT}</svg>`;
   return el;
 }
 
