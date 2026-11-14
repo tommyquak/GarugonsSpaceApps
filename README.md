@@ -8,11 +8,11 @@ Team Garugons, NASA Space Apps Challenge 2026, challenge "Dancing with the SARs"
 
 An open web map that uses the first dry season seen by the NASA-ISRO NISAR radar over Borneo's peatlands to show three things:
 
-1. **Dry.** Where the land dried out, pass by pass, through cloud and smoke.
-2. **Burn.** Where it burned.
-3. **Rewet.** What the rain brought back, and what it did not.
+1. **Dry.** Where the radar echo fell over the dry season, pass by pass, through cloud and smoke.
+2. **Burn.** Where fire was detected.
+3. **Rewet.** What changed with the first rain, and what had not.
 
-It is a screening map that shows where to look. It does not measure the water table or predict fire.
+It is a screening map that shows where to look. It does not measure the water table, predict fire or recommend an intervention. We had the work audited part way through and changed it: see `docs/AUDIT.md` and `docs/LIMITS.md`.
 
 ## Repository layout
 
