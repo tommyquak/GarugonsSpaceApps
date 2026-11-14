@@ -14,12 +14,24 @@ interface StoryStep {
   text(): string;
 }
 
-export function buildStory(root: HTMLElement, button: HTMLElement, map: MapLibreMap, overlays: Overlays, hooks: { stopPlayback(): void; onOpen(): void }): void {
+export interface Story {
+  open(): void;
+  isOpen(): boolean;
+}
+
+export function buildStory(
+  root: HTMLElement,
+  button: HTMLElement,
+  map: MapLibreMap,
+  overlays: Overlays,
+  hooks: { stopPlayback(): void; onOpen(): void; onClose(): void },
+): Story {
   const statics = overlays.statics;
   const fire = statics.filter((l) => l.kind === "fire");
+  const recovery = statics.filter((l) => l.kind === "recovery");
   const only = (kinds: string[]): void => {
     for (const l of statics) {
-      if (l.kind === "season" || l.kind === "fire") overlays.setLayer(l.id, kinds.includes(l.kind));
+      if (l.kind === "season" || l.kind === "fire" || l.kind === "recovery") overlays.setLayer(l.id, kinds.includes(l.kind));
     }
   };
 
@@ -50,14 +62,22 @@ export function buildStory(root: HTMLElement, button: HTMLElement, map: MapLibre
       title: "Rewet",
       site: "west",
       apply: () => {
-        only(["season"]); // hidden while a single pass is shown, back when the user leaves it
-        if (overlays.steps.length) overlays.setStep(overlays.steps.length - 1);
+        if (recovery.length) {
+          only(["recovery"]);
+          overlays.setMode("season");
+        } else {
+          only(["season"]); // hidden while a single pass is shown, back when the user leaves it
+          if (overlays.steps.length) overlays.setStep(overlays.steps.length - 1);
+        }
       },
       text: () => {
         const last = overlays.steps[overlays.steps.length - 1];
+        if (recovery.length) {
+          return "Blue marks land where the radar signal (HH) rose again across the first rain. Dried land that stays clear here did not come back in that pass; it is a place to look at, not a measured water level.";
+        }
         return last
-          ? `This is the latest radar pass, on ${formatDay(last.date)}. Where the colour has faded since the passes before it, the signal has come back; land still coloured is still darker than at the start of the season.`
-          : "The single radar passes are not loaded yet. When they are, this step will show the latest pass, and where the signal has come back.";
+          ? `The recovery layer is not loaded yet, so this is the latest radar pass, on ${formatDay(last.date)}. Land still coloured is still darker than at the start of the season.`
+          : "The recovery layer is not loaded yet. When it is, this step will show where the radar signal rose again after the rain.";
       },
     },
   ];
@@ -105,6 +125,8 @@ export function buildStory(root: HTMLElement, button: HTMLElement, map: MapLibre
     if (open) {
       hooks.onOpen();
       go(current < 0 ? 0 : current);
+    } else {
+      hooks.onClose();
     }
   };
   button.addEventListener("click", () => setOpen(root.hidden));
@@ -112,5 +134,6 @@ export function buildStory(root: HTMLElement, button: HTMLElement, map: MapLibre
     setOpen(false);
     button.focus();
   });
-  setOpen(false);
+  root.hidden = true;
+  return { open: () => setOpen(true), isOpen: () => !root.hidden };
 }

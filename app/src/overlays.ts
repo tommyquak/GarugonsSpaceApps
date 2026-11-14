@@ -40,7 +40,7 @@ export class Overlays {
     this.steps = passSteps(layers);
     this.sites = [...new Set(layers.filter((l) => l.date).map((l) => l.site ?? ""))];
     for (const l of this.statics) {
-      if (l.kind !== "reference") this.on.add(l.id);
+      if (l.kind !== "reference" && l.kind !== "recovery") this.on.add(l.id);
     }
     this.sync();
   }
