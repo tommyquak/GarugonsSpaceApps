@@ -54,6 +54,11 @@ def main():
         strong = valid & (asc < STRONG_DB) & (desc < STRONG_DB)
         fire = (np.nan_to_num(read(fire_file)) > 0) if fire_file.exists() else None
         put(f"peat_km2_{site}", float((valid & peat).sum() * KM2), "km2", site, ME, note="mapped peat with radar data on both orbits")
+        other = a.layers / f"peat_official_{site}.tif"    # the local-only official map, as a cross-check of the public one
+        if other.exists() and a.peat != "peat_official":
+            official = read(other) == 1
+            put(f"peat_map_agreement_{site}", float((peat == official).mean()), "share of cells", site, ME,
+                note="cells where PEATMAP and the official Indonesian peat map say the same")
         for zone_name, zone in (("on_peat", valid & peat), ("off_peat", valid & ~peat)):
             s = strong & zone
             put(f"fell_1db_km2_{zone_name}_{site}", float(s.sum() * KM2), "km2", site, ME, note="fell by 1 dB or more in HH on both orbits")
