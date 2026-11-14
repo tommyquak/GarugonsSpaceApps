@@ -12,7 +12,7 @@ import { bindPlaceActions } from "./chart/actions";
 import { createPlaceChart } from "./chart/placeChart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
-import { maybePlayIntro } from "./intro";
+import { canReplayIntro, maybePlayIntro, playIntro } from "./intro";
 import { buildMapLegend } from "./maplegend";
 import { bindLink } from "./link";
 import { byId } from "./dom";
@@ -120,10 +120,22 @@ async function start(): Promise<void> {
     exploreButton.setAttribute("aria-pressed", String(on));
     if (!on && actions.parts().includes("class")) actions.apply(actions.parts().filter((part) => part !== "class"), actions.block());
   };
-  exploreButton.addEventListener("click", () => setExplore(!app.classList.contains("is-explore")));
+  exploreButton.addEventListener("click", () => {
+    const on = !app.classList.contains("is-explore");
+    setExplore(on);
+    // The raw layers belong to the season view, so that is where turning this on leads.
+    if (on && actions.parts().includes("map")) actions.apply(actions.parts().filter((part) => part === "how"), null);
+  });
+  // A way back to the control room from anywhere in the app.
+  const roomButton = byId("btn-room");
+  if (canReplayIntro()) {
+    roomButton.hidden = false;
+    roomButton.addEventListener("click", () => playIntro());
+  }
   // Last, so that a link someone was sent restores its view over the defaults set above.
   const shared = window.location.hash.length > 1;
-  bindLink(map, overlays, chart, actions);
+  const link = bindLink(map, overlays, chart, actions);
+  opening.onRun((running) => link.setQuiet(running)); // the story's own changes of view are not steps in the history
   setExplore(actions.parts().includes("class"));
   // Without a link, the map opens on the one view made for a first look.
   if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
