@@ -14,6 +14,7 @@ import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
 import { canReplayIntro, maybePlayIntro, playIntro } from "./intro";
 import { buildMapLegend } from "./maplegend";
+import { buildMeasure } from "./measure";
 import { bindLink } from "./link";
 import { byId } from "./dom";
 import { Overlays } from "./overlays";
@@ -81,6 +82,7 @@ async function start(): Promise<void> {
   const overlays = new Overlays(map, layers);
   buildPanel(byId("panel-layers"), map, overlays);
   const season = buildSeason(byId("season"), overlays);
+  void buildMeasure(byId("panel-measure"), overlays);
 
   // On a phone the panels share one bottom sheet, one at a time. A wide screen ignores the tab.
   const sheet = byId("sheet");
