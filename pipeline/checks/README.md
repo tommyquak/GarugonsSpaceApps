@@ -4,6 +4,10 @@
 
 The checked-in [validation.json](../../app/public/validation.json) is the app and slides handoff. The corrected data-v9 recovery files were reissued on 14 November. The result contains 475 upstream entries (the 357 that were checked, then exploratory entries added afterwards: 14 from `pipeline/context/peat_cifor.py`, 24 from `pipeline/context/repeat_fire.py` and 80 from `pipeline/context/burn_flag.py`) and 136 final Track 5 entries. The 24 repeat-fire entries were rebuilt by Track 5 from the released rasters and NASA's detection files and are final too. To list the exact final keys, use the filter below.
 
+The data-v9 dry-season comparison uses a 16 July start pass on track 125 and 12 and 24 July on track 061. The first qualifying rain was on 26 October. The recovery comparison uses 28 October on track 061 and 1 November on track 125.
+
+The original HV rebound layers in data-v9 included a forest baseline shift of +0.167 dB on track 061 and −0.034 dB on track 125 at both sites. The 14 November replacement uses HV as measured. Track 5 checked the release checksums and reproduced all eight whole-site and driest-tenth medians from the radar stacks. For the whole western site on track 061 the median changed from +0.1282 dB to −0.0388 dB. [Correction record](https://github.com/tommyquak/GarugonsSpaceApps/issues/1#issuecomment-6873030852)
+
 To reproduce the **v9 app handoff** from public releases:
 
 ```sh
