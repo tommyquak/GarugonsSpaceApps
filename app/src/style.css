@@ -801,7 +801,8 @@ input[type="range"]::-moz-range-thumb {
   font-size: 15px;
 }
 
-.op-key:empty {
+.op-key:empty,
+.op-sub:empty {
   display: none;
 }
 

@@ -79,7 +79,7 @@ const BEATS: Beat[] = [
   {
     map: "season",
     head: "Through the dry season the radar echo fell along the canals, and fire built up on the same open peat.",
-    sub: () => "Closed forest held steady.",
+    sub: () => "",
     key: [
       { color: "#bd8a4a", label: "The radar echo fell" },
       { color: "#de3626", label: "Fire detected" },
@@ -88,7 +88,7 @@ const BEATS: Beat[] = [
   {
     map: "check",
     head: "The first rain brought the radar echo back on most land. On some, it did not.",
-    sub: () => "There the ground still looks different from the start of the season, which can mean burnt vegetation or peat that is still dry. That is where a field team should look first.",
+    sub: () => "There the ground still looks different from the start of the season, which can mean burnt vegetation or peat that is still dry. That is where a peat restoration team should look first.",
     key: [
       { color: "#ff3b30", label: "Fire on several days, and the vegetation echo is still low" },
       { color: "#ff9f0a", label: "No fire, and the ground echo is still low" },

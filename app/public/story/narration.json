@@ -4,6 +4,6 @@
  ["From space, a camera sees only smoke.", 0.9, "But NISAR's radar sees the ground through it: rivers, canals, and the edge of the forest."],
  ["What does the radar tell us?", 0.7, "A wetter surface sends back a stronger echo.", 0.7, "So as open peat dries, the echo falls."],
  ["Why does that matter?", 0.7, "Dry peat is the peat that burns.", 0.7, "And it gives up its carbon as it burns."],
- ["Through the dry season, the radar echo fell along the canals, and fire built up on the same open peat.", 0.8, "Closed forest held steady."],
- ["The first rain brought the radar echo back on most of the land.", 0.8, "On some, it did not.", 0.7, "There, the vegetation had burned, or the ground was still dry.", 0.8, "That is where a field team should look first."]
+ ["Through the dry season, the radar echo fell along the canals, and fire built up on the same open peat."],
+ ["The first rain brought the radar echo back on most of the land.", 0.8, "On some, it did not.", 0.7, "There, the vegetation had burned, or the ground was still dry.", 0.8, "That is where a peat restoration team should look first."]
 ]
