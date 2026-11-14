@@ -110,6 +110,8 @@ async function start(): Promise<void> {
   const seasonButton = byId("btn-season");
   const seasonTab = byId("tab-season"); // the same view from the phone's bottom bar, where the header button is hidden
   const exploreButton = byId("btn-explore");
+  // "How it decides" covers the map with its graph, so it and "Explore the data" are never on together.
+  let leaveExplore = (): void => undefined;
   const actions = await buildActions(map, chart, {
     setTab,
     setLegend: (view) => legend.setBlocks(view),
@@ -118,6 +120,9 @@ async function start(): Promise<void> {
       if (on) season.stop();
       seasonButton.setAttribute("aria-pressed", String(!on));
       seasonTab.setAttribute("aria-pressed", String(!on));
+    },
+    onHow: (on) => {
+      if (on) leaveExplore();
     },
   });
   // The season view, from the header and from the phone's bottom bar: it opens playing, from its first pass.
@@ -143,9 +148,15 @@ async function start(): Promise<void> {
   exploreButton.addEventListener("click", () => {
     const on = !app.classList.contains("is-explore");
     setExplore(on);
-    // The raw layers belong to the season view, so that is where turning this on leads.
-    if (on && actions.parts().includes("map")) actions.apply(actions.parts().filter((part) => part === "how"), null);
+    if (!on) return;
+    // The raw layers belong to the season view, so that is where turning this on leads, with the graph closed.
+    const parts = actions.parts();
+    if (parts.includes("map")) actions.apply([], null);
+    else if (parts.includes("how")) actions.apply(parts.filter((part) => part !== "how"), actions.block());
   });
+  leaveExplore = () => {
+    if (app.classList.contains("is-explore")) setExplore(false);
+  };
   // A way back to the control room from anywhere in the app.
   const roomButton = byId("btn-room");
   if (canReplayIntro()) {
@@ -160,7 +171,7 @@ async function start(): Promise<void> {
     // The story frames the map beside its caption, which the usual limits on panning would not allow.
     if (extent) map.setMaxBounds(running ? null : studyLimits(map, extent));
   });
-  setExplore(actions.parts().includes("class"));
+  setExplore(actions.parts().includes("class") && !actions.parts().includes("how"));
   // Without a link, the map opens on the one view made for a first look.
   if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
   // A visitor who came in through "Enter dashboard" gets the story once; "Skip to map" and a
