@@ -10,6 +10,7 @@ and from validation.json, never typed.
   fig_start.png       why the start matters: the fall measured from the rain-wet start and from the dry start
   fig_recovery.png    after the rain: HH and HV still below the start, with and without fire detections
   fig_edge.png        the fall by distance into the forest
+  fig_water_table.png the water-table model against the gauge record, and its run on 2026 beside the radar
 
     python pipeline/figures.py --out pipeline/out/figures
 """
@@ -177,7 +178,7 @@ def fig_recovery(out, v):
     ax.set_ylabel("Still below the dry start, dB", fontsize=13, color=MUTED)
     ax.legend(frameon=False, fontsize=13, ncols=4, loc="upper center", bbox_to_anchor=(0.5, 1.1))
     tidy(ax)
-    fig.text(0.1, 0.115, "One pass per orbit, within days of heavy rain, from a later processing release than the dry passes. HV here carries the forest baseline; see docs/LIMITS.md.", fontsize=12, color=MUTED)
+    fig.text(0.1, 0.115, "One pass per orbit, within days of heavy rain, from a later processing release than the dry passes. HV is shown as measured. See docs/LIMITS.md.", fontsize=12, color=MUTED)
     finish(fig, out / "fig_recovery.png", "NISAR L2 GCOV (ASF DAAC), NASA FIRMS, PEATMAP")
 
 
@@ -204,13 +205,59 @@ def fig_edge(out, v):
     finish(fig, out / "fig_edge.png", "NISAR L2 GCOV (ASF DAAC)")
 
 
+def fig_water_table(out, v):
+    H = Path("pipeline/out/hydro")
+    if not (H / "water_table_modelled.json").exists() or not (H / "radar_vs_water_table.json").exists():
+        print("skipped fig_water_table.png: run pipeline/hydro first")
+        return
+    gauge = json.loads((H / "gauge_daily.json").read_text())["DF"]
+    model = json.loads((H / "water_table_modelled.json").read_text())["DF"]
+    radar = json.loads((H / "radar_vs_water_table.json").read_text())["sites"]["DF"]["tracks"]
+    fig = frame("A bridge to the ground, without fieldwork", "Drained forest near Palangka Raya. A rainfall-driven model fitted to the 2013 to 2017 gauge record, then run on 2026 rainfall.")
+    ax = fig.add_axes([0.06, 0.2, 0.42, 0.58])
+    d = sorted(gauge)
+    ax.plot([dt.date.fromisoformat(k) for k in d], [gauge[k] for k in d], color="#9aa3ad", linewidth=1.6, label="Measured (gauge)")
+    m = model["gauge_years"]
+    ax.plot([dt.date.fromisoformat(k) for k in sorted(m)], [m[k] for k in sorted(m)], color=RAIN, linewidth=1.6, label="Modelled from rain")
+    ax.set_ylabel("Water table, m from the surface", fontsize=13, color=MUTED)
+    ax.set_title("2013 to 2017: the model against the gauge", fontsize=14, color=INK, loc="left")
+    ax.legend(frameon=False, fontsize=12, loc="lower left")
+    tidy(ax)
+    import matplotlib.dates as mdates
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax1 = fig.add_axes([0.56, 0.5, 0.39, 0.28])
+    y = model["2026"]
+    days = [dt.date.fromisoformat(k) for k in sorted(y)]
+    ax1.plot(days, [y[k] for k in sorted(y)], color=RAIN, linewidth=2)
+    ax1.axhline(-0.4, color=FIRE, linewidth=1.2, linestyle="--")
+    ax1.text(days[5], -0.36, "0.4 m limit in the regulation", color=FIRE, fontsize=11, va="bottom")
+    ax1.set_title("2026: modelled, not measured", fontsize=14, color=INK, loc="left")
+    ax1.set_ylabel("Water table, m", fontsize=12, color=MUTED)
+    tidy(ax1)
+    ax1.tick_params(labelbottom=False)
+    ax2 = fig.add_axes([0.56, 0.2, 0.39, 0.26], sharex=ax1)
+    for track, colour, name in (("125", DAWN, "dawn orbit"), ("061", DUSK, "dusk orbit")):
+        t = radar[track]
+        ax2.plot([dt.date.fromisoformat(k) for k in t["dates"]], t["hh_db"], "-o", color=colour, linewidth=2, markersize=6, label=f"Radar HH, {name}")
+    ax2.set_ylabel("HH, dB", fontsize=12, color=MUTED)
+    ax2.legend(frameon=False, fontsize=11, loc="lower left", ncols=2)
+    tidy(ax2)
+    ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=2))
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
+    lo, hi = v["hydro_held_out_r_min_DF"]["value"], v["hydro_held_out_r_max_DF"]["value"]
+    fig.text(0.06, 0.125, f"On years left out of the fit, the model follows the gauge with r from {lo:.2f} to {hi:.2f} (the lowest is a half year of record).", fontsize=12, color=MUTED)
+    fig.text(0.06, 0.098, "The radar and the model both answer the same rain, so their agreement is support, not validation.", fontsize=12, color=MUTED)
+    finish(fig, out / "fig_water_table.png", "Hirano groundwater record (figshare, CC BY 4.0), GPM IMERG (GES DISC), NISAR L2 GCOV (ASF DAAC)")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--out", required=True, type=Path)
     a = p.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
     v = json.loads(Path("pipeline/out/validation.json").read_text())
-    for make in (fig_season, fig_orbits, fig_start, fig_recovery, fig_edge):
+    for make in (fig_season, fig_orbits, fig_start, fig_recovery, fig_edge, fig_water_table):
         make(a.out, v)
 
 
