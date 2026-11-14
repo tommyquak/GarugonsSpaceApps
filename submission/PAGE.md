@@ -47,7 +47,7 @@ To be added: seven slides with animated GIFs (public link).
 
 ### The physics, and the polarisations
 
-At L-band the wave passes through leaves and reaches branches, trunks and the ground. HH carries a strong echo that bounces between the ground and the trunks, and that echo weakens as the surface dries (Hess et al. 1990; Kim et al. 2017). HV comes mostly from the woody vegetation, though it also responds to moisture, so the two are not separate "water" and "vegetation" channels. What we use is the contrast: on peat where fire was detected, HV stayed lower after the rain than on peat where it was not.
+At L-band the wave passes through leaves and reaches the ground. A wetter surface sends back a stronger echo: as open peat dries, HH falls. Closed forest barely changed over the season, so it is the yardstick. HV comes mostly from the woody vegetation, though it also responds to moisture, so the two are not separate "water" and "vegetation" channels. What we use is the contrast: on peat where fire was detected, HV stayed lower after the rain than on peat where it was not.
 
 ### What we do not see, and what we do not claim
 
