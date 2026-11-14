@@ -67,8 +67,12 @@ export function bindPlaceActions(root: HTMLElement, map: MapLibreMap, overlays: 
     window.cancelAnimationFrame(frame);
     frame = 0;
   };
+  // The camera as it was before the flight, so "Back to the map" returns to the view the
+  // person had: flat on the plain map, tilted in the 3D view of "Where to check".
+  let before: { zoom: number; pitch: number; bearing: number } | null = null;
   const flyDown = (place: { lon: number; lat: number }): void => {
     flying = true;
+    before = { zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() };
     const view = { center: [place.lon, place.lat] as [number, number], zoom: Math.min(map.getMaxZoom(), FLY_ZOOM), pitch: FLY_PITCH };
     if (reducedMotion()) {
       map.jumpTo(view); // the tilted view without the flight or the circling
@@ -98,9 +102,14 @@ export function bindPlaceActions(root: HTMLElement, map: MapLibreMap, overlays: 
     if (!flying) return;
     flying = false;
     stopTurning();
-    map.easeTo({ pitch: 0, bearing: 0, duration: reducedMotion() ? 0 : 1200, essential: true });
+    // Only the 3D view lets the map stay tilted (it switches rotation on); anywhere else the
+    // map must end flat and north up, or it would be stuck tilted with no control to level it.
+    const tilted = map.dragRotate.isEnabled() && before !== null && before.pitch > 0;
+    const camera = { zoom: before?.zoom ?? map.getZoom(), pitch: tilted && before ? before.pitch : 0, bearing: tilted && before ? before.bearing : 0 };
+    before = null;
+    map.easeTo({ ...camera, duration: reducedMotion() ? 0 : 1200, essential: true });
   };
-  // Any touch of the map hands the camera back; the view stays tilted until "Back to the flat map".
+  // Any touch of the map hands the camera back; the view stays tilted until "Back to the map".
   for (const event of ["dragstart", "wheel", "touchstart", "dblclick"] as const) map.on(event, stopTurning);
 
   // ---- Ground look ----
@@ -250,7 +259,7 @@ export function bindPlaceActions(root: HTMLElement, map: MapLibreMap, overlays: 
       const saveButton = h("button", { type: "button", class: "text-button small" });
       const lookSlot = h("div", {});
       renderActions = (): void => {
-        flyButton.textContent = flying ? "Back to the flat map" : "Fly down";
+        flyButton.textContent = flying ? "Back to the map" : "Fly down";
         flyButton.setAttribute("aria-pressed", String(flying));
         const isSaved = saved.some((p) => key(p) === key(place));
         saveButton.textContent = isSaved ? "Remove from list" : "Add to list";
@@ -304,11 +313,7 @@ export function bindPlaceActions(root: HTMLElement, map: MapLibreMap, overlays: 
   // A new place or a closed card ends the flight and the ground look of the old one.
   chart.onPick(() => {
     closeLook();
-    if (flying && !chart.place) flatten();
-    else if (flying) {
-      flying = false;
-      stopTurning();
-    }
+    if (flying) flatten(); // never leave the camera tilted over a place that is no longer on show
   });
   renderPlaces();
 }
