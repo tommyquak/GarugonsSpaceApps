@@ -67,10 +67,11 @@ Outputs land in `pipeline/out/`. The numbers are in `pipeline/out/validation.jso
 | PEATMAP peat extent, CC BY 4.0 | Xu, Morris, Liu and Holden 2018, University of Leeds | https://doi.org/10.5518/252 |
 | Sentinel-2 cloudless 2016 mosaic (basemap), CC BY 4.0 | EOX, from Copernicus Sentinel data (ESA) | https://cloudless.eox.at |
 | Blue Marble imagery (basemap option) | NASA GIBS | https://earthdata.nasa.gov/gibs |
+| VIIRS daily true colour, `VIIRS_SNPP_CorrectedReflectance_TrueColor` (ground look in the place card) | NASA GIBS, Suomi NPP | https://earthdata.nasa.gov/gibs |
 
 ## Use of Super Intelligence (SI)
 
-This project is built with SI coding assistants working under each team member's direction. Code files written with SI assistance say so in their first comment line, and `submission/SI_USE.md` records where SI was used.
+This project is built with SI coding assistants working under each team member's direction. Code files written with SI assistance say so in their first comment line, and `submission/si_use/` records where SI was used, one file per team member.
 
 ## Licence
 
