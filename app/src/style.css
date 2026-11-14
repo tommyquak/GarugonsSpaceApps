@@ -159,9 +159,11 @@ input[type="checkbox"]:not([role="switch"]):checked::before {
 
 .brand h1 {
   margin: 0;
+  overflow: hidden; /* on a narrow header the name shortens; it never runs under the tabs */
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
