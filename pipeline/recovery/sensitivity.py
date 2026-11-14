@@ -50,11 +50,11 @@ def variants(stack, base, dry_until):
     return out
 
 
-def run(stack, base, fall_other, floor, dry_until, min_blocks=100):
+def run(stack, base, fall_other, floor, dry_until, min_blocks=100, start_from=None):
     """Each variant's summary for HH and HV. Variants that cannot be run (no such pass) are left out."""
     rows = []
     for name, until, late_n, late_skip, wet_pass in variants(stack, base, dry_until):
-        res = recover(stack, base, until, late_n=late_n, late_skip=late_skip, wet_pass=wet_pass)
+        res = recover(stack, base, until, late_n=late_n, late_skip=late_skip, wet_pass=wet_pass, start_from=start_from)
         if res is None:
             continue
         out, _, after = res
@@ -80,6 +80,7 @@ def main():
     p.add_argument("--track", required=True)
     p.add_argument("--other-track", required=True)
     p.add_argument("--dry-until", required=True)
+    p.add_argument("--start-from", help="YYYYMMDD, earliest day for a start pass; default: the first two passes")
     p.add_argument("--stacks", required=True, type=Path)
     p.add_argument("--layers", required=True, type=Path)
     a = p.parse_args()
@@ -87,7 +88,7 @@ def main():
     base = json.loads((a.layers / f"baseline_{a.track}.json").read_text())
     fall_other = read(a.layers / f"drydown_{a.site}_{a.other_track}.tif")
     floor = abs(get(f"noise_floor_hh_{a.track}")["value"])
-    rows = run(stack, base, fall_other, floor, a.dry_until)
+    rows = run(stack, base, fall_other, floor, a.dry_until, start_from=a.start_from)
     tag = f"{a.site}_{a.track}"
     if not rows or rows[0]["variant"] != "as run":
         print(f"{tag}: no pass after {a.dry_until} yet, skipped")
