@@ -1177,7 +1177,7 @@
   "value": "2026-10-25",
   "unit": "date",
   "site": "east",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/season.py",
   "note": "day before the first day of 5 mm or more that opens a 5-day window of 25 mm or more, after the driest 30 days"
  },
@@ -1185,7 +1185,7 @@
   "value": "2026-10-25",
   "unit": "date",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/season.py",
   "note": "day before the first day of 5 mm or more that opens a 5-day window of 25 mm or more, after the driest 30 days"
  },
@@ -2697,7 +2697,7 @@
   "value": "2026-07-10",
   "unit": "date",
   "site": "east",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/season.py",
   "note": "start passes are taken from this day on: 7 days after the last wet day"
  },
@@ -2705,7 +2705,7 @@
   "value": "2026-07-10",
   "unit": "date",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/season.py",
   "note": "start passes are taken from this day on: 7 days after the last wet day"
  },
