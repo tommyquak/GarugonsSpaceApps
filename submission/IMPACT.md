@@ -23,7 +23,7 @@ Not every fire in Indonesia is a peat fire. In our own study area fire touched [
 
 - **From once a year to every 12 days.** NISAR passes every 12 days on each orbit and sees through cloud and smoke. The picture arrives during the season, while a decision can still be made.
 - **From "where it burned" to "where it dried".** Hotspots tell you a fire has started. This shows the condition that makes fire possible, and what the rain did and did not undo.
-- **From a map to a list.** A restoration team cannot act on a colour ramp. It can act on 337 squares with coordinates, a reason for each, and a confidence grade.
+- **From a map to a list.** A restoration team cannot act on a colour ramp. It can act on [v: blocks_rewet_first_west] squares with coordinates, a reason for each, and a confidence grade.
 - **At no cost per use.** Every input is free and open, the processing is one command on a laptop, and the app is a static site with no server.
 
 ## What it would take to use it for real
