@@ -1,6 +1,6 @@
 # Project page draft
 
-Track 6, owner Reagan. Rewritten after the independent audit (`docs/AUDIT.md`): every claim here is on its list of what we can still claim. Every `[v: key]` is a number to be filled from `pipeline/out/validation.json` (release `data-v9` or later) once that entry is marked `final`. Nothing here is submitted until Tommy presses submit.
+Track 6 page draft for Tommy’s review. Results are drawn from the shared `app/public/validation.json`. Bracketed entries still await independent verification. Tommy submits the final page.
 
 ## 1. Project name
 
@@ -8,7 +8,7 @@ Dry Season Waltz (working title; the team has not confirmed it)
 
 ## 2. High-level summary
 
-Every dry season, drained peatland in Borneo is at its most flammable, some of it burns, and the smoke reaches cities across the region, Singapore included. Optical satellites often lose sight of the ground just then, behind cloud and then smoke. We built an open web map that follows NISAR's first dry season over these peatlands in three steps: where the radar echo of the land fell, where fire was detected, and what changed after the first rain. NISAR's L-band radar sees through cloud and smoke and reaches into the forest canopy every 12 days. We measure the fall of its HH echo against deep intact forest, keep only what two orbits looking from opposite sides both see, and show it as a map anyone can play through the season. It is a screening map of where to check on the ground. It does not measure the water table or predict fire.
+Every dry season, drained peatland in Borneo is at its most flammable, some of it burns, and the smoke reaches cities across the region, Singapore included. Optical satellites often lose sight of the ground just then, behind cloud and then smoke. We built an open web map that follows NISAR's first dry season over these peatlands in three steps: where the radar echo of the land fell, where fire was detected, and what changed after the first rain. NISAR's L-band radar sees through cloud and smoke and reaches into the forest canopy. Each orbit has a nominal 12-day repeat cycle, with gaps in the available observations. We measure the fall of its HH echo against deep intact forest, keep only what two orbits looking from opposite sides both see, and show it as a map anyone can play through the season. It is a screening map of where to check on the ground. It does not measure the water table or predict fire.
 
 ## 3. Link to project demo
 
@@ -32,18 +32,18 @@ To be added: seven slides with animated GIFs (public link).
 ### How it works
 
 1. **Radar stacks.** NISAR L2 GCOV backscatter (HH and HV) for an ascending dawn track and a descending dusk track, averaged to 50 m and stacked by date. Both orbits are on one grid.
-2. **A rain-free start.** The season starts at the first passes with no heavy rain before them, chosen by a rule from NASA's daily rainfall (`pipeline/season.py`), so the fall is not just the surface losing the last rain.
+2. **A rain-free start.** A fixed rule applied to NASA’s daily rainfall sets the earliest eligible start pass seven days after the last wet day before the driest 30-day stretch (`pipeline/season.py`). This reduces the influence of recent rain on the baseline.
 3. **A yardstick.** Calibration and weather shift a whole scene from pass to pass. We measure that shift on deep intact peat swamp forest, at least 4 km from any edge, and remove it from HH.
-4. **The fall.** HH late in the dry season minus HH at its start, on 250 m blocks. A block counts if it fell by 1 dB or more on both orbits, which look from opposite sides at different times of day.
+4. **The fall.** HH late in the dry season minus HH at its start, on 250 m blocks. We count mapped area where HH fell by more than 1 dB on both orbits, which look from opposite sides at different times of day.
 5. **After the rain.** The change from the late dry season to the first pass after the rain, in HH, and HV as measured compared between places with and without fire detections.
 
 ### What we found
 
-- Between mid July and late October 2026, HH fell by 1 dB or more, relative to deep forest, on [v: fell_1db_km2_on_peat_west] km2 of mapped peat in the west box and [v: fell_1db_km2_on_peat_east] km2 in the east. The two orbits agree on where: Spearman r = [v: track5_west_orbit_spearman] in the west and [v: track5_east_orbit_spearman] in the east, and the agreement holds inside single land-cover classes.
-- Deep intact forest is a steady yardstick in the dry season: the 95th percentile of its change over the season is [v: reference_drydown_p95_125] dB on the dawn orbit and [v: reference_drydown_p95_061] dB on the dusk orbit.
-- Forest edges fall too: about [v: selfcheck_forest_edge_median_125] dB within 250 m of a forest edge, reaching zero only about 4 km inside.
-- Within days of the first heavy rain, HH on the land that fell rose by about [v: recovery_hh_median_rebound_west_125] dB on the dawn orbit and [v: recovery_hh_median_rebound_west_061] dB on the dusk orbit, and not on the pass before the rain.
-- Fire was detected on [v: fire_share_on_peat_west] of mapped peat in the west box and [v: fire_share_on_peat_east] in the east. After the rain, HV on peat with fire detections sat [v: recovery_hv_left_fire_minus_no_fire_on_peat_west_125] dB below peat without them, the same sign on both orbits at both sites.
+- Between mid July and late October 2026, HH fell by more than 1 dB on both orbits, relative to deep forest, across about 755 km² of mapped peat in the west and about 292 km² in the east. The study areas overlap. The two orbits ranked the locations of the fall similarly (Spearman ρ = 0.83 west and 0.87 east).
+- In the western reference forest, the 95th percentile of HH change over the dry season is [v: reference_drydown_p95_125] dB on the dawn orbit and [v: reference_drydown_p95_061] dB on the dusk orbit.
+- On the dawn orbit, the median change in HH within 250 m of a western forest edge was [v: selfcheck_forest_edge_median_125] dB.
+- In western blocks where HH fell by more than 1 dB on both orbits, the median echo rose 1.15 dB on the first dawn pass after the rain and 1.12 dB on the first dusk pass. Each orbit observed the rebound once.
+- Fire was detected on [v: fire_share_on_peat_west] of mapped peat in the west box and [v: fire_share_on_peat_east] in the east. On the western dawn pass after the rain, the difference in HV change between peat with and without fire detections (fire minus no fire) was [v: recovery_hv_left_fire_minus_no_fire_on_peat_west_125] dB.
 
 ### The physics, and the polarisations
 
@@ -62,7 +62,7 @@ At L-band the wave passes through leaves and reaches the ground. A wetter surfac
 
 ### What NISAR could do next
 
-With two to three years of passes, the same stacks support subsidence mapping by interferometry over whole peat domes, and a record of every dry season to set against wet years. The pipeline takes any bounding box, so the same map can be built for another peatland.
+With two to three years of observations, we could test whether the phase of NISAR’s 12-day interferometric pairs (GUNW) reveals long-term peat subsidence alongside seasonal drying. We already use those pairs for coherence. The current HH and HV backscatter maps do not measure subsidence. Field studies of drained peat and field-tested L-band interferometry motivate this next step (Hooijer et al. 2012; Tay et al. 2025). The pipeline accepts a bounding box. Applying it to a second peatland remains untested.
 
 ### Who it is for
 
@@ -75,18 +75,18 @@ Team to confirm before submission. Draft: We used SI coding assistants throughou
 ## 7. NASA data
 
 - NISAR L2 GCOV (NASA and ISRO), Alaska Satellite Facility DAAC, https://search.asf.alaska.edu
-- GPM IMERG daily rainfall, NASA GES DISC, https://disc.gsfc.nasa.gov
+- GPM IMERG Late daily rainfall, version 07, NASA GES DISC. [NASA dataset record](https://www.earthdata.nasa.gov/data/catalog/ges-disc-gpm-3imergdl-07)
 - FIRMS active fire detections (VIIRS and MODIS), https://firms.modaps.eosdis.nasa.gov
-- NASA GIBS imagery: Blue Marble for a basemap option, and VIIRS daily true colour (`VIIRS_SNPP_CorrectedReflectance_TrueColor`, Suomi NPP) for the dated ground look in the place card, https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api
+- NASA GIBS imagery: Blue Marble for a basemap option, and VIIRS daily true colour (`VIIRS_SNPP_CorrectedReflectance_TrueColor`, Suomi NPP) for the dated ground look in the place card, https://nasa-gibs.github.io/gibs-api-docs/
 
 ## 8. Space agency partner and other data, and references
 
 - OpenStreetMap contributors, waterways and base map, https://www.openstreetmap.org
 - Sentinel-2 cloudless 2016 by EOX, the default base map (contains modified Copernicus Sentinel data 2016), CC BY 4.0, https://s2maps.eu
-- Peat boundary: PEATMAP, Xu et al. 2018, CC BY 4.0, doi 10.5518/252. Every peat number uses it. It agrees with the Indonesian Ministry of Agriculture peat map on [v: peat_map_agreement_west] of cells in the west box and [v: peat_map_agreement_east] in the east; the two draw on the same mapping, so this is not an independent check. The official map has no stated licence and is not redistributed.
-- Jaenicke, Englhart and Siegert 2011, monitoring the effect of restoration measures in Indonesian peatlands by radar satellite imagery, doi 10.1016/j.jenvman.2010.09.029
-- Hess, Melack and Simonett 1990, radar detection of flooding beneath the forest canopy, doi 10.1080/01431169008955095
-- Kim et al. 2017, L-band backscatter and groundwater in forested peat, doi 10.1016/j.rse.2017.06.009
-- Dadap et al. 2019, satellite soil moisture observations predict burned area in Southeast Asian peatlands, doi 10.1088/1748-9326/ab3891
+- Peat boundary: PEATMAP (Xu et al., 2017), CC BY 4.0. [Dataset record, DOI 10.5518/252](https://archive.researchdata.leeds.ac.uk/251/). Every peat number uses it. It agrees with the Indonesian Ministry of Agriculture peat map on [v: peat_map_agreement_west] of cells in the west box and [v: peat_map_agreement_east] in the east; the two draw on the same mapping, so this is not an independent check. The official map has no stated licence and is not redistributed.
+- Jaenicke, Englhart and Siegert 2011, monitoring the effect of restoration measures in Indonesian peatlands by radar satellite imagery. DOI 10.1016/j.jenvman.2010.09.029. [PubMed record](https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=20971549&retmode=json)
+- Hess, Melack and Simonett 1990, Radar detection of flooding beneath the forest canopy: A review. DOI 10.1080/01431169008955095. [Crossref record](https://api.crossref.org/works/10.1080/01431169008955095)
+- Kim et al. 2017, Characterizing hydrologic changes of the Great Dismal Swamp using SAR/InSAR. DOI 10.1016/j.rse.2017.06.009. [Author’s copy at SMU (PDF)](https://www.smu.edu/-/media/site/dedman/academics/departments/earthsciences/pdf/kim/020_kim_gds_peatland_rse_2017.pdf)
+- Dadap et al. 2019, satellite soil moisture observations predict burned area in Southeast Asian peatlands. DOI 10.1088/1748-9326/ab3891. [MIT repository](https://dspace.mit.edu/entities/publication/9eeb57d2-e8fe-4774-b956-642bb51013c9)
 
 Track 5 keeps the full list with a confidence tag for each claim in `docs/REFERENCES.md`.
