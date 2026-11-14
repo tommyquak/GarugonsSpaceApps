@@ -37,7 +37,7 @@ The colour is how far the L-band HH radar echo fell between a dry start in mid J
 - **Most classed blocks are "fire detected on peat",** which uses the fire detections and the peat map and no radar.
 - **"Agreement" is a count, not a probability.**
 - **Canals are context only.** In our data the fall in HH does not change with distance to a mapped canal, and OpenStreetMap is incomplete here.
-- **One peat map.** PEATMAP and the official map are the same national mapping, so their 98 to 99% agreement is not an independent check.
+- **One peat map.** PEATMAP and the official map are the same national mapping, so their 98 to 99% agreement is not an independent check. The one independent map we could test, CIFOR's modelled map (Gumbricht et al. 2017), does not confirm the boundary (`pipeline/context/peat_cifor.py`, exploratory): cell by cell it agrees with PEATMAP on 57% of the west box and 50% of the east, about what two unrelated maps would reach. It is a speckled model output and its authors matched soil profiles 65% of the time, so this does not show PEATMAP is wrong; it shows the peat boundary is a real uncertainty. On CIFOR peat the 1 dB fall covers 646 km2 in the west (755 on PEATMAP) and 574 km2 in the east (292), so the western figure is fairly robust to the choice of map and the eastern one is not.
 
 ## Fire-prone ground: no clear result
 
