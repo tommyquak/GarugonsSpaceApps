@@ -1,0 +1,282 @@
+<!doctype html>
+<!-- Written with Super Intelligence (SI) assistance. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the radar sees a peat dry season</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0f14; }
+  canvas { display: block; width: 100vw; height: 100vh; object-fit: contain; background: #0b0f14; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="1280" height="720" aria-label="Animation: an L-band radar pulse meets wet ground, dry ground, burnt forest and rewetted ground, and the HH and HV echoes change. A schematic, not data."></canvas>
+<script>
+// An animated schematic of the two L-band echoes over one dry season, in four acts:
+// wet, fall, fire, rain. Every frame is a pure function of time, so the page can be played
+// live or stepped frame by frame (window.seek) when a GIF is recorded from it.
+"use strict";
+const canvas = document.getElementById("stage");
+const g = canvas.getContext("2d");
+const W = 1280, H = 720, GROUND = 548;
+const ACT = 4.2, ACTS = 4, LOOP = ACT * ACTS;
+const C = { sky0: "#0b0f14", sky1: "#17222e", ink: "#eef2f6", muted: "#9aa7b4", wet: "#2d6fb3", dry: "#b28c57", peat: "#3b2a1c",
+            trunk: "#6f4d2e", leaf: "#2f8a5f", leaf2: "#46a877", hh: "#f2b25a", hv: "#63d9a0", fire: "#ff6a3d", rain: "#8fc4f0", char: "#2a2a2e" };
+const SAT = { x: 150, y: 96 };
+const TREES = [{ x: 500, h: 200, r: 78 }, { x: 715, h: 232, r: 90 }, { x: 915, h: 190, r: 74 }];
+const ACT_TEXT = [
+  ["Wet", "Wet ground: a strong HH echo bounces between ground and trunk."],
+  ["Fall", "The surface dries, and the HH echo falls."],
+  ["Fire", "Fire takes the canopy, and the HV echo falls."],
+  ["Rain", "Rain returns. HH rises again. HV stays lower where the fire was."],
+];
+// What each act ends as: how wet the ground is, how much canopy is left, and the two echo strengths (0 to 1).
+const END = [{ wet: 1.0, canopy: 1.0, hh: 0.9, hv: 0.72 }, { wet: 0.12, canopy: 1.0, hh: 0.42, hv: 0.68 },
+             { wet: 0.12, canopy: 0.18, hh: 0.46, hv: 0.3 }, { wet: 0.95, canopy: 0.18, hh: 0.84, hv: 0.33 }];
+
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const ease = (v) => { v = clamp(v); return v * v * (3 - 2 * v); };
+const lerp = (a, b, t) => a + (b - a) * t;
+function mix(c1, c2, t) {
+  const p = (c) => [1, 3, 5].map((k) => parseInt(c.slice(k, k + 2), 16));
+  const a = p(c1), b = p(c2);
+  return `rgb(${a.map((v, k) => Math.round(lerp(v, b[k], t))).join(",")})`;
+}
+function noise(n) { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); }
+
+// The state of the scene at a time in the loop.
+function stateAt(t) {
+  const act = Math.floor(t / ACT) % ACTS, u = (t % ACT) / ACT;
+  const to = END[act], from = act === 0 ? to : END[act - 1];
+  const scene = ease(u / 0.3);                 // the ground and the canopy change in the first third of an act
+  const echo = ease((u - 0.62) / 0.14);        // the meters move when the echoes arrive back
+  return { act, u, wet: lerp(from.wet, to.wet, scene), canopy: lerp(from.canopy, to.canopy, scene),
+           hh: lerp(from.hh, to.hh, echo), hv: lerp(from.hv, to.hv, echo), hhOut: to.hh, hvOut: to.hv };
+}
+
+function along(points, s) {                    // a point and its direction at distance s along a path
+  let rest = s;
+  for (let i = 0; i < points.length - 1; i++) {
+    const [x0, y0] = points[i], [x1, y1] = points[i + 1], len = Math.hypot(x1 - x0, y1 - y0);
+    if (rest <= len || i === points.length - 2) {
+      const f = clamp(rest / len);
+      return { x: lerp(x0, x1, f), y: lerp(y0, y1, f), dx: (x1 - x0) / len, dy: (y1 - y0) / len };
+    }
+    rest -= len;
+  }
+}
+function pathLength(points) { let l = 0; for (let i = 0; i < points.length - 1; i++) l += Math.hypot(points[i + 1][0] - points[i][0], points[i + 1][1] - points[i][1]); return l; }
+
+// A travelling wave packet: a sine wave under a bell-shaped envelope, centred at `head` along the path.
+function packet(points, head, amplitude, colour, t, dashed) {
+  const total = pathLength(points), span = 150;
+  g.save();
+  g.strokeStyle = colour; g.lineWidth = 3.2; g.lineCap = "round"; g.shadowColor = colour; g.shadowBlur = 14;
+  if (dashed) g.setLineDash([9, 7]);
+  g.beginPath();
+  let started = false;
+  for (let d = -span; d <= span; d += 3) {
+    const s = head + d;
+    if (s < 0 || s > total) continue;
+    const p = along(points, s), env = Math.exp(-(d * d) / (2 * 46 * 46));
+    const off = Math.sin(d * 0.2 - t * 9) * amplitude * env;
+    const x = p.x - p.dy * off, y = p.y + p.dx * off;
+    if (started) g.lineTo(x, y); else { g.moveTo(x, y); started = true; }
+  }
+  g.stroke();
+  g.restore();
+}
+function faintPath(points, colour) {
+  g.save(); g.strokeStyle = colour; g.globalAlpha = 0.16; g.lineWidth = 1.5; g.setLineDash([3, 7]);
+  g.beginPath(); points.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke(); g.restore();
+}
+
+function drawSky(t) {
+  const sky = g.createLinearGradient(0, 0, 0, GROUND);
+  sky.addColorStop(0, C.sky0); sky.addColorStop(1, C.sky1);
+  g.fillStyle = sky; g.fillRect(0, 0, W, H);
+  for (let i = 0; i < 70; i++) {               // a few stars, steady
+    g.globalAlpha = 0.25 + 0.5 * noise(i * 3.1);
+    g.fillStyle = "#cfd8e3"; g.fillRect(noise(i) * W, noise(i + 100) * (GROUND - 220), 1.6, 1.6);
+  }
+  g.globalAlpha = 1;
+}
+function drawSatellite(t) {
+  const y = SAT.y + Math.sin(t * 1.3) * 3;
+  g.save(); g.translate(SAT.x, y); g.rotate(-0.5);
+  g.fillStyle = "#5d6c7c"; g.fillRect(-58, -9, 36, 18); g.fillRect(22, -9, 36, 18);       // solar panels
+  g.strokeStyle = "#8fa0b2"; g.lineWidth = 1; for (const x of [-46, -34, 34, 46]) { g.beginPath(); g.moveTo(x, -9); g.lineTo(x, 9); g.stroke(); }
+  g.fillStyle = "#d7dee6"; g.fillRect(-20, -13, 40, 26);                                   // body
+  g.fillStyle = "#f2b25a"; g.beginPath(); g.ellipse(0, 22, 24, 7, 0, 0, Math.PI * 2); g.fill();   // antenna
+  g.restore();
+  g.fillStyle = C.muted; g.font = "15px system-ui, sans-serif"; g.fillText("NISAR, L-band", SAT.x - 52, y + 62);
+}
+function drawGround(s) {
+  g.fillStyle = C.peat; g.fillRect(0, GROUND, W, H - GROUND);
+  g.fillStyle = mix(C.dry, C.wet, s.wet); g.fillRect(0, GROUND, W, 30);
+  const table = GROUND + 34 + (1 - s.wet) * 70;                                            // the water in the peat, as a level
+  g.fillStyle = "rgba(45,111,179,0.55)"; g.fillRect(0, table, W, H - table);
+  g.strokeStyle = "rgba(143,196,240,0.8)"; g.lineWidth = 1.5; g.setLineDash([10, 8]);
+  g.beginPath(); g.moveTo(0, table); g.lineTo(W, table); g.stroke(); g.setLineDash([]);
+  g.fillStyle = "rgba(238,242,246,0.75)"; g.font = "14px system-ui, sans-serif"; g.fillText("water in the peat", 22, table + 20);
+  g.fillStyle = "rgba(13,17,23,0.55)"; g.fillRect(1040, GROUND, 6, H - GROUND);              // a canal
+  g.fillRect(1040, GROUND, 60, 30 + (1 - s.wet) * 40);
+  g.fillStyle = mix("#1c2a3a", C.wet, s.wet * 0.9); g.fillRect(1046, GROUND + 6 + (1 - s.wet) * 44, 48, 60);
+}
+function drawTree(tree, s, t, burning) {
+  const top = GROUND - tree.h;
+  g.fillStyle = mix(C.char, C.trunk, clamp(s.canopy * 1.4));
+  g.fillRect(tree.x - 9, top + 30, 18, tree.h - 30);
+  g.strokeStyle = g.fillStyle; g.lineWidth = 6; g.lineCap = "round";
+  for (const [dx, dy] of [[-46, -34], [40, -44], [-22, -70], [26, -78]]) { g.beginPath(); g.moveTo(tree.x, top + 60); g.lineTo(tree.x + dx, top + 60 + dy); g.stroke(); }
+  const sway = Math.sin(t * 1.1 + tree.x) * 4;
+  const blobs = [[0, 0, 1], [-0.72, 0.34, 0.74], [0.72, 0.3, 0.76], [-0.3, -0.5, 0.7], [0.36, -0.46, 0.66]];
+  blobs.forEach(([bx, by, br], i) => {
+    const keep = clamp(s.canopy * 1.25 - i * 0.05);
+    if (keep <= 0.02) return;
+    g.globalAlpha = 0.9 * keep;
+    g.fillStyle = i % 2 ? C.leaf2 : C.leaf;
+    g.beginPath(); g.arc(tree.x + bx * tree.r + sway, top + by * tree.r, tree.r * br * (0.55 + 0.45 * keep), 0, Math.PI * 2); g.fill();
+  });
+  g.globalAlpha = 1;
+  if (burning > 0) {                                                                        // flames, glow and smoke
+    g.save();
+    g.globalCompositeOperation = "lighter";
+    const glow = g.createRadialGradient(tree.x, top + 40, 10, tree.x, top + 40, tree.r * 2.4);
+    glow.addColorStop(0, `rgba(255,120,40,${0.5 * burning})`); glow.addColorStop(1, "rgba(255,120,40,0)");
+    g.fillStyle = glow; g.fillRect(tree.x - tree.r * 2.4, top - tree.r * 2, tree.r * 4.8, tree.r * 4.4);
+    for (let i = 0; i < 34; i++) {                                                          // tongues of flame, rising and narrowing
+      const life = (t * 1.4 + noise(i * 1.7 + tree.x)) % 1;
+      const x = tree.x + (noise(i * 7 + tree.x) - 0.5) * tree.r * 2 + Math.sin(t * 6 + i) * 6 * life;
+      const y = top + 70 - life * (150 + 60 * noise(i * 2.3)) + (noise(i * 3) - 0.5) * 60;
+      const w = (16 + 14 * noise(i * 5)) * (1 - life * 0.75), h = w * 2.4;
+      const flame = g.createRadialGradient(x, y, 0, x, y, h);
+      flame.addColorStop(0, `rgba(255,236,170,${0.85 * burning * (1 - life)})`);
+      flame.addColorStop(0.35, `rgba(255,150,50,${0.6 * burning * (1 - life)})`);
+      flame.addColorStop(1, "rgba(255,70,20,0)");
+      g.fillStyle = flame;
+      g.beginPath(); g.ellipse(x, y, w, h, 0, 0, Math.PI * 2); g.fill();
+    }
+    for (let i = 0; i < 16; i++) {                                                          // sparks
+      const life = (t * 0.9 + noise(i * 9.1 + tree.x)) % 1;
+      const x = tree.x + (noise(i * 4 + tree.x) - 0.5) * tree.r * 2.4 + Math.sin(t * 3 + i * 2) * 20 * life, y = top + 20 - life * 240;
+      g.fillStyle = `rgba(255,210,120,${burning * (1 - life)})`; g.fillRect(x, y, 2.4, 2.4);
+    }
+    g.restore();
+  }
+}
+function drawSmoke(amount, t) {                    // smoke that drifts off after the fire
+  if (amount <= 0) return;
+  for (let i = 0; i < 46; i++) {
+    const tree = TREES[i % TREES.length], life = (t * 0.22 + noise(i * 3.3)) % 1;
+    const x = tree.x + (noise(i * 6.1) - 0.5) * 120 + life * 170, y = GROUND - tree.h - 20 - life * 330, r = 26 + life * 70;
+    const puff = g.createRadialGradient(x, y, 0, x, y, r);
+    puff.addColorStop(0, `rgba(150,150,158,${0.26 * amount * (1 - life)})`); puff.addColorStop(1, "rgba(150,150,158,0)");
+    g.fillStyle = puff; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+}
+function drawRain(amount, t) {
+  if (amount <= 0) return;
+  g.strokeStyle = C.rain; g.lineWidth = 1.6;
+  for (let i = 0; i < 150; i++) {
+    const x = (noise(i) * (W + 200) - 100 + t * 60) % W, y = ((noise(i + 50) + t * (1.5 + noise(i + 9))) % 1) * (GROUND - 20);
+    g.globalAlpha = amount * 0.55;
+    g.beginPath(); g.moveTo(x, y); g.lineTo(x - 5, y + 16); g.stroke();
+  }
+  g.globalAlpha = 1;
+}
+function drawMeters(s) {
+  const x = 1106, top = 190, h = 250;
+  g.fillStyle = "rgba(13,17,23,0.78)"; g.strokeStyle = "rgba(154,167,180,0.35)"; g.lineWidth = 1;
+  g.beginPath(); g.roundRect(x - 26, top - 62, 182, h + 134, 14); g.fill(); g.stroke();
+  g.fillStyle = C.ink; g.font = "600 16px system-ui, sans-serif"; g.textAlign = "center"; g.fillText("Echo strength", x + 65, top - 32);
+  [["HH", s.hh, C.hh, ["ground", "and trunk"]], ["HV", s.hv, C.hv, ["branches"]]].forEach(([name, value, colour, what], i) => {
+    const bx = x + 8 + i * 80;
+    g.fillStyle = "rgba(154,167,180,0.18)"; g.beginPath(); g.roundRect(bx, top, 34, h, 8); g.fill();
+    g.fillStyle = colour; g.shadowColor = colour; g.shadowBlur = 14;
+    g.beginPath(); g.roundRect(bx, top + h * (1 - value), 34, h * value, 8); g.fill(); g.shadowBlur = 0;
+    g.fillStyle = C.ink; g.font = "700 20px system-ui, sans-serif"; g.fillText(name, bx + 17, top + h + 28);
+    g.fillStyle = C.muted; g.font = "12px system-ui, sans-serif";
+    what.forEach((line, k) => g.fillText(line, bx + 17, top + h + 46 + k * 15));
+  });
+  g.textAlign = "left";
+}
+function drawText(s) {
+  g.fillStyle = C.ink; g.font = "700 30px system-ui, sans-serif";
+  g.fillText("How the L-band radar sees a peat dry season", 300, 58);
+  ACT_TEXT.forEach(([name], i) => {                                                         // the four steps
+    const x = 300 + i * 132, on = i === s.act;
+    g.fillStyle = on ? C.hh : "rgba(154,167,180,0.16)"; g.beginPath(); g.roundRect(x, 78, 118, 34, 17); g.fill();
+    g.fillStyle = on ? "#1a1205" : C.muted; g.font = `${on ? 700 : 500} 16px system-ui, sans-serif`; g.fillText(`${i + 1}  ${name}`, x + 26, 100);
+  });
+  const fade = Math.min(ease(s.u / 0.08), ease((1 - s.u) / 0.06));
+  g.globalAlpha = fade; g.font = "600 24px system-ui, sans-serif";
+  const words = ACT_TEXT[s.act][1];
+  g.fillStyle = "rgba(11,15,20,0.82)"; g.beginPath(); g.roundRect(288, 124, g.measureText(words).width + 24, 40, 10); g.fill();
+  g.fillStyle = C.ink; g.fillText(words, 300, 152); g.globalAlpha = 1;
+  g.fillStyle = "rgba(238,242,246,0.7)"; g.font = "13.5px system-ui, sans-serif";
+  g.fillText("A schematic, not data. On real land the two echoes often rise and fall together.", 24, H - 34);
+  g.fillText("Animation made with Super Intelligence (SI) assistance", 24, H - 14);
+}
+
+function render(time) {
+  const t = ((time % LOOP) + LOOP) % LOOP, s = stateAt(t);
+  g.clearRect(0, 0, W, H);
+  drawSky(t);
+  drawRain(s.act === 3 ? Math.min(ease(s.u / 0.1), ease((0.55 - s.u) / 0.2)) : 0, t);
+  drawGround(s);
+  const burning = s.act === 2 ? Math.min(ease(s.u / 0.06), ease((0.4 - s.u) / 0.15)) : 0;
+  TREES.forEach((tree) => drawTree(tree, s, t, burning));
+  drawSmoke(s.act === 2 ? ease((s.u - 0.1) / 0.3) : s.act === 3 ? 1 - ease(s.u / 0.25) : 0, t);
+  drawSatellite(t);
+  const beam = g.createLinearGradient(SAT.x, SAT.y, 640, GROUND);                           // the radar's beam, faint
+  beam.addColorStop(0, "rgba(242,178,90,0.16)"); beam.addColorStop(1, "rgba(242,178,90,0)");
+  g.fillStyle = beam; g.beginPath(); g.moveTo(SAT.x + 10, SAT.y + 24); g.lineTo(330, GROUND); g.lineTo(980, GROUND); g.closePath(); g.fill();
+
+  // Two pulses per act: one to the ground and back by way of a trunk (HH), one to the branches and back (HV).
+  const ground = [430, GROUND], trunk = [TREES[0].x - 9, GROUND - 92], crown = [TREES[1].x - 30, GROUND - TREES[1].h + 8];
+  const outHH = [[SAT.x + 26, SAT.y + 30], ground], backHH = [ground, trunk, [SAT.x + 70, SAT.y + 22]];
+  const outHV = [[SAT.x + 40, SAT.y + 16], crown], backHV = [crown, [SAT.x + 96, SAT.y + 4]];
+  [outHH, backHH, outHV, backHV].forEach((p, i) => faintPath(p, i < 2 ? C.hh : C.hv));
+  const go = clamp(s.u / 0.3), back = clamp((s.u - 0.34) / 0.3);
+  if (s.u < 0.31) { packet(outHH, go * pathLength(outHH), 15, C.ink, t); packet(outHV, go * pathLength(outHV), 15, C.ink, t); }
+  if (s.u > 0.3 && s.u < 0.4) {                                                             // the bounce
+    const pop = 1 - Math.abs((s.u - 0.35) / 0.05);
+    [[ground, C.hh, s.hhOut], [crown, C.hv, s.hvOut]].forEach(([p, colour, strength]) => {
+      g.globalAlpha = 0.7 * pop; g.fillStyle = colour; g.beginPath(); g.arc(p[0], p[1], 10 + 30 * strength * pop, 0, Math.PI * 2); g.fill();
+    });
+    g.globalAlpha = 1;
+  }
+  if (s.u > 0.3 && s.u < 0.6) {                                                             // ripples along the ground where the pulse lands
+    const k = (s.u - 0.3) / 0.3;
+    for (const delay of [0, 0.25]) {
+      const q = clamp(k - delay, 0, 1);
+      if (q <= 0) continue;
+      g.strokeStyle = C.hh; g.globalAlpha = 0.55 * (1 - q) * (0.35 + 0.65 * s.wet); g.lineWidth = 2;
+      g.beginPath(); g.ellipse(ground[0], GROUND + 2, 20 + 130 * q, 4 + 14 * q, 0, 0, Math.PI * 2); g.stroke();
+    }
+    g.globalAlpha = 1;
+  }
+  if (s.u > 0.34 && s.u < 0.66) {
+    packet(backHH, back * pathLength(backHH), 4 + 20 * s.hhOut, C.hh, t);
+    packet(backHV, back * pathLength(backHV), 4 + 20 * s.hvOut, C.hv, t, true);
+  }
+  drawMeters(s);
+  drawText(s);
+  const edge = Math.min(t / 0.5, (LOOP - t) / 0.5);                                         // the loop fades out and back in
+  if (edge < 1) { g.fillStyle = `rgba(11,15,20,${1 - ease(edge)})`; g.fillRect(0, 0, W, H); }
+}
+
+window.seek = (seconds) => render(seconds);
+window.loopSeconds = LOOP;
+if (!new URLSearchParams(location.search).has("still")) {
+  const begin = performance.now();
+  const tick = (now) => { render((now - begin) / 1000); requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+} else {
+  render(0);
+}
+</script>
+</body>
+</html>
