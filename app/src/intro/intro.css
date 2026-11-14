@@ -42,6 +42,24 @@
   position: absolute;
 }
 
+/* The ontology on the four side screens of the wall (wall.ts), over the grey placeholder shapes. */
+.intro-wall {
+  position: absolute;
+  background: #1b2128;
+  outline: 3px solid #07090b;
+  animation: intro-wall-on 600ms ease-out both;
+}
+.intro-wall svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@keyframes intro-wall-on {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Sizes inside the room are in the app's own pixels: on screen they show at 0.36 of this. */
 .intro-sign {
   position: absolute;
