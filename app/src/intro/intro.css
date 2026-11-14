@@ -202,3 +202,13 @@
     flex: 1;
   }
 }
+
+/* The dip to dark between a wall screen that has filled the view and the app behind it. */
+.intro-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #0b0f14;
+  opacity: 0;
+  pointer-events: none;
+}
