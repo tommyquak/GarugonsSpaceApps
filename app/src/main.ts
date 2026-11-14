@@ -60,6 +60,13 @@ async function start(): Promise<void> {
     attributionControl: false,
   });
   map.addControl(new AttributionControl({ customAttribution: sources }), "bottom-right");
+  // On a narrow map MapLibre folds the credits behind an "i" button but starts them unfolded,
+  // which covers a third of a phone's map. Start folded; a tap on the "i" shows them.
+  const credits = map.getContainer().querySelector(".maplibregl-ctrl-attrib");
+  if (credits?.classList.contains("maplibregl-compact")) {
+    credits.classList.remove("maplibregl-compact-show");
+    credits.removeAttribute("open");
+  }
   map.addControl(new NavigationControl({ showCompass: false }), "top-right");
   map.addControl(new ScaleControl({ unit: "metric" }), "bottom-left");
 
@@ -110,6 +117,7 @@ async function start(): Promise<void> {
   const legend = buildMapLegend(sheet, layers, overlays);
   const app = byId("app");
   const seasonButton = byId("btn-season");
+  const seasonTab = byId("tab-season"); // the same view from the phone's bottom bar, where the header button is hidden
   const exploreButton = byId("btn-explore");
   const actions = await buildActions(map, chart, {
     setTab,
@@ -118,10 +126,15 @@ async function start(): Promise<void> {
       overlays.setSuppressed(on);
       if (on) season.stop();
       seasonButton.setAttribute("aria-pressed", String(!on));
+      seasonTab.setAttribute("aria-pressed", String(!on));
     },
   });
   closeCheck = () => actions.apply(actions.parts().filter((part) => part === "how"), null);
   seasonButton.addEventListener("click", closeCheck);
+  seasonTab.addEventListener("click", () => {
+    closeCheck();
+    setTab(""); // fold the sheet so the slider and the map are in view
+  });
   // The raw layers and the class colours are for people who want to dig: off until asked for.
   const setExplore = (on: boolean): void => {
     app.classList.toggle("is-explore", on);
