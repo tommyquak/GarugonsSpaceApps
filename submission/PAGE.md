@@ -1,6 +1,6 @@
 # Project page draft
 
-Track 6 page draft for Tommy’s review. Results are drawn from the shared `app/public/validation.json`. Bracketed entries still await independent verification. Tommy submits the final page.
+Track 6 page draft for Tommy’s review. Results are drawn from the shared `app/public/validation.json`. Tommy submits the final page.
 
 ## 1. Project name
 
@@ -40,10 +40,9 @@ To be added: seven slides with animated GIFs (public link).
 ### What we found
 
 - Between mid July and late October 2026, HH fell by more than 1 dB on both orbits, relative to deep forest, across about 755 km² of mapped peat in the west and about 292 km² in the east. The study areas overlap. The two orbits ranked the locations of the fall similarly (Spearman ρ = 0.83 west and 0.87 east).
-- In the western reference forest, the 95th percentile of HH change over the dry season is [v: reference_drydown_p95_125] dB on the dawn orbit and [v: reference_drydown_p95_061] dB on the dusk orbit.
-- On the dawn orbit, the median change in HH within 250 m of a western forest edge was [v: selfcheck_forest_edge_median_125] dB.
+- In the western reference forest used to correct the radar baseline, the 95th percentile of the HH change was +0.27 dB at dawn and +0.37 dB at dusk. At western forest edges, the median dawn change was −0.4 dB for locations 50 to under 250 m inside the edge.
 - In western blocks where HH fell by more than 1 dB on both orbits, the median echo rose 1.15 dB on the first dawn pass after the rain and 1.12 dB on the first dusk pass. Each orbit observed the rebound once.
-- Fire was detected on [v: fire_share_on_peat_west] of mapped peat in the west box and [v: fire_share_on_peat_east] in the east. On the western dawn pass after the rain, the difference in HV change between peat with and without fire detections (fire minus no fire) was [v: recovery_hv_left_fire_minus_no_fire_on_peat_west_125] dB.
+- Among mapped peat pixels with radar coverage on both orbits, active-fire detection footprints covered about 37% in the west and 61% in the east. In western peat blocks where HH fell by more than 1 dB on both orbits, the median HV change from the dry-season start to the first dawn pass after rain was 0.54 dB lower in blocks with a fire detection than in those without one. The groups use the full study-period fire record, so the comparison cannot establish when fire affected a block.
 
 ### The physics, and the polarisations
 
@@ -83,7 +82,7 @@ Team to confirm before submission. Draft: We used SI coding assistants throughou
 
 - OpenStreetMap contributors, waterways and base map, https://www.openstreetmap.org
 - Sentinel-2 cloudless 2016 by EOX, the default base map (contains modified Copernicus Sentinel data 2016), CC BY 4.0, https://s2maps.eu
-- Peat boundary: PEATMAP (Xu et al. 2018), CC BY 4.0. [Dataset record, DOI 10.5518/252](https://archive.researchdata.leeds.ac.uk/251/). Every peat number uses it. It agrees with the Indonesian Ministry of Agriculture peat map on [v: peat_map_agreement_west] of cells in the west box and [v: peat_map_agreement_east] in the east; the two draw on the same mapping, so this is not an independent check. The official map has no stated licence and is not redistributed.
+- Peat boundary: PEATMAP (Xu et al. 2018), CC BY 4.0. [Dataset record, DOI 10.5518/252](https://archive.researchdata.leeds.ac.uk/251/). Every peat number uses it. PEATMAP and the Indonesian Ministry of Agriculture peat map draw on the same national mapping. Estimated peat area in the eastern box is sensitive to which boundary is used. The official map has no stated licence and is not redistributed.
 - Jaenicke, Englhart and Siegert 2011, monitoring the effect of restoration measures in Indonesian peatlands by radar satellite imagery. DOI 10.1016/j.jenvman.2010.09.029. [PubMed record](https://pubmed.ncbi.nlm.nih.gov/20971549/)
 - Hess, Melack and Simonett 1990, Radar detection of flooding beneath the forest canopy: A review. DOI 10.1080/01431169008955095. [Publisher record](https://doi.org/10.1080/01431169008955095)
 - Kim et al. 2017, Characterizing hydrologic changes of the Great Dismal Swamp using SAR/InSAR. DOI 10.1016/j.rse.2017.06.009. [Author’s copy at SMU (PDF)](https://www.smu.edu/-/media/site/dedman/academics/departments/earthsciences/pdf/kim/020_kim_gds_peatland_rse_2017.pdf)
