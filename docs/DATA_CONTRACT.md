@@ -18,6 +18,8 @@ One file per site and orbit: `<site>_<track>.npz`, for example `west_125.npz`.
 
 Sites: `west` and `east` (Central Kalimantan, tracks `125` ascending and `061` descending), `oki` (South Sumatra, tracks `010` ascending and `119` descending).
 
+Both stacks of a site are on the same grid, the one of the ascending track, so they line up pixel for pixel. Their date lists differ. Each stack has a `.json` file next to it with its dates, source granules and grid. Loading code is in `pipeline/radar/README.md`.
+
 Release tag: `data-v1`, then `data-v2` and so on. Never replace a file inside a published tag.
 
 ## 2. Map layers (tracks 2 and 3 write; tracks 4 and 5 read)
