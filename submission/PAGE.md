@@ -67,20 +67,20 @@ People who block canals, patrol for fire or study haze, and who today have no pi
 
 ## 6. Use of Super Intelligence (SI)
 
-Team to confirm before submission. Draft: We used SI coding assistants throughout the weekend, under each team member's direction, to write and test the pipeline and app code, to run the analysis, to draft documentation and this page, and to coordinate work through a shared message board. Team members decided the approach, reviewed the results and chose what to claim. Code files written with SI assistance say so in their first line, and `submission/SI_USE.md` lists each use. SI-made images and video carry a visible watermark.
+Team to confirm before submission. Draft: We used SI coding assistants throughout the weekend, under each team member's direction, to write and test the pipeline and app code, to run the analysis, to draft documentation and this page, and to coordinate work through a shared message board. Team members decided the approach, reviewed the results and chose what to claim. Code files written with SI assistance say so in their first line, and `submission/si_use/` lists each use. SI-made images and video carry a visible watermark.
 
 ## 7. NASA data
 
 - NISAR L2 GCOV (NASA and ISRO), Alaska Satellite Facility DAAC, https://search.asf.alaska.edu
 - GPM IMERG daily rainfall, NASA GES DISC, https://disc.gsfc.nasa.gov
 - FIRMS active fire detections (VIIRS and MODIS), https://firms.modaps.eosdis.nasa.gov
-- NASA GIBS imagery for the basemap, https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api
+- NASA GIBS imagery: Blue Marble for a basemap option, and VIIRS daily true colour (`VIIRS_SNPP_CorrectedReflectance_TrueColor`, Suomi NPP) for the dated ground look in the place card, https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api
 
 ## 8. Space agency partner and other data, and references
 
 - OpenStreetMap contributors, waterways and base map, https://www.openstreetmap.org
 - Sentinel-2 cloudless 2016 by EOX, the default base map (contains modified Copernicus Sentinel data 2016), CC BY 4.0, https://s2maps.eu
-- Peat boundary: Indonesian Ministry of Agriculture peat map, viewed through Global Forest Watch; and Gumbricht et al. 2017, doi 10.17528/CIFOR/DATA.00058. Linked, not redistributed.
+- Peat boundary: PEATMAP, Xu et al. 2018, CC BY 4.0, doi 10.5518/252. Every peat number uses it. It agrees with the Indonesian Ministry of Agriculture peat map (no stated licence, so used for comparison only and not redistributed) on [v: peat_map_agreement_west] of cells in the west box and [v: peat_map_agreement_east] in the east.
 - Jaenicke, Englhart and Siegert 2011, monitoring the effect of restoration measures in Indonesian peatlands by radar satellite imagery, doi 10.1016/j.jenvman.2010.09.029
 - Hess, Melack and Simonett 1990, radar detection of flooding beneath the forest canopy, doi 10.1080/01431169008955095
 - Kim et al. 2017, L-band backscatter and groundwater in forested peat, doi 10.1016/j.rse.2017.06.009

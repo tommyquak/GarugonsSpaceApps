@@ -1,6 +1,6 @@
 # Slide outline
 
-Seven slides, the demo limit. Track 6, owner Reagan. Every `[v: key]` is filled from `pipeline/out/validation.json` once the entry is `final`; until then the slide shows the key, never a typed number. GIFs are recorded from the live app. Any SI-made image carries a visible "Made with SI" watermark and a line in `SI_USE.md`.
+Seven slides, the demo limit. Track 6, owner Reagan. Every `[v: key]` is filled from `pipeline/out/validation.json` once the entry is `final`; until then the slide shows the key, never a typed number. GIFs are recorded from the live app. Any SI-made image carries a visible "Made with SI" watermark and a line in its maker's file in `si_use/`.
 
 The thread through all seven: the dry season as a dance in three beats, **dry, burn, rewet**, seen by a radar that does not stop for cloud or smoke.
 
