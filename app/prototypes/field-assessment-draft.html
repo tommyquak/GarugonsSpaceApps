@@ -1,0 +1,396 @@
+<!-- Written with Super Intelligence (SI) assistance. Standalone visual prototype; not wired into the app. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101416">
+  <title>Field assessment · visual draft</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #101416;
+      --panel: #171d20;
+      --paper: #f3f0e8;
+      --paper-ink: #202725;
+      --muted: #9aa6a7;
+      --hairline: rgba(226, 232, 224, .13);
+      --accent: #e5a85c;
+      --dry: #df6b49;
+      --burn: #efebe1;
+      --rewet: #6b9fc0;
+      --left: #9b83bd;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; overflow-x: hidden;
+      background: radial-gradient(ellipse at 53% 35%, #263135 0, #151b1d 37%, #0d1112 76%);
+      color: #eeeae1; font: 14px/1.5 "IBM Plex Sans", "Segoe UI", sans-serif;
+    }
+    button { color: inherit; font: inherit; }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .grain { position: fixed; inset: 0; pointer-events: none; opacity: .12; z-index: 5;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E"); }
+    .topbar { height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(18px, 4vw, 60px); border-bottom: 1px solid var(--hairline); letter-spacing: .06em; text-transform: uppercase; font-size: 10px; color: #b5bfbd; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 22px; height: 22px; border: 1px solid #9da8a4; border-radius: 50%; position: relative; }
+    .brand-mark::before,.brand-mark::after { content:""; position:absolute; left:4px; right:4px; top:10px; height:1px; background:#9da8a4; transform:rotate(-38deg); }
+    .brand-mark::after { transform:rotate(38deg); }
+    .draft-label { color: var(--accent); border: 1px solid rgba(229,168,92,.4); padding: 5px 9px; border-radius: 3px; }
+    main { max-width: 1500px; margin: auto; padding: clamp(28px, 5vh, 62px) clamp(18px, 4vw, 62px) 32px; }
+    .intro { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-bottom: 22px; }
+    .eyebrow { color: #9da9a7; font-size: 10px; letter-spacing: .17em; text-transform: uppercase; }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(30px, 4vw, 52px); letter-spacing: -.035em; line-height: 1.04; margin: 10px 0 9px; }
+    .intro p { max-width: 500px; color: #adb6b2; margin: 0; font-size: 14px; }
+    .enter-hint { white-space: nowrap; color: #c7ceca; font-size: 12px; padding-bottom: 5px; }
+    .stage { position: relative; height: min(66vh, 680px); min-height: 480px; overflow: hidden; border: 1px solid rgba(225,235,231,.12); border-radius: 5px; background: linear-gradient(180deg, rgba(7,11,13,.22), rgba(5,8,9,.86)), radial-gradient(ellipse at 50% 38%, #3d4a4c 0, #1e282a 45%, #111719 78%); box-shadow: 0 35px 100px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.08); isolation: isolate; }
+    .stage::before { content:""; position:absolute; inset:0 0 44% 0; opacity:.38; background: repeating-linear-gradient(90deg, transparent 0 139px, rgba(255,255,255,.035) 140px 141px), linear-gradient(180deg, transparent 88%, rgba(174,193,188,.08)); }
+    .stage::after { content:""; position:absolute; left:0; right:0; bottom:0; height:27%; background: linear-gradient(180deg, rgba(6,9,10,0), rgba(4,7,8,.64)); border-top:1px solid rgba(213,223,219,.11); z-index:0; }
+    .room-glow { position:absolute; width:36%; height:1px; top:10%; left:32%; background:#d4e0db; box-shadow:0 0 9px 2px rgba(208,225,217,.46),0 55px 100px 45px rgba(197,217,208,.06); opacity:.65; }
+    .console-line { position:absolute; bottom:27%; left:0; right:0; height:1px; background:rgba(197,210,204,.21); z-index:1; }
+    .desk { position:absolute; bottom:0; height:26%; left:0; right:0; background:linear-gradient(180deg,#101619,#0a0e10); border-top:1px solid rgba(210,223,219,.12); transform:perspective(300px) rotateX(7deg) scale(1.02); transform-origin:bottom; z-index:1; }
+    .desk-light { position:absolute; bottom:22%; left:14%; right:14%; height:2px; background:linear-gradient(90deg,transparent,rgba(204,151,87,.7),transparent); filter:blur(2px); z-index:2; }
+    .screen-bank { position:absolute; top:8%; left:50%; transform:translateX(-50%); display:flex; gap:12px; opacity:.42; z-index:1; }
+    .screen-bank i { display:block; width:clamp(52px,7vw,100px); height:54px; border:1px solid #566264; background:linear-gradient(140deg,#263337,#11191b); box-shadow:0 6px 16px #060a0b; }
+    .hands { position:absolute; z-index:2; width:min(91%,1100px); height:100%; left:50%; bottom:-1%; transform:translateX(-50%); overflow:visible; filter:drop-shadow(0 15px 13px rgba(0,0,0,.48)); }
+    .front-sheet { position:absolute; z-index:3; width:clamp(285px,34vw,460px); height:clamp(390px,54vh,570px); left:50%; top:50%; transform:translate(-50%,-51%) perspective(1100px) rotateY(-2deg) rotateX(1deg); padding:clamp(20px,2.2vw,32px); overflow:hidden; color:var(--paper-ink); text-align:left; cursor:zoom-in; border:1px solid #d2cbbc; border-radius:2px; background:linear-gradient(113deg,rgba(255,255,255,.42),transparent 40%),var(--paper); box-shadow:0 25px 56px rgba(0,0,0,.52), 0 2px 3px rgba(255,255,255,.5) inset; transition:transform .4s ease, box-shadow .4s ease; }
+    .front-sheet:hover { transform:translate(-50%,-53%) perspective(1100px) rotateY(-1deg) scale(1.015); box-shadow:0 34px 70px rgba(0,0,0,.57),0 2px 3px rgba(255,255,255,.5) inset; }
+    .sheet-top { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(34,43,39,.24); padding-bottom:12px; font-size:8px; letter-spacing:.13em; text-transform:uppercase; }
+    .nasa-mark { width:25px; height:25px; display:grid; place-items:center; font-size:8px; border:1px solid #5f6d67; border-radius:50%; color:#52605a; font-weight:700; letter-spacing:-.07em; }
+    .cover-title { font:400 clamp(27px,3vw,39px)/.99 Georgia,serif; letter-spacing:-.035em; margin:28px 0 11px; max-width:360px; }
+    .cover-subtitle { font:12px/1.4 "Segoe UI",sans-serif; color:#64716a; max-width:320px; margin:0 0 17px; }
+    .limit-ribbon { display:flex; gap:9px; align-items:flex-start; border-left:3px solid #9b83bd; background:#e7e1ec; color:#3c3347; font:9px/1.38 "Segoe UI",sans-serif; padding:8px 10px; margin-bottom:15px; }
+    .mini-map { position:relative; height:145px; background:#dce1db; border:1px solid #c6cdc5; overflow:hidden; }
+    .mini-map svg { position:absolute; inset:0; width:100%; height:100%; }
+    .map-caption { display:flex; justify-content:space-between; margin-top:5px; color:#6f7972; font-size:7px; letter-spacing:.06em; text-transform:uppercase; }
+    .cover-facts { display:flex; gap:18px; margin-top:13px; border-top:1px solid rgba(34,43,39,.2); padding-top:10px; }
+    .cover-fact { flex:1; }
+    .cover-fact b { display:block; font:26px/1 Georgia,serif; color:#455149; }
+    .cover-fact span { display:block; font-size:7px; line-height:1.3; color:#66726b; margin-top:4px; }
+    .cover-foot { position:absolute; bottom:17px; left:clamp(20px,2.2vw,32px); right:clamp(20px,2.2vw,32px); display:flex; justify-content:space-between; font-size:7px; color:#778079; text-transform:uppercase; letter-spacing:.1em; }
+    .tap-cue { position:absolute; z-index:4; bottom:20px; left:50%; transform:translateX(-50%); padding:9px 13px; border:1px solid rgba(240,239,228,.23); border-radius:3px; color:#e9ebe5; background:rgba(10,14,15,.66); font-size:11px; backdrop-filter:blur(7px); }
+    .tap-cue span { color:var(--accent); padding-left:8px; }
+    .legend { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-top:14px; color:#a9b2af; font-size:11px; }
+    .legend-items { display:flex; flex-wrap:wrap; gap:15px; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .swatch { width:8px; height:8px; border-radius:50%; background:var(--dry); }
+    .swatch.burn { background:#ece9df; border:1px solid #89938e; }
+    .swatch.rewet { background:var(--rewet); }
+    .swatch.left { background:var(--left); }
+    .meta-note { text-align:right; max-width:480px; }
+
+    .report-viewer { position:fixed; inset:0; z-index:20; opacity:0; pointer-events:none; transform:translateY(5vh) scale(.84); transform-origin:50% 54%; transition:transform .64s cubic-bezier(.2,.78,.14,1),opacity .24s ease; background:#0f1415; display:grid; grid-template-rows:62px 1fr; }
+    body.report-open .report-viewer { opacity:1; pointer-events:auto; transform:none; }
+    body.report-open .stage, body.report-open .intro, body.report-open .legend, body.report-open .topbar { filter:blur(7px); opacity:.2; transition:filter .4s,opacity .4s; }
+    .viewer-bar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 24px; border-bottom:1px solid var(--hairline); background:#111718; }
+    .viewer-title { color:#bec6c1; font-size:11px; letter-spacing:.11em; text-transform:uppercase; }
+    .viewer-actions { display:flex; align-items:center; gap:9px; }
+    .viewer-actions button,.page-nav button { border:1px solid rgba(236,239,231,.19); background:#1c2425; border-radius:3px; padding:8px 12px; cursor:pointer; font-size:11px; }
+    .viewer-actions .print { color:#171819; background:#e5a85c; border-color:#e5a85c; font-weight:600; }
+    .close-view { font-size:20px!important; width:37px; height:37px; padding:0!important; }
+    .viewer-body { overflow:auto; padding:28px 18px 70px; scroll-behavior:smooth; }
+    .page-nav { display:flex; justify-content:center; gap:7px; margin:0 auto 20px; }
+    .page-nav button { color:#9da8a4; background:transparent; }
+    .page-nav button[aria-current="page"] { color:#f1eee6; border-color:var(--accent); }
+    .pages { width:min(850px,100%); margin:0 auto; }
+    .report-page { position:relative; width:100%; min-height:1100px; margin:0 auto 28px; padding:64px 70px 58px; color:var(--paper-ink); background:var(--paper); box-shadow:0 18px 60px rgba(0,0,0,.38); overflow:hidden; }
+    .page-kicker { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #d0d0c7; padding-bottom:16px; color:#68736d; font-size:9px; letter-spacing:.14em; text-transform:uppercase; }
+    .page-title { font:400 54px/.98 Georgia,serif; letter-spacing:-.04em; margin:38px 0 13px; max-width:640px; }
+    .page-deck { color:#64716a; max-width:570px; margin:0; font-size:16px; }
+    .caveat { margin:23px 0; border-left:4px solid #9882b4; background:#e9e2ef; color:#3e3548; padding:13px 15px; font-size:12px; line-height:1.45; }
+    .section-label { color:#727c75; font-size:9px; letter-spacing:.15em; text-transform:uppercase; margin:25px 0 10px; }
+    .page-map { position:relative; height:330px; background:#e1e5dd; border:1px solid #cbd1c8; overflow:hidden; }
+    .page-map svg { width:100%;height:100%; }
+    .map-key { position:absolute; left:14px; bottom:13px; display:flex; gap:12px; background:rgba(245,244,235,.9); padding:7px 9px; font-size:9px; }
+    .map-key span { display:flex; align-items:center; gap:5px; }
+    .map-key i { width:8px;height:8px;border-radius:50%;background:var(--dry); }
+    .map-key .k-burn { background:#39413e; }
+    .map-key .k-rewet { background:var(--rewet); }
+    .map-disclaimer { position:absolute; right:11px; bottom:12px; font-size:8px; color:#788078; }
+    .summary-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:15px; }
+    .summary-card { min-height:98px; padding:12px 14px; border-top:2px solid #8b9690; background:#e9e9e0; }
+    .summary-card:nth-child(1) { border-color:var(--dry); }
+    .summary-card:nth-child(2) { border-color:#6c7c72; }
+    .summary-card:nth-child(3) { border-color:var(--rewet); }
+    .summary-card strong { display:block; font:29px Georgia,serif; color:#3f4b44; }
+    .summary-card span { color:#6d7771; font-size:10px; }
+    .page-bottom { position:absolute; bottom:25px; left:70px; right:70px; display:flex; justify-content:space-between; border-top:1px solid #d0d0c7; padding-top:11px; color:#7a847c; font-size:8px; letter-spacing:.06em; text-transform:uppercase; }
+    .page-two-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin:20px 0; }
+    .evidence-card { border:1px solid #d0d2c9; padding:17px; min-height:190px; background:#eeece4; }
+    .evidence-card h3 { font:22px Georgia,serif; margin:0 0 7px; }
+    .evidence-card p { color:#65716a; font-size:11px; margin:0 0 15px; }
+    .spark { height:65px; display:flex; align-items:end; gap:5px; border-bottom:1px solid #aeb7ae; background:repeating-linear-gradient(0deg,transparent 0 20px,rgba(67,82,73,.08) 21px); padding:0 5px; }
+    .spark i { flex:1; height:var(--h); background:var(--c,#d7784e); opacity:.78; }
+    .stat-pair { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:22px; }
+    .stat { border-top:1px solid #bdc4bb; padding-top:13px; }
+    .stat b { font:35px Georgia,serif; color:#435148; display:block; }
+    .stat span { font-size:11px; color:#65716a; }
+    .method-note { background:#e7e8df; padding:17px 19px; font-size:11px; color:#56625b; margin-top:19px; }
+    .handoff-list { counter-reset:step; list-style:none; padding:0; margin:24px 0; }
+    .handoff-list li { counter-increment:step; display:grid; grid-template-columns:36px 1fr; gap:14px; padding:17px 0; border-top:1px solid #d0d2c9; }
+    .handoff-list li::before { content:counter(step,decimal-leading-zero); color:#a56944; font:17px Georgia,serif; }
+    .handoff-list strong { display:block; font:20px Georgia,serif; margin-bottom:4px; }
+    .handoff-list span { display:block; color:#647069; font-size:11px; }
+    .sources { font-size:9px; color:#69736c; line-height:1.55; border-top:1px solid #d0d2c9; padding-top:14px; }
+    .status-message { font-size:10px;color:#788078;margin-top:8px; }
+    .footer-hint { text-align:center; color:#76817c; font-size:10px; margin:22px 0 0; }
+    @media (max-width:760px) {
+      .topbar { height:54px; padding:0 16px; }
+      main { padding:28px 14px 22px; }
+      .intro { display:block; margin-bottom:17px; }
+      .intro p { max-width:450px; }
+      .enter-hint { margin-top:12px; }
+      .stage { height:560px; min-height:470px; }
+      .screen-bank { top:7%; }
+      .front-sheet { width:clamp(270px,78vw,365px); height:455px; top:47%; }
+      .mini-map { height:106px; }
+      .cover-title { font-size:29px; margin-top:19px; }
+      .cover-foot { bottom:12px; }
+      .tap-cue { bottom:12px; width:max-content; }
+      .legend { display:block; }
+      .meta-note { text-align:left; margin-top:8px; }
+      .viewer-bar { height:56px; padding:0 11px; }
+      .viewer-title { font-size:9px; }
+      .viewer-actions { gap:5px; }
+      .viewer-actions button { padding:7px; font-size:10px; }
+      .viewer-body { padding:14px 9px 40px; }
+      .report-page { min-height:1000px; padding:35px 25px 50px; }
+      .page-title { font-size:39px; margin-top:27px; }
+      .page-map { height:230px; }
+      .summary-row { grid-template-columns:1fr; }
+      .summary-card { min-height:auto; }
+      .page-two-grid { grid-template-columns:1fr; }
+      .page-bottom { left:25px; right:25px; }
+      .map-key { gap:7px; font-size:8px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; } }
+    @media print {
+      @page { size:A4 portrait; margin:0; }
+      body { background:white; color:#202725; }
+      .grain,.topbar,main,.viewer-bar,.page-nav,.footer-hint { display:none!important; }
+      .report-viewer { position:static; display:block; opacity:1; transform:none; background:white; overflow:visible; }
+      .viewer-body { overflow:visible; padding:0; }
+      .pages { width:auto; margin:0; }
+      .report-page { width:210mm; height:297mm; min-height:0; margin:0; padding:17mm 18mm 18mm; box-shadow:none; break-after:page; page-break-after:always; }
+      .report-page:last-child { break-after:auto; page-break-after:auto; }
+      .page-bottom { left:18mm; right:18mm; bottom:9mm; }
+      .page-map { height:78mm; }
+      .summary-card { min-height:26mm; }
+      .evidence-card { min-height:42mm; }
+      .report-page:nth-child(3) { break-after:auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>Dry Season Waltz · field handoff</span></div>
+    <span class="draft-label">visual draft</span>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="intro-title">
+      <div>
+        <div class="eyebrow">From evidence to a field decision</div>
+        <h1 id="intro-title">A report the team can take with them.</h1>
+        <p>Review the evidence, then open a three-page field assessment for the command team. The page and hands are a visual concept; the report preview uses project terminology and final validation values.</p>
+      </div>
+      <div class="enter-hint">Click the sheet to open <span aria-hidden="true">↗</span></div>
+    </section>
+
+    <section class="stage" aria-label="A printed field assessment held in a dark operations room">
+      <div class="room-glow" aria-hidden="true"></div>
+      <div class="screen-bank" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="console-line" aria-hidden="true"></div>
+      <div class="desk" aria-hidden="true"></div><div class="desk-light" aria-hidden="true"></div>
+      <svg class="hands" viewBox="0 0 1200 680" role="img" aria-label="Illustrated hands holding a report">
+        <defs>
+          <linearGradient id="skinL" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c18b69"/><stop offset=".45" stop-color="#916248"/><stop offset="1" stop-color="#604433"/></linearGradient>
+          <linearGradient id="skinR" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#d0a07c"/><stop offset=".48" stop-color="#946648"/><stop offset="1" stop-color="#5b4233"/></linearGradient>
+          <linearGradient id="sleeve" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#263033"/><stop offset="1" stop-color="#131a1c"/></linearGradient>
+        </defs>
+        <path d="M0 680 0 579c54-47 91-95 139-154 32-39 70-65 108-61 33 3 56 27 61 60 5 33-8 62-25 91l-82 165Z" fill="url(#sleeve)"/>
+        <path d="M0 651c45-53 83-107 127-161 35-43 75-82 110-86 29-3 47 13 52 35 6 25-3 45-20 67l-54 73c-18 24-34 48-50 72Z" fill="url(#skinL)"/>
+        <path d="M205 425c-24-14-49-31-64-51-12-16-19-35-12-49 8-17 28-18 43-5l49 41c-13-21-25-43-25-59 0-18 12-29 28-27 15 2 22 17 30 34l25 49c17 9 31 25 35 45 6 28-5 58-24 81-19 23-53 38-87 35-27-2-48-17-55-38-7-23 4-44 27-56Z" fill="url(#skinL)" stroke="#d0a183" stroke-opacity=".32" stroke-width="2"/>
+        <path d="M1200 680V579c-54-47-91-95-139-154-32-39-70-65-108-61-33 3-56 27-61 60-5 33 8 62 25 91l82 165Z" fill="url(#sleeve)"/>
+        <path d="M1200 651c-45-53-83-107-127-161-35-43-75-82-110-86-29-3-47 13-52 35-6 25 3 45 20 67l54 73c18 24 34 48 50 72Z" fill="url(#skinR)"/>
+        <path d="M995 425c24-14 49-31 64-51 12-16 19-35 12-49-8-17-28-18-43-5l-49 41c13-21 25-43 25-59 0-18-12-29-28-27-15 2-22 17-30 34l-25 49c-17 9-31 25-35 45-6 28 5 58 24 81 19 23 53 38 87 35 27-2 48-17 55-38 7-23-4-44-27-56Z" fill="url(#skinR)" stroke="#d0a183" stroke-opacity=".32" stroke-width="2"/>
+        <path d="M171 349c7-7 19-7 27 0l15 14c6 6 6 17 0 23-7 6-16 4-24-2l-18-15c-7-6-7-14 0-20Z" fill="#d5a18c" opacity=".88"/>
+        <path d="M1029 349c-7-7-19-7-27 0l-15 14c-6 6-6 17 0 23 7 6 16 4 24-2l18-15c7-6 7-14 0-20Z" fill="#d5a18c" opacity=".88"/>
+        <path d="M140 412c17 12 36 20 53 24M1060 412c-17 12-36 20-53 24" fill="none" stroke="#e0b79c" stroke-opacity=".28" stroke-width="3"/>
+      </svg>
+
+      <button class="front-sheet" id="open-report" type="button" aria-label="Open the three-page field assessment">
+        <div class="sheet-top"><span>Field assessment · west peat</span><span class="nasa-mark" aria-label="NISAR">NISAR</span></div>
+        <h2 class="cover-title">Where should we check after the rain?</h2>
+        <p class="cover-subtitle">A screening brief for post-rain field verification in western Borneo.</p>
+        <div class="limit-ribbon"><strong>Screening only.</strong><span>No ground measurements; use this to guide investigation, not to select an intervention.</span></div>
+        <div class="mini-map" aria-label="Map preview of the western study area">
+          <svg id="cover-map" viewBox="0 0 400 180" aria-hidden="true"></svg>
+        </div>
+        <div class="map-caption"><span>Western study area</span><span>Block screening classes</span></div>
+        <div class="cover-facts">
+          <div class="cover-fact"><b id="repeat-fire-cover">—</b><span>of detected fire on mapped peat overlapped earlier fire footprints</span></div>
+          <div class="cover-fact"><b id="earlier-fire-cover">—</b><span>of western mapped peat had earlier fire detections</span></div>
+        </div>
+        <div class="cover-foot"><span>Dry Season Waltz · demonstration brief</span><span>Open report ↗</span></div>
+      </button>
+      <div class="tap-cue" aria-hidden="true">Open field assessment <span>↗</span></div>
+    </section>
+
+    <div class="legend" aria-label="Project visual key">
+      <div class="legend-items">
+        <span class="legend-item"><i class="swatch"></i>Dry · HH echo fell</span>
+        <span class="legend-item"><i class="swatch burn"></i>Burn · fire detected</span>
+        <span class="legend-item"><i class="swatch rewet"></i>Rewet · HH rose</span>
+        <span class="legend-item"><i class="swatch left"></i>Still low after rain</span>
+      </div>
+      <div class="meta-note">Mock report uses final validation values where available; map preview is from the current block layer.</div>
+    </div>
+  </main>
+
+  <section class="report-viewer" id="report-viewer" role="dialog" aria-modal="true" aria-label="Three-page field assessment preview" aria-hidden="true">
+    <header class="viewer-bar">
+      <div class="viewer-title">Dry Season Waltz <span aria-hidden="true">/</span> field assessment preview</div>
+      <div class="viewer-actions">
+        <button type="button" id="back-to-sheet">Back to sheet</button>
+        <button type="button" class="print" id="print-report">Print / save PDF</button>
+        <button type="button" class="close-view" id="close-report" aria-label="Close report">×</button>
+      </div>
+    </header>
+    <div class="viewer-body" id="viewer-body">
+      <nav class="page-nav" aria-label="Report pages">
+        <button type="button" data-page="page-1" aria-current="page">01 · decision</button>
+        <button type="button" data-page="page-2">02 · evidence</button>
+        <button type="button" data-page="page-3">03 · field handoff</button>
+      </nav>
+      <div class="pages">
+        <article class="report-page" id="page-1">
+          <div class="page-kicker"><span>Field assessment · west peatland</span><span>01 / decision brief</span></div>
+          <h2 class="page-title">Where should we check first after the rain?</h2>
+          <p class="page-deck">A screening brief for field teams reviewing radar change across western Borneo’s peatland.</p>
+          <div class="caveat"><strong>Screening result, not a field diagnosis.</strong> We have no ground measurements. The map shows radar change and fire detections; it does not measure the water table, explain why a place changed, or recommend an intervention.</div>
+          <div class="section-label">Western study area · one-kilometre screening blocks</div>
+          <div class="page-map"><svg id="report-map" viewBox="0 0 700 330" role="img" aria-label="Western study area block screening map"></svg>
+            <div class="map-key"><span><i></i>fell and stayed low</span><span><i class="k-burn"></i>fire detected</span><span><i class="k-rewet"></i>came back</span></div>
+            <div class="map-disclaimer">Current block layer · conceptual preview</div>
+          </div>
+          <div class="summary-row">
+            <div class="summary-card"><strong id="repeat-fire-stat">—</strong><span>of this season’s fire footprint on western peat overlaps land with earlier fire detections</span></div>
+            <div class="summary-card"><strong id="earlier-fire-stat">—</strong><span>of western mapped peat had fire detections in earlier seasons</span></div>
+            <div class="summary-card"><strong>Investigate</strong><span>verify selected blocks on the ground before any operational decision</span></div>
+          </div>
+          <p class="status-message" id="validation-status">Loading final validation values…</p>
+          <div class="page-bottom"><span>Dry Season Waltz · demonstration screening brief</span><span>Sources and limits on page 3</span></div>
+        </article>
+
+        <article class="report-page" id="page-2">
+          <div class="page-kicker"><span>Evidence summary · west peatland</span><span>02 / what the data show</span></div>
+          <h2 class="page-title">Three signals. One place to inspect.</h2>
+          <p class="page-deck">The report carries the dashboard’s Dry, Burn and Rewet evidence into a compact handoff.</p>
+          <div class="page-two-grid">
+            <section class="evidence-card"><h3>Dry</h3><p>HH radar brightness fell through the dry season. NISAR observes through cloud and smoke; the signal is compared with a deep-forest reference.</p><div class="spark" aria-label="Schematic dry season radar series"><i style="--h:82%;--c:#d8aa68"></i><i style="--h:75%;--c:#d49a60"></i><i style="--h:68%;--c:#d88c59"></i><i style="--h:59%;--c:#d77a52"></i><i style="--h:46%;--c:#d96949"></i><i style="--h:40%;--c:#c75a43"></i><i style="--h:34%;--c:#b64c3e"></i></div><div class="status-message">Schematic trend · final chart will use selected block data</div></section>
+            <section class="evidence-card"><h3>Burn</h3><p>Fire detections are a separate layer. The radar’s coherence also drops where and when FIRMS saw fire, with limits around non-fire ground change.</p><div class="spark" aria-label="Schematic fire detections"><i style="--h:13%;--c:#69746f"></i><i style="--h:22%;--c:#69746f"></i><i style="--h:31%;--c:#69746f"></i><i style="--h:79%;--c:#414b47"></i><i style="--h:92%;--c:#39413e"></i><i style="--h:50%;--c:#69746f"></i><i style="--h:24%;--c:#69746f"></i></div><div class="status-message">Schematic signal · not a time series</div></section>
+            <section class="evidence-card"><h3>Rewet</h3><p>HH rose on the first pass after rain in the driest blocks. Some mapped blocks remained low; this points to checks, not causes.</p><div class="spark"><i style="--h:28%;--c:#748892"></i><i style="--h:35%;--c:#6c8fa0"></i><i style="--h:31%;--c:#6c8fa0"></i><i style="--h:44%;--c:#638fa7"></i><i style="--h:59%;--c:#5e97b5"></i><i style="--h:69%;--c:#5a9abf"></i><i style="--h:74%;--c:#5a9abf"></i></div><div class="status-message">Schematic trend · report chart should use selected block data</div></section>
+            <section class="evidence-card"><h3>What did not come back</h3><p>Where HH and HV remained low after rain, compare the radar evidence with the fire footprint, vegetation and field notes.</p><div class="spark"><i style="--h:80%;--c:#8874a6"></i><i style="--h:76%;--c:#8874a6"></i><i style="--h:79%;--c:#8874a6"></i><i style="--h:73%;--c:#8874a6"></i><i style="--h:75%;--c:#8874a6"></i><i style="--h:71%;--c:#8874a6"></i><i style="--h:74%;--c:#8874a6"></i></div><div class="status-message">Schematic trend · no water-table inference</div></section>
+          </div>
+          <div class="section-label">Earlier fire footprint · final validation</div>
+          <div class="stat-pair">
+            <div class="stat"><b id="repeat-fire-stat-2">—</b><span>of the 2026 fire footprint on western mapped peat also had a detection in an earlier season</span></div>
+            <div class="stat"><b id="earlier-fire-stat-2">—</b><span>of western mapped peat had an earlier-season fire detection</span></div>
+          </div>
+          <div class="method-note">This overlap describes where detections occurred. It does not show why fire returned or establish that radar can predict a future fire.</div>
+          <div class="page-bottom"><span>Inputs: NISAR L-band · FIRMS · GPM IMERG · PEATMAP</span><span>All values from final validation</span></div>
+        </article>
+
+        <article class="report-page" id="page-3">
+          <div class="page-kicker"><span>Proposed field handoff · review before use</span><span>03 / next steps and limits</span></div>
+          <h2 class="page-title">Verify the signal before acting.</h2>
+          <p class="page-deck">Use the ranked blocks to choose a small, reachable set of sites and nearby comparisons for field verification.</p>
+          <div class="caveat"><strong>Decision boundary.</strong> This screening map identifies places to investigate. It does not measure water-table depth, identify a cause, predict fire, or recommend canal work or another intervention.</div>
+          <div class="section-label">Suggested field checks</div>
+          <ol class="handoff-list">
+            <li><div><strong>Confirm the location</strong><span>Use the selected block ID and coordinates; check access and whether the location is actually on mapped peat.</span></div></li>
+            <li><div><strong>Measure what radar cannot</strong><span>Record water-table depth if a dipwell is available, canal condition, visible fire evidence and vegetation condition.</span></div></li>
+            <li><div><strong>Capture a comparison</strong><span>Visit a nearby block with a different screening class under similar field conditions; record date, GPS and photographs.</span></div></li>
+            <li><div><strong>Review with local teams</strong><span>Compare field observations with the radar dates, rainfall timing and fire detections before prioritising any response.</span></div></li>
+          </ol>
+          <div class="section-label">What this report cannot establish</div>
+          <div class="method-note"><strong>One season, no ground truth.</strong> HH fall is not a measured water-table drop. Fire detections can miss small or obscured fires. Changes after rain are based on limited passes; differences in processing between releases add uncertainty. PEATMAP has its own boundary errors. A block label is a screening class produced by explicit thresholds, not a diagnosis.</div>
+          <div class="section-label">Sources and provenance</div>
+          <p class="sources">NISAR L2 GCOV HH/HV, NASA and ISRO, via Alaska Satellite Facility DAAC; FIRMS active fire detections, NASA; GPM IMERG rainfall, NASA; PEATMAP (Xu et al., 2018, CC BY 4.0); waterways from OpenStreetMap contributors. Processing, thresholds, validation and full limits are documented in the project repository. Generated as a demonstration report preview; not an official NASA or agency product.</p>
+          <div class="page-bottom"><span>Dry Season Waltz · field assessment preview</span><span>Review with local partners before use</span></div>
+        </article>
+      </div>
+      <p class="footer-hint">Use the page controls above, or scroll. Print / Save PDF creates a three-page handout.</p>
+    </div>
+  </section>
+
+  <script>
+    const body = document.body;
+    const viewer = document.getElementById("report-viewer");
+    const viewerBody = document.getElementById("viewer-body");
+    const opener = document.getElementById("open-report");
+    let lastFocus = null;
+
+    function openReport() {
+      lastFocus = document.activeElement;
+      body.classList.add("report-open");
+      viewer.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => document.getElementById("back-to-sheet").focus(), 620);
+    }
+    function closeReport() {
+      body.classList.remove("report-open");
+      viewer.setAttribute("aria-hidden", "true");
+      if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+    }
+    opener.addEventListener("click", openReport);
+    document.getElementById("back-to-sheet").addEventListener("click", closeReport);
+    document.getElementById("close-report").addEventListener("click", closeReport);
+    document.getElementById("print-report").addEventListener("click", () => window.print());
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && body.classList.contains("report-open")) closeReport(); });
+
+    document.querySelectorAll(".page-nav button").forEach((button) => button.addEventListener("click", () => {
+      const target = document.getElementById(button.dataset.page);
+      target?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      document.querySelectorAll(".page-nav button").forEach((item) => item.removeAttribute("aria-current"));
+      button.setAttribute("aria-current", "page");
+    }));
+
+    function showFinal(key, ids, suffix = "%") {
+      const item = window.reportValidation?.[key];
+      const value = item && item.status === "final" ? `${(Number(item.value) * 100).toFixed(1)}${suffix}` : "—";
+      for (const id of ids) document.getElementById(id).textContent = value;
+      return Boolean(item && item.status === "final");
+    }
+    fetch("../validation.json").then((r) => r.ok ? r.json() : Promise.reject()).then((data) => {
+      window.reportValidation = data;
+      const a = showFinal("fire_repeat_share_on_peat_west", ["repeat-fire-cover", "repeat-fire-stat", "repeat-fire-stat-2"]);
+      const b = showFinal("fire_earlier_share_on_peat_west", ["earlier-fire-cover", "earlier-fire-stat", "earlier-fire-stat-2"]);
+      document.getElementById("validation-status").textContent = a && b ? "Both figures are read from final entries in validation.json." : "Final values are not available in this local data copy; the report leaves them blank.";
+    }).catch(() => { document.getElementById("validation-status").textContent = "Validation data unavailable; no figures are shown."; });
+
+    function drawBlockMap(svg, viewWidth, viewHeight) {
+      fetch("../blocks/blocks_west.app.json").then((r) => r.ok ? r.json() : Promise.reject()).then((data) => {
+        const rows = data.rows || [];
+        const xs = rows.map((r) => r[2]); const ys = rows.map((r) => r[3]);
+        const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+        const colors = { fell_still_low: "#9b83bd", fire_detected: "#46504b", fell_came_back: "#6497b6", none: "#c7cdc4" };
+        let html = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/>`;
+        html += `<path d="M0 ${viewHeight*.78} C${viewWidth*.18} ${viewHeight*.58}, ${viewWidth*.26} ${viewHeight*.82}, ${viewWidth*.42} ${viewHeight*.55} S${viewWidth*.68} ${viewHeight*.62},${viewWidth} ${viewHeight*.24}" fill="none" stroke="#b4bdb2" stroke-width="2" stroke-dasharray="5 5"/>`;
+        for (const row of rows) {
+          const x = 15 + ((row[2] - minX) / (maxX-minX || 1)) * (viewWidth-30);
+          const y = 15 + ((maxY - row[3]) / (maxY-minY || 1)) * (viewHeight-30);
+          const color = colors[row[4]] || colors.none;
+          html += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(1.2,viewWidth/150).toFixed(1)}" height="${Math.max(1.2,viewWidth/150).toFixed(1)}" fill="${color}" opacity="${row[4]==="none"?.34:.82}"/>`;
+        }
+        html += `<path d="M${viewWidth*.2} ${viewHeight*.17} C${viewWidth*.31} ${viewHeight*.09},${viewWidth*.36} ${viewHeight*.21},${viewWidth*.44} ${viewHeight*.15} S${viewWidth*.59} ${viewHeight*.12},${viewWidth*.69} ${viewHeight*.2}" fill="none" stroke="#9d806a" stroke-width="1.1" opacity=".75"/>`;
+        svg.innerHTML = html;
+      }).catch(() => { svg.innerHTML = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/><text x="50%" y="50%" text-anchor="middle" fill="#6d7771" font-size="12">Block layer unavailable in this preview</text>`; });
+    }
+    drawBlockMap(document.getElementById("cover-map"), 400, 180);
+    drawBlockMap(document.getElementById("report-map"), 700, 330);
+  </script>
+</body>
+</html>
