@@ -64,6 +64,7 @@ Outputs land in `pipeline/out/`. The numbers are in `pipeline/out/validation.jso
 | GPM IMERG daily rainfall | NASA | GES DISC, https://disc.gsfc.nasa.gov |
 | FIRMS active fire detections (VIIRS, MODIS) | NASA | https://firms.modaps.eosdis.nasa.gov |
 | Waterways | OpenStreetMap contributors | https://www.openstreetmap.org |
+| PEATMAP peat extent, CC BY 4.0 | Xu, Morris, Liu and Holden 2018, University of Leeds | https://doi.org/10.5518/252 |
 | Sentinel-2 cloudless 2016 mosaic (basemap), CC BY 4.0 | EOX, from Copernicus Sentinel data (ESA) | https://cloudless.eox.at |
 | Blue Marble imagery (basemap option) | NASA GIBS | https://earthdata.nasa.gov/gibs |
 
