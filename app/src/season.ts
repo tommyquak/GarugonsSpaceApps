@@ -31,12 +31,19 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
   const slider = h("input", { type: "range", min: 0, max: last, step: 1, value: 0, "aria-label": "Radar pass" });
   // Always in view: pressed while the whole season shows, a filled call to return while one pass does.
   const wholeButton = h("button", { type: "button", class: "text-button season-whole", text: "Whole season" });
+  // One tick under the track for each pass: the dawn orbit tall, the dusk orbit short.
+  const ticks = h("div", { class: "season-ticks", "aria-hidden": "true" });
+  steps.forEach((step, k) => {
+    const tick = h("i", { class: step.orbit === "dawn" ? "is-dawn" : "is-dusk" });
+    tick.style.left = `${last ? (100 * k) / last : 0}%`;
+    ticks.append(tick);
+  });
   const fireButton = h("button", { type: "button", class: "text-button season-fire", text: "Fire", title: "Show the fire detected up to each date" });
   fireButton.hidden = !overlays.hasPassFire;
   const label = h("div", { class: "season-label", "aria-live": "polite" });
   const detail = h("div", { class: "season-detail" });
   root.replaceChildren(
-    h("div", { class: "season-row" }, playButton, slider, fireButton, wholeButton),
+    h("div", { class: "season-row" }, playButton, h("div", { class: "season-track" }, slider, ticks), fireButton, wholeButton),
     h("div", { class: "season-text" }, label, detail),
   );
 

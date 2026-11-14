@@ -13,7 +13,7 @@ export interface Level {
   title: string;
   text: string;
   color: string;
-  /** Opacity of the flat fill: the lowest level is kept faint so the other two stand out. */
+  /** Opacity of the flat fill: the lowest level is by far the largest, so it is kept faint and the other two come forward. */
   strength: number;
   /** The colour of a column, which cannot vary its opacity. */
   solid: string;
@@ -22,7 +22,7 @@ export interface Level {
 export const LEVELS: Level[] = [
   { id: 3, title: "Most affected", text: "Fire on several days, and the vegetation echo (HV) was still low after the rain.", color: "#ff3b30", strength: 0.95, solid: "#ff3b30" },
   { id: 2, title: "Affected", text: "The echo fell and was still low after the rain, or fire with the vegetation echo still low.", color: "#ff9f0a", strength: 0.92, solid: "#ff9f0a" },
-  { id: 1, title: "Changed, then recovered", text: "Fire was detected or the echo fell, and the radar saw no lasting change after the rain.", color: "#f2d98a", strength: 0.3, solid: "#5f573f" },
+  { id: 1, title: "Changed, then recovered", text: "Fire was detected or the echo fell, and the radar saw no lasting change after the rain.", color: "#f2d98a", strength: 0.16, solid: "#454031" },
 ];
 
 export const LEVELS_NOTE = "Ranked by signs of lasting change in the radar and fire data. Not checked on the ground.";

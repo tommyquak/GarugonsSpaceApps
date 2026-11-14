@@ -947,6 +947,47 @@ input[type="range"]::-moz-range-thumb {
   gap: 10px;
 }
 
+/* The slider with a tick for every radar pass under its track. The ticks span the travel of the
+   thumb, which stops half its own width short of each end. */
+.season-track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.season-ticks {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: calc(50% + 5px);
+  height: 7px;
+  pointer-events: none;
+}
+
+.season-ticks i {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  margin-left: -0.5px;
+  height: 4px;
+  background: var(--muted);
+  opacity: 0.7;
+}
+
+.season-ticks i.is-dawn {
+  height: 7px;
+  background: var(--text);
+}
+
+/* The line under the name gives way before it has to be cut short. */
+@media (max-width: 1279px) {
+  .brand p {
+    display: none;
+  }
+}
+
 .season-text {
   display: flex;
   flex-wrap: wrap;
