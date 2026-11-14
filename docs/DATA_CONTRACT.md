@@ -37,7 +37,6 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 | `peat_official_<site>.tif`, `peat_cifor_<site>.tif` | 3 | Other peat maps as cross-checks. Local use only: no stated licence, so not committed and not released. |
 | `canals_osm_<site>.geojson`, `canal_distance_<site>.tif` | 3 | Canals, drains and ditches from OpenStreetMap (ODbL), and metres to the nearest one. |
 | `rain_daily_<site>.json` | 3 | `{ "YYYY-MM-DD": mm }`, box mean. |
-| `canals_osm_<site>.geojson` | 3 | OpenStreetMap waterways. |
 
 ## 3. Numbers (tracks 2, 3 and 5 write; tracks 4 and 6 read)
 
