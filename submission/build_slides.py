@@ -52,7 +52,7 @@ CHOICES = [
     ("One ontology.", "Sources, observations, states and classes, with their thresholds, live in one file that the pipeline and the app both read."),
 ]
 # What comes next (slide 7), also used by build_html_deck.py. The papers are in docs/REFERENCES.md.
-SUBSIDENCE = ("Drained peat sinks as it oxidises, and that sinking is carbon lost (Hooijer et al. 2012). L-band radar has measured it in Central Kalimantan, checked in the field (Tay et al. 2025). NISAR's 12-day pairs, whose coherence we already use, could do the same with two to three years of passes.")
+SUBSIDENCE = ("Drained peat sinks, and over the years much of that sinking is peat oxidising, which is carbon lost (Hooijer et al. 2012). L-band radar has measured the sinking in Central Kalimantan, checked in the field (Tay et al. 2025). NISAR's 12-day pairs, whose coherence we already use, could do the same with two to three years of passes.")
 MORE_SEASONS = "Every dry season set against wet years. The pipeline takes any bounding box; not yet run on a second site."
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
 CODE_URL = "https://github.com/tommyquak/GarugonsSpaceApps"
