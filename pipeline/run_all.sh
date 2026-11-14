@@ -82,6 +82,7 @@ if [ -n "${WITH_CONTEXT:-}" ]; then
     $PY pipeline/context/peat.py --site "$site" --layers "$L"      # official map, local cross-check only
     $PY pipeline/context/canals.py --site "$site" --layers "$L"
   done
+  $PY pipeline/context/pull_gunw.py --sites $SITES --tracks $ASC $DESC --out data/gunw   # coherence for the burn flag; skips pairs already on disk
 fi
 for site in $SITES; do   # these two only read what is on disk, so they always run when their input exists
   if [ -d "data/firms/$site" ]; then
@@ -96,6 +97,10 @@ for site in $SITES; do   # these two only read what is on disk, so they always r
   fi
   if [ -d "data/firms_history/$site" ] && [ -f "$L/fire_days_$site.tif" ] && [ -f "$L/peat_peatmap_$site.tif" ]; then
     $PY pipeline/context/repeat_fire.py --site "$site" --history "data/firms_history/$site" --layers "$L"
+  fi
+  if [ -d "data/gunw/$site" ] && [ -d "data/firms/$site" ] && [ -f "$L/peat_peatmap_$site.tif" ]; then
+    $PY pipeline/context/burn_flag.py --site "$site" --track $ASC --gunw "data/gunw/$site" --firms "data/firms/$site" --layers "$L"
+    $PY pipeline/context/burn_flag.py --site "$site" --track $DESC --other-track $ASC --gunw "data/gunw/$site" --firms "data/firms/$site" --layers "$L"
   fi
 done
 
