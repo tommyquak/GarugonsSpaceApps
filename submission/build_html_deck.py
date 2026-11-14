@@ -10,7 +10,7 @@ numbers change only by rebuilding from the file.
         --out submission/deck            # writes index.html and copies the pictures to assets/
     python submission/build_html_deck.py ... --final   # only keys marked final; no draft badge
 
-Pictures: gh release download figures-v3 --dir submission/figures, plus app_room.jpg (Kalent's entry view).
+Pictures: gh release download figures-v3 --dir submission/figures (the figures, the four app GIFs and app_room.jpg).
 """
 import argparse
 import html
@@ -21,10 +21,10 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_slides import APP_URL, CODE_URL, Numbers  # noqa: E402
+from build_slides import APP_URL, CHOICES, CODE_URL, Numbers, ontology_counts  # noqa: E402
 
-PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "demo_season.gif", "demo_check.gif",
-            "fig_orbits.png", "fig_start.png", "fig_water_table.png", "app_room.jpg"]
+PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "demo_season.gif", "demo_check.gif", "demo_decide.gif",
+            "demo_report.gif", "fig_orbits.png", "fig_start.png", "fig_water_table.png", "app_room.jpg"]
 
 
 def copy_pictures(fig, assets):
@@ -51,9 +51,12 @@ def numbers(num):
     }
 
 
-def page(n, draft):
-    """The deck. {{key}} slots are filled from validation.json; everything else is fixed text."""
+def page(n, draft, counts):
+    """The deck. {{key}} slots are filled from validation.json and the ontology file; everything else is fixed text."""
     out = TEMPLATE.replace("{{app_url}}", APP_URL).replace("{{code_url}}", CODE_URL)
+    out = out.replace("{{why}}", "\n".join(f"      <p><b>{html.escape(name)}</b> {html.escape(reason)}</p>" for name, reason in CHOICES))
+    for key, value in counts.items():
+        out = out.replace("{{o_" + key + "}}", html.escape(value))
     out = out.replace("{{draft}}", '<div class="badge">draft: exploratory numbers</div>' if draft else "")
     for key, value in n.items():
         out = out.replace("{{" + key + "}}", html.escape(value))
@@ -143,12 +146,18 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
   border: 1px solid var(--line); border-radius: 10px; }
 .tile .num { font: 500 46px var(--mono); }
 .tile .label { margin-top: 14px; font: 400 22px/1.4 var(--sans); color: var(--dim); }
+.tile.small { width: 290px; height: 126px; padding: 14px 20px; }
+.tile.small .num { font-size: 32px; }
+.tile.small .label { margin-top: 4px; font-size: 16px; line-height: 1.3; }
+/* The choices behind the method, each with its reason */
+.why { position: absolute; left: 1090px; top: 290px; width: 690px; font: 400 21px/1.36 var(--sans); color: var(--dim); }
+.why p { margin-bottom: 15px; } .why b { display: block; color: var(--ink); font: 600 23px/1.3 var(--sans); }
 
 /* ===========================================
    SLIDE 4: what you can do in the app
    =========================================== */
-.do { position: absolute; left: 1230px; top: 296px; width: 550px; font: 400 26px/1.45 var(--sans); color: var(--dim); }
-.do p { margin-bottom: 22px; } .do b { color: var(--ink); font-weight: 600; }
+.do { position: absolute; left: 1330px; top: 292px; width: 450px; font: 400 23px/1.42 var(--sans); color: var(--dim); }
+.do p { margin-bottom: 20px; } .do b { color: var(--ink); font-weight: 600; }
 
 /* ===========================================
    SLIDE 6: the limits, each with our answer
@@ -207,11 +216,14 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
   <!-- 3. The season in one picture -->
   <section class="slide" aria-label="Slide 3: the season">
     {{draft}}
-    <h2 class="reveal r1">Through the dry season HH fell steadily on open peat, then rose within days of the first heavy rain</h2>
-    <div class="frame reveal r2" style="left:140px; top:296px; width:1160px; height:652px"><img src="assets/fig_season.png" alt="Season figure: the HH fall pass by pass on both orbits, deep forest flat, daily rain underneath"></div>
-    <div class="tile reveal r3" style="top:296px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of mapped peat in the west box where HH fell 1 dB or more, on both orbits</div></div>
-    <div class="tile reveal r4" style="top:524px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east box</div></div>
-    <div class="tile reveal r5" style="top:752px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">HH rise on the first pass after the rain, {{rise_where}}; none on the pass before</div></div>
+    <h2 class="reveal r1">On open peat HH fell through the dry season, then rose with the first rain. Six choices make that hold</h2>
+    <div class="frame reveal r2" style="left:140px; top:296px; width:900px; height:506px"><img src="assets/fig_season.png" alt="Season figure: the HH fall pass by pass on both orbits, deep forest flat, daily rain underneath"></div>
+    <div class="tile small reveal r3" style="left:140px; top:822px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of mapped peat in the west box fell 1 dB or more, on both orbits</div></div>
+    <div class="tile small reveal r3" style="left:445px; top:822px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east box</div></div>
+    <div class="tile small reveal r3" style="left:750px; top:822px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">rise on the first pass after rain, {{rise_where}}; none before it</div></div>
+    <div class="why reveal r4">
+{{why}}
+    </div>
     <div class="rule"></div>
     <p class="source">Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), PEATMAP (CC BY 4.0).</p>
     <p class="page">03 / 07</p>
@@ -220,14 +232,18 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
   <!-- 4. The app -->
   <section class="slide" aria-label="Slide 4: the app">
     {{draft}}
-    <h2 class="reveal r1">An open map anyone can play through the season, then check place by place</h2>
-    <div class="frame dark reveal r2" style="left:140px; top:296px; width:1040px; height:585px"><img src="assets/demo_season.gif" alt="Recording of the app: the season slider playing, with fire building up beside the fall"></div>
-    <div class="do reveal r3">
-      <p><b>Play the season.</b> Every pass on both orbits; fire builds up beside the fall.</p>
-      <p><b>Where to check.</b> 1 km blocks labelled by what was seen, ranked, with the evidence behind each, as CSV or GeoJSON.</p>
+    <h2 class="reveal r1">An open map with four views: play the season, see where to check, read the rule, print the list</h2>
+    <div class="frame dark reveal r2" style="left:140px; top:296px; width:570px; height:320px"><img src="assets/demo_season.gif" alt="Recording of the app: the season playing from June to November, with fire building up beside the fall"></div>
+    <div class="frame dark reveal r2" style="left:730px; top:296px; width:570px; height:320px"><img src="assets/demo_check.gif" alt="Recording of the app: Where to check tilting from a flat map into columns by level"></div>
+    <div class="frame dark reveal r3" style="left:140px; top:636px; width:570px; height:320px"><img src="assets/demo_decide.gif" alt="Recording of the app: How it decides, the ontology graph from sources to classes"></div>
+    <div class="frame dark reveal r3" style="left:730px; top:636px; width:570px; height:320px"><img src="assets/demo_report.gif" alt="Recording of the field assessment: three sheets on a table, the view moving in and the pages turning"></div>
+    <div class="do reveal r4">
+      <p><b>The season.</b> Every pass on both orbits; fire builds up beside the fall.</p>
+      <p><b>Where to check.</b> 1 km blocks in three levels, flat or in 3D, ranked, as CSV or GeoJSON.</p>
+      <p><b>How it decides.</b> The ontology, drawn from its file: {{o_sources}} sources, {{o_observations}} observations, {{o_states}} states and {{o_actions}} classes, each rule open to read.</p>
+      <p><b>Field assessment.</b> Three pages to print, ending in the blocks to visit first.</p>
       <p><a href="{{app_url}}" target="_blank" rel="noopener">Open the map</a></p>
     </div>
-    <div class="frame dark reveal r4" style="left:1230px; top:620px; width:550px; height:309px"><img src="assets/demo_check.gif" alt="Recording of the app: Where to check, the ranked list and the evidence graph"></div>
     <div class="rule"></div>
     <p class="source">Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.</p>
     <p class="page">04 / 07</p>
@@ -341,11 +357,12 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--figures", default="submission/figures", type=Path)
     p.add_argument("--validation", default="app/public/validation.json", type=Path)
+    p.add_argument("--ontology", default="pipeline/fusion/ontology.json", type=Path)
     p.add_argument("--out", default="submission/deck", type=Path)
     p.add_argument("--final", action="store_true", help="use only keys marked final, and drop the draft badge")
     a = p.parse_args()
     num = Numbers(a.validation, a.final)
-    filled = page(numbers(num), draft=not a.final)
+    filled = page(numbers(num), draft=not a.final, counts=ontology_counts(a.ontology))
     copy_pictures(a.figures, a.out / "assets")
     (a.out / "index.html").write_text(filled, encoding="utf-8")
     print(f"wrote {a.out / 'index.html'} ({'final' if a.final else 'draft'}); numbers from {len(set(num.used))} validation keys:")

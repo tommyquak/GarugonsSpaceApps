@@ -9,8 +9,10 @@ what we do not see, what comes next. Claims stay inside docs/AUDIT.md "What we c
         --out submission/deck.pptx            # draft: exploratory numbers, tagged on every slide
     python submission/build_slides.py ... --final   # only keys marked final; stops if one is missing
 
-Figures and app GIFs come from Tommy's release: gh release download figures-v3 --dir submission/figures
-slide 7 also needs app_room.jpg, a screenshot of the app's entry view (Kalent), in the same folder.
+Figures, the four app GIFs and app_room.jpg (the app's entry view) come from the release:
+gh release download figures-v3 --dir submission/figures
+Slide 3 gives the reasons behind the method and slide 4 the app's four views; the counts of the
+ontology on slide 4 are read from pipeline/fusion/ontology.json, not typed.
 """
 import argparse
 import io
@@ -40,6 +42,15 @@ FONT = "Archivo"
 MONO = "JetBrains Mono"   # numbers only: they are measurements
 W, H = Inches(13.333), Inches(7.5)
 M = Inches(0.6)
+# The choices behind the method, each with its reason (slide 3). build_html_deck.py uses the same list.
+CHOICES = [
+    ("Forest as the yardstick.", "Each pass is measured against closed forest, which removes shifts that affect a whole scene."),
+    ("Two orbits must agree.", "Dawn and dusk look from opposite sides; a fall counts only where both see it."),
+    ("The dry window comes from rainfall.", "Its start and end are set from the daily rain record by a fixed rule, not by eye."),
+    ("Wait for the first rain.", "What comes back with the rain was moisture; what stays low is where to look."),
+    ("Levels, not the size of the fall.", "Peat beside a canal falls far and recovers, so blocks are ranked by lasting change."),
+    ("One ontology.", "Sources, observations, states and classes, with their thresholds, live in one file that the pipeline and the app both read."),
+]
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
 CODE_URL = "https://github.com/tommyquak/GarugonsSpaceApps"
 
@@ -70,6 +81,12 @@ class Numbers:
     def db(self, key, sign=True):
         x = self.get(key)
         return f"{x:+.1f} dB" if sign else f"{abs(x):.1f} dB"
+
+
+def ontology_counts(path):
+    """How many sources, observations, states and classes the ontology file holds, as words for a sentence."""
+    o = json.loads(Path(path).read_text())
+    return {k: str(len(o[k])) for k in ("sources", "observations", "states", "actions")}
 
 
 def text(slide, x, y, w, h, runs, size=16, color=INK, bold=False, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP,
@@ -182,13 +199,14 @@ def framed(slide, path, x, y, w, name):
     return pic
 
 
-def tile(slide, x, y, w, h, number, label, colour):
-    """A panel with a measured number over a short label."""
+def tile(slide, x, y, w, h, number, label, colour, small=False):
+    """A panel with a measured number over a short label; small is the size for a row of three under a figure."""
     t = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, y, w, h, PANEL, LINE)
     t.adjustments[0] = 0.08
-    text(slide, x + Inches(0.18), y + Inches(0.15), w - Inches(0.36), Inches(0.45), number, size=22, color=colour,
+    pad, top, below = (Inches(0.14), Inches(0.1), Inches(0.46)) if small else (Inches(0.18), Inches(0.15), Inches(0.62))
+    text(slide, x + pad, y + top, w - 2 * pad, Inches(0.4), number, size=17 if small else 22, color=colour,
          font=MONO, bold=True)
-    text(slide, x + Inches(0.18), y + Inches(0.62), w - Inches(0.36), h - Inches(0.7), label, size=12, color=DIM)
+    text(slide, x + pad, y + below, w - 2 * pad, h - below - Inches(0.06), label, size=10 if small else 12, color=DIM)
 
 
 def limits_table(slide, x, y, w, rows):
@@ -323,34 +341,50 @@ def build(a):
     # 3. The season in one picture
     s = prs.slides.add_slide(blank)
     background(s, BG)
-    title(s, "Through the dry season HH fell steadily on open peat, then rose within days of the first heavy rain")
-    framed(s, fig / "fig_season.png", M, Inches(1.65), Inches(8.9), "Season figure")
+    title(s, "On open peat HH fell through the dry season, then rose with the first rain. Six choices make that hold")
+    fw = Inches(6.9)
+    framed(s, fig / "fig_season.png", M, Inches(1.65), fw, "Season figure")   # 16:9, so 3.88 in tall
     dawn, dusk = num.db("recovery_hh_median_rebound_west_125"), num.db("recovery_hh_median_rebound_west_061")
     rise, rise_where = (dawn, "on both orbits") if dawn == dusk else (f"{dawn} / {dusk}", "dawn / dusk orbit")
-    tx, tw, th, gap = Inches(9.85), Inches(2.88), Inches(1.5), Inches(0.2)
-    tile(s, tx, Inches(1.65), tw, th, num.km2("fell_1db_km2_on_peat_west"),
-         "of mapped peat in the west box where HH fell 1 dB or more, on both orbits", SAND)
-    tile(s, tx, Inches(1.65) + th + gap, tw, th, num.km2("fell_1db_km2_on_peat_east"), "the same, in the east box", SAND)
-    tile(s, tx, Inches(1.65) + 2 * (th + gap), tw, th, rise,
-         f"HH rise on the first pass after the rain, {rise_where}; none on the pass before", RAIN)
+    gap = Inches(0.15)
+    ty, tw, th = Inches(5.68), int((fw - 2 * gap) / 3), Inches(1.08)
+    tile(s, M, ty, tw, th, num.km2("fell_1db_km2_on_peat_west"),
+         "of mapped peat in the west box fell 1 dB or more, on both orbits", SAND, small=True)
+    tile(s, M + tw + gap, ty, tw, th, num.km2("fell_1db_km2_on_peat_east"), "the same, in the east box", SAND, small=True)
+    tile(s, M + 2 * (tw + gap), ty, tw, th, rise,
+         f"rise on the first pass after rain, {rise_where}; none before it", RAIN, small=True)
+    why = [[(name + " ", {"bold": True, "color": INK}), reason] for name, reason in CHOICES]
+    text(s, Inches(7.85), Inches(1.6), Inches(4.88), Inches(5.2), why, size=13, color=DIM, space_after=9)
     footer(s, 3, "Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), PEATMAP (CC BY 4.0).", draft)
-    s.notes_slide.notes_text_frame.text = "The season at a glance: the fall, deep forest flat as the yardstick, daily rain underneath."
+    s.notes_slide.notes_text_frame.text = ("The season at a glance: the fall, deep forest flat as the yardstick, daily rain underneath. "
+                                           "Beside it, the six choices behind the method and the reason for each.")
 
     # 4. The app
     s = prs.slides.add_slide(blank)
     background(s, BG)
-    title(s, "An open map anyone can play through the season, then check place by place")
-    framed(s, fig / "demo_season.gif", M, Inches(1.65), Inches(8.0), "Season demo")
-    framed(s, fig / "demo_check.gif", Inches(9.0), Inches(4.05), Inches(3.73), "Where to check demo")
+    title(s, "An open map with four views: play the season, see where to check, read the rule, print the list")
+    gw, gap = Inches(4.4), Inches(0.15)   # the four recordings in a grid of two by two, each 16:9
+    gh = int(gw * 9 / 16)
+    views = [("demo_season.gif", "Season demo"), ("demo_check.gif", "Where to check demo"),
+             ("demo_decide.gif", "How it decides demo"), ("demo_report.gif", "Field assessment demo")]
+    for k, (name, label) in enumerate(views):
+        framed(s, fig / name, M + (k % 2) * (gw + gap), Inches(1.65) + (k // 2) * (gh + gap), gw, label)
+    o = ontology_counts(a.ontology)
     items = [
-        [("Play the season. ", {"bold": True, "color": INK}), "Every pass on both orbits; fire builds up beside the fall."],
+        [("The season. ", {"bold": True, "color": INK}), "Every pass on both orbits; fire builds up beside the fall."],
         [("Where to check. ", {"bold": True, "color": INK}),
-         "1 km blocks labelled by what was seen, ranked, with the evidence behind each, as CSV or GeoJSON."],
+         "1 km blocks in three levels, flat or in 3D, ranked, as CSV or GeoJSON."],
+        [("How it decides. ", {"bold": True, "color": INK}),
+         f"The ontology, drawn from its file: {o['sources']} sources, {o['observations']} observations, {o['states']} states "
+         f"and {o['actions']} classes, each rule open to read."],
+        [("Field assessment. ", {"bold": True, "color": INK}), "Three pages to print, ending in the blocks to visit first."],
         [("Open the map", {"bold": True, "link": APP_URL})],
     ]
-    text(s, Inches(9.0), Inches(1.7), Inches(3.73), Inches(2.3), items, size=14, color=DIM, space_after=8)
+    tx = M + 2 * gw + gap + Inches(0.3)
+    text(s, tx, Inches(1.65), W - M - tx, Inches(5.1), items, size=13, color=DIM, space_after=10)
     footer(s, 4, "Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.", draft)
-    s.notes_slide.notes_text_frame.text = "GIFs recorded from the live app (figures-v3): the season with fire building up, and Where to check."
+    s.notes_slide.notes_text_frame.text = ("Four recordings of the live app (figures-v3), left to right, top to bottom: the season, "
+                                           "Where to check tilting into 3D, the ontology under How it decides, and the field assessment.")
 
     # 5. Why believe it
     s = prs.slides.add_slide(blank)
@@ -426,6 +460,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--figures", default="submission/figures", type=Path)
     p.add_argument("--validation", default="pipeline/out/validation.json", type=Path)
+    p.add_argument("--ontology", default="pipeline/fusion/ontology.json", type=Path)
     p.add_argument("--out", default="submission/deck.pptx", type=Path)
     p.add_argument("--final", action="store_true", help="use only keys marked final, and drop the draft tag")
     build(p.parse_args())
