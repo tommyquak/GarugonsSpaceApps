@@ -20,6 +20,7 @@
    "125"
   ],
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -56,6 +57,7 @@
    "125"
   ],
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -90,6 +92,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -124,6 +127,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -158,6 +162,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -192,6 +197,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -226,6 +232,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -260,6 +267,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -294,6 +302,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -328,6 +337,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -362,6 +372,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -396,6 +407,42 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20261028",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20261028.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-10-28",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -430,6 +477,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -464,6 +512,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -498,6 +547,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -532,6 +582,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -566,6 +617,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -600,6 +652,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -634,6 +687,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -668,6 +722,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -702,6 +757,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -736,6 +792,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -770,6 +827,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -804,6 +862,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -838,6 +897,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -872,6 +932,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -906,6 +967,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -940,6 +1002,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -974,6 +1037,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1008,6 +1072,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1042,6 +1107,7 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1076,6 +1142,42 @@
   "track": "061",
   "orbit": "dusk",
   "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20261028",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20261028.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-10-28",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1110,6 +1212,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1144,6 +1247,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1178,6 +1282,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1212,6 +1317,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1246,6 +1352,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1280,6 +1387,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1314,6 +1422,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1348,6 +1457,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1382,6 +1492,7 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
@@ -1416,12 +1527,87 @@
   "track": "125",
   "orbit": "dawn",
   "ramp": {
+   "title": "Fall in HH brightness",
    "colors": [
     "#f6e27a",
     "#f0a04b",
     "#d9502e",
     "#8f1d1d",
     "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "recovery_hh_east",
+  "title": "Rise after the rain, east",
+  "url": "layers/recovery_hh_east.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "recovery",
+  "site": "east",
+  "tracks": [
+   "061",
+   "125"
+  ],
+  "ramp": {
+   "title": "Rise in HH after the rain",
+   "colors": [
+    "#d6ecff",
+    "#8cc5f2",
+    "#3f97d9",
+    "#1f5fa8",
+    "#12305e"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "recovery_hh_west",
+  "title": "Rise after the rain, west",
+  "url": "layers/recovery_hh_west.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "recovery",
+  "site": "west",
+  "tracks": [
+   "061",
+   "125"
+  ],
+  "ramp": {
+   "title": "Rise in HH after the rain",
+   "colors": [
+    "#d6ecff",
+    "#8cc5f2",
+    "#3f97d9",
+    "#1f5fa8",
+    "#12305e"
    ],
    "scale": [
     0.0,
