@@ -1,28 +1,49 @@
 # Written with Super Intelligence (SI) assistance.
 """Narration for the opening story, one clip per beat, in a synthetic voice.
 
-Reads the lines from app/public/story/narration.json and writes voice/beat-<n>.mp3 beside it.
-The voice is a synthetic copy of a team member's own voice, made with ElevenLabs with their
-consent; the app says so wherever the sound can be switched on. A clip that already exists is
-kept, so changing one line only remakes that clip (delete the file to force it).
+Reads the beats from app/public/story/narration.json: each beat is a list of sentences with the
+pause between them in seconds, as ["First sentence.", 0.6, "Second sentence."]. Every sentence
+is voiced on its own and the pauses are real silence, joined with ffmpeg. Pause tags inside
+the text are not used: the speech model turns them into hesitation noises.
+
+Writes voice/beat-<n>.mp3 beside the file. A beat whose text and settings have not changed is
+kept (delete the clip to force it). The voice is a synthetic copy of a team member's own voice,
+made with ElevenLabs with their consent, and is logged in submission/si_use/.
 
 The key and the voice are read from the environment and are never written to the repository:
 
     ELEVENLABS_API_KEY=... ELEVENLABS_VOICE_ID=... python app/scripts/make_story_voice.py --story app/public/story
+
+Needs ffmpeg.
 """
 import argparse
 import hashlib
 import json
 import os
+import subprocess
+import tempfile
 from pathlib import Path
 
 import certifi
 import requests
 
 MODEL = "eleven_multilingual_v2"
-# A little slower than the default, so sentences do not run into each other; the lines carry
-# their own pauses as <break> tags.
-SETTINGS = {"stability": 0.5, "similarity_boost": 0.8, "style": 0.15, "use_speaker_boost": True, "speed": 0.9}
+# A little slower than the default, so sentences do not run into each other.
+SETTINGS = {"stability": 0.55, "similarity_boost": 0.8, "style": 0.1, "use_speaker_boost": True, "speed": 0.92}
+RATE = 44100
+
+
+def speak(text, before, after, key, voice):
+    """One sentence as raw 16-bit mono samples. The sentences around it are given so the tone carries across."""
+    r = requests.post(f"https://api.elevenlabs.io/v1/text-to-speech/{voice}", params={"output_format": "mp3_44100_128"},
+                      headers={"xi-api-key": key},
+                      json={"text": text, "model_id": MODEL, "voice_settings": SETTINGS, "previous_text": before, "next_text": after},
+                      timeout=180, verify=certifi.where())
+    if r.status_code != 200:
+        raise SystemExit(f"HTTP {r.status_code} from the speech service")      # the body may name the account, so it is not printed
+    decoded = subprocess.run(["ffmpeg", "-loglevel", "error", "-i", "pipe:0", "-f", "s16le", "-ar", str(RATE), "-ac", "1", "pipe:1"],
+                             input=r.content, capture_output=True, check=True)
+    return decoded.stdout
 
 
 def main():
@@ -32,24 +53,32 @@ def main():
     key, voice = os.environ.get("ELEVENLABS_API_KEY"), os.environ.get("ELEVENLABS_VOICE_ID")
     if not key or not voice:
         raise SystemExit("set ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID in the environment")
-    lines = json.loads((a.story / "narration.json").read_text())
+    beats = json.loads((a.story / "narration.json").read_text())
     out = a.story / "voice"
     out.mkdir(exist_ok=True)
-    marks_file = out / "made.json"          # which text each clip was made from
+    marks_file = out / "made.json"          # which text and settings each clip was made from
     marks = json.loads(marks_file.read_text()) if marks_file.exists() else {}
-    for n, text in enumerate(lines, start=1):
-        clip, mark = out / f"beat-{n}.mp3", hashlib.sha256((text + json.dumps(SETTINGS, sort_keys=True)).encode()).hexdigest()[:16]
+    for n, beat in enumerate(beats, start=1):
+        clip = out / f"beat-{n}.mp3"
+        mark = hashlib.sha256((json.dumps(beat) + json.dumps(SETTINGS, sort_keys=True) + MODEL).encode()).hexdigest()[:16]
         if clip.exists() and marks.get(clip.name) == mark:
             print(f"{clip.name}: kept")
             continue
-        r = requests.post(f"https://api.elevenlabs.io/v1/text-to-speech/{voice}", params={"output_format": "mp3_44100_128"},
-                          headers={"xi-api-key": key}, json={"text": text, "model_id": MODEL, "voice_settings": SETTINGS},
-                          timeout=180, verify=certifi.where())
-        if r.status_code != 200:
-            raise SystemExit(f"{clip.name}: HTTP {r.status_code}")      # the body may name the account, so it is not printed
-        clip.write_bytes(r.content)
+        sentences = [part for part in beat if isinstance(part, str)]
+        samples = b""
+        for part in beat:
+            if isinstance(part, str):
+                k = sentences.index(part)
+                samples += speak(part, " ".join(sentences[:k]), " ".join(sentences[k + 1:]), key, voice)
+            else:
+                samples += b"\x00\x00" * round(RATE * float(part))
+        with tempfile.NamedTemporaryFile(suffix=".pcm") as raw:
+            raw.write(samples)
+            raw.flush()
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", str(RATE), "-ac", "1", "-i", raw.name,
+                            "-af", "afade=t=in:d=0.03,areverse,afade=t=in:d=0.08,areverse", "-codec:a", "libmp3lame", "-b:a", "128k", str(clip)], check=True)
         marks[clip.name] = mark
-        print(f"{clip.name}: {len(r.content) / 1000:.0f} kB")
+        print(f"{clip.name}: {len(sentences)} sentences, {len(samples) / 2 / RATE:.1f} s")
     marks_file.write_text(json.dumps(marks, indent=1) + "\n")
 
 

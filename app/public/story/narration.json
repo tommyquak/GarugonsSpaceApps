@@ -1,9 +1,9 @@
 [
- "Every dry season, drained peat in Borneo burns. <break time=\"0.6s\" /> This is Sebangau, in Central Kalimantan.",
- "Canals dug in the nineteen nineties still drain it, <break time=\"0.3s\" /> and fire keeps coming back. <break time=\"0.6s\" /> Most of this year's fire on peat fell on land that had burned before.",
- "From space, a camera sees only smoke.",
- "But NISAR's radar sees the ground through it: <break time=\"0.3s\" /> rivers, canals, and the edge of the forest.",
- "What does the radar tell us? <break time=\"0.6s\" /> A wetter surface sends back a stronger echo. <break time=\"0.6s\" /> So as open peat dries, the echo falls. <break time=\"0.6s\" /> It is a sign of drying, not a measurement of the water table.",
- "Through the dry season, the radar echo fell along the canals, <break time=\"0.3s\" /> and fire built up on the same open peat. <break time=\"0.6s\" /> Closed forest held steady.",
- "After the rain, some land had not come back. <break time=\"0.6s\" /> That is where to look first."
+ ["Every dry season, drained peat in Borneo burns.", 0.6, "This is Sebangau, in Central Kalimantan."],
+ ["Canals dug in the nineteen nineties still drain it, and fire keeps coming back.", 0.6, "Most of this year's fire on peat fell on land that had burned before."],
+ ["From space, a camera sees only smoke."],
+ ["But NISAR's radar sees the ground through it: rivers, canals, and the edge of the forest."],
+ ["What does the radar tell us?", 0.5, "A wetter surface sends back a stronger echo.", 0.5, "So as open peat dries, the echo falls.", 0.6, "It is a sign of drying, not a measurement of the water table."],
+ ["Through the dry season, the radar echo fell along the canals, and fire built up on the same open peat.", 0.6, "Closed forest held steady."],
+ ["After the rain, some land had not come back.", 0.6, "That is where to look first."]
 ]
