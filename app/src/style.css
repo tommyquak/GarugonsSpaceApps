@@ -743,14 +743,7 @@ input[type="range"]::-moz-range-thumb {
   background: var(--text);
 }
 
-.op-bar.is-done i {
-  width: 100%;
-}
-
-.op-bar.is-now i {
-  width: 100%;
-  transition: width var(--beat, 6500ms) linear;
-}
+/* The width of each line is set by opening.ts. */
 
 .op-foot {
   align-items: flex-end;
@@ -891,8 +884,7 @@ input[type="range"]::-moz-range-thumb {
   .op-shade,
   .op-img,
   .op-text,
-  .op-credit,
-  .op-bar.is-now i {
+  .op-credit {
     transition: none;
   }
 }
@@ -1027,7 +1019,8 @@ a.text-button {
   font-weight: 500;
 }
 
-/* The header is a row of tabs, not buttons: the three views first, then the reference pages. */
+/* The header is a row of tabs, not buttons: the two views first, then the story, the panels
+   that open over a view, and the reference pages. */
 .bar-actions {
   align-self: stretch;
   margin-left: auto;
@@ -1057,7 +1050,9 @@ a.text-button {
   font-weight: 500;
 }
 
-.bar-actions .text-button[aria-pressed="true"]::after {
+/* The view on show has a line under it. */
+#btn-actions[aria-pressed="true"]::after,
+#btn-season[aria-pressed="true"]::after {
   content: "";
   position: absolute;
   left: 13px;
@@ -1065,6 +1060,26 @@ a.text-button {
   bottom: -1px;
   height: 2px;
   background: var(--text);
+}
+
+/* A panel that is open over the view is a filled chip: several can be open, only one view is on show. */
+#btn-how,
+#btn-explore {
+  isolation: isolate;
+}
+
+#btn-how[aria-pressed="true"]::after,
+#btn-explore[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 4px;
+  right: 4px;
+  top: 11px;
+  bottom: 11px;
+  border-radius: var(--control-radius);
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 
 .bar-actions .text-button:focus-visible {
@@ -1087,6 +1102,8 @@ a.text-button {
   order: 4;
 }
 
+/* The hairline sits before Story, which is always there; How it decides appears only with the blocks. */
+
 #btn-explore {
   order: 5;
 }
@@ -1099,12 +1116,12 @@ a.text-button {
   order: 7;
 }
 
-/* A hairline between the views and the reference pages. */
-#btn-how {
+/* A hairline between the two views and everything else. */
+#btn-story {
   margin-left: 17px;
 }
 
-#btn-how::before {
+#btn-story::before {
   content: "";
   position: absolute;
   left: -9px;
@@ -1578,9 +1595,9 @@ button:disabled {
     font-size: 13px;
   }
 
-  .bar-actions .text-button[aria-pressed="true"]::after {
-    left: 9px;
-    right: 9px;
+  #btn-explore[aria-pressed="true"]::after {
+    top: 8px;
+    bottom: 8px;
   }
 
   #map {
