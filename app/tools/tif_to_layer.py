@@ -8,7 +8,7 @@ Mercator with no-data transparent, and adds or replaces the entry with that id i
     drydown_<site>_<track>.tif        fall in HH over the dry season, 1 to 3 dB
     hh_<site>_<track>_<YYYYMMDD>.tif  the same ramp for one radar pass, with its date
     dried_<site>.tif                  one colour where the value is 1
-    recovery_<pol>_<site>.tif         rise across the first rain, 0.5 to 2 dB
+    recovery_<pol>_<site>_<track>.tif rise across the first rain, 0.5 to 2 dB
     fire_days_<site>.tif              black where a fire was detected on one day or more
     anything else                     a neutral ramp between the 2nd and 98th percentile
 
@@ -69,9 +69,9 @@ def describe(stem):
         return {"style": "fall", "title": f"Fall in HH over the dry season, {track_label(m[2])}", "source": RADAR}
     if re.fullmatch(r"dried_[a-z]+", stem):
         return {"style": "mask", "title": "Dried beyond the noise floor on both orbits", "source": RADAR}
-    m = re.fullmatch(r"recovery_(hh|hv)_[a-z]+", stem)
+    m = re.fullmatch(r"recovery_(hh|hv)_[a-z]+_(\d{3})", stem)
     if m:
-        return {"style": "rise", "title": f"Rise in {m[1].upper()} across the first rain", "source": RADAR}
+        return {"style": "rise", "title": f"Rise in {m[1].upper()} across the first rain, {track_label(m[2])}", "source": RADAR}
     if re.fullmatch(r"fire_days_[a-z]+", stem):
         return {"style": "fire", "title": "Fire detected in 2026", "source": "NASA FIRMS (VIIRS and MODIS)"}
     return {"style": "auto", "title": stem.replace("_", " "), "source": None}
