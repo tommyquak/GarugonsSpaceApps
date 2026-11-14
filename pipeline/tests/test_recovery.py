@@ -108,3 +108,34 @@ def test_main_writes_layers_and_numbers(tmp_path, monkeypatch):
     assert v["recovery_blocks_west_125"]["value"] == 12 * 6           # the right half of the blocks
     assert v["recovery_hh_share_regained_west_125"]["value"] > v["recovery_hv_share_regained_west_125"]["value"]
     assert all(e.get("status", "exploratory") == "exploratory" for e in v.values())
+
+
+def load_sensitivity():
+    """pipeline/recovery/sensitivity.py by path, since pipeline/drying has a module of the same name."""
+    import importlib.util
+    from pathlib import Path
+    path = Path(recovery.__file__).with_name("sensitivity.py")
+    spec = importlib.util.spec_from_file_location("recovery_sensitivity", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_sensitivity_runs_every_variant_and_flags_a_soaked_pass():
+    sens = load_sensitivity()
+    stack, baseline, fall, rebound = make_stack()
+    other = np.where(np.arange(60)[None, :] >= 30, -2.0, 0.0) * np.ones((60, 1))
+    rows = sens.run(stack, baseline, other, 0.3, DRY_UNTIL, min_blocks=10)
+    assert [r["variant"] for r in rows] == ["as run", "dry one earlier", "late one pass", "second wet"]
+    assert rows[0]["after_pass"] == "20260812" and rows[1]["dry_until"] == "20260719"
+    assert rows[3]["after_pass"] == "20260824"
+    assert np.isclose(rows[0]["hh"]["regained"], rebound["hh"] / -fall, atol=1e-3)   # as run matches recovery.py
+    assert sens.largest_move(rows, "hh") > 1.0                        # the +5 dB soaked pass moves the share a lot
+
+
+def test_sensitivity_leaves_out_variants_it_cannot_run():
+    sens = load_sensitivity()
+    stack, baseline, _, _ = make_stack()
+    other = np.full((60, 60), -2.0)
+    rows = sens.run(stack, baseline, other, 0.3, "20260812", min_blocks=10)   # only one pass after this date
+    assert "second wet" not in [r["variant"] for r in rows]
