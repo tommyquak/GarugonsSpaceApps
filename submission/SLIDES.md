@@ -19,7 +19,7 @@ The thread through all seven: the dry season in three beats, **fall, fire, rain*
 
 ## 3. How the radar sees the ground under the forest
 
-- L-band passes through the leaves. HH carries a strong ground-to-trunk bounce, which weakens as the surface dries (Hess et al. 1990; Kim et al. 2017).
+- L-band passes through the leaves. A wetter surface sends back a stronger echo: as open peat dries, HH falls. Closed forest barely changed, so it is the yardstick.
 - HV comes mostly from the woody vegetation, but it also responds to moisture: the two are not separate "water" and "vegetation" channels.
 - We measure against deep intact forest, from a rain-free start, and keep only what both orbits see.
 - Visual: a simple diagram of the two echoes (not in the repo yet; ask Tommy, or draw it, with a watermark if SI-made).
@@ -52,7 +52,7 @@ Three beats, one row each:
 
 - Ground truth first: the sixty-visit field protocol in `submission/IMPACT.md`.
 - Years of NISAR passes: subsidence by interferometry over whole peat domes, and every dry season set against wet years.
-- The pipeline takes any bounding box: another peatland is one command away.
+- The pipeline takes any bounding box; not yet run on a second site.
 - Links: the app (the "Where to check" view and ranked list), the code, the data releases (QR code).
 
 ## Still to decide

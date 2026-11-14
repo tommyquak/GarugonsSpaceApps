@@ -198,7 +198,7 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <div class="frame reveal r2" style="left:140px; top:300px; width:800px; height:450px"><img src="assets/fig_cloud.png" alt="The same ground on 14 September 2026: smoke and cloud in VIIRS true colour, the land in NISAR L-band HH"></div>
     <div class="frame dark reveal r3" style="left:980px; top:300px; width:800px; height:450px"><img src="assets/explainer.gif" alt="Animated schematic of how the L-band radar sees a peat dry season"></div>
     <p class="caption reveal r4" style="left:140px; top:782px; width:800px"><b>Every 12 days, day or night.</b> The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar.</p>
-    <p class="caption reveal r5" style="left:980px; top:782px; width:800px"><b class="hh">HH</b> carries a bounce between the ground and the trunks that weakens as the surface dries (Hess et al. 1990; Kim et al. 2017). <b>HV</b> comes mostly from woody vegetation, but responds to moisture too. A schematic, not data.</p>
+    <p class="caption reveal r5" style="left:980px; top:782px; width:800px"><b class="hh">HH.</b> A wetter surface sends back a stronger echo: as open peat dries, HH falls. Closed forest barely changed, so it is the yardstick. <b>HV</b> comes mostly from woody vegetation, but responds to moisture too. A schematic, not data.</p>
     <div class="rule"></div>
     <p class="source">VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.</p>
     <p class="page">02 / 07</p>
@@ -207,7 +207,7 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
   <!-- 3. The season in one picture -->
   <section class="slide" aria-label="Slide 3: the season">
     {{draft}}
-    <h2 class="reveal r1">Through the dry season HH fell steadily on peat, then rose within days of the first heavy rain</h2>
+    <h2 class="reveal r1">Through the dry season HH fell steadily on open peat, then rose within days of the first heavy rain</h2>
     <div class="frame reveal r2" style="left:140px; top:296px; width:1160px; height:652px"><img src="assets/fig_season.png" alt="Season figure: the HH fall pass by pass on both orbits, deep forest flat, daily rain underneath"></div>
     <div class="tile reveal r3" style="top:296px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of mapped peat in the west box where HH fell 1 dB or more, on both orbits</div></div>
     <div class="tile reveal r4" style="top:524px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east box</div></div>
@@ -271,7 +271,7 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <div class="next reveal r2">
       <p><b>Ground truth first.</b> A sixty-visit field protocol, in the late dry season and after the first rain.</p>
       <p><b>Years, not months.</b> Subsidence by interferometry over whole peat domes, and every dry season set against wet years.</p>
-      <p><b>Anywhere.</b> The pipeline takes any bounding box: another peatland is one command away.</p>
+      <p><b>Anywhere.</b> The pipeline takes any bounding box; not yet run on a second site.</p>
     </div>
     <div class="frame dark reveal r3" style="left:920px; top:290px; width:860px; height:404px"><img src="assets/app_room.jpg" alt="The app's entry view: an illustrative control room made with SI, with the live dashboard on its screens"></div>
     <p class="caption reveal r4" style="left:920px; top:716px; width:860px">The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.</p>

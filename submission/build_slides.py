@@ -25,7 +25,7 @@ from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.oxml.ns import qn
 from pptx.util import Emu, Inches, Pt
 
-# A dark ground with panels and hairlines, after the team's SDTH pitch deck; colours keep their meaning from the app.
+# A near-black ground, dark panels with hairline borders, light ink and a dim grey; colours keep their meaning from the app.
 BG = RGBColor(0x0B, 0x0F, 0x14)
 PANEL = RGBColor(0x12, 0x18, 0x22)
 LINE = RGBColor(0x23, 0x30, 0x3E)
@@ -312,9 +312,9 @@ def build(a):
            "The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar."]],
          size=14, color=DIM)
     text(s, Inches(6.78), Inches(5.1), Inches(5.95), Inches(1.5),
-         [[("HH ", {"bold": True, "color": SAND}),
-           "carries a bounce between the ground and the trunks that weakens as the surface dries (Hess et al. 1990; "
-           "Kim et al. 2017). "], [("HV ", {"bold": True, "color": INK}),
+         [[("HH. ", {"bold": True, "color": SAND}),
+           "A wetter surface sends back a stronger echo: as open peat dries, HH falls. Closed forest barely changed, "
+           "so it is the yardstick. "], [("HV ", {"bold": True, "color": INK}),
            "comes mostly from woody vegetation, but responds to moisture too. A schematic, not data."]],
          size=14, color=DIM, space_after=4)
     footer(s, 2, "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.", draft)
@@ -323,7 +323,7 @@ def build(a):
     # 3. The season in one picture
     s = prs.slides.add_slide(blank)
     background(s, BG)
-    title(s, "Through the dry season HH fell steadily on peat, then rose within days of the first heavy rain")
+    title(s, "Through the dry season HH fell steadily on open peat, then rose within days of the first heavy rain")
     framed(s, fig / "fig_season.png", M, Inches(1.65), Inches(8.9), "Season figure")
     dawn, dusk = num.db("recovery_hh_median_rebound_west_125"), num.db("recovery_hh_median_rebound_west_061")
     rise, rise_where = (dawn, "on both orbits") if dawn == dusk else (f"{dawn} / {dusk}", "dawn / dusk orbit")
@@ -400,7 +400,7 @@ def build(a):
     nxt = [
         [("Ground truth first. ", {"bold": True, "color": INK}), "A sixty-visit field protocol, in the late dry season and after the first rain."],
         [("Years, not months. ", {"bold": True, "color": INK}), "Subsidence by interferometry over whole peat domes, and every dry season set against wet years."],
-        [("Anywhere. ", {"bold": True, "color": INK}), "The pipeline takes any bounding box: another peatland is one command away."],
+        [("Anywhere. ", {"bold": True, "color": INK}), "The pipeline takes any bounding box; not yet run on a second site."],
     ]
     text(s, M, Inches(1.8), Inches(5.6), Inches(3.6), nxt, size=17, color=DIM, space_after=16)
     framed(s, fig / "app_room.jpg", Inches(6.55), Inches(1.75), Inches(6.18), "App entry view")   # 1915 x 900 px
