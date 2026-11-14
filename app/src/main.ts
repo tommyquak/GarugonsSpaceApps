@@ -163,8 +163,8 @@ async function start(): Promise<void> {
   setExplore(actions.parts().includes("class"));
   // Without a link, the map opens on the one view made for a first look.
   if (!shared && actions.parts().length === 0) actions.apply(["map"], null);
-  // A visitor who came in through "Enter dashboard" gets the story once; "Skip to map", a wall
-  // screen and a shared link all mean they chose where to go. The intro may end before or after
+  // A visitor who came in through "Enter dashboard" gets the story once; "Skip to map" and a
+  // shared link mean they chose where to go. The intro may end before or after
   // this point, so both the mark it leaves and its event are read.
   const afterIntro = (how: string | undefined): void => {
     if (how === "enter" && !shared) opening.play();
