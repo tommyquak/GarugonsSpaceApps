@@ -6,6 +6,8 @@
   C  tilt         the score must not slope across the swath (a sign of a geometry artefact)
   D  alignment    the two orbits must be registered to each other after regridding
   E  season       dried land should darken through the dry season and brighten after the rain; forest should not
+  F  depth        how the score changes with distance into the forest (edges dry, the interior should not)
+  G  ramp         the two orbits' scores must not drift apart across the scene
 
 Prints a report and writes the numbers to validation.json.
 
@@ -21,8 +23,8 @@ import rasterio
 from rasterio.warp import Resampling, reproject
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from baseline import REFERENCE, reference_mask  # noqa: E402
-from common import block_mean, load_stack, lonlat  # noqa: E402
+from common import load_reference, load_stack, lonlat  # noqa: E402
+from reference import REFERENCE, reference_mask  # noqa: E402
 from vjson import put  # noqa: E402
 
 ME = "pipeline/drying/selfcheck.py"
@@ -51,31 +53,32 @@ def check_overlap(layers, tracks):
 
 
 def check_reference(stacks, tracks):
+    S = [load_stack(stacks / f"west_{t}.npz") for t in tracks]
+    default, _ = reference_mask(S)
+    _, lat = lonlat(S[0])
+    mid_lat = (REFERENCE["bbox"][1] + REFERENCE["bbox"][3]) / 2
+    variants = {"default": default, "drop the darkest tenth only": reference_mask(S, drop=10)[0],
+                "drop the darkest third": reference_mask(S, drop=33)[0], "2 km into the forest": reference_mask(S, depth_km=2)[0],
+                "6 km into the forest": reference_mask(S, depth_km=6)[0], "any forest in the box": reference_mask(S, depth_km=0.05)[0],
+                "north half": default & (lat > mid_lat), "south half": default & (lat <= mid_lat)}
     out = {}
-    for t in tracks:
-        s = load_stack(stacks / f"west_{t}.npz")
-        ref, box = reference_mask(s)
-        lon, lat = lonlat(s)
-        hv = np.nanmean(s["hv"], axis=0)
-        mid_lat = (REFERENCE["bbox"][1] + REFERENCE["bbox"][3]) / 2
-        variants = {"default (brighter half in HV)": ref, "brightest quarter in HV": box & (hv > np.nanpercentile(hv[box], 75)),
-                    "whole box": box, "north half of the reference": ref & (lat > mid_lat), "south half of the reference": ref & (lat <= mid_lat)}
+    for s, t in zip(S, tracks):
         offs = {}
         for name, m in variants.items():
             med = np.array([np.nanmedian(layer[m]) for layer in s["hh"]])
             offs[name] = med - med.mean()
-        worst = {name: float(np.max(np.abs(o - offs["default (brighter half in HV)"]))) for name, o in offs.items()}
-        out[t] = {k: round(v, 3) for k, v in worst.items()}
+        worst = {name: round(float(np.max(np.abs(o - offs["default"]))), 3) for name, o in offs.items()}
+        out[t] = worst
         put(f"selfcheck_reference_max_offset_shift_{t}", max(worst.values()), "dB", "west", ME,
-            note="largest change in any date's offset across five ways of drawing the reference forest")
+            note="largest change in any date's offset across eight ways of drawing the reference forest")
+    out["km2"] = {name: round(float(m.sum()) * 0.0025, 0) for name, m in variants.items()}
     return out
 
 
-def check_tilt(stacks, layers, tracks):
+def check_tilt(layers, tracks):
     out = {}
     for t in tracks:
-        s = load_stack(stacks / f"west_{t}.npz")
-        ref, _ = reference_mask(s)
+        ref = load_reference(layers)
         score, _, _ = read(layers / f"drydown_west_{t}.tif")
         rows, cols = score.shape
         east_km = np.tile(np.arange(cols) * 0.05, (rows, 1))
@@ -115,7 +118,7 @@ def check_season(stacks, layers, tracks, dry_until):
         base = json.loads((layers / f"baseline_{t}.json").read_text())
         dried, _, _ = read(layers / "dried_west.tif")
         score, _, _ = read(layers / f"drydown_west_{t}.tif")
-        ref, _ = reference_mask(s)
+        ref = load_reference(layers)
         strong = (dried == 1) & (score < -1.0)
         off = np.array(base["hh"]["offset_db"])
         series = {"dried by 1 dB or more": [float(np.nanmedian(layer[strong]) - o) for layer, o in zip(s["hh"], off)],
@@ -132,6 +135,47 @@ def check_season(stacks, layers, tracks, dry_until):
     return out
 
 
+def check_depth(layers, tracks):
+    depth, _, _ = read(layers / "forest_depth_west.tif")
+    pick = np.zeros(depth.shape, bool)
+    pick[2::5, 2::5] = True   # one sample per 250 m block
+    out = {}
+    for t in tracks:
+        score, _, _ = read(layers / f"drydown_west_{t}.tif")
+        rows = {}
+        for lo, hi in ((0.05, 0.25), (0.25, 0.5), (0.5, 1), (1, 2), (2, 4), (4, 6), (6, 99)):
+            v = score[pick & (depth >= lo) & (depth < hi) & np.isfinite(score)]
+            if v.size < 100:
+                continue
+            rows[f"{lo:g} to {hi:g} km"] = {"blocks": int(v.size), "median_db": round(float(np.median(v)), 2),
+                                           "p5_db": round(float(np.percentile(v, 5)), 2), "sd_db": round(float(v.std()), 2)}
+        out[t] = rows
+        put(f"selfcheck_forest_edge_median_{t}", rows["0.05 to 0.25 km"]["median_db"], "dB", "west", ME, note="median dry-down of forest within 250 m of an edge")
+        deep = [k for k in rows if k.startswith("6 ") or k.startswith("4 ")][-1]
+        put(f"selfcheck_forest_interior_median_{t}", rows[deep]["median_db"], "dB", "west", ME, note=f"median dry-down of forest {deep} inside")
+    return out
+
+
+def check_ramp(layers, tracks, sites=("west", "east")):
+    out = {}
+    for site in sites:
+        a, _, _ = read(layers / f"drydown_{site}_{tracks[0]}.tif")
+        d, _, _ = read(layers / f"drydown_{site}_{tracks[1]}.tif")
+        rows, cols = a.shape
+        east_km = np.tile(np.arange(cols) * 0.05, (rows, 1))
+        north_km = np.tile(-np.arange(rows)[:, None] * 0.05, (1, cols))
+        k = np.isfinite(a) & np.isfinite(d)
+        k[np.arange(rows) % 5 != 2] = False
+        k[:, np.arange(cols) % 5 != 2] = False
+        coef = np.linalg.lstsq(np.c_[east_km[k], north_km[k], np.ones(k.sum())], (d - a)[k], rcond=None)[0]
+        end_to_end = max(abs(coef[0] * cols * 0.05), abs(coef[1] * rows * 0.05))
+        out[site] = {"mean_diff_db": round(float((d - a)[k].mean()), 2), "east_db_per_10km": round(float(coef[0] * 10), 3),
+                     "north_db_per_10km": round(float(coef[1] * 10), 3), "largest_end_to_end_db": round(float(end_to_end), 2)}
+        put(f"selfcheck_orbit_ramp_end_to_end_{site}", float(end_to_end), "dB", site, ME,
+            note="largest drift between the two orbits' scores from one side of the site to the other")
+    return out
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--stacks", required=True, type=Path)
@@ -140,8 +184,8 @@ def main():
     p.add_argument("--dry-until", required=True)
     a = p.parse_args()
     report = {"A_overlap": check_overlap(a.layers, a.tracks), "B_reference": check_reference(a.stacks, a.tracks),
-              "C_tilt": check_tilt(a.stacks, a.layers, a.tracks), "D_alignment": check_alignment(a.stacks, a.tracks),
-              "E_season": check_season(a.stacks, a.layers, a.tracks, a.dry_until)}
+              "C_tilt": check_tilt(a.layers, a.tracks), "D_alignment": check_alignment(a.stacks, a.tracks),
+              "E_season": check_season(a.stacks, a.layers, a.tracks, a.dry_until), "F_depth": check_depth(a.layers, a.tracks), "G_ramp": check_ramp(a.layers, a.tracks)}
     print(json.dumps(report, indent=1, default=str))
 
 
