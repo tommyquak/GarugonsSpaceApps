@@ -29,7 +29,7 @@ import requests
 
 MODEL = "eleven_multilingual_v2"
 # A little slower than the default, so sentences do not run into each other.
-SETTINGS = {"stability": 0.55, "similarity_boost": 0.8, "style": 0.1, "use_speaker_boost": True, "speed": 0.92}
+SETTINGS = {"stability": 0.55, "similarity_boost": 0.8, "style": 0.1, "use_speaker_boost": True, "speed": 0.86}
 RATE = 44100
 
 
