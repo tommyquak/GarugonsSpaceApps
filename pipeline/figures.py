@@ -12,7 +12,6 @@ and from validation.json, never typed.
   fig_edge.png        the fall by distance into the forest
   fig_water_table.png the water-table model against the gauge record, and its run on 2026 beside the radar
   fig_cloud.png       the same day seen by an optical satellite (smoke and cloud) and by NISAR
-  fig_diagram.png     how the L-band radar sees wet and dry ground under vegetation (a drawing, not data)
 
     python pipeline/figures.py --out pipeline/out/figures
 """
@@ -298,47 +297,13 @@ def fig_cloud(out, v, day_iso="2026-09-14", box=(113.6, -3.2, 114.83, -2.4)):
     finish(fig, out / "fig_cloud.png", "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). The two were taken hours apart")
 
 
-def fig_diagram(out, v):
-    """A drawing of the two echoes, wet ground against dry ground. Not data."""
-    from matplotlib.patches import Circle, FancyArrowPatch, Rectangle
-    fig = frame("How the radar sees the ground under the trees", "A drawing, not data. L-band waves pass through leaves. Two echoes come back, and the ground changes one of them.")
-    panels = (("Wet ground", "#6fa8dc", 5.0, "strong echo"), ("Dry ground", "#c9a36a", 2.0, "weaker echo"))
-    for k, (name, soil, strength, word) in enumerate(panels):
-        ax = fig.add_axes([0.05 + 0.47 * k, 0.16, 0.43, 0.66])
-        ax.set_xlim(0, 10)
-        ax.set_ylim(0, 7)
-        ax.axis("off")
-        ax.add_patch(Rectangle((0, 0), 10, 1.0, color=soil, zorder=1))
-        ax.text(0.2, 0.35, name, fontsize=16, fontweight="bold", color=INK, zorder=3)
-        for x in (3.2, 6.6, 8.6):                                   # trees: trunk and canopy
-            ax.add_patch(Rectangle((x - 0.12, 1.0), 0.24, 2.6, color="#6b4a2b", zorder=2))
-            for dx, dy, r in ((0, 4.3, 1.0), (-0.7, 3.8, 0.7), (0.7, 3.8, 0.7)):
-                ax.add_patch(Circle((x + dx, dy), r, color=FOREST, alpha=0.55, zorder=2, linewidth=0))
-        arrow = dict(arrowstyle="-|>", mutation_scale=18, zorder=4)
-        ax.add_patch(FancyArrowPatch((0.6, 6.7), (2.6, 1.05), color=INK, linewidth=2.2, **arrow))               # in, to the ground
-        ax.add_patch(FancyArrowPatch((2.6, 1.05), (3.08, 2.2), color=DUSK, linewidth=strength, **arrow))         # ground to trunk
-        ax.add_patch(FancyArrowPatch((3.08, 2.2), (1.0, 6.7), color=DUSK, linewidth=strength, **arrow))           # trunk back to the radar
-        ax.text(0.3, 5.3, "wave in", fontsize=12, color=INK, rotation=-70)
-        ax.text(1.75, 4.6, f"HH: {word}", fontsize=13, color=DUSK, fontweight="bold", rotation=65)
-        ax.add_patch(FancyArrowPatch((4.2, 6.7), (6.3, 4.6), color=INK, linewidth=2.2, **arrow))                 # in, to the canopy
-        ax.add_patch(FancyArrowPatch((6.3, 4.6), (5.0, 6.7), color=FOREST, linewidth=2.6, linestyle=(0, (4, 2)), **arrow))
-        ax.text(5.3, 5.7, "HV: from branches", fontsize=13, color=FOREST, fontweight="bold")
-    fig.text(0.05, 0.125, "HH carries the bounce between ground and trunk, which weakens as the surface dries. HV comes mostly from woody vegetation.", fontsize=12.5, color=MUTED)
-    fig.text(0.05, 0.098, "On most land the two rise and fall together, so they are not separate water and vegetation channels.", fontsize=12.5, color=MUTED)
-    fig.text(0.05, 0.048, "A schematic after Hess et al. 1990 and Richards et al. 1987. Not to scale.", fontsize=10.5, color=MUTED)
-    fig.text(0.05, 0.022, "Drawing made with Super Intelligence (SI) assistance", fontsize=10.5, color=MUTED)
-    fig.savefig(out / "fig_diagram.png", facecolor="white")
-    plt.close(fig)
-    print("wrote", out / "fig_diagram.png")
-
-
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--out", required=True, type=Path)
     a = p.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
     v = json.loads(Path("pipeline/out/validation.json").read_text())
-    for make in (fig_season, fig_orbits, fig_start, fig_recovery, fig_edge, fig_water_table, fig_cloud, fig_diagram):
+    for make in (fig_season, fig_orbits, fig_start, fig_recovery, fig_edge, fig_water_table, fig_cloud):
         make(a.out, v)
 
 
