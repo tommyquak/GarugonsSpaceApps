@@ -1,0 +1,42 @@
+<!-- Written with Super Intelligence (SI) assistance. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d1013" />
+    <meta name="description" content="A screening map of where Central Kalimantan peatland dried over the dry season, seen by the NISAR L-band radar." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230d1013'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23f0a04b'/%3E%3C/svg%3E" />
+    <title>Dry Season Waltz</title>
+  </head>
+  <body>
+    <div id="app">
+      <header id="bar">
+        <div class="brand">
+          <h1>Dry Season Waltz</h1>
+          <p>Where the land dried this dry season, seen by NISAR L-band radar</p>
+        </div>
+        <nav class="bar-actions" aria-label="Pages">
+          <button type="button" class="text-button" id="btn-story" aria-pressed="false">Story</button>
+          <button type="button" class="text-button" id="btn-limits">Limits</button>
+          <button type="button" class="text-button" id="btn-about">About</button>
+        </nav>
+      </header>
+      <div id="map" role="application" aria-label="Map of Central Kalimantan"></div>
+      <section id="sheet" aria-label="Map controls">
+        <div id="season" class="card" role="group" aria-label="Season slider"></div>
+        <div id="tabs">
+          <button type="button" class="text-button" id="tab-layers" aria-expanded="false" aria-controls="panel-layers">Layers</button>
+          <button type="button" class="text-button" id="tab-place" aria-expanded="false" aria-controls="panel-place">Place</button>
+          <button type="button" class="text-button" id="tab-story" aria-expanded="false" aria-controls="panel-story">Story</button>
+        </div>
+        <div id="col-left">
+          <section id="panel-story" class="card panel" aria-label="Story" hidden></section>
+          <section id="panel-layers" class="card panel" aria-label="Layers"></section>
+        </div>
+        <section id="panel-place" class="card panel" aria-label="Place"></section>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

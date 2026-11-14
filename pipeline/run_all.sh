@@ -53,7 +53,11 @@ $PY pipeline/drying/noise_floor.py --layers "$L" --sites $SITES --tracks $ASC $D
 echo "== 6. recovery after the rain"
 for site in $SITES; do
   $PY pipeline/recovery/recovery.py --site "$site" --track $ASC --other-track $DESC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
+  $PY pipeline/recovery/recovery.py --site "$site" --track $DESC --other-track $ASC --dry-until "$DRY_UNTIL" --stacks "$S" --layers "$L"
 done
+
+echo "== 6b. split by peat and fire (skips a site until track 3's layers are in $L)"
+$PY pipeline/drying/split.py --layers "$L" --sites $SITES --tracks $ASC $DESC
 
 echo "== 7. checks"
 $PY pipeline/drying/selfcheck.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL" > "$L/selfcheck_report.json"

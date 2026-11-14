@@ -1,0 +1,1638 @@
+[
+ {
+  "id": "dried_east",
+  "title": "Dried over the season, east",
+  "url": "layers/dried_east.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "season",
+  "site": "east",
+  "tracks": [
+   "061",
+   "125"
+  ],
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "dried_west",
+  "title": "Dried over the season, west",
+  "url": "layers/dried_west.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "season",
+  "site": "west",
+  "tracks": [
+   "061",
+   "125"
+  ],
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260618",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260618.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-06-18",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260630",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260630.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-06-30",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260712",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260712.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-07-12",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260724",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260724.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-07-24",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260817",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260817.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-08-17",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260829",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260829.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-08-29",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260910",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260910.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-09-10",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20260922",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20260922.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-09-22",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20261004",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20261004.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-10-04",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20261016",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20261016.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-10-16",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_061_20261028",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_061_20261028.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-10-28",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260622",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260622.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-06-22",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260704",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260704.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-07-04",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260716",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260716.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-07-16",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260821",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260821.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-08-21",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260902",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260902.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-09-02",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260914",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260914.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-09-14",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20260926",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20260926.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-09-26",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20261008",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20261008.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-10-08",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20261020",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20261020.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-10-20",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_east_125_20261101",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_east_125_20261101.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": "2026-11-01",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "east",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260618",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260618.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-06-18",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260630",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260630.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-06-30",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260712",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260712.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-07-12",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260724",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260724.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-07-24",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260817",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260817.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-08-17",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260829",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260829.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-08-29",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260910",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260910.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-09-10",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20260922",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20260922.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-09-22",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20261004",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20261004.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-10-04",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20261016",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20261016.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-10-16",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_061_20261028",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_061_20261028.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-10-28",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "061",
+  "orbit": "dusk",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260622",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260622.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-06-22",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260704",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260704.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-07-04",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260716",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260716.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-07-16",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260821",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260821.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-08-21",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260902",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260902.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-09-02",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260914",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260914.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-09-14",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20260926",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20260926.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-09-26",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20261008",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20261008.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-10-08",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20261020",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20261020.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-10-20",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "hh_west_125_20261101",
+  "title": "Fall in HH since the start of the season",
+  "url": "layers/hh_west_125_20261101.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": "2026-11-01",
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "pass",
+  "site": "west",
+  "track": "125",
+  "orbit": "dawn",
+  "ramp": {
+   "title": "Fall in HH brightness",
+   "colors": [
+    "#f6e27a",
+    "#f0a04b",
+    "#d9502e",
+    "#8f1d1d",
+    "#4a0d12"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "recovery_hh_east",
+  "title": "Rise after the rain, east",
+  "url": "layers/recovery_hh_east.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "recovery",
+  "site": "east",
+  "tracks": [
+   "061",
+   "125"
+  ],
+  "ramp": {
+   "title": "Rise in HH after the rain",
+   "colors": [
+    "#d6ecff",
+    "#8cc5f2",
+    "#3f97d9",
+    "#1f5fa8",
+    "#12305e"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "recovery_hh_west",
+  "title": "Rise after the rain, west",
+  "url": "layers/recovery_hh_west.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": "dB",
+  "legend": "sequential",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "recovery",
+  "site": "west",
+  "tracks": [
+   "061",
+   "125"
+  ],
+  "ramp": {
+   "title": "Rise in HH after the rain",
+   "colors": [
+    "#d6ecff",
+    "#8cc5f2",
+    "#3f97d9",
+    "#1f5fa8",
+    "#12305e"
+   ],
+   "scale": [
+    0.0,
+    3.0
+   ],
+   "shown_from": 1.0,
+   "full_at": 3.0
+  }
+ },
+ {
+  "id": "reference_west",
+  "title": "Reference forest, west",
+  "url": "layers/reference_west.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "outline",
+  "source": "NISAR L2 GCOV, ASF DAAC",
+  "kind": "reference",
+  "site": "west",
+  "color": "#9fd6b8"
+ }
+]

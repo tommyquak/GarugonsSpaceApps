@@ -12,6 +12,7 @@ Needs a NASA Earthdata login in ~/.netrc (machine urs.earthdata.nasa.gov).
 
     python pipeline/radar/pull_gcov.py --site west --out data/gcov/west
     python pipeline/radar/pull_gcov.py --bbox 113.6 -3.2 114.3 -2.4 --tracks 125 61 --out data/gcov/west
+    python pipeline/radar/pull_gcov.py --site west --since 2026-10-25 --out data/gcov/west    # new passes only
 """
 import argparse
 import json
@@ -117,6 +118,7 @@ def main():
     p.add_argument("--out", required=True, type=Path)
     p.add_argument("--workers", type=int, default=4, help="signed URLs expire in about an hour, so keep this small")
     p.add_argument("--block-mb", type=int, default=2)
+    p.add_argument("--since", help="YYYY-MM-DD: only passes on or after this day, to fetch new passes")
     p.add_argument("--limit", type=int, help="only the first N granules, for a quick test")
     p.add_argument("--force", action="store_true", help="download again even if a manifest exists")
     a = p.parse_args()
@@ -124,7 +126,10 @@ def main():
         p.error("give --site or --bbox")
     bbox = tuple(a.bbox) if a.bbox else tuple(SITES[a.site]["bbox"])
     tracks = a.tracks or (SITES[a.site]["tracks"] if a.site else None)
-    granules = search(bbox, tracks)[: a.limit]
+    granules = search(bbox, tracks)
+    if a.since:
+        granules = [g for g in granules if g["startTime"][:10] >= a.since]
+    granules = granules[: a.limit]
     print(f"{len(granules)} GCOV granules over {bbox}, tracks {tracks or 'all'}")
     a.out.mkdir(parents=True, exist_ok=True)
     failed = 0
