@@ -88,6 +88,7 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
     wholeButton.setAttribute("aria-pressed", String(overlays.mode !== "pass"));
     wholeButton.title = overlays.mode === "pass" ? "Back to the whole season: brings the whole-season layers back" : "The whole season is showing";
     root.classList.toggle("is-pass", overlays.mode === "pass");
+    slider.style.setProperty("--fill", overlays.mode === "pass" && last ? `${((100 * overlays.stepIndex) / last).toFixed(1)}%` : "0%");
     if (overlays.mode === "pass") {
       const step = steps[overlays.stepIndex];
       slider.value = String(overlays.stepIndex);

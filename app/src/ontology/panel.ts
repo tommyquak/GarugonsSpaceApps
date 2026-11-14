@@ -56,7 +56,7 @@ export function buildEvidencePanel(parent: HTMLElement, ontology: Ontology, hook
     heading = text;
     summary = more;
     kind.textContent = name;
-    root.setAttribute("aria-label", `${name}: ${heading}`);
+    root.setAttribute("aria-label", name ? `${name}: ${heading}` : heading);
     body.replaceChildren(...parts);
     body.scrollTop = 0;
     render();
@@ -81,7 +81,7 @@ export function buildEvidencePanel(parent: HTMLElement, ontology: Ontology, hook
     showSchema() {
       // No block: the details of a clicked box take the place the block card has.
       const side = h("aside", {});
-      fill("schema", "Vocabulary", "How it decides", "", side, drawGraph(ontology, null, hooks.color, side));
+      fill("schema", "", "How it decides", "", side, drawGraph(ontology, null, hooks.color, side));
     },
     hide() {
       mode = null;
