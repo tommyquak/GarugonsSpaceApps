@@ -25,6 +25,7 @@ export class BlockLayer {
   private shown = false;
   private columns = false;
   private selected: BlockFeature | null = null;
+  private hidden = new Set<string>();   // actions switched off in the legend
 
   constructor(
     private map: MapLibreMap,
@@ -93,6 +94,7 @@ export class BlockLayer {
       },
       ANCHOR,
     );
+    for (const action of [...this.hidden]) this.setActionShown(action, false);
     this.mark(this.selected, true);
     this.sync();
   }
@@ -125,6 +127,24 @@ export class BlockLayer {
   setColumns(on: boolean): void {
     this.columns = on;
     this.sync();
+  }
+
+  /** Shows or hides every block of one action, flat and as columns. */
+  setActionShown(action: string, on: boolean): void {
+    if (on) this.hidden.delete(action);
+    else this.hidden.add(action);
+    const filter: ExpressionSpecification = this.hidden.size
+      ? ["all", acted, ["!", ["in", ["get", "action"], ["literal", [...this.hidden]]]]]
+      : acted;
+    for (const site of this.sites) {
+      for (const kind of ["fill", "columns"]) {
+        if (this.map.getLayer(`blocks-${site}-${kind}`)) this.map.setFilter(`blocks-${site}-${kind}`, filter);
+      }
+    }
+  }
+
+  isActionShown(action: string): boolean {
+    return !this.hidden.has(action);
   }
 
   /** Outlines one block, or none. */
