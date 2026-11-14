@@ -20,6 +20,7 @@ Layers written, each only if its input exists:
     hh_<site>_<track>_<YYYYMMDD>    one per radar pass, fall in HH against the start of the season
     reference_<site>                the intact reference forest, as an outline with a light fill
     fire_<site>                     land with at least one fire detection day (fire_days_<site>.tif)
+    recovery_hh_<site>              rise in HH across the first rain, mean of the orbits, in a blue ramp
 
 A fall is drawn from --min-db upward and reaches the end of the ramp at --full-db. Smaller falls
 and cells with no data are transparent. The ramp is the one of pipeline/drying/one_look_map.py.
@@ -39,6 +40,7 @@ from rasterio.warp import Resampling, calculate_default_transform, reproject, tr
 # Same colours and full scale as pipeline/drying/one_look_map.py (RAMP, FULL_SCALE_DB).
 RAMP = ["#f6e27a", "#f0a04b", "#d9502e", "#8f1d1d", "#4a0d12"]
 FULL_SCALE_DB = 3.0
+RAMP_RISE = ["#d6ecff", "#8cc5f2", "#3f97d9", "#1f5fa8", "#12305e"]  # light to deep blue, for a rise
 MIN_DB = 1.0
 LEVELS = 48  # colour steps between --min-db and --full-db
 
@@ -52,9 +54,9 @@ def hex_rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 
 
-def ramp_rgb(t):
-    """Colour of the ramp at t in 0..1, linear between evenly spaced stops."""
-    stops = np.array([hex_rgb(h) for h in RAMP], dtype=float)
+def ramp_rgb(t, colors):
+    """Colour of a ramp at t in 0..1, linear between evenly spaced stops."""
+    stops = np.array([hex_rgb(h) for h in colors], dtype=float)
     x = np.clip(t, 0, 1) * (len(stops) - 1)
     i = np.minimum(x.astype(int), len(stops) - 2)
     f = (x - i)[..., None]
@@ -108,12 +110,12 @@ def save_palette(path, index, palette_rgb, alpha):
     img.save(path, optimize=True, transparency=bytes(alpha))
 
 
-def save_fall(path, fall, show, min_db, full_db):
-    """Colour a fall in decibels with the ramp. Index 0 is transparent."""
+def save_fall(path, fall, show, min_db, full_db, colors=RAMP):
+    """Colour a change in decibels with a ramp. Index 0 is transparent."""
     step = np.round((np.clip(fall, min_db, full_db) - min_db) / (full_db - min_db) * (LEVELS - 1))
     index = np.where(show, 1 + np.nan_to_num(step), 0)
     levels = min_db + (full_db - min_db) * np.arange(LEVELS) / (LEVELS - 1)
-    palette = np.vstack([[0, 0, 0], ramp_rgb(levels / FULL_SCALE_DB)])
+    palette = np.vstack([[0, 0, 0], ramp_rgb(levels / FULL_SCALE_DB, colors)])
     save_palette(path, index, palette, [0] + [255] * LEVELS)
 
 
@@ -127,8 +129,8 @@ def save_mask(path, mask, rgb, fill_alpha, edge_alpha, edge_px):
     save_palette(path, index, [(0, 0, 0), rgb, rgb], [0, fill_alpha, edge_alpha])
 
 
-def ramp_entry(min_db, full_db):
-    return {"colors": RAMP, "scale": [0.0, FULL_SCALE_DB], "shown_from": min_db, "full_at": full_db}
+def ramp_entry(min_db, full_db, colors=RAMP, title="Fall in HH brightness"):
+    return {"title": title, "colors": colors, "scale": [0.0, FULL_SCALE_DB], "shown_from": min_db, "full_at": full_db}
 
 
 def iso(yyyymmdd):
@@ -194,6 +196,21 @@ def main():
         path = add(hh_path.stem, "Fall in HH since the start of the season", grid, kind="pass", site=site,
                    track=track, orbit=orbit.get(track), date=iso(day), ramp=ramp_entry(a.min_db, a.full_db))
         save_fall(path, fall_m, show, a.min_db, a.full_db)
+
+    # The rise across the first rain, once track 2b has exported it. Positive means brighter.
+    # Files are recovery_hh_<site>.tif or one per orbit, recovery_hh_<site>_<track>.tif; orbits are averaged.
+    by_site = {}
+    for rec_path in sorted(a.layers.glob("recovery_hh_*.tif")):
+        m = re.fullmatch(r"recovery_hh_(.+?)(?:_(\d{3}))?", rec_path.stem)
+        by_site.setdefault(m.group(1), []).append((rec_path, m.group(2)))
+    for site, found in by_site.items():
+        grid = grids.get(site, found[0][0], a.res)[1]
+        rise = np.mean([grids.get(site, path, a.res)[0] for path, _ in found], axis=0)
+        rise_m = grid.warp(rise, Resampling.bilinear)
+        path = add(f"recovery_hh_{site}", f"Rise after the rain, {site}", grid, kind="recovery", site=site,
+                   tracks=[t for _, t in found if t],
+                   ramp=ramp_entry(a.min_db, a.full_db, RAMP_RISE, "Rise in HH after the rain"))
+        save_fall(path, rise_m, rise_m >= a.min_db, a.min_db, a.full_db, RAMP_RISE)
 
     # (c) Yes or no layers: the reference forest, and fire days once track 3 has exported them.
     for ref_path in sorted(a.layers.glob("reference_*.tif")):
