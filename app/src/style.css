@@ -651,6 +651,20 @@ button {
   color: var(--accent);
 }
 
+.place-actions a.text-button {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.place-actions .copied {
+  align-self: center;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
 .look {
   margin: 0 0 10px;
 }

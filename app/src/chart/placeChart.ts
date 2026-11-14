@@ -162,7 +162,8 @@ export class PlaceChart {
     for (const fn of this.pickListeners) fn();
   }
 
-  private close(): void {
+  /** Closes the place card and takes its marker off the map. */
+  close(): void {
     this.marker?.remove();
     this.marker = undefined;
     this.drawn = undefined;

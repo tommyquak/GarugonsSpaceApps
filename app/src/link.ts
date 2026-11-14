@@ -82,6 +82,8 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
     const at = chart.place;
     if (state.place && !(at && at.lat.toFixed(4) === state.place.lat.toFixed(4) && at.lon.toFixed(4) === state.place.lon.toFixed(4))) {
       void chart.pick(state.place.lon, state.place.lat);
+    } else if (!state.place && at) {
+      chart.close(); // the address names no place, so none stays open
     }
   };
 
