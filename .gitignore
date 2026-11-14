@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/
+dist/
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+
+# Local state of the board tool and of coding agents
+.board/
+.claude/settings.local.json
+.codex/
+
+# Credentials: never commit
+.env
+.env.*
+.netrc
+*.pem
+*.key
+
+# Data and pipeline outputs: published as a GitHub release, not committed
+data/
+pipeline/out/
+*.h5
+*.npz
+*.npy
+*.nc4
+*.tif
+*.zip
