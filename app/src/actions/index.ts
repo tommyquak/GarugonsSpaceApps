@@ -109,14 +109,19 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
     const none = action.id === NO_ACTION;
     const swatch = h("span", { class: `act-swatch${none ? " is-none" : ""}`, "aria-hidden": "true" });
     if (!none) swatch.style.background = actionColor(action.id);
-    legend.append(
-      h(
-        "div",
-        { class: "act-legend-item" },
-        h("div", { class: "act-legend-head" }, swatch, h("strong", { text: action.title }), h("span", { class: "act-legend-count", text: `${store.count(action.id).toLocaleString("en")} blocks` })),
-        action.advice ? h("p", { text: action.advice }) : null,
-      ),
+    // Each action can be switched off, so a reader can look at one kind of block at a time.
+    const toggle = none ? null : h("input", { type: "checkbox", class: "act-toggle", checked: true, "aria-label": `Show ${action.title} blocks` });
+    const item = h(
+      "div",
+      { class: "act-legend-item" },
+      h("label", { class: "act-legend-head" }, toggle, swatch, h("strong", { text: action.title }), h("span", { class: "act-legend-count", text: `${store.count(action.id).toLocaleString("en")} blocks` })),
+      action.advice ? h("p", { text: action.advice }) : null,
     );
+    toggle?.addEventListener("change", () => {
+      layer.setActionShown(action.id, toggle.checked);
+      item.classList.toggle("is-off", !toggle.checked);
+    });
+    legend.append(item);
   }
   const strengths = h("div", { class: "act-strengths", title: ontology.confidence?.rule ?? "" }, h("span", { text: "Confidence" }));
   for (const level of CONFIDENCE_LEVELS) {

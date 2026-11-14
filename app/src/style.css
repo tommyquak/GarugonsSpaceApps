@@ -1629,3 +1629,23 @@ button:disabled {
     height: 256px;
   }
 }
+
+/* A switch per action in the Actions legend */
+.act-toggle {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+label.act-legend-head {
+  cursor: pointer;
+  min-height: 28px;
+}
+
+.act-legend-item.is-off .act-swatch,
+.act-legend-item.is-off strong {
+  opacity: 0.4;
+}
