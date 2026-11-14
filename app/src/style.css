@@ -366,6 +366,102 @@ button {
   color: var(--accent);
 }
 
+.bar-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+/* Limits and About */
+.sheet-dialog {
+  width: min(680px, calc(100vw - 24px));
+  max-height: min(80vh, 760px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #12161a;
+  color: var(--text);
+}
+
+.sheet-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.dialog-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #12161a;
+  border-bottom: 1px solid var(--line);
+}
+
+.dialog-head h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.doc {
+  padding: 4px 16px 18px;
+}
+
+.doc h2,
+.doc h3,
+.doc h4 {
+  margin: 18px 0 6px;
+  font-size: 14px;
+}
+
+.doc p,
+.doc ul,
+.doc ol {
+  margin: 8px 0;
+}
+
+.doc ul,
+.doc ol {
+  padding-left: 20px;
+}
+
+.doc a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.doc code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: #1f252c;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.doc th,
+.doc td {
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.doc th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 [hidden] {
   display: none !important;
 }
