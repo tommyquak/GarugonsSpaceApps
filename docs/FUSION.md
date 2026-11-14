@@ -69,7 +69,7 @@ The "Where to check" view opens coloured by level, for a first look. The levels 
 
 As columns, a block's height is its level and nothing else: three fixed drawing heights, so that colour and height say the same thing. Coloured by class, the height is the fall in HH instead, at 1,200 m of column per dB. On a wide screen the view opens as columns.
 
-The order is by signs of lasting change, not by harm. Nothing here was checked on the ground, and the size of the fall plays no part: land beside a canal can fall a long way and recover with the first rain.
+The order is by signs of lasting change, not by harm. Nothing here was checked on the ground, and the size of the fall plays no part: a block can fall a long way and return to its start level on the first pass after the rain.
 
 ## The fire-prone test
 
@@ -83,4 +83,4 @@ The order is by signs of lasting change, not by harm. Nothing here was checked o
 - **Not complete.** OpenStreetMap misses canals, and the peat map has its own errors.
 - **Peat only, by choice.** Fire and change outside mapped peat are real and are shown on the map, but no class is attached to them.
 
-The thresholds were written on 14 Nov 2026, the day of the first results, and have not been tuned since. What moves when they move is in `docs/LIMITS.md` and `pipeline/out/layers/sensitivity.json`.
+The thresholds were written on 14 Nov 2026, and have not been tuned since. What moves when they move is in `docs/LIMITS.md` and `pipeline/out/layers/sensitivity.json`.

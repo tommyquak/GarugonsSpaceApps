@@ -25,8 +25,8 @@ const GAP = 6;
 const EDGE = 8;
 
 const STATUS: Record<string, string> = {
-  final: "Final: recomputed and checked independently by the team's checks track.",
-  exploratory: "Exploratory: computed by the pipeline, not yet checked independently.",
+  final: "Final: recomputed separately by a second team member.",
+  exploratory: "Exploratory: computed by the pipeline, not yet recomputed by a second team member.",
 };
 
 const POPOVER = typeof HTMLElement !== "undefined" && "popover" in HTMLElement.prototype;

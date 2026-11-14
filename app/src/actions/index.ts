@@ -186,7 +186,7 @@ export async function buildActions(
   classBox.append(
     legend,
     strengths,
-    h("p", { class: "note", text: "A stronger colour means more of the conditions for that class hold. It is a count, not a probability. Blocks without a class are a faint grid when you zoom in. The other layers are dimmed while this view is open." }),
+    h("p", { class: "note", text: "A stronger colour means more of the conditions for that class hold. It is a count, not a probability. Blocks without a class are a faint grid when you zoom in. The other layers are hidden while this view is open." }),
   );
   const listBox = h("div", { class: "act-list" });
   panel.replaceChildren(

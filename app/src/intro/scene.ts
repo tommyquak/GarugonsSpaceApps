@@ -1,6 +1,6 @@
 // Written with Super Intelligence (SI) assistance.
 // The operations room around the wall screen, drawn in code: no image files and no
-// third-party assets. It is a made-up room for a made-up field team.
+// third-party assets. It is a made-up room.
 //
 // The room box is 1/START_SCALE times the size of the app, and the app sits in a hole in its
 // back wall. In the room's own 1000 x 1000 drawing units that hole is the square from
@@ -113,7 +113,7 @@ function person(left: number, top: number, width: number, height: number): strin
 // Signs name the made-up team and the real source of the radar data, in words only.
 const SIGN = `
 <div class="intro-sign">
-  <strong>Dry Season Waltz field team</strong>
+  <strong>Team Garugons</strong>
   <span>Peatland observation room</span>
   <span>Data source: NASA-ISRO NISAR L-band radar</span>
 </div>`;

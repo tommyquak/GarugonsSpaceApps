@@ -58,7 +58,7 @@
     .front-sheet { position:absolute; inset:0; width:100%; height:100%; padding:30px; overflow:hidden; color:var(--paper-ink); text-align:left; cursor:zoom-in; border:1px solid #d2cbbc; border-radius:2px; background:linear-gradient(113deg,rgba(255,255,255,.42),transparent 40%),var(--paper); box-shadow:0 1px 1px rgba(0,0,0,.5), 0 6px 14px rgba(0,0,0,.42), 0 24px 46px rgba(0,0,0,.34); transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease; }
     .front-sheet:hover, .front-sheet:focus-visible { transform:translateY(-5px) rotate(.5deg); box-shadow:0 2px 2px rgba(0,0,0,.4), 0 16px 30px rgba(0,0,0,.44), 0 40px 70px rgba(0,0,0,.4); }
     .sheet-top { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(34,43,39,.24); padding-bottom:12px; font-size:8px; letter-spacing:.13em; text-transform:uppercase; }
-    .nasa-mark { width:25px; height:25px; display:grid; place-items:center; font-size:8px; border:1px solid #5f6d67; border-radius:50%; color:#52605a; font-weight:700; letter-spacing:-.07em; }
+    .nasa-mark { color:#52605a; }
     .cover-title { font:400 36px/.99 Georgia,serif; letter-spacing:-.035em; margin:28px 0 11px; max-width:360px; }
     .cover-subtitle { font:12px/1.4 "Segoe UI",sans-serif; color:#64716a; max-width:320px; margin:0 0 17px; }
     .limit-ribbon { display:flex; gap:9px; align-items:flex-start; border-left:3px solid #9b83bd; background:#e7e1ec; color:#3c3347; font:9px/1.38 "Segoe UI",sans-serif; padding:8px 10px; margin-bottom:15px; }
@@ -255,17 +255,17 @@
       <div class="under-sheet three" aria-hidden="true"></div>
       <div class="under-sheet two" aria-hidden="true"></div>
       <button class="front-sheet" id="open-report" type="button" aria-label="Open the three-page field assessment">
-        <div class="sheet-top"><span>Field assessment · western study area</span><span class="nasa-mark" aria-label="NISAR">NISAR</span></div>
+        <div class="sheet-top"><span>Field assessment · western study area</span><span class="nasa-mark">Data: NISAR</span></div>
         <h2 class="cover-title">Peat blocks to check after the 2026 dry season</h2>
-        <p class="cover-subtitle">Central Kalimantan. From NISAR radar and NASA fire detections, June to November 2026.</p>
+        <p class="cover-subtitle">Central Kalimantan. From NISAR radar and NASA fire detections in the 2026 dry season.</p>
         <div class="limit-ribbon"><strong>A screening result.</strong><span>Nothing in it was checked on the ground. It says where to look, not what to do.</span></div>
-        <div class="mini-map" aria-label="Map preview of the western study area">
+        <div class="mini-map">
           <svg id="cover-map" viewBox="0 0 400 180" aria-hidden="true"></svg>
         </div>
         <div class="map-caption"><span>Western study area</span><span>Block screening classes</span></div>
         <div class="cover-facts">
-          <div class="cover-fact"><b id="repeat-fire-cover">—</b><span>of this year’s fire on peat fell on land that had burned in 2015, 2019 or 2023</span></div>
-          <div class="cover-fact"><b id="earlier-fire-cover">—</b><span>of the peat had burned in those years</span></div>
+          <div class="cover-fact"><b id="repeat-fire-cover">...</b><span>of this year’s fire detections on peat were on land with a detection in 2015, 2019 or 2023</span></div>
+          <div class="cover-fact"><b id="earlier-fire-cover">...</b><span>of the peat had a detection in those years</span></div>
         </div>
         <div class="cover-foot"><span>Dry Season Waltz · a demonstration</span><span>Three pages</span></div>
       </button>
@@ -273,14 +273,13 @@
       <div class="tap-cue" aria-hidden="true">Open the field assessment</div>
     </section>
 
-    <div class="legend" aria-label="Project visual key">
+    <div class="legend">
       <div class="legend-items">
-        <span class="legend-item"><i class="swatch"></i>The radar echo fell</span>
-        <span class="legend-item"><i class="swatch burn"></i>Fire detected</span>
-        <span class="legend-item"><i class="swatch rewet"></i>The echo rose after the rain</span>
-        <span class="legend-item"><i class="swatch left"></i>Still low after the rain</span>
+        <span class="legend-item"><i class="swatch" style="background:#9b83bd"></i>The echo fell and was still low after the rain</span>
+        <span class="legend-item"><i class="swatch" style="background:#46504b"></i>Fire detected (NASA FIRMS)</span>
+        <span class="legend-item"><i class="swatch" style="background:#6497b6"></i>The echo fell and came back with the rain</span>
       </div>
-      <div class="meta-note">Figures are final values from the project’s numbers file. The map is drawn from the current blocks.</div>
+      <div class="meta-note">The two figures are read from the project’s checked numbers. The map is drawn from the app’s blocks.</div>
     </div>
   </main>
 
@@ -309,15 +308,15 @@
           <div class="caveat"><strong>A screening result.</strong> There are no ground measurements. The map shows where the radar echo changed and where fire was detected. It does not measure the water table, say why a block changed, or recommend any work.</div>
           <div class="section-label">Western study area, one-kilometre blocks</div>
           <div class="page-map"><svg id="report-map" viewBox="0 0 700 330" role="img" aria-label="Western study area block screening map"></svg>
-            <div class="map-key"><span><i></i>fell and stayed low</span><span><i class="k-burn"></i>fire detected</span><span><i class="k-rewet"></i>came back</span></div>
-            <div class="map-disclaimer">Drawn from the current blocks</div>
+            <div class="map-key"><span><i style="background:#9b83bd"></i>fell and still low after the rain</span><span><i style="background:#46504b"></i>fire detected (NASA FIRMS)</span><span><i style="background:#6497b6"></i>fell and came back</span></div>
+            <div class="map-disclaimer">Blocks only. No rivers or roads are drawn.</div>
           </div>
           <div class="summary-row">
-            <div class="summary-card"><strong id="repeat-fire-stat">—</strong><span>of this year’s fire on western peat fell on land that had burned in 2015, 2019 or 2023</span></div>
-            <div class="summary-card"><strong id="earlier-fire-stat">—</strong><span>of western peat had burned in those years</span></div>
+            <div class="summary-card"><strong id="repeat-fire-stat">...</strong><span>of this year’s fire detections on western peat were on land with a detection in 2015, 2019 or 2023</span></div>
+            <div class="summary-card"><strong id="earlier-fire-stat">...</strong><span>of western peat had a detection in those years</span></div>
             <div class="summary-card"><strong>Next</strong><span>visit the listed blocks before deciding anything; the list is on page 3</span></div>
           </div>
-          <p class="status-message" id="validation-status">Loading final validation values…</p>
+          <p class="status-message" id="validation-status">Loading the checked figures...</p>
           <div class="page-bottom"><span>Dry Season Waltz · a demonstration</span><span>Sources and limits on page 3</span></div>
         </article>
 
@@ -326,29 +325,29 @@
           <h2 class="page-title">The evidence</h2>
           <p class="page-deck">What was measured, in the order it happened: the dry season, the fires, and the first rain.</p>
           <div class="page-two-grid">
-            <section class="evidence-card"><h3>Dry season</h3><p>The HH radar echo fell through the dry season on open peat, measured against closed forest. The radar sees the ground through cloud and smoke.</p><div class="spark" aria-label="Schematic dry season radar series"><i style="--h:82%;--c:#d8aa68"></i><i style="--h:75%;--c:#d49a60"></i><i style="--h:68%;--c:#d88c59"></i><i style="--h:59%;--c:#d77a52"></i><i style="--h:46%;--c:#d96949"></i><i style="--h:40%;--c:#c75a43"></i><i style="--h:34%;--c:#b64c3e"></i></div><div class="status-message">A sketch, not data</div></section>
-            <section class="evidence-card"><h3>Fire</h3><p>Fire detections come from NASA FIRMS and are a separate measurement. The radar’s coherence also drops where and when FIRMS saw fire; other changes to the ground lower it too.</p><div class="spark" aria-label="Schematic fire detections"><i style="--h:13%;--c:#69746f"></i><i style="--h:22%;--c:#69746f"></i><i style="--h:31%;--c:#69746f"></i><i style="--h:79%;--c:#414b47"></i><i style="--h:92%;--c:#39413e"></i><i style="--h:50%;--c:#69746f"></i><i style="--h:24%;--c:#69746f"></i></div><div class="status-message">A sketch, not data</div></section>
+            <section class="evidence-card"><h3>Through the dry season</h3><p>The HH radar echo fell through the dry season on open peat, measured against closed forest. Cloud and smoke do not stop the radar.</p><div class="spark" aria-label="Schematic dry season radar series"><i style="--h:82%;--c:#d8aa68"></i><i style="--h:75%;--c:#d49a60"></i><i style="--h:68%;--c:#d88c59"></i><i style="--h:59%;--c:#d77a52"></i><i style="--h:46%;--c:#d96949"></i><i style="--h:40%;--c:#c75a43"></i><i style="--h:34%;--c:#b64c3e"></i></div><div class="status-message">A sketch, not data</div></section>
+            <section class="evidence-card"><h3>Fire</h3><p>Fire detections come from NASA FIRMS and are a separate measurement. They are not ours, and they mark active fire, not burnt land.</p><div class="spark" aria-label="Schematic fire detections"><i style="--h:13%;--c:#69746f"></i><i style="--h:22%;--c:#69746f"></i><i style="--h:31%;--c:#69746f"></i><i style="--h:79%;--c:#414b47"></i><i style="--h:92%;--c:#39413e"></i><i style="--h:50%;--c:#69746f"></i><i style="--h:24%;--c:#69746f"></i></div><div class="status-message">A sketch, not data</div></section>
             <section class="evidence-card"><h3>First rain</h3><p>On the first pass after the rain the echo rose again on most blocks. On some it stayed low. That says where to look, not why.</p><div class="spark"><i style="--h:28%;--c:#748892"></i><i style="--h:35%;--c:#6c8fa0"></i><i style="--h:31%;--c:#6c8fa0"></i><i style="--h:44%;--c:#638fa7"></i><i style="--h:59%;--c:#5e97b5"></i><i style="--h:69%;--c:#5a9abf"></i><i style="--h:74%;--c:#5a9abf"></i></div><div class="status-message">A sketch, not data</div></section>
             <section class="evidence-card"><h3>Still low after the rain</h3><p>Where the echo stayed low, compare it on site with the fire footprint, the vegetation and the water level.</p><div class="spark"><i style="--h:80%;--c:#8874a6"></i><i style="--h:76%;--c:#8874a6"></i><i style="--h:79%;--c:#8874a6"></i><i style="--h:73%;--c:#8874a6"></i><i style="--h:75%;--c:#8874a6"></i><i style="--h:71%;--c:#8874a6"></i><i style="--h:74%;--c:#8874a6"></i></div><div class="status-message">A sketch, not data</div></section>
           </div>
-          <div class="section-label">Fire on land that had burned before</div>
+          <div class="section-label">Fire detected where it was detected before</div>
           <div class="stat-pair">
-            <div class="stat"><b id="repeat-fire-stat-2">—</b><span>of this year’s fire on western peat fell on land with a fire detection in 2015, 2019 or 2023</span></div>
-            <div class="stat"><b id="earlier-fire-stat-2">—</b><span>of western peat had a fire detection in those years</span></div>
+            <div class="stat"><b id="repeat-fire-stat-2">...</b><span>of this year’s fire detections on western peat were on land with a detection in 2015, 2019 or 2023</span></div>
+            <div class="stat"><b id="earlier-fire-stat-2">...</b><span>of western peat had a fire detection in those years</span></div>
           </div>
-          <div class="method-note">This says where fire returned. It does not say why, and it does not mean the radar can predict fire.</div>
-          <div class="page-bottom"><span>Inputs: NISAR L-band · FIRMS · GPM IMERG · PEATMAP</span><span>Figures are final values</span></div>
+          <div class="method-note">These are NASA FIRMS detections, not a map of burnt land. They say where fire was detected again. They do not say why, and they do not mean the radar can predict fire.</div>
+          <div class="page-bottom"><span>Inputs: NISAR L-band · FIRMS · GPM IMERG · PEATMAP</span><span>Both figures recomputed by a second team member</span></div>
         </article>
 
         <article class="report-page" id="page-3">
           <div class="page-kicker"><span>Field assessment · western study area</span><span>Page 3 of 3</span></div>
           <h2 class="page-title">Blocks to visit</h2>
-          <p class="page-deck">Twelve blocks: the six highest-ranked of each of the two upper levels. Each is one kilometre square, and the position given is its centre.</p>
+          <p class="page-deck">Twelve blocks: the six highest-ranked of each of the two upper levels. Each is one kilometre square, and the position given is its centre. Within a level the order is by the size of the fall, which is not a grade of the land.</p>
           <table class="handoff-table" aria-label="Blocks to visit first">
-            <thead><tr><th>No.</th><th>Block</th><th>Centre</th><th>Why it is listed</th><th class="num">Canal</th><th class="tick">Visited</th></tr></thead>
+            <thead><tr><th>No.</th><th>Block</th><th>Centre</th><th>Why it is listed</th><th class="num">To a canal</th><th class="tick">Visited</th></tr></thead>
             <tbody id="handoff-rows"><tr><td colspan="6" class="handoff-empty">The block list could not be read.</td></tr></tbody>
           </table>
-          <div class="handoff-key"><span><i class="lv3"></i>Fire on several days, and the vegetation echo still low after the rain</span><span><i class="lv2"></i>No fire, and the ground echo still low after the rain</span></div>
+          <div class="handoff-key"><span><i class="lv3"></i>Fire on several days, and the vegetation echo still low after the rain</span><span><i class="lv2"></i>The echo fell and was still low after the rain, or fire with the vegetation echo still low</span></div>
           <div class="section-label">At each block, record</div>
           <div class="record-row">
             <div><strong>Water</strong><span>Depth to water in a dipwell or a hand-dug pit, in centimetres.</span></div>
@@ -505,7 +504,7 @@
 
     function showFinal(key, ids, suffix = "%") {
       const item = window.reportValidation?.[key];
-      const value = item && item.status === "final" ? `${(Number(item.value) * 100).toFixed(1)}${suffix}` : "—";
+      const value = item && item.status === "final" ? `${(Number(item.value) * 100).toFixed(1)}${suffix}` : "not available";
       for (const id of ids) document.getElementById(id).textContent = value;
       return Boolean(item && item.status === "final");
     }
@@ -513,7 +512,7 @@
       window.reportValidation = data;
       const a = showFinal("fire_repeat_share_on_peat_west", ["repeat-fire-cover", "repeat-fire-stat", "repeat-fire-stat-2"]);
       const b = showFinal("fire_earlier_share_on_peat_west", ["earlier-fire-cover", "earlier-fire-stat", "earlier-fire-stat-2"]);
-      document.getElementById("validation-status").textContent = a && b ? "Both figures are final values in validation.json." : "Final values are missing from this copy of the data, so the figures are left blank.";
+      document.getElementById("validation-status").textContent = a && b ? "Both figures were recomputed separately by a second team member." : "Final values are missing from this copy of the data, so the figures are left blank.";
     }).catch(() => { document.getElementById("validation-status").textContent = "The numbers file could not be read, so no figures are shown."; });
 
     function drawBlockMap(svg, viewWidth, viewHeight) {
@@ -523,20 +522,19 @@
         const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
         const colors = { fell_still_low: "#9b83bd", fire_detected: "#46504b", fell_came_back: "#6497b6", none: "#c7cdc4" };
         let html = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/>`;
-        html += `<path d="M0 ${viewHeight*.78} C${viewWidth*.18} ${viewHeight*.58}, ${viewWidth*.26} ${viewHeight*.82}, ${viewWidth*.42} ${viewHeight*.55} S${viewWidth*.68} ${viewHeight*.62},${viewWidth} ${viewHeight*.24}" fill="none" stroke="#b4bdb2" stroke-width="2" stroke-dasharray="5 5"/>`;
         for (const row of rows) {
           const x = 15 + ((row[2] - minX) / (maxX-minX || 1)) * (viewWidth-30);
           const y = 15 + ((maxY - row[3]) / (maxY-minY || 1)) * (viewHeight-30);
           const color = colors[row[4]] || colors.none;
           html += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(1.2,viewWidth/150).toFixed(1)}" height="${Math.max(1.2,viewWidth/150).toFixed(1)}" fill="${color}" opacity="${row[4]==="none"?.34:.82}"/>`;
         }
-        html += `<path d="M${viewWidth*.2} ${viewHeight*.17} C${viewWidth*.31} ${viewHeight*.09},${viewWidth*.36} ${viewHeight*.21},${viewWidth*.44} ${viewHeight*.15} S${viewWidth*.59} ${viewHeight*.12},${viewWidth*.69} ${viewHeight*.2}" fill="none" stroke="#9d806a" stroke-width="1.1" opacity=".75"/>`;
         svg.innerHTML = html;
       }).catch(() => { svg.innerHTML = `<rect width="${viewWidth}" height="${viewHeight}" fill="#e1e5dd"/><text x="50%" y="50%" text-anchor="middle" fill="#6d7771" font-size="12">The blocks could not be read</text>`; });
     }
     // Page 3: the blocks to visit first, read from the block file. The six highest-ranked blocks of
     // each of the two upper levels: fire on several days with the vegetation echo still low, and
-    // no fire with the ground echo still low. The same grouping as the app's at-a-glance view.
+    // the echo fell and was still low, or fire with the vegetation echo still low. The same grouping as
+    // the app's at-a-glance view. A fire block is described by its fire days, whichever level it is in.
     function drawHandoff(body) {
       fetch("../blocks/blocks_west.app.json").then((r) => r.ok ? r.json() : Promise.reject()).then((data) => {
         const at = (list, name) => list.indexOf(name);
@@ -550,8 +548,8 @@
         const rows = [...pick(3), ...pick(2)];
         if (!rows.length) return;
         const one = (v) => Number(v).toFixed(1);
-        const why = (row) => level(row) === 3
-          ? `Fire on ${Math.round(obs(row, "fire_days"))} days. Vegetation echo ${one(Math.max(obs(row, "hv_left_asc"), obs(row, "hv_left_desc")))} dB below the dry start.`
+        const why = (row) => prop(row, "action") === "fire_detected"
+          ? `Fire detected on ${Math.round(obs(row, "fire_days"))} days. Vegetation echo ${one(Math.max(obs(row, "hv_left_asc"), obs(row, "hv_left_desc")))} dB below the dry start.`
           : `Echo fell ${one(prop(row, "fall_db"))} dB and is still ${one(Math.max(obs(row, "left_asc"), obs(row, "left_desc")))} dB low. No fire detected.`;
         const where = (row) => `${Math.abs(prop(row, "lat")).toFixed(4)}\u00b0 ${prop(row, "lat") < 0 ? "S" : "N"}, ${prop(row, "lon").toFixed(4)}\u00b0 E`;
         const canal = (row) => { const m = obs(row, "canal_m"); return m === null ? "" : m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`; };

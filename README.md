@@ -2,17 +2,17 @@
 
 Team Garugons, NASA Space Apps Challenge 2026, challenge "Dancing with the SARs".
 
-**Status: being built this weekend (14 and 15 November 2026). Nothing here is final yet.**
+Built on 14 and 15 November 2026.
 
 ## What it is
 
 An open web map that uses the first dry season seen by the NASA-ISRO NISAR radar over Borneo's peatlands to show three things:
 
-1. **Dry.** Where the radar echo fell over the dry season, pass by pass, through cloud and smoke.
-2. **Burn.** Where fire was detected.
-3. **Rewet.** What changed with the first rain, and what had not.
+1. **The fall.** Where the radar echo fell over the dry season, pass by pass, through cloud and smoke.
+2. **Fire.** Where NASA's FIRMS detected fire.
+3. **The first rain.** Where the echo rose again on the first pass after the rain, and where it did not.
 
-It is a screening map that shows where to look. It does not measure the water table, predict fire or recommend an intervention. We had the work audited part way through and changed it: see `docs/AUDIT.md` and `docs/LIMITS.md`.
+It is a screening map that shows where to look. It does not measure the water table, predict fire or recommend an intervention. Part way through we asked a Super Intelligence (SI) reviewer to audit the work, and changed it: see `docs/AUDIT.md` and `docs/LIMITS.md`.
 
 ## Repository layout
 
@@ -46,15 +46,15 @@ pipeline/run_all.sh
 | Pull | `pipeline/radar/pull_gcov.py` | Reads only the part of each NISAR L2 GCOV granule that covers a site |
 | Stack | `pipeline/radar/build_stack.py` | HH and HV at 50 m, in decibels, both orbits on one grid |
 | Reference | `pipeline/drying/reference.py`, `baseline.py` | Deep intact forest as the yardstick, and the scene-wide shift of each pass |
-| Dry-down | `pipeline/drying/drydown.py`, `per_pass.py` | How far HH fell over the dry season, and one layer per pass |
-| Noise floor | `pipeline/drying/noise_floor.py` | What counts as a real fall, on both orbits |
-| Recovery | `pipeline/recovery/recovery.py` | What the rain brought back in HH and in HV |
+| The fall | `pipeline/drying/drydown.py`, `per_pass.py` | How far HH fell over the dry season, and one layer per pass |
+| Forest spread | `pipeline/drying/noise_floor.py` | The 5th percentile of change in the reference forest, on both orbits |
+| After the rain | `pipeline/recovery/recovery.py` | What changed in HH and in HV on the first pass after the rain |
 | Checks | `pipeline/drying/selfcheck.py`, `sensitivity.py` | Tests for artefacts and for our own choices |
 | App data | `pipeline/drying/series.py`, `app/scripts/` | Files the web map reads |
 
 Tests for the processing code: `python -m pytest pipeline/tests`.
 
-Outputs land in `pipeline/out/`. The numbers are in `pipeline/out/validation.json`. The built files are also attached to the releases `data-v1`, `data-v3` and `data-v4`.
+Outputs land in `pipeline/out/`. The numbers are in `pipeline/out/validation.json`; the copy the app and the slides read is `app/public/validation.json`. The built files are attached to the data releases, the latest being `data-v9`.
 
 ## Data
 

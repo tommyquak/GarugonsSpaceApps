@@ -55,7 +55,6 @@ export function buildList(root: HTMLElement, store: BlockStore, firstSite: () =>
   const ontology = store.ontology;
   const actions = ontology.actions.filter((a) => a.id !== NO_ACTION);
   const canal = ontology.states.find((s) => s.id === "near_canal");
-  const notBack = ontology.states.find((s) => s.id === "still_low");
 
   const action = select("Action", actions.map((a) => [a.id, a.title]));
   const confidence = select("Agreement", [["", "Any"], ...CONFIDENCE_LEVELS.map((c): [string, string] => [c, c.charAt(0).toUpperCase() + c.slice(1)])]);
@@ -78,7 +77,7 @@ export function buildList(root: HTMLElement, store: BlockStore, firstSite: () =>
     h("div", { class: "act-filters" }, action.field, confidence.field, near.field, site.field),
     h("div", { class: "act-count-row" }, count, csvButton, geoButton),
     viewport,
-    h("p", { class: "note", text: `Fall is how far HH fell over the dry season, in dB.${notBack ? ` "Did not come back" is the state "${notBack.title}".` : ""}` }),
+    h("p", { class: "note", text: "Fall is how far HH fell over the dry season, in dB. A bigger fall is not a grade of the land." }),
   );
 
   let rows: BlockFeature[] = [];
