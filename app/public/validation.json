@@ -703,14 +703,14 @@
   "value": 0.608,
   "unit": "share of zone",
   "site": "east",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/split.py"
  },
  "fire_share_on_peat_west": {
   "value": 0.3705,
   "unit": "share of zone",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/split.py"
  },
  "first_dry_day_east": {
@@ -2017,7 +2017,7 @@
   "value": -0.5363,
   "unit": "dB",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/recovery/recovery.py",
   "note": "median HV after the rain against the start, peat with fire detections minus peat without; HV as measured"
  },
@@ -2519,14 +2519,14 @@
   "value": 0.3748,
   "unit": "dB",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "reference_drydown_p95_125": {
   "value": 0.2672,
   "unit": "dB",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "reference_flagged_share": {
@@ -2557,7 +2557,7 @@
   "value": -0.4,
   "unit": "dB",
   "site": "west",
-  "status": "exploratory",
+  "status": "final",
   "made_by": "pipeline/drying/selfcheck.py",
   "note": "median dry-down of forest within 250 m of an edge"
  },
