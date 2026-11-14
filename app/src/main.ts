@@ -61,6 +61,13 @@ async function start(): Promise<void> {
     attributionControl: false,
   });
   map.addControl(new AttributionControl({ customAttribution: sources }), "bottom-right");
+  // On a narrow map MapLibre folds the credits behind an "i" button but starts them unfolded,
+  // which covers a third of a phone's map. Start folded; a tap on the "i" shows them.
+  const credits = map.getContainer().querySelector(".maplibregl-ctrl-attrib");
+  if (credits?.classList.contains("maplibregl-compact")) {
+    credits.classList.remove("maplibregl-compact-show");
+    credits.removeAttribute("open");
+  }
   map.addControl(new NavigationControl({ showCompass: false }), "top-right");
   map.addControl(new ScaleControl({ unit: "metric" }), "bottom-left");
 
@@ -101,6 +108,7 @@ async function start(): Promise<void> {
   const legend = buildMapLegend(sheet, layers, overlays);
   const app = byId("app");
   const seasonButton = byId("btn-season");
+  const seasonTab = byId("tab-season"); // the same view from the phone's bottom bar, where the header button is hidden
   const exploreButton = byId("btn-explore");
   const actions = await buildActions(map, chart, {
     setTab,
@@ -109,11 +117,18 @@ async function start(): Promise<void> {
       overlays.setSuppressed(on);
       if (on) season.stop();
       seasonButton.setAttribute("aria-pressed", String(!on));
+      seasonTab.setAttribute("aria-pressed", String(!on));
     },
   });
-  seasonButton.addEventListener("click", () => {
+  // The season view, from the header and from the phone's bottom bar: it opens playing, from its first pass.
+  const openSeason = (): void => {
     actions.apply(actions.parts().filter((part) => part === "how"), null);
-    if (!reducedMotion()) season.playFromStart(); // the season view opens playing, from its first pass
+    if (!reducedMotion()) season.playFromStart();
+  };
+  seasonButton.addEventListener("click", openSeason);
+  seasonTab.addEventListener("click", () => {
+    openSeason();
+    setTab(""); // fold the sheet so the slider and the map are in view
   });
   // The opening story: replayed from "Story", and played once after a first-visit intro (below).
   const opening = buildOpening(map, overlays, actions, extent, season.stop);
