@@ -9,7 +9,7 @@ what we do not see, what comes next. Claims stay inside docs/AUDIT.md "What we c
         --out submission/deck.pptx            # draft: exploratory numbers, tagged on every slide
     python submission/build_slides.py ... --final   # only keys marked final; stops if one is missing
 
-Figures come from Tommy's release (figures-v2): gh release download figures-v2 --dir submission/figures
+Figures and app GIFs come from Tommy's release: gh release download figures-v3 --dir submission/figures
 """
 import argparse
 import io
@@ -112,12 +112,37 @@ def compact(path):
     """The figure as a smaller image for the deck: charts to a 256-colour PNG, the photographic map to JPEG.
 
     Keeps the deck small enough to upload to Google Drive in one call; the release files stay untouched."""
+    if path.suffix.lower() == ".gif":
+        return lit_first(path)               # animated: keep every frame
     img = Image.open(path).convert("RGB")
     buf = io.BytesIO()
     if path.stem == "fig_map":
         img.save(buf, "JPEG", quality=86, optimize=True)
     else:
         img.quantize(colors=256, method=Image.Quantize.MEDIANCUT).save(buf, "PNG", optimize=True)
+    buf.seek(0)
+    return buf
+
+
+def lit_first(path):
+    """The GIF reordered to start at its first lit frame, so stills and thumbnails of the slide are not black.
+
+    A GIF that already starts lit is passed through untouched."""
+    from PIL import ImageSequence, ImageStat
+    im = Image.open(path)
+    frames = [f.convert("RGB") for f in ImageSequence.Iterator(im)]
+    durations = []
+    for i in range(len(frames)):
+        im.seek(i)
+        durations.append(im.info.get("duration", 80))
+    light = [sum(ImageStat.Stat(f).mean) / 3 for f in frames]
+    start = next(i for i, v in enumerate(light) if v >= 0.6 * max(light))
+    if start == 0:
+        return str(path)
+    order = list(range(start, len(frames))) + list(range(start))
+    buf = io.BytesIO()
+    frames[order[0]].save(buf, "GIF", save_all=True, append_images=[frames[i] for i in order[1:]],
+                          duration=[durations[i] for i in order], loop=0, optimize=False)
     buf.seek(0)
     return buf
 
@@ -236,25 +261,24 @@ def build(a):
         "The problem and the one takeaway. Map: where HH fell by 1 dB or more, mid July to mid October 2026, "
         "Central Kalimantan, with the PEATMAP outline.")
 
-    # 2. What NISAR sees
+    # 2. What NISAR sees: the problem in one picture, and how the radar gets through
     s = prs.slides.add_slide(blank)
     background(s, PAPER)
-    title(s, "NISAR's L-band radar reaches the ground under the forest, through cloud and smoke")
-    radar_diagram(s, M, Inches(1.75))
-    points = [
-        [("Every 12 days, day or night. ", {"bold": True}), "Its microwaves pass through cloud and smoke."],
-        [("HH ", {"bold": True, "color": FALL}),
-         "carries a strong bounce between the ground and the trunks, which weakens as the surface dries "
-         "(Hess et al. 1990; Kim et al. 2017)."],
-        [("HV ", {"bold": True}),
-         "comes mostly from woody vegetation, but it responds to moisture too: the two are not separate "
-         "water and vegetation channels."],
-        [("Two orbits, one yardstick. ", {"bold": True}),
-         "Dawn and dusk passes look from opposite sides; every change is measured against deep intact forest."],
-    ]
-    text(s, Inches(7.2), Inches(1.95), Inches(5.5), Inches(4.6), points, size=16, color=INK, space_after=14)
-    footer(s, 2, "NISAR L2 GCOV, NASA and ISRO, via ASF DAAC. Diagram drawn by the team.", draft)
-    s.notes_slide.notes_text_frame.text = "How the radar sees the ground. Physics claims are the audited ones only."
+    title(s, "Cloud and smoke hide the ground from optical satellites. NISAR's radar sees through them")
+    picture(s, fig / "fig_cloud.png", M, Inches(1.6), w=Inches(5.95), name="Cloud against radar figure")
+    picture(s, fig / "explainer.gif", Inches(6.78), Inches(1.6), w=Inches(5.95), name="Radar explainer animation")
+    text(s, M, Inches(5.1), Inches(5.95), Inches(1.5),
+         [[("Every 12 days, day or night. ", {"bold": True}),
+           "The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar."]],
+         size=14, color=INK)
+    text(s, Inches(6.78), Inches(5.1), Inches(5.95), Inches(1.5),
+         [[("HH ", {"bold": True, "color": FALL}),
+           "carries a bounce between the ground and the trunks that weakens as the surface dries (Hess et al. 1990; "
+           "Kim et al. 2017). "], [("HV ", {"bold": True}),
+           "comes mostly from woody vegetation, but responds to moisture too. A schematic, not data."]],
+         size=14, color=INK, space_after=4)
+    footer(s, 2, "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.", draft)
+    s.notes_slide.notes_text_frame.text = "The problem in one picture, and how the radar sees the ground. Physics claims are the audited ones only."
 
     # 3. The season in one picture
     s = prs.slides.add_slide(blank)
@@ -279,22 +303,17 @@ def build(a):
     s = prs.slides.add_slide(blank)
     background(s, PAPER)
     title(s, "An open map anyone can play through the season, then check place by place")
-    slot = shape(s, MSO_SHAPE.RECTANGLE, M, Inches(1.65), Inches(8.0), Inches(4.5), RGBColor(0xF1, 0xF2, 0xF4), RULE)
-    slot.name = "App GIF slot"
-    text(s, M + Inches(0.4), Inches(3.55), Inches(7.2), Inches(0.8),
-         "App recording goes here: the season slider, a place chart, the Where to check list",
-         size=14, color=MUTED, align=PP_ALIGN.CENTER)
+    picture(s, fig / "demo_season.gif", M, Inches(1.65), w=Inches(8.0), name="Season demo")
+    picture(s, fig / "demo_check.gif", Inches(9.0), Inches(4.05), w=Inches(3.73), name="Where to check demo")
     items = [
-        [("Play the season. ", {"bold": True}), "Every NISAR pass on both orbits, with a whole-season view."],
-        [("Click a place. ", {"bold": True}), "HH and HV through the season, with daily rain and fire dates."],
+        [("Play the season. ", {"bold": True}), "Every pass on both orbits; fire builds up beside the fall."],
         [("Where to check. ", {"bold": True}),
          "1 km blocks labelled by what was seen, ranked, with the evidence behind each, as CSV or GeoJSON."],
-        [("Open. ", {"bold": True}), "Every layer and number rebuilds from NASA's archive with the code."],
-        [("Open the map", {"bold": True, "color": RAIN, "link": APP_URL})],
+        [("Open the map", {"bold": True, "link": APP_URL})],
     ]
-    text(s, Inches(9.0), Inches(1.75), Inches(3.75), Inches(4.6), items, size=15, color=INK, space_after=12)
+    text(s, Inches(9.0), Inches(1.7), Inches(3.73), Inches(2.3), items, size=14, color=INK, space_after=8)
     footer(s, 4, "Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.", draft)
-    s.notes_slide.notes_text_frame.text = "Replace the slot with the GIF recorded from the live app."
+    s.notes_slide.notes_text_frame.text = "GIFs recorded from the live app (figures-v3): the season with fire building up, and Where to check."
 
     # 5. Why believe it
     s = prs.slides.add_slide(blank)
@@ -303,7 +322,9 @@ def build(a):
     picture(s, fig / "fig_orbits.png", M, Inches(1.7), w=Inches(5.95), name="Orbits figure")
     picture(s, fig / "fig_start.png", Inches(6.78), Inches(1.7), w=Inches(5.95), name="Start figure")
     text(s, M, Inches(5.2), Inches(5.95), Inches(1.4),
-         "Dawn and dusk orbits look from opposite sides, hours apart, and agree block by block on where HH fell.",
+         f"Dawn and dusk orbits look from opposite sides, hours apart, and agree block by block on where HH fell: "
+         f"Spearman r = {num.get('track5_west_orbit_spearman'):.2f} in the west box, {num.get('track5_east_orbit_spearman'):.2f} "
+         f"in the east (the scatter shows Pearson r).",
          size=14, color=INK)
     text(s, Inches(6.78), Inches(5.2), Inches(5.95), Inches(1.4),
          "Half way through, an independent audit found our first start date came just after rain. We now start "
@@ -323,8 +344,9 @@ def build(a):
          "from a later NASA processing release than the dry passes."],
         [("No fire forecast, no canal advice. ", {"bold": True}),
          "An early fall did not separate later fire from no fire inside drained land."],
-        [("Not only peat burns. ", {"bold": True}),
-         f"Fire was detected on {num.share('fire_share_on_peat_west')} of mapped peat in the west box, and off peat too."],
+        [("Fire returns, but we cannot say why. ", {"bold": True}),
+         f"On western peat, {num.share('fire_repeat_share_on_peat_west')} of this year's fire fell on the "
+         f"{num.share('fire_earlier_share_on_peat_west')} that burned in 2015, 2019 or 2023. Fire off peat is mapped too."],
     ]
     text(s, M, Inches(1.75), Inches(5.4), Inches(4.8), limits, size=15, color=INK, space_after=14)
     picture(s, fig / "fig_water_table.png", Inches(6.35), Inches(1.75), w=Inches(6.4), name="Water table figure")
