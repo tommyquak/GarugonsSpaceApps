@@ -1,5 +1,7 @@
 # Weekend plan
 
+Written at the start of the weekend, as a plan. Where it differs from `docs/AUDIT.md` and `docs/LIMITS.md`, those are current: the audit changed what the map may claim, and some pieces below were built differently or not at all.
+
 Sat 14 Nov 09:00 to Sun 15 Nov 23:59 SGT. Owners and folders are in `AGENTS.md` section 3. File formats are in `docs/DATA_CONTRACT.md`.
 
 ## What we are building

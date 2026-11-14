@@ -2,7 +2,7 @@
 
 The file formats the tracks hand to each other. If you need to change one, change this file in the same PR and tag the owners it affects on the board.
 
-Nothing in this file is committed to git except the small app files in section 5. Stacks and layers are attached to a GitHub release.
+Stacks and layers are attached to a GitHub release, not committed. Committed: the small app files in section 5 and the copies the app reads under `app/public/`.
 
 ## 1. Radar stacks (track 1 writes; tracks 2, 3 and 5 read)
 
@@ -16,7 +16,7 @@ One file per site and orbit: `<site>_<track>.npz`, for example `west_125.npz`.
 | `crs` | int | EPSG code of the grid. |
 | `dates` | list of `YYYYMMDD` strings | One per layer of `hh` and `hv`, in order. |
 
-Sites: `west` and `east` (Central Kalimantan, tracks `125` ascending and `061` descending), `oki` (South Sumatra, tracks `010` ascending and `119` descending).
+Sites: `west` and `east` (Central Kalimantan, tracks `125` ascending and `061` descending), `oki` (South Sumatra, tracks `010` ascending and `119` descending) was planned and not built. `gauges` is the small site around the two water-level gauges used by `pipeline/hydro/`.
 
 Both stacks of a site are on the same grid, the one of the ascending track, so they line up pixel for pixel. Their date lists differ. Each stack has a `.json` file next to it with its dates, source granules and grid. Loading code is in `pipeline/radar/README.md`.
 
@@ -32,7 +32,7 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 | `hh_<site>_<track>_<YYYYMMDD>.tif` | 2 | One per radar pass, for the season slider. HH on that pass minus HH on the dry start passes, scene-wide shift removed, on 250 m blocks. Decibels. Negative means darker than at the start. |
 | `dried_<site>.tif` | 2 | 1 where the dry-down is below the 5th percentile of change in deep forest on both orbits, else 0. A loose mask: draw the size of the fall instead. |
 | `recovery_hh_<site>_<track>.tif`, `recovery_hv_<site>_<track>.tif` | 2 | Change across the first rain, in decibels: first pass after the rain minus the last two dry passes. One per orbit that has a pass after the rain. |
-| `recovery_left_hh_<site>_<track>.tif`, `recovery_left_hv_<site>_<track>.tif` | 2b | What the rain did not bring back, in decibels: first pass after the rain minus the start of the season (mean of the first two passes). Negative means still darker than in June. One per orbit that has a pass after the rain. |
+| `recovery_left_hh_<site>_<track>.tif`, `recovery_left_hv_<site>_<track>.tif` | 2b | What the rain did not bring back, in decibels: first pass after the rain minus the dry start passes chosen by `pipeline/season.py`. Negative means still darker than in June. One per orbit that has a pass after the rain. |
 | `fire_days_<site>.tif` | 3 | Number of distinct days with a 2026 fire detection whose pixel footprint reaches the cell (half the detection's pixel size, at least 200 m, at most 1 km). Active fire, not burnt area. |
 | `fire_first_day_<site>.tif` | 3 | Day of the year 2026 of the first fire detection whose footprint reaches the cell, NaN where there was none. The same cells as `fire_days`. "Fire up to a date" is first day on or before that date; the app's season slider is drawn from it. |
 | `fire_days_1km_<site>.tif` | 3 | The same with every detection widened to 1 km, for the cautious reading of "no fire nearby". |
@@ -50,7 +50,7 @@ GeoTIFF, float32, NaN for no data, on the same grid as the stack it came from. W
 
 ```json
 {
-  "two_orbit_agreement_250m": { "value": 0.0, "unit": "Spearman r", "site": "west", "status": "exploratory", "made_by": "pipeline/checks/two_orbit.py" }
+  "track5_west_orbit_spearman": { "value": 0.8279, "unit": "Spearman rho", "site": "west", "status": "final", "made_by": "pipeline/checks/run.py" }
 }
 ```
 
@@ -104,8 +104,8 @@ Each feature is a 1 km square in lon/lat:
 
 ```json
 [
-  { "id": "dried_west", "title": "Dried beyond the noise floor", "url": "layers/dried_west.png",
-    "bounds": [113.6, -3.2, 114.2, -2.4], "date": null, "unit": "dB", "legend": "sequential",
+  { "id": "dried_west", "title": "Fall in HH over the dry season, west", "url": "layers/dried_west.png",
+    "bounds": [113.6, -3.2, 114.3, -2.4], "date": null, "unit": "dB", "legend": "sequential",
     "source": "NISAR L2 GCOV, ASF DAAC" }
 ]
 ```

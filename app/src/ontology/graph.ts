@@ -21,7 +21,7 @@ const COLUMNS = [
   { x: 0, w: 176, title: "Sources", type: "Source" },
   { x: 216, w: 336, title: "Observations", type: "Observation" },
   { x: 592, w: 196, title: "States", type: "State" },
-  { x: 828, w: 152, title: "Action", type: "Action" },
+  { x: 828, w: 152, title: "Class", type: "Action" },
 ];
 const WIDTH = 980;
 const HEAD = 26; // room for the column titles
@@ -98,7 +98,7 @@ function measure(node: GraphNode, schema: boolean): Box {
 function describe(node: GraphNode): string {
   const kind = node.kind === "condition" ? "Extra condition" : COLUMNS[node.column].type;
   const verdict = node.kind === "state" && node.truth !== undefined ? `: ${yesNo(node.truth)}` : node.kind === "observation" && node.value ? `: ${node.value}` : "";
-  const chosen = node.chosen ? " (the action of this block)" : node.dimmed ? " (not chosen)" : "";
+  const chosen = node.chosen ? " (the class of this block)" : node.dimmed ? " (not chosen)" : "";
   return `${kind}: ${node.title}${verdict}${chosen}. ${sentences(node.detail)}`;
 }
 
@@ -192,7 +192,7 @@ function asList(ontology: Ontology, block: BlockProps | null): HTMLElement {
   };
   const list = h("ul");
   const chosen = block ? ontology.actions.find((a) => a.id === block.action) : undefined;
-  if (chosen) list.append(actionItem(chosen, "Action of this block: ", true));
+  if (chosen) list.append(actionItem(chosen, "Class of this block: ", true));
   for (const action of ontology.actions) {
     if (action !== chosen) list.append(actionItem(action, block ? "Not chosen: " : "", false));
   }
@@ -353,7 +353,7 @@ export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (
       }
     }
     // What the file says about it, without the lines already shown above.
-    const said = node.detail.filter((line) => !/^(Rule|This block|Unit|Provider|Measured by|Stronger if):/.test(line) && !/action of this block/.test(line));
+    const said = node.detail.filter((line) => !/^(Rule|This block|Unit|Provider|Measured by|Stronger if):/.test(line) && !/class of this block/.test(line));
     if (said.length) parts.push(h("p", { class: "inspect-text", text: sentences(said) }));
     for (const kind of ["measures", "supports", "leads", "strengthens"] as const) {
       const item = (key: string, negated: boolean): Related | null => {
@@ -405,7 +405,7 @@ export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (
   const keys = h(
     "div",
     { class: "graph-keys" },
-    ...(block ? [key("carried evidence for this action", "g-edge is-lit from-state"), key("not used", "g-edge")] : []),
+    ...(block ? [key("carried evidence for this class", "g-edge is-lit from-state"), key("not used", "g-edge")] : []),
     key("the rule needs it to be false", `g-edge is-negated${schema ? " is-lit from-state" : ""}`),
     key("adds to the agreement count", `g-edge is-strengthens${schema ? " is-lit from-state" : ""}`),
   );

@@ -34,9 +34,9 @@ Edit only your own folders. To change something in someone else's, ask for a han
 | Track | Owner | Folders |
 |---|---|---|
 | 1. Radar data and stacks | Tommy (`@tommyquak`) | `pipeline/radar/` |
-| 2a. Drying: baseline, dry-down, noise floor | Tommy (`@tommyquak`) | `pipeline/drying/` |
+| 2a. The fall: baseline, dry-down, forest spread | Tommy (`@tommyquak`) | `pipeline/drying/` |
 | 2b. Recovery after the rain | Reagan (`@D0bui`) | `pipeline/recovery/` |
-| 2c. Fusion into blocks and actions | Tommy (`@tommyquak`) | `pipeline/fusion/`, `docs/FUSION.md` |
+| 2c. Fusion into blocks and classes | Tommy (`@tommyquak`) | `pipeline/fusion/`, `docs/FUSION.md` |
 | 3. Fire and context layers | Gabriel (`@gabriel-wan`) | `pipeline/context/` |
 | 4. The app | Kalent (`@kccrcodes`) and Jan Hoe (`@NUSOffisher`) | `app/` |
 | 5. Checks and limits | Anson (`@iians0n`) | `pipeline/checks/`, `docs/LIMITS.md`, `docs/REFERENCES.md` |
@@ -58,7 +58,7 @@ Shared files (`AGENTS.md`, `PLAN.md`, `docs/DATA_CONTRACT.md`, `tools/`, `.claud
 ## 5. Science rules
 
 - Apply the peat boundary from the first step. Report every area and share on mapped peat and off it, separately.
-- Every number shown in the app, the slides or the project page is read from `pipeline/out/validation.json`. Nobody types a number by hand.
+- Every number shown in the app's panels, the slides or the project page is read from `validation.json` (`pipeline/out/`, copied to `app/public/`). A number typed in a document is quoted from an entry in that file.
 - Every method or claim cites a named paper in `docs/REFERENCES.md`, tagged [E] established, [S] standard inference or [H] our hypothesis.
 - We do not claim to measure the water table, subsidence, or where fire will start. The product is a screening map that shows where the radar echo (HH) fell, where NASA FIRMS detected fire, and where the echo was still low on the first pass after the rain.
 - Peat fires are not the only fires in Indonesia. Show fire off peat as well.
@@ -66,7 +66,7 @@ Shared files (`AGENTS.md`, `PLAN.md`, `docs/DATA_CONTRACT.md`, `tools/`, `.claud
 
 ## 6. Competition rules
 
-- All pipeline and app code is written in this repo, and every number we report is computed by it.
+- Every number we report is computed by code in this repo.
 - All materials must be free and open. No commercial imagery and nothing derived from it. Canals come from OpenStreetMap. Datasets under a non-commercial or unstated licence are linked and cited, never committed. The peat boundary we publish is PEATMAP (CC BY 4.0), not the official map, whose licence is not stated.
 - Describe AI use as "Super Intelligence (SI)". Every code file an agent wrote starts with a comment line `Written with Super Intelligence (SI) assistance`. Every SI-made image or video carries a visible watermark. Log each use in your own file, `submission/si_use/<your-github-login>.md`.
 - Everything is in English.
@@ -76,7 +76,7 @@ Shared files (`AGENTS.md`, `PLAN.md`, `docs/DATA_CONTRACT.md`, `tools/`, `.claud
 
 Raw satellite products never go in git. Large derived files go in a GitHub release, not in a commit. Earthdata and other tokens are read from `~/.netrc` or environment variables, and never appear in code, commits, logs you paste, or board posts.
 
-## 8. Deadlines (SGT)
+## 8. Schedule (SGT)
 
 | When | What |
 |---|---|

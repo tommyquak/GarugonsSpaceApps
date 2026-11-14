@@ -1,6 +1,6 @@
-# Water-table bridge
+# A modelled water table beside the radar
 
-There are no water-level measurements for 2026, the year NISAR observed. There are daily records for 2013 to 2018 at two sites near Palangka Raya, about 9 km north of the west box. This folder uses those records to bring a ground measurement into the project in the only way open to us: a small model fitted to the real record, tested on years it did not see, and then driven by 2026 rainfall.
+We found no public water-level measurements for 2026, the year NISAR observed. There are daily records for 2013 to 2018 at two sites near Palangka Raya, about 9 km north of the west box. This folder compares the radar with a small model fitted to that record, tested on years it did not see, and then driven by 2026 rainfall. It is not ground validation of 2026.
 
 ```
 python pipeline/hydro/gauges.py --out pipeline/out/hydro
@@ -23,7 +23,7 @@ Or `WITH_HYDRO=1 SKIP_PULL=1 pipeline/run_all.sh`, which runs the last two once 
 
 ## How to read the result
 
-- **The model's skill is the honest part.** On years it was not fitted to, it follows the measured water table with a correlation of 0.74 to 0.94 and an error of 8 to 26 cm, apart from one half-year of record.
+- **The model's skill on years left out of the fit is the result we can state.** On years it was not fitted to, it follows the measured water table with a correlation of 0.74 to 0.94 and an error of 8 to 26 cm, apart from one half-year of record.
 - **The 2026 water table is modelled, not measured.** Say so every time it is shown.
 - **The comparison with the radar is weak support, not validation.** Both curves answer the same rain, there are only ten or eleven passes, and some passes were taken on rain days. At the drained site HH moves with the modelled water table on the dawn orbit and less clearly at dusk; under the forest with little drainage the radar barely moves, as the physics leads one to expect.
 - **A slope in decibels per metre is not a calibration.** It is one site, one season, against a model.
