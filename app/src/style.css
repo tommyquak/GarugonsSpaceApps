@@ -455,6 +455,134 @@ input[type="range"]::-moz-range-thumb {
   display: none;
 }
 
+/* ==== How it was measured (src/measure.ts): the method of the season view, beside the map. ==== */
+#app.is-check #panel-measure {
+  display: none;
+}
+
+.measure-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 2px 0 8px;
+  overflow: visible;
+}
+
+.measure-chart text {
+  font-size: 10px;
+  fill: var(--muted);
+}
+
+.measure-chart .m-title {
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: var(--text);
+}
+
+.measure-chart .m-note.is-open {
+  fill: #e0bd7c;
+}
+
+.measure-chart .m-note.is-forest {
+  fill: #7fc8a0;
+}
+
+.m-grid {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.m-dry {
+  fill: rgba(236, 232, 223, 0.055);
+}
+
+.m-line {
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.m-line.is-dusk {
+  stroke-dasharray: 4 3;
+}
+
+.m-area {
+  opacity: 0.6;
+}
+
+.m-head {
+  stroke: var(--text);
+  stroke-width: 1;
+}
+
+.m-point {
+  fill: var(--panel);
+  stroke: #e0bd7c;
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.m-point.is-before {
+  stroke: var(--line-strong);
+}
+
+.m-point.is-start,
+.m-point.is-late {
+  fill: #e0bd7c;
+}
+
+.m-point:hover,
+.m-point:focus-visible,
+.m-point.is-now {
+  fill: var(--text);
+  stroke: var(--text);
+  outline: none;
+}
+
+.measure-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.measure-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.m-key-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0bd7c;
+}
+
+.m-key-line {
+  width: 18px;
+  border-top: 2px solid #e0bd7c;
+}
+
+.m-key-line.is-dusk {
+  border-top-style: dashed;
+}
+
+.measure-now {
+  margin: 0 0 6px;
+  font-weight: 500;
+}
+
+.measure-role {
+  margin: 0;
+  color: var(--muted);
+}
+
+#col-left {
+  width: 356px;
+}
+
 /* The way back to the control room, at the far left of the header. */
 #btn-room {
   display: inline-flex;
@@ -809,7 +937,7 @@ input[type="range"]::-moz-range-thumb {
 #season {
   position: absolute;
   z-index: 2;
-  left: 296px;
+  left: 380px;
   right: 12px;
   bottom: 34px;
   max-width: 620px;
@@ -1823,7 +1951,7 @@ button:disabled {
 
 /* Folded, it is a title bar the width of the season slider, just above it. */
 #drawer.is-folded {
-  left: 296px;
+  left: 380px;
   max-width: 620px;
   bottom: var(--over-season, 34px);
 }
