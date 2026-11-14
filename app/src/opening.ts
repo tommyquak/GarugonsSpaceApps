@@ -16,10 +16,11 @@ import type { Overlays } from "./overlays";
 import { reducedMotion, viewPadding } from "./view";
 
 const BEAT_MS = 6500;
-const SHORTEST_MS = 4500; // with sound, a beat still stays long enough to look at
+const SHORTEST_MS = 3000; // with sound, a beat still stays long enough to look at
 const VOICE_LEAD_MS = 900; // the picture settles before the voice starts
-const AFTER_VOICE_MS = 2800; // the beat moves on this long after the voice stops
+const AFTER_VOICE_MS = 500; // the beat moves on as the voice stops, with just room for the last word
 const FADE_MS = 450;
+const REEL_MS = 5200; // the season beat steps through its passes in this long
 const SECOND_AT = 0.36; // how far into a two-picture beat the second picture takes over
 
 interface Credit {
@@ -52,12 +53,11 @@ const BEATS: Beat[] = [
   { image: "fire", head: "Every dry season, drained peat in Borneo burns.", sub: () => "Sebangau, Central Kalimantan, September 2019." },
   {
     image: "canal",
-    head: "Canals dug in the 1990s still drain it, and fire keeps coming back.",
+    head: "In the 1990s the Mega Rice Project cut canals through this peat. They still drain it.",
     sub: (n) => {
       const share = percent(n, "fire_repeat_share_on_peat_west");
-      return share
-        ? `In our western study area, ${share} of this year's fire on peat fell on land that had burned in 2015, 2019 or 2023.`
-        : "A drainage canal of the Mega Rice Project, Central Kalimantan.";
+      const again = share ? ` In our western study area, ${share} of this year's fire on peat fell on land that had burned before.` : "";
+      return `Water runs out along a canal, the peat beside it dries, and dry peat burns.${again}`;
     },
   },
   {
@@ -125,6 +125,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     let swap = 0;
     let lead = 0;
     let second = 0;
+    let reel = 0;
     let front = 0;
     let sound = false;
     const voice = new Audio();
@@ -168,8 +169,17 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       if (view === "season") {
         actions.apply([], null);
         overlays.setPassFire(true);
-        // The last dry-season pass but one: the fall near its deepest, before the rain.
-        overlays.setStep(Math.max(0, overlays.steps.length - 3));
+        // The season plays from its first pass to the last dry one, where the fall is deepest.
+        const end = Math.max(0, overlays.steps.length - 3);
+        if (still) {
+          overlays.setStep(end);
+        } else {
+          overlays.setStep(0);
+          reel = window.setInterval(() => {
+            if (overlays.stepIndex >= end) window.clearInterval(reel);
+            else overlays.setStep(overlays.stepIndex + 1);
+          }, Math.round(REEL_MS / Math.max(end, 1)));
+        }
       } else {
         overlays.setMode("season");
         actions.apply(["map"], null);
@@ -213,13 +223,20 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
 
     // The line of the current beat fills over the time the beat will stay.
     // The line of the beat fills over `ms`. Without `hold`, the beat also moves on when it is full.
+    const lineOf = (k: number): HTMLElement => bars[k].firstElementChild as HTMLElement;
+    // Full, empty or filling: set directly, because a fill that is left half way must stop at once.
+    const setLine = (k: number, share: number): void => {
+      const line = lineOf(k);
+      line.style.transition = "none";
+      line.style.width = `${share * 100}%`;
+    };
     const run = (ms: number, hold = false): void => {
       window.clearTimeout(timer);
-      const bar = bars[index];
-      bar.classList.remove("is-now");
-      bar.style.setProperty("--beat", `${ms}ms`);
-      void bar.offsetWidth;
-      bar.classList.add("is-now");
+      const line = lineOf(index);
+      setLine(index, 0);
+      void line.offsetWidth;
+      line.style.transition = `width ${ms}ms linear`;
+      line.style.width = "100%";
       if (!hold) timer = window.setTimeout(() => show(index + 1), ms);
     };
 
@@ -228,6 +245,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       window.clearTimeout(swap);
       window.clearTimeout(lead);
       window.clearTimeout(second);
+      window.clearInterval(reel);
       voice.pause();
       const first = index < 0;
       index = Math.max(0, Math.min(BEATS.length - 1, to));
@@ -248,10 +266,8 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
           made.classList.remove("is-swap");
         }, 260);
       }
-      bars.forEach((bar, k) => {
-        bar.classList.toggle("is-done", k < index || (k === index && (still || lastBeat)));
-        bar.classList.remove("is-now");
-      });
+      // The lines of the beats already seen are full, the rest empty; the current one fills in run().
+      bars.forEach((_, k) => setLine(k, k < index || (k === index && (still || lastBeat)) ? 1 : 0));
       back.disabled = index === 0;
       withSound.hidden = sound || index !== 0;
       next.textContent = lastBeat ? "Open the map" : "Next";
@@ -301,6 +317,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       window.clearTimeout(swap);
       window.clearTimeout(lead);
       window.clearTimeout(second);
+      window.clearInterval(reel);
       voice.pause();
       document.removeEventListener("keydown", onKey, true);
       document.removeEventListener("visibilitychange", onHide);
@@ -342,6 +359,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     document.addEventListener("visibilitychange", onHide);
 
     stopSeason();
+    void overlays.preloadPasses(); // so the season beat steps without waiting on the network
     for (const fn of watchers) fn(true);
     app.classList.add("is-story");
     app.setAttribute("inert", "");

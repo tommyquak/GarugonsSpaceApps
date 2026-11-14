@@ -11,13 +11,15 @@ const ICON_PAUSE = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden=
 
 export interface Season {
   stop(): void;
+  /** Plays the passes from the first one. */
+  playFromStart(): void;
 }
 
 export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
   const steps = overlays.steps;
   if (!steps.length) {
     root.hidden = true;
-    return { stop: () => undefined };
+    return { stop: () => undefined, playFromStart: () => undefined };
   }
   const last = steps.length - 1;
   let timer: number | undefined;
@@ -104,5 +106,12 @@ export function buildSeason(root: HTMLElement, overlays: Overlays): Season {
 
   overlays.onChange(render);
   render();
-  return { stop };
+  return {
+    stop,
+    playFromStart() {
+      if (playing) stop();
+      overlays.setStep(0);
+      void play();
+    },
+  };
 }
