@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "drying"))
 from common import block_mean, load_stack, write_layer  # noqa: E402
 from drydown import normalised  # noqa: E402
 from vjson import get, put  # noqa: E402
+from season import start_passes  # noqa: E402
 
 ME = "pipeline/recovery/recovery.py"
 STRONG_DB = -1.0
@@ -43,7 +44,7 @@ def read(path):
         return src.read(1)
 
 
-def recover(stack, base, dry_until, late_n=2, late_skip=0, wet_pass=0):
+def recover(stack, base, dry_until, late_n=2, late_skip=0, wet_pass=0, start_from=None):
     """Fall, rebound and left for HH and HV on 250 m blocks, or None if no pass is after dry_until.
 
     late_n is how many of the last dry passes make "late season", and late_skip how many of the very
@@ -62,7 +63,7 @@ def recover(stack, base, dry_until, late_n=2, late_skip=0, wet_pass=0):
     out = {}
     for pol in ("hh", "hv"):
         layers = normalised(stack, base, pol)
-        start = np.mean([block_mean(layers[i]) for i in dry[:2]], axis=0)
+        start = np.mean([block_mean(layers[i]) for i in start_passes(stack["dates"], start_from)], axis=0)
         late = np.mean([block_mean(layers[i]) for i in dry[len(dry) - late_skip - late_n:len(dry) - late_skip]], axis=0)
         wet_level = block_mean(layers[after])
         out[pol] = {"fall": late - start, "rebound": wet_level - late, "left": wet_level - start}
@@ -99,19 +100,20 @@ def main():
     p.add_argument("--track", required=True, help="the track that has a pass after the rain")
     p.add_argument("--other-track", required=True, help="the other orbit, used as an independent measure of the fall")
     p.add_argument("--dry-until", required=True, help="YYYYMMDD, last day before the rain returned")
+    p.add_argument("--start-from", help="YYYYMMDD, earliest day for a start pass (pipeline/season.py); default: the first two passes")
     p.add_argument("--stacks", required=True, type=Path)
     p.add_argument("--layers", required=True, type=Path)
     p.add_argument("--peat", default="peat_peatmap", help="name stem of the peat layer, as in pipeline/drying/split.py")
     a = p.parse_args()
     stack = load_stack(a.stacks / f"{a.site}_{a.track}.npz")
     base = json.loads((a.layers / f"baseline_{a.track}.json").read_text())
-    res = recover(stack, base, a.dry_until)
+    res = recover(stack, base, a.dry_until, start_from=a.start_from)
     if res is None:
         print(f"{a.site} track {a.track}: no pass after {a.dry_until} yet, skipped")
         return
     out, dry, after = res
     for pol in ("hh", "hv"):
-        passes = {"track": a.track, "after_pass": stack["dates"][after], "start_passes": ",".join(stack["dates"][i] for i in dry[:2]),
+        passes = {"track": a.track, "after_pass": stack["dates"][after], "start_passes": ",".join(stack["dates"][i] for i in start_passes(stack["dates"], a.start_from)),
                   "late_passes": ",".join(stack["dates"][i] for i in dry[-2:])}
         for kind, name, title in (("rebound", f"recovery_{pol}", "rebound after the rain"),
                                   ("left", f"recovery_left_{pol}", "left after the rain against the start of the season")):
