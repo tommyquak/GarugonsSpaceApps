@@ -65,7 +65,7 @@ if [ -n "${WITH_CONTEXT:-}" ]; then
   echo "== 5b. context layers: fire, rain, peat, canals"
   for site in $SITES; do
     $PY pipeline/context/pull_firms.py --site "$site" --start "$SEASON_START" --out "data/firms/$site"
-    $PY pipeline/context/peat.py --site "$site" --layers "$L"
+    $PY pipeline/context/peatmap.py --site "$site" --layers "$L"
     $PY pipeline/context/canals.py --site "$site" --layers "$L"
   done
 fi
