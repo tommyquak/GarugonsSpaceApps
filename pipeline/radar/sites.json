@@ -1,0 +1,5 @@
+{
+  "west": {"bbox": [113.6, -3.2, 114.3, -2.4], "tracks": [125, 61], "note": "Central Kalimantan, Sebangau forest and the land west of the Kahayan"},
+  "east": {"bbox": [114.21, -3.0, 114.83, -2.42], "tracks": [125, 61], "note": "Central Kalimantan, east of the Sebangau river"},
+  "oki": {"bbox": [105.25, -3.55, 105.95, -2.95], "tracks": [10, 119], "note": "Ogan Komering Ilir, South Sumatra"}
+}
