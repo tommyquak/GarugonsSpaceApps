@@ -122,6 +122,20 @@ def count_days(by_day, shape, edge, until=None):
     return days, days_wide
 
 
+def on_grid(detections, T, epsg, shape):
+    """Detections grouped by day as { day: [((row, col), reach in cells), ...] } on the grid of T, keeping
+    those within 1 km of it, since a detection just outside can still reach cells inside."""
+    to_grid = Transformer.from_crs(4326, epsg, always_xy=True)
+    by_day = defaultdict(list)
+    edge = WIDE_REACH_M // PIXEL_M
+    for lon, lat, day, reach in detections:
+        x, y = to_grid.transform(lon, lat)
+        col, row = ~T * (x, y)
+        if -edge <= row < shape[0] + edge and -edge <= col < shape[1] + edge:
+            by_day[day].append(((int(np.floor(row)), int(np.floor(col))), int(round(reach / PIXEL_M))))
+    return by_day
+
+
 def first_day(by_day, shape):
     """Day of the year of the first detection whose footprint reaches each cell; NaN where none does."""
     first = np.full(shape, np.nan, "float32")
@@ -161,14 +175,8 @@ def main(argv=None):
     grid_file = sorted(a.layers.glob(f"drydown_{a.site}_*.tif"))[0]
     with rasterio.open(grid_file) as src:
         profile, T, epsg, shape = src.profile, src.transform, src.crs.to_epsg(), src.shape
-    to_grid = Transformer.from_crs(4326, epsg, always_xy=True)
-    by_day = defaultdict(list)
+    by_day = on_grid(detections, T, epsg, shape)
     edge = WIDE_REACH_M // PIXEL_M
-    for lon, lat, day, reach in detections:
-        x, y = to_grid.transform(lon, lat)
-        col, row = ~T * (x, y)
-        if -edge <= row < shape[0] + edge and -edge <= col < shape[1] + edge:
-            by_day[day].append(((int(np.floor(row)), int(np.floor(col))), int(round(reach / PIXEL_M))))
     days, days_wide = count_days(by_day, shape, edge)
     for name, layer, text in ((f"fire_days_{a.site}.tif", days, "days with a fire detection whose footprint reaches the cell"),
                               (f"fire_days_1km_{a.site}.tif", days_wide, "days with a fire detection within 1 km")):
