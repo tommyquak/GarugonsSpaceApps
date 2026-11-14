@@ -1,7 +1,7 @@
 // Written with Super Intelligence (SI) assistance.
 // Click a place: reads the time series of that cell (docs/DATA_CONTRACT.md section 4) and draws
 // HH and HV over the season for both orbits, with a plain reading of what HH did.
-import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
+import { Marker, type Map as MapLibreMap } from "maplibre-gl";
 import { asset, fetchJson, formatDay, monthName, parseDay } from "./data";
 import { h } from "./dom";
 import type { Overlays } from "./overlays";
@@ -98,7 +98,7 @@ function reading(passes: Pass[], orbit: string): string | null {
 
 export class PlaceChart {
   private sites: Promise<Site[]> | undefined;
-  private marker: maplibregl.Marker | undefined;
+  private marker: Marker | undefined;
   private request = 0;
   private drawn: (() => void) | undefined;
 
@@ -162,7 +162,7 @@ export class PlaceChart {
 
   private async pick(lon: number, lat: number): Promise<void> {
     const request = (this.request += 1);
-    this.marker ??= new maplibregl.Marker({ element: h("div", { class: "place-marker" }) });
+    this.marker ??= new Marker({ element: h("div", { class: "place-marker" }) });
     this.marker.setLngLat([lon, lat]).addTo(this.map);
     const where = `${Math.abs(lat).toFixed(3)} ${lat < 0 ? "S" : "N"}, ${Math.abs(lon).toFixed(3)} ${lon < 0 ? "W" : "E"}`;
     const closeButton = h("button", { type: "button", class: "text-button small", text: "Close" });
