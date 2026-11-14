@@ -10,6 +10,7 @@ rasterio
 pyproj
 matplotlib
 pillow
+python-pptx   # writes the .pptx deck (submission/build_slides.py)
 py7zr        # unpacks the CIFOR peat map once (pipeline/context/peat_cifor.py)
 
 # Tests: python -m pytest pipeline/tests
