@@ -302,6 +302,23 @@ input[type="range"] {
 }
 
 /* Season slider */
+/* While Where to check is open it has the map to itself: no season slider. */
+#app.is-check #season {
+  display: none;
+}
+
+/* The raw layers and the class colours stay out of the way until "Explore the data" is on. */
+#app:not(.is-explore) #panel-layers,
+#app:not(.is-explore) #tab-layers,
+#app:not(.is-explore) .act-mode {
+  display: none;
+}
+
+.season-fire[aria-pressed="true"] {
+  border-color: #de3626;
+  color: #ff8a78;
+}
+
 /* The legend on the map: bottom right, clear of the season slider. */
 #map-legend {
   position: absolute;
