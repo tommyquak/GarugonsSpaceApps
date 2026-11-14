@@ -3,9 +3,14 @@
 // Action, with a curved link wherever the ontology says one thing feeds another. With a block
 // the nodes carry its values and the links that carried evidence for its action are lit;
 // without one the same drawing is the schema of the vocabulary.
+//
+// Pulses travel along the lit links, sources first, then observations, then states, to show
+// which way the information flows. Clicking a node opens its details: its rule, the
+// thresholds it uses, what it is built from and what it feeds, each of which can be clicked
+// in turn.
 import { h } from "../dom";
 import { WIDE } from "../view";
-import { buildGraph, formatValue, ruleTerms, sentences, yesNo, type BlockProps, type GraphEdge, type GraphNode, type Ontology } from "./model";
+import { buildGraph, formatValue, namedIn, ruleTerms, sentences, yesNo, type BlockProps, type GraphEdge, type GraphNode, type Ontology } from "./model";
 
 const SVG = "http://www.w3.org/2000/svg";
 const SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
@@ -100,7 +105,7 @@ function describe(node: GraphNode): string {
 function drawNode(box: Box, schema: boolean, color: (action: string) => string): SVGGElement {
   const { node } = box;
   const classes = ["g-node", `g-${node.kind}`, node.chosen ? "is-chosen" : "", node.dimmed ? "is-dimmed" : "", node.truth === true ? "is-yes" : ""].filter(Boolean);
-  const g = svg("g", { class: classes.join(" "), "data-key": node.key, tabindex: 0, role: "img", "aria-label": describe(node), transform: `translate(${box.x}, ${box.y})` });
+  const g = svg("g", { class: classes.join(" "), "data-key": node.key, tabindex: 0, role: "button", "aria-label": `${describe(node)} Press Enter for details.`, transform: `translate(${box.x}, ${box.y})` });
   // The browser's own tooltip: the rule of a state or an action, else the full title.
   g.append(svg("title", {}, node.rule ? `${node.title}. Rule: ${node.rule}` : node.title));
   g.append(svg("rect", { class: "g-card", x: 0.5, y: 0.5, width: box.w - 1, height: box.h - 1, rx: 6 }));
@@ -206,8 +211,18 @@ function key(text: string, sample: string): HTMLElement {
   return item;
 }
 
-/** The graph for a block, or the schema of the vocabulary when `block` is null. */
-export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (action: string) => string): HTMLElement {
+const LINK_WORDS: Record<GraphEdge["kind"], [string, string]> = {
+  measures: ["Measured by", "Measures"],
+  supports: ["Built from", "Used by"],
+  leads: ["Needs", "Leads to"],
+  strengthens: ["Counts for more with", "Adds to the agreement of"],
+};
+
+/**
+ * The graph for a block, or the schema of the vocabulary when `block` is null. The details of
+ * a clicked node go into `side` when one is given, else under the graph.
+ */
+export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (action: string) => string, side?: HTMLElement): HTMLElement {
   const schema = block === null;
   const graph = buildGraph(ontology, block);
   const boxes = new Map<string, Box>();
@@ -249,26 +264,42 @@ export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (
   if (chosenBox && others) root.append(svg("text", { class: "g-sub", x: COLUMNS[3].x + 1, y: chosenBox.y + chosenBox.h + 17 }, "Not chosen"));
 
   const edgeLayer = svg("g", { "aria-hidden": "true" });
-  const drawn: { edge: GraphEdge; el: SVGPathElement }[] = [];
+  const pulseLayer = svg("g", { "aria-hidden": "true" });
+  const drawn: { edge: GraphEdge; el: SVGPathElement; pulse?: SVGPathElement }[] = [];
   // Dim links first, so the lit ones lie on top.
   for (const edge of [...graph.edges].sort((a, b) => Number(a.lit) - Number(b.lit))) {
     const from = boxes.get(edge.from);
     const to = boxes.get(edge.to);
     if (!from || !to) continue;
     const el = drawEdge(edge, from, to);
-    drawn.push({ edge, el });
+    // A pulse on every link that carries information: all of them in the schema, the lit ones for a block.
+    let pulse: SVGPathElement | undefined;
+    if (edge.lit) {
+      pulse = svg("path", { class: `g-pulse stage-${from.node.column}`, d: el.getAttribute("d") ?? "", pathLength: 100 });
+      pulseLayer.append(pulse);
+    }
+    drawn.push({ edge, el, pulse });
     edgeLayer.append(el);
   }
-  root.append(edgeLayer);
+  root.append(edgeLayer, pulseLayer);
 
   const rest = block
-    ? "Point at a node, tap it, or move to it with the Tab key, to read its rule and why it matters."
-    : "Point at a node, tap it, or move to it with the Tab key, to read what it means.";
+    ? "Point at a box to read it. Click it for its rule, its numbers and what it connects to."
+    : "Point at a box to read it. Click it for its rule, its thresholds and what it connects to.";
   const detail = h("p", { class: "graph-detail", "aria-live": "polite", text: rest });
   let pinned: Box | null = null;
+  let selected: Box | null = null;
   const show = (box: Box | null): void => {
-    for (const { edge, el } of drawn) el.classList.toggle("is-hot", Boolean(box) && (edge.from === box?.node.key || edge.to === box?.node.key));
-    for (const other of boxes.values()) other.el?.classList.toggle("is-active", other === box);
+    for (const { edge, el, pulse } of drawn) {
+      const hot = Boolean(box) && (edge.from === box?.node.key || edge.to === box?.node.key);
+      el.classList.toggle("is-hot", hot);
+      pulse?.classList.toggle("is-hot", hot);
+    }
+    root.classList.toggle("has-focus", Boolean(box));
+    for (const other of boxes.values()) {
+      other.el?.classList.toggle("is-active", other === box);
+      other.el?.classList.toggle("is-selected", other === selected);
+    }
     if (!box) {
       detail.textContent = rest;
       return;
@@ -276,18 +307,97 @@ export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (
     const type = box.node.kind === "condition" ? "Extra condition" : COLUMNS[box.node.column].type;
     detail.replaceChildren(h("strong", { text: `${type}: ${box.node.title}. ` }), sentences(box.node.detail));
   };
+
+  // The details of one node, opened by a click. Every related node in it is a button to that node.
+  const inspector = side ?? h("aside", {});
+  inspector.classList.add("graph-inspect");
+  const thresholds = ontology.thresholds ?? {};
+  const thresholdNames = Object.keys(thresholds).filter((name) => name !== "note");
+  type Related = { box: Box; note: string };
+  const related = (heading: string, items: Related[]): HTMLElement | null => {
+    if (!items.length) return null;
+    const list = h("ul", { class: "inspect-links" });
+    for (const { box, note } of items) {
+      const button = h("button", { type: "button", class: `inspect-link is-${box.node.kind}` }, h("span", { text: box.node.title }), note ? h("em", { text: note }) : null);
+      button.addEventListener("click", () => select(box));
+      list.append(h("li", {}, button));
+    }
+    return h("div", { class: "inspect-part" }, h("h4", { text: heading }), list);
+  };
+  const stateOf = (node: GraphNode): string =>
+    node.kind === "state" && node.truth !== undefined ? yesNo(node.truth) : node.kind === "observation" && block && node.value ? node.value : "";
+  const fillInspector = (box: Box | null): void => {
+    if (!box) {
+      inspector.replaceChildren(
+        h("p", { class: "inspect-empty", text: "Click a box to see its rule, the numbers it uses and what it connects to." }),
+        h("p", { class: "inspect-note", text: "A screening result from one season. No ground measurements." }),
+      );
+      return;
+    }
+    const { node } = box;
+    const type = node.kind === "condition" ? "Extra condition" : COLUMNS[node.column].type;
+    const close = h("button", { type: "button", class: "text-button small", text: "Close", "aria-label": "Close the details" });
+    close.addEventListener("click", () => select(null));
+    const parts: (HTMLElement | null)[] = [h("div", { class: "inspect-head" }, h("span", { class: `inspect-kind is-${node.kind}`, text: type }), close), h("h3", { class: "inspect-title", text: node.title })];
+    const verdict = stateOf(node);
+    if (verdict) parts.push(h("p", { class: "inspect-value" }, "This block: ", h("strong", { text: verdict })));
+    else if (node.kind === "observation" && node.value) parts.push(h("p", { class: "inspect-value", text: `Unit: ${node.value}` }));
+    if (node.chosen !== undefined) parts.push(h("p", { class: "inspect-value", text: node.chosen ? `The class of this block. ${node.note ?? ""}` : "Not the class of this block." }));
+    if (node.sub) parts.push(h("p", { class: "inspect-value", text: node.sub }));
+    if (node.rule) {
+      parts.push(h("div", { class: "inspect-part" }, h("h4", { text: "Rule" }), h("code", { class: "inspect-rule", text: node.rule })));
+      const used = namedIn(node.rule, thresholdNames);
+      if (used.length) {
+        const rows = used.map((name) => h("div", {}, h("dt", { text: name }), h("dd", { text: String(thresholds[name]) })));
+        parts.push(h("div", { class: "inspect-part" }, h("h4", { text: "Thresholds" }), h("dl", { class: "inspect-terms" }, ...rows), h("p", { class: "inspect-note", text: "Choices made on the day of the first results, not taken from a reference." })));
+      }
+    }
+    // What the file says about it, without the lines already shown above.
+    const said = node.detail.filter((line) => !/^(Rule|This block|Unit|Provider|Measured by|Stronger if):/.test(line) && !/action of this block/.test(line));
+    if (said.length) parts.push(h("p", { class: "inspect-text", text: sentences(said) }));
+    for (const kind of ["measures", "supports", "leads", "strengthens"] as const) {
+      const item = (key: string, negated: boolean): Related | null => {
+        const other = boxes.get(key);
+        if (!other) return null;
+        return { box: other, note: [negated ? "must be false" : "", stateOf(other.node)].filter(Boolean).join(", ") };
+      };
+      const into = drawn.filter((d) => d.edge.kind === kind && d.edge.to === node.key).map((d) => item(d.edge.from, d.edge.negated));
+      const out = drawn.filter((d) => d.edge.kind === kind && d.edge.from === node.key).map((d) => item(d.edge.to, d.edge.negated));
+      parts.push(related(LINK_WORDS[kind][0], into.filter((x): x is Related => x !== null)));
+      parts.push(related(LINK_WORDS[kind][1], out.filter((x): x is Related => x !== null)));
+    }
+    inspector.replaceChildren(...parts.filter((el): el is HTMLElement => el !== null));
+    inspector.scrollTop = 0;
+  };
+  function select(box: Box | null): void {
+    selected = box === selected ? null : box;
+    fillInspector(selected);
+    show(selected);
+  }
+  fillInspector(null);
+  root.addEventListener("click", (event) => {
+    if (event.target === root) select(null); // a click on the empty part of the drawing
+  });
+
   for (const box of boxes.values()) {
     const el = drawNode(box, schema, color);
     box.el = el;
     el.addEventListener("pointerenter", () => show(box));
-    el.addEventListener("pointerleave", () => show(pinned));
+    el.addEventListener("pointerleave", () => show(pinned ?? selected));
+    el.addEventListener("click", () => select(box));
+    el.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        select(box);
+      }
+    });
     el.addEventListener("focus", () => {
       pinned = box;
       show(box);
     });
     el.addEventListener("blur", () => {
       if (pinned === box) pinned = null;
-      show(pinned);
+      show(pinned ?? selected);
     });
     root.append(el);
   }
@@ -299,5 +409,5 @@ export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (
     key("the rule needs it to be false", `g-edge is-negated${schema ? " is-lit from-state" : ""}`),
     key("adds to the agreement count", `g-edge is-strengthens${schema ? " is-lit from-state" : ""}`),
   );
-  return h("div", { class: "graph" }, h("div", { class: "graph-scroll" }, root), keys, detail, asList(ontology, block));
+  return h("div", { class: "graph" }, h("div", { class: "graph-scroll" }, root), keys, detail, side ? null : inspector, asList(ontology, block));
 }

@@ -1528,6 +1528,223 @@ button:disabled {
   opacity: 1;
 }
 
+/* A pulse runs along every link that carries information, one column after the other. */
+.g-pulse {
+  fill: none;
+  stroke: #dfe6ee;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 5 200;
+  stroke-dashoffset: 5;
+  pointer-events: none;
+  animation: g-flow 3.3s linear infinite;
+}
+
+.g-pulse.stage-1 {
+  stroke: #7ae6d3;
+  animation-delay: 1.1s;
+}
+
+.g-pulse.stage-2 {
+  stroke: #f3b3dc;
+  animation-delay: 2.2s;
+}
+
+.graph-svg.has-focus .g-pulse:not(.is-hot) {
+  opacity: 0.12;
+}
+
+@keyframes g-flow {
+  0% {
+    stroke-dashoffset: 5;
+  }
+  33.3%,
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-pulse {
+    display: none;
+  }
+}
+
+.g-node {
+  cursor: pointer;
+}
+
+.g-node.is-selected .g-card {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+/* The details of a clicked box: beside the schema, under the graph of a block. */
+.graph-inspect {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.graph > .graph-inspect {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.inspect-empty {
+  margin: 4px 0 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.inspect-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.inspect-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.inspect-kind {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.inspect-kind.is-observation {
+  border-color: #45b8a6;
+  color: #7ae6d3;
+}
+
+.inspect-kind.is-state,
+.inspect-kind.is-condition {
+  border-color: #d98ac0;
+  color: #f3b3dc;
+}
+
+.inspect-kind.is-action {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#drawer .inspect-title {
+  margin: 8px 0 6px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.inspect-value,
+.inspect-text {
+  margin: 0 0 6px;
+}
+
+.inspect-value strong {
+  color: var(--text);
+}
+
+.inspect-part {
+  margin-top: 10px;
+}
+
+#drawer .inspect-part h4 {
+  margin: 0 0 4px;
+}
+
+.inspect-rule {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #0c0f12;
+  color: var(--text);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.inspect-terms {
+  margin: 0;
+}
+
+.inspect-terms div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.inspect-terms dt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+.inspect-terms dd {
+  margin: 0;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.inspect-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inspect-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-left: 3px solid #8b949e;
+  border-radius: 6px;
+  background: #171c22;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.inspect-link:hover,
+.inspect-link:focus-visible {
+  border-color: var(--accent);
+}
+
+.inspect-link.is-observation {
+  border-left-color: #45b8a6;
+}
+
+.inspect-link.is-state,
+.inspect-link.is-condition {
+  border-left-color: #d98ac0;
+}
+
+.inspect-link.is-action {
+  border-left-color: var(--accent);
+}
+
+.inspect-link em {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
 .graph-keys {
   display: flex;
   flex-wrap: wrap;
