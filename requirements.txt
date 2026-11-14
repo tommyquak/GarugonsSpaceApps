@@ -1,0 +1,12 @@
+# Python 3.11 or later. Used by pipeline/ and by app/scripts/.
+numpy
+scipy
+h5py
+fsspec
+aiohttp
+requests
+certifi
+rasterio
+pyproj
+matplotlib
+pillow
