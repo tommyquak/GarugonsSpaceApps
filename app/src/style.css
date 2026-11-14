@@ -290,6 +290,86 @@ input[type="range"] {
   accent-color: var(--accent);
 }
 
+/* Season slider */
+#season {
+  position: absolute;
+  z-index: 2;
+  left: 296px;
+  right: 12px;
+  bottom: 34px;
+  max-width: 620px;
+  padding: 10px 12px;
+}
+
+.season-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.season-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-top: 6px;
+}
+
+.season-label {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.season-detail {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.icon-button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  background: rgba(240, 160, 75, 0.14);
+  color: var(--accent);
+}
+
+.icon-button:hover {
+  background: rgba(240, 160, 75, 0.26);
+}
+
+.text-button {
+  flex: none;
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #1b2026;
+  white-space: nowrap;
+}
+
+.text-button:hover {
+  border-color: var(--muted);
+}
+
+.text-button[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+[hidden] {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
