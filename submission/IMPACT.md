@@ -31,7 +31,7 @@ Nothing in this project was checked against the ground. Every test we ran is int
 
 **What exists in public, and why it does not settle it.** Two water-level records from this landscape are openly licensed: daily groundwater levels in drained and undrained peat swamp forest near Palangka Raya for 2013 to 2018 [6], and water levels at forested, dammed and drained sites in Sebangau from August 2019 to January 2020 [7]. Neither overlaps NISAR, which began observing here in 2026. Indonesia's peat water-level monitoring network would be the obvious source for 2026, and we could not reach its data.
 
-**What could be done without going to the field.** The 2013 to 2018 record can calibrate a simple rainfall-driven water-table model. Run on NASA's 2026 rainfall, it would give a modelled water table for the same weeks the radar saw, to set beside the radar curve. That is a bridge, not a measurement, and it must be labelled as modelled.
+**What we did without going to the field.** We fitted a simple rainfall-driven water-table model to the 2013 to 2018 record, tested it on years left out of the fit, and ran it on NASA's 2026 rainfall, to set a modelled water table beside the radar curve at the gauge sites (`pipeline/hydro/`). On the left-out years it follows the gauge with a correlation of [v: hydro_held_out_r_min_UF] to [v: hydro_held_out_r_max_UF] at the forest site. At the drained site the radar moves with the modelled water table on one orbit and less clearly on the other. That is a bridge, not a measurement: the 2026 water table is modelled, and both curves answer the same rain.
 
 **What real ground truthing would look like.** A small, cheap protocol that a field partner could run in one dry season:
 
