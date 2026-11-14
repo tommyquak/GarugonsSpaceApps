@@ -69,6 +69,25 @@ The grid is regular in longitude and latitude, so the app finds a cell without a
 
 `fire_dates_<site>.json` (track 3 writes, optional, same folder): the days with a fire detection in each cell of the grid of `series_<site>.json`, as `{ "<row * cols + col>": ["YYYY-MM-DD", ...] }`. A cell without a detection has no key. The chart shows these days under the radar lines.
 
+## 6. Fused blocks (lead writes; tracks 4, 5 and 6 read)
+
+`pipeline/out/blocks/blocks_<site>.geojson`, `blocks_<site>.csv` and `ontology.json`, attached to the release. How the fusion works: `docs/FUSION.md`.
+
+Each feature is a 1 km square in lon/lat:
+
+```json
+{ "id": "west-042-017", "site": "west", "lon": 113.95, "lat": -2.81,
+  "action": "rewet_first", "confidence": "medium", "rank": 12, "fall_db": 2.1,
+  "obs": { "fall_asc": 2.2, "fall_desc": 2.0, "left_asc": 0.9, "left_desc": 1.1, "hv_left_asc": 0.3, "hv_left_desc": 0.4,
+           "fire_share": 0.0, "fire_days": 0, "peat_share": 1.0, "canal_m": 300 },
+  "states": { "on_peat": true, "dried": true, "burnt": false, "not_back": true, "canopy_lost": false, "drained": true },
+  "reasons": ["100% of the block is on mapped peat.", "HH fell 2.2 dB on the dawn orbit and 2.0 dB on the dusk orbit over the dry season."] }
+```
+
+- `action` is `assess_burn`, `rewet_first`, `watch` or `none`. `confidence` is `high`, `medium`, `low`, or null when the action is `none`. `rank` counts from 1 inside each action, largest fall first.
+- Falls and "left" values are in decibels and positive when the echo is lower. A value can be null.
+- `ontology.json` lists the sources, observations, states and actions with their rules and reasons. Draw legends, the evidence graph and help text from it; do not retype them.
+
 ## 5. App files (track 4 owns; committed)
 
 - `app/public/layers/<id>.png`: a layer drawn as an image, in Web Mercator.
