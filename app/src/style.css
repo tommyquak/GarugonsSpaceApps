@@ -830,7 +830,9 @@ input[type="range"]::-moz-range-thumb {
   background: rgba(11, 14, 17, 0.6);
 }
 
-#opening .text-button.op-next {
+/* Filled: the way on, and a switch that is on. */
+#opening .text-button.op-next,
+#opening .text-button[aria-pressed="true"] {
   border-color: var(--text);
   background: var(--text);
   color: var(--ink);
