@@ -44,7 +44,7 @@ export function buildStory(
         overlays.setMode("season");
       },
       text: () =>
-        "Colour marks land where the L-band radar signal (HH) fell over the dry season on both orbits. A deeper red means a larger fall; it shows where to look and does not measure the water table.",
+        "Colour marks land where the L-band radar signal (HH) fell over the dry season on both orbits. A darker brown means a larger fall; it shows where to look and does not measure the water table.",
     },
     {
       title: "Burn",
@@ -55,7 +55,7 @@ export function buildStory(
       },
       text: () =>
         fire.length
-          ? "Black marks land with a fire detection this year, from NASA FIRMS, on peat and off it. Compare it with the nearby radar echo fall; the map does not predict where fire will start."
+          ? "Red marks land with a fire detection this year, from NASA FIRMS, on peat and off it. Fire and the fall in the echo are separate signals and often do not coincide; the map does not predict where fire will start."
           : "The fire layer is not loaded yet. When it is, this step will show this year's NASA FIRMS fire detections next to areas where the radar echo fell, on peat and off it.",
     },
     {
