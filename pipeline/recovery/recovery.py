@@ -41,6 +41,44 @@ def read(path):
         return src.read(1)
 
 
+def recover(stack, base, dry_until):
+    """Fall, rebound and left for HH and HV on 250 m blocks, or None if no pass is after dry_until.
+
+    Returns (out, dry, after): out[pol] holds the three arrays, dry the indices of the dry-season
+    passes and after the index of the first pass after the rain."""
+    dry = [i for i, d in enumerate(stack["dates"]) if d <= dry_until]
+    wet = [i for i, d in enumerate(stack["dates"]) if d > dry_until]
+    if not wet:
+        return None
+    if len(dry) < 4:
+        raise SystemExit("need at least four passes on or before --dry-until, so the start and late pairs do not overlap")
+    after = wet[0]
+    out = {}
+    for pol in ("hh", "hv"):
+        layers = normalised(stack, base, pol)
+        start = np.mean([block_mean(layers[i]) for i in dry[:2]], axis=0)
+        late = np.mean([block_mean(layers[i]) for i in dry[-2:]], axis=0)
+        wet_level = block_mean(layers[after])
+        out[pol] = {"fall": late - start, "rebound": wet_level - late, "left": wet_level - start}
+    return out, dry, after
+
+
+def strong_blocks(out, fall_other, cov):
+    """One sample per 250 m block (the centre pixel of each 5 by 5), and those that fell by 1 dB or more in HH on both orbits."""
+    pick = np.zeros(cov.shape, bool)
+    pick[2::5, 2::5] = True
+    ok = pick & cov & np.isfinite(fall_other) & np.isfinite(out["hh"]["rebound"]) & np.isfinite(out["hv"]["rebound"])
+    return ok, ok & (out["hh"]["fall"] < STRONG_DB) & (fall_other < STRONG_DB)
+
+
+def summarise(pol_out, strong, floor):
+    """Medians over the strongly dried blocks, the share of the fall regained, and the share back within the noise floor."""
+    fall, rebound, left = (pol_out[k][strong] for k in ("fall", "rebound", "left"))
+    regained = float(np.median(rebound) / -np.median(fall)) if np.median(fall) < 0 else float("nan")
+    return {"fall": float(np.median(fall)), "rebound": float(np.median(rebound)), "left": float(np.median(left)),
+            "regained": regained, "back": float((left > -floor).mean())}
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--site", required=True)
@@ -52,19 +90,12 @@ def main():
     a = p.parse_args()
     stack = load_stack(a.stacks / f"{a.site}_{a.track}.npz")
     base = json.loads((a.layers / f"baseline_{a.track}.json").read_text())
-    dry = [i for i, d in enumerate(stack["dates"]) if d <= a.dry_until]
-    wet = [i for i, d in enumerate(stack["dates"]) if d > a.dry_until]
-    if not wet:
+    res = recover(stack, base, a.dry_until)
+    if res is None:
         print(f"{a.site} track {a.track}: no pass after {a.dry_until} yet, skipped")
         return
-    after = wet[0]
-    out = {}
+    out, dry, after = res
     for pol in ("hh", "hv"):
-        layers = normalised(stack, base, pol)
-        start = np.mean([block_mean(layers[i]) for i in dry[:2]], axis=0)
-        late = np.mean([block_mean(layers[i]) for i in dry[-2:]], axis=0)
-        wet_level = block_mean(layers[after])
-        out[pol] = {"fall": late - start, "rebound": wet_level - late, "left": wet_level - start}
         rebound = out[pol]["rebound"].astype("float32")
         rebound[~stack["cov"]] = np.nan
         write_layer(a.layers / f"recovery_{pol}_{a.site}_{a.track}.tif", rebound, stack, layer=f"{pol.upper()} rebound after the rain", units="dB",
@@ -72,10 +103,7 @@ def main():
 
     # Blocks that fell by 1 dB or more in HH on both orbits; the other orbit's fall is independent of this track.
     fall_other = read(a.layers / f"drydown_{a.site}_{a.other_track}.tif")
-    pick = np.zeros(stack["cov"].shape, bool)
-    pick[2::5, 2::5] = True
-    ok = pick & stack["cov"] & np.isfinite(fall_other) & np.isfinite(out["hh"]["rebound"]) & np.isfinite(out["hv"]["rebound"])
-    strong = ok & (out["hh"]["fall"] < STRONG_DB) & (fall_other < STRONG_DB)
+    ok, strong = strong_blocks(out, fall_other, stack["cov"])
     floor = abs(get(f"noise_floor_hh_{a.track}")["value"])
     n = int(strong.sum())
     tag = f"{a.site}_{a.track}"
@@ -85,17 +113,14 @@ def main():
         note="HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most")
     print(f"{a.site} track {a.track}: pass after the rain {stack['dates'][after]}, {n} strongly dried blocks, rebound against other-orbit fall r = {r:.2f}")
     for pol in ("hh", "hv"):
-        fall, rebound, left = (out[pol][k][strong] for k in ("fall", "rebound", "left"))
-        regained = float(np.median(rebound) / -np.median(fall)) if np.median(fall) < 0 else float("nan")
-        back = float((left > -floor).mean())
-        put(f"recovery_{pol}_median_fall_{tag}", float(np.median(fall)), "dB", a.site, ME)
-        put(f"recovery_{pol}_median_rebound_{tag}", float(np.median(rebound)), "dB", a.site, ME)
-        put(f"recovery_{pol}_median_left_{tag}", float(np.median(left)), "dB", a.site, ME, note="level after the rain against the start of the season")
-        put(f"recovery_{pol}_share_regained_{tag}", regained, "share of the fall", a.site, ME)
-        put(f"recovery_{pol}_share_back_within_noise_{tag}", back, "share of blocks", a.site, ME)
-        print(f"   {pol.upper()}: median fall {np.median(fall):+.2f} dB, rebound {np.median(rebound):+.2f} dB, still {np.median(left):+.2f} dB from the start; "
-              f"{regained:.0%} of the fall regained; {back:.0%} of blocks back within the noise floor")
-
+        m = summarise(out[pol], strong, floor)
+        put(f"recovery_{pol}_median_fall_{tag}", m["fall"], "dB", a.site, ME)
+        put(f"recovery_{pol}_median_rebound_{tag}", m["rebound"], "dB", a.site, ME)
+        put(f"recovery_{pol}_median_left_{tag}", m["left"], "dB", a.site, ME, note="level after the rain against the start of the season")
+        put(f"recovery_{pol}_share_regained_{tag}", m["regained"], "share of the fall", a.site, ME)
+        put(f"recovery_{pol}_share_back_within_noise_{tag}", m["back"], "share of blocks", a.site, ME)
+        print(f"   {pol.upper()}: median fall {m['fall']:+.2f} dB, rebound {m['rebound']:+.2f} dB, still {m['left']:+.2f} dB from the start; "
+              f"{m['regained']:.0%} of the fall regained; {m['back']:.0%} of blocks back within the noise floor")
 
     # If the other orbit already has its own rebound layer, compare the two.
     other = a.layers / f"recovery_hh_{a.site}_{a.other_track}.tif"
