@@ -1,5 +1,5 @@
 // Written with Super Intelligence (SI) assistance.
-import { AttributionControl, Map as MapLibreMap, NavigationControl, ScaleControl, setWorkerUrl } from "maplibre-gl";
+import { AttributionControl, LngLat, Map as MapLibreMap, NavigationControl, ScaleControl, setWorkerUrl } from "maplibre-gl";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
@@ -19,6 +19,26 @@ import { viewPadding } from "./view";
 
 // MapLibre runs part of its work in a web worker; this is the address of that file in the build.
 setWorkerUrl(workerUrl);
+
+// How far the map may be moved: the data extent and about half a degree around it, widened
+// where the opening view needs more room (a tall phone screen shows more than that).
+function studyLimits(map: MapLibreMap, extent: [number, number, number, number]): [number, number, number, number] {
+  const pad = 0.5;
+  const limits: [number, number, number, number] = [extent[0] - pad, extent[1] - pad, extent[2] + pad, extent[3] + pad];
+  const camera = map.cameraForBounds(extent, { padding: viewPadding() });
+  if (camera?.center && camera.zoom !== undefined) {
+    const centre = LngLat.convert(camera.center);
+    const box = map.getContainer().getBoundingClientRect();
+    const degreesPerPixel = 360 / (512 * 2 ** camera.zoom); // near the equator, north-south as east-west
+    const halfWide = (box.width / 2) * degreesPerPixel * 1.05;
+    const halfTall = (box.height / 2) * degreesPerPixel * 1.05;
+    limits[0] = Math.min(limits[0], centre.lng - halfWide);
+    limits[1] = Math.min(limits[1], centre.lat - halfTall);
+    limits[2] = Math.max(limits[2], centre.lng + halfWide);
+    limits[3] = Math.max(limits[3], centre.lat + halfTall);
+  }
+  return limits;
+}
 
 async function start(): Promise<void> {
   const layers = await loadLayers();
@@ -40,7 +60,17 @@ async function start(): Promise<void> {
 
   // Start on the data, clear of the panels. Without layers the map stays on the study area.
   const extent = unionBounds(layers);
-  if (extent) map.fitBounds(extent, { padding: viewPadding(), animate: false });
+  if (extent) {
+    map.setMaxBounds(studyLimits(map, extent));
+    map.fitBounds(extent, { padding: viewPadding(), animate: false });
+    map.on("resize", () => map.setMaxBounds(studyLimits(map, extent)));
+  }
+  // The flat map keeps north up: no turning or tilting by drag, touch or keyboard. The 3D view
+  // of the Actions panel switches these back on while it is open.
+  map.dragRotate.disable();
+  map.touchPitch.disable();
+  map.touchZoomRotate.disableRotation();
+  map.keyboard.disableRotation();
 
   await map.once("load");
   const overlays = new Overlays(map, layers);
