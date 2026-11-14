@@ -91,26 +91,31 @@ interface DatedValue {
 
 const PAIR_DAYS = 14; // as in pipeline/season.py: the second start pass must follow within this
 
-// A plain sentence on HH for one orbit, by the pipeline's rule: the start passes (the first
-// pass on or after the dry start, and the next if it follows within 14 days) against the last
-// two passes before the rain, and then what the first pass after the rain did.
+// A plain sentence on HH for one orbit, by the pipeline's rule (pipeline/drying/drydown.py):
+// the start passes (the first pass on or after the dry start, and the next if it follows
+// within 14 days) against the last two later passes before the rain, and then what the first
+// pass after the rain did. The passes are chosen by date first, as the pipeline does, and only
+// then read: if one of them has no data here, the card says so and does not fall back on
+// other dates, which would be a different measurement from the one the map shows.
 function reading(passes: Pass[], orbit: string, rule: SeasonRule): string | null {
-  const v = passes.filter((p) => p.hh !== null).map((p) => ({ date: p.date, hh: p.hh as number }));
-  const first = v.findIndex((p) => p.date >= rule.startFrom);
+  const first = passes.findIndex((p) => p.date >= rule.startFrom);
   if (first < 0) return null;
-  const start = [v[first]];
-  const next = v[first + 1];
-  if (next && (parseDay(next.date).getTime() - parseDay(v[first].date).getTime()) / 86_400_000 <= PAIR_DAYS) start.push(next);
-  const late = v.filter((p) => p.date <= rule.lastDry && !start.includes(p)).slice(-2);
-  if (!late.length) return null;
-  const startLevel = mean(start.map((p) => p.hh));
-  const lateLevel = mean(late.map((p) => p.hh));
+  const start = [passes[first]];
+  const next = passes[first + 1];
+  if (next && (parseDay(next.date).getTime() - parseDay(passes[first].date).getTime()) / 86_400_000 <= PAIR_DAYS) start.push(next);
+  const late = passes.filter((p, i) => p.date <= rule.lastDry && i > first + start.length - 1).slice(-2);
+  if (late.length < 2) return null;
   const name = orbit.charAt(0).toUpperCase() + orbit.slice(1);
+  const levels = (group: Pass[]): number[] | null => (group.every((p) => p.hh !== null) ? group.map((p) => p.hh as number) : null);
+  const startValues = levels(start);
+  const lateValues = levels(late);
+  if (!startValues || !lateValues) return `${name} pass: not enough data at this place for a reading (a pass it is measured from is missing).`;
+  const lateLevel = mean(lateValues);
   const span = `between the dry start in ${monthName(start[0].date)} and ${monthName(late[late.length - 1].date)}`;
-  const fall = Math.round((startLevel - lateLevel) * 10) / 10;
+  const fall = Math.round((mean(startValues) - lateLevel) * 10) / 10;
   let text = fall >= 0.1 ? `${name} pass: HH fell ${fall.toFixed(1)} dB ${span}` : `${name} pass: HH did not fall ${span}`;
-  const after = v.find((p) => p.date > rule.lastDry);
-  if (after) {
+  const after = passes.find((p) => p.date > rule.lastDry);
+  if (after && after.hh !== null) {
     const rise = Math.round((after.hh - lateLevel) * 10) / 10;
     const day = `${parseDay(after.date).getUTCDate()} ${monthName(after.date)}`;
     text += rise >= 0.1 ? `, then rose ${rise.toFixed(1)} dB on the first pass after the rain (${day})` : `, and had not risen on the first pass after the rain (${day})`;
