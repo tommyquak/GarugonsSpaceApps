@@ -11,7 +11,8 @@ least one pass after the rain, on 250 m blocks and with the scene-wide shift rem
 
 Writes recovery_<pol>_<site>_<track>.tif (the rebound) and recovery_left_<pol>_<site>_<track>.tif
 (what is left, the third beat of the story) for HH and HV, in decibels, and numbers in validation.json for the blocks that fell by 1 dB or more on both
-orbits. Run it once per track. When both tracks have a pass after the rain, the second run
+orbits, also split on and off mapped peat and into burnt and only dried once the peat and
+fire layers exist. Run it once per track. When both tracks have a pass after the rain, the second run
 also compares the two rebounds: they are measured days apart from opposite sides, so
 agreement between them is evidence that the rebound is on the ground and not in the radar.
 
@@ -34,6 +35,7 @@ from vjson import get, put  # noqa: E402
 
 ME = "pipeline/recovery/recovery.py"
 STRONG_DB = -1.0
+MIN_ZONE_BLOCKS = 100   # fewer strongly dried blocks than this in a group and its medians are not reported
 
 
 def read(path):
@@ -75,6 +77,14 @@ def strong_blocks(out, fall_other, cov):
     return ok, ok & (out["hh"]["fall"] < STRONG_DB) & (fall_other < STRONG_DB)
 
 
+def zones(peat, fire):
+    """The four groups the recovery is reported in: on or off mapped peat, and burnt or only dried.
+
+    peat is True on mapped peat, fire True within 200 m of a 2026 fire detection (split.py's rules).
+    Burnt land should come back in HH, the ground is wet again, but not in HV, the canopy is gone."""
+    return {f"{pz}_{fz}": p & f for pz, p in (("on_peat", peat), ("off_peat", ~peat)) for fz, f in (("no_fire", ~fire), ("fire", fire))}
+
+
 def summarise(pol_out, strong, floor):
     """Medians over the strongly dried blocks, the share of the fall regained, and the share back within the noise floor."""
     fall, rebound, left = (pol_out[k][strong] for k in ("fall", "rebound", "left"))
@@ -91,6 +101,7 @@ def main():
     p.add_argument("--dry-until", required=True, help="YYYYMMDD, last day before the rain returned")
     p.add_argument("--stacks", required=True, type=Path)
     p.add_argument("--layers", required=True, type=Path)
+    p.add_argument("--peat", default="peat_peatmap", help="name stem of the peat layer, as in pipeline/drying/split.py")
     a = p.parse_args()
     stack = load_stack(a.stacks / f"{a.site}_{a.track}.npz")
     base = json.loads((a.layers / f"baseline_{a.track}.json").read_text())
@@ -128,6 +139,28 @@ def main():
         put(f"recovery_{pol}_share_back_within_noise_{tag}", m["back"], "share of blocks", a.site, ME)
         print(f"   {pol.upper()}: median fall {m['fall']:+.2f} dB, rebound {m['rebound']:+.2f} dB, still {m['left']:+.2f} dB from the start; "
               f"{m['regained']:.0%} of the fall regained; {m['back']:.0%} of blocks back within the noise floor")
+
+    # The same, on and off mapped peat, and burnt apart from only dried, once track 3's layers exist.
+    peat_file, fire_file = a.layers / f"{a.peat}_{a.site}.tif", a.layers / f"fire_days_{a.site}.tif"
+    if peat_file.exists() and fire_file.exists():
+        peat, fire = read(peat_file) == 1, np.nan_to_num(read(fire_file)) > 0
+        if peat.shape != strong.shape:
+            raise SystemExit(f"{peat_file.name} is not on the grid of the stack")
+        for zone, mask in zones(peat, fire).items():
+            s = strong & mask
+            put(f"recovery_blocks_{zone}_{tag}", int(s.sum()), "blocks of 250 m", a.site, ME, note="fell by 1 dB or more in HH on both orbits")
+            if s.sum() < MIN_ZONE_BLOCKS:
+                print(f"   {zone}: {int(s.sum())} blocks, too few to report")
+                continue
+            line = f"   {zone:17s} {int(s.sum()):6d} blocks:"
+            for pol in ("hh", "hv"):
+                m = summarise(out[pol], s, floor)
+                put(f"recovery_{pol}_share_regained_{zone}_{tag}", m["regained"], "share of the fall", a.site, ME)
+                put(f"recovery_{pol}_median_left_{zone}_{tag}", m["left"], "dB", a.site, ME, note="level after the rain against the start of the season")
+                line += f"  {pol.upper()} {m['regained']:.0%} regained, {m['left']:+.2f} dB left"
+            print(line)
+    else:
+        print(f"   {peat_file.name} or {fire_file.name} is not there yet, no split by peat and fire")
 
     # If the other orbit already has its own rebound layer, compare the two.
     other = a.layers / f"recovery_hh_{a.site}_{a.other_track}.tif"
