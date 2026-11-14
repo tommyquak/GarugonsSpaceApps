@@ -88,10 +88,13 @@ const BEATS: Beat[] = [
 
 export interface Opening {
   play(): void;
+  /** Called with true when the story starts and false when it ends. */
+  onRun(fn: (running: boolean) => void): void;
 }
 
 export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: ActionsView, extent: [number, number, number, number] | null, stopSeason: () => void): Opening {
   let root: HTMLElement | null = null;
+  const watchers: ((running: boolean) => void)[] = [];
   let credits: Record<string, Credit> = {};
   let numbers: Numbers = {};
   void fetchJson<Record<string, Credit>>("story/credits.json").then((found) => (credits = found ?? {}));
@@ -115,7 +118,12 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     voice.preload = "auto";
 
     const layers = [h("img", { class: "op-img", alt: "" }), h("img", { class: "op-img", alt: "" })];
-    const bars = BEATS.map(() => h("span", { class: "op-bar" }, h("i")));
+    // One line per beat; each is also a way to jump to that beat.
+    const bars = BEATS.map((beat, k) => {
+      const bar = h("button", { type: "button", class: "op-bar", "aria-label": `Part ${k + 1} of ${BEATS.length}: ${beat.head}` }, h("i"));
+      bar.addEventListener("click", () => show(k));
+      return bar;
+    });
     const head = h("h2", { class: "op-head" });
     const sub = h("p", { class: "op-sub" });
     const key = h("div", { class: "op-key" });
@@ -132,7 +140,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       h("div", { class: "op-media" }, ...layers),
       h("div", { class: "op-shade op-shade-image" }),
       h("div", { class: "op-shade op-shade-map" }),
-      h("div", { class: "op-top" }, h("div", { class: "op-bars", "aria-hidden": "true" }, ...bars), soundButton, skip),
+      h("div", { class: "op-top" }, h("div", { class: "op-bars", role: "group", "aria-label": "Parts of the story" }, ...bars), soundButton, skip),
       h("div", { class: "op-foot" }, text, h("div", { class: "op-side" }, h("div", { class: "op-nav" }, back, withSound, next), credit)),
     );
     root = made;
@@ -252,6 +260,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
       app.removeAttribute("inert");
       made.classList.remove("is-in");
       window.setTimeout(() => made.remove(), still ? 0 : FADE_MS);
+      for (const fn of watchers) fn(false);
       document.getElementById("btn-actions")?.focus({ preventScroll: true });
     };
 
@@ -278,6 +287,7 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     document.addEventListener("visibilitychange", onHide);
 
     stopSeason();
+    for (const fn of watchers) fn(true);
     app.classList.add("is-story");
     app.setAttribute("inert", "");
     document.body.append(made);
@@ -287,5 +297,5 @@ export function buildOpening(map: MapLibreMap, overlays: Overlays, actions: Acti
     next.focus({ preventScroll: true });
   }
 
-  return { play };
+  return { play, onRun: (fn) => void watchers.push(fn) };
 }

@@ -448,8 +448,27 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Season slider */
-/* While Where to check is open it has the map to itself: no season slider. */
-#app.is-check #season {
+/* While Where to check is open it has the map to itself: no season slider, and no layer
+   switches, which would change nothing on the map while it is open. */
+#app.is-check #season,
+#app.is-check #panel-layers {
+  display: none;
+}
+
+/* The way back to the control room, at the far left of the header. */
+#btn-room {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 7px;
+  color: var(--muted);
+}
+
+#btn-room:hover {
+  color: var(--text);
+}
+
+#btn-room[hidden] {
   display: none;
 }
 
@@ -561,16 +580,38 @@ input[type="range"]::-moz-range-thumb {
   gap: 6px;
 }
 
+/* Each line is a button with room for a finger; the line itself stays thin. */
 .op-bar {
   flex: 1;
+  position: relative;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.op-bar::before,
+.op-bar i {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
   height: 2px;
+}
+
+.op-bar::before {
+  right: 0;
   background: rgba(236, 232, 223, 0.28);
+}
+
+.op-bar:hover::before {
+  background: rgba(236, 232, 223, 0.6);
 }
 
 .op-bar i {
   display: block;
   width: 0;
-  height: 100%;
   background: var(--text);
 }
 
@@ -1392,8 +1433,14 @@ button:disabled {
   .brand p,
   #btn-story,
   #btn-season,
+  #btn-room span,
   .wide-only {
     display: none;
+  }
+
+  #btn-room {
+    margin-right: 6px;
+    padding: 0 10px;
   }
 
   .bar-actions .text-button {
