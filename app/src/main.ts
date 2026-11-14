@@ -21,7 +21,7 @@ import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
 import { buildSeason } from "./season";
 import { buildOpening } from "./opening";
-import { viewPadding } from "./view";
+import { reducedMotion, viewPadding } from "./view";
 
 // MapLibre runs part of its work in a web worker; this is the address of that file in the build.
 setWorkerUrl(workerUrl);
@@ -111,7 +111,10 @@ async function start(): Promise<void> {
       seasonButton.setAttribute("aria-pressed", String(!on));
     },
   });
-  seasonButton.addEventListener("click", () => actions.apply(actions.parts().filter((part) => part === "how"), null));
+  seasonButton.addEventListener("click", () => {
+    actions.apply(actions.parts().filter((part) => part === "how"), null);
+    if (!reducedMotion()) season.playFromStart(); // the season view opens playing, from its first pass
+  });
   // The opening story: replayed from "Story", and played once after a first-visit intro (below).
   const opening = buildOpening(map, overlays, actions, extent, season.stop);
   byId("btn-story").addEventListener("click", () => opening.play());
