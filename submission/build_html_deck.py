@@ -2,7 +2,7 @@
 """Build the seven-slide demo deck as one HTML page (track 6), in the app's control-room look.
 
 Same slides, order and wording as build_slides.py, which makes the .pptx; this makes a web deck with a
-fixed 1920 x 1080 stage scaled to any screen (frontend-slides skill). Every number is read from
+fixed 1920 x 1080 stage scaled to any screen. Every number is read from
 validation.json through build_slides.Numbers; none is typed here. No in-browser editing, on purpose:
 numbers change only by rebuilding from the file.
 
@@ -88,7 +88,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* === FIXED 16:9 STAGE (viewport-base.css, in full) === */
+/* === FIXED 16:9 STAGE === */
 html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--stage-bg, #000); }
 .deck-viewport { position: fixed; inset: 0; overflow: hidden; background: var(--stage-bg, #000); }
 .deck-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; background: var(--slide-bg, #fff); }
@@ -157,8 +157,8 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
 /* ===========================================
    SLIDE 4: what you can do in the app
    =========================================== */
-.do { position: absolute; left: 1330px; top: 292px; width: 450px; font: 400 23px/1.42 var(--sans); color: var(--dim); }
-.do p { margin-bottom: 20px; } .do b { color: var(--ink); font-weight: 600; }
+.do { position: absolute; left: 1330px; top: 292px; width: 450px; font: 400 22px/1.4 var(--sans); color: var(--dim); }
+.do p { margin-bottom: 16px; } .do b { color: var(--ink); font-weight: 600; }
 
 /* ===========================================
    SLIDE 6: the limits, each with our answer
@@ -207,8 +207,8 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <h2 class="reveal r1">Cloud and smoke hide the ground from optical satellites. NISAR's radar sees through them</h2>
     <div class="frame reveal r2" style="left:140px; top:300px; width:800px; height:450px"><img src="assets/fig_cloud.png" alt="The same ground on 14 September 2026: smoke and cloud in VIIRS true colour, the land in NISAR L-band HH"></div>
     <div class="frame dark reveal r3" style="left:980px; top:300px; width:800px; height:450px"><img src="assets/explainer.gif" alt="Animated schematic of how the L-band radar sees a peat dry season"></div>
-    <p class="caption reveal r4" style="left:140px; top:782px; width:800px"><b>Every 12 days, day or night.</b> The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar.</p>
-    <p class="caption reveal r5" style="left:980px; top:782px; width:800px"><b class="hh">HH.</b> A wetter surface sends back a stronger echo: as open peat dries, HH falls. Closed forest barely changed, so it is the yardstick. <b>HV</b> comes mostly from woody vegetation, but responds to moisture too. A schematic, not data.</p>
+    <p class="caption reveal r4" style="left:140px; top:782px; width:800px"><b>A 12-day repeat by design, day or night.</b> The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar.</p>
+    <p class="caption reveal r5" style="left:980px; top:782px; width:800px"><b class="hh">HH.</b> On open ground a drier surface sends back a weaker echo, so HH falls; clearing and standing water change it too. Closed forest is the yardstick. <b>HV</b> comes mostly from woody vegetation, but responds to moisture too. A schematic, not data.</p>
     <div class="rule"></div>
     <p class="source">VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.</p>
     <p class="page">02 / 07</p>
@@ -219,7 +219,7 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     {{draft}}
     <h2 class="reveal r1">On open peat HH fell through the dry season, then rose with the first rain. Six choices make that hold</h2>
     <div class="frame reveal r2" style="left:140px; top:296px; width:900px; height:506px"><img src="assets/fig_season.png" alt="Season figure: the HH fall pass by pass on both orbits, deep forest flat, daily rain underneath"></div>
-    <div class="tile small reveal r3" style="left:140px; top:822px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of mapped peat in the west box fell 1 dB or more, on both orbits</div></div>
+    <div class="tile small reveal r3" style="left:140px; top:822px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of mapped peat in the west box where HH fell 1 dB or more, on both orbits</div></div>
     <div class="tile small reveal r3" style="left:445px; top:822px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east box</div></div>
     <div class="tile small reveal r3" style="left:750px; top:822px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">rise on the first pass after rain, {{rise_where}}; none before it</div></div>
     <div class="why reveal r4">
@@ -241,7 +241,7 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <div class="do reveal r4">
       <p><b>The season.</b> Every pass on both orbits; fire builds up beside the fall.</p>
       <p><b>Where to check.</b> 1 km blocks in three levels, flat or in 3D, ranked, as CSV or GeoJSON.</p>
-      <p><b>How it decides.</b> The ontology, drawn from its file: {{o_sources}} sources, {{o_observations}} observations, {{o_states}} states and {{o_actions}} classes, each rule open to read.</p>
+      <p><b>How it decides.</b> The ontology, drawn from its file: {{o_sources}} sources, {{o_observations}} observations, {{o_states}} states and {{o_classes}} classes, each rule open to read.</p>
       <p><b>Field assessment.</b> Three pages to print, ending in the blocks to visit first.</p>
       <p><a href="{{app_url}}" target="_blank" rel="noopener">Open the map</a></p>
     </div>
@@ -256,8 +256,8 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <h2 class="reveal r1">Why believe it: two orbits agree, and an audit we asked for made the answer smaller</h2>
     <div class="frame reveal r2" style="left:140px; top:296px; width:800px; height:450px"><img src="assets/fig_orbits.png" alt="Two orbits side by side and block by block"></div>
     <div class="frame reveal r3" style="left:980px; top:296px; width:800px; height:450px"><img src="assets/fig_start.png" alt="Why the starting point matters: share of land that fell for three choices of start"></div>
-    <p class="caption reveal r4" style="left:140px; top:778px; width:800px"><b>Two orbits, one answer.</b> Dawn and dusk look from opposite sides, hours apart, and agree block by block: Spearman r = {{r_west}} in the west box, {{r_east}} in the east (the scatter shows Pearson r).</p>
-    <p class="caption reveal r5" style="left:980px; top:778px; width:800px"><b>Audited half way.</b> An independent audit found our first start date came just after rain. We now start from the first rain-free passes, and published the audit with our response.</p>
+    <p class="caption reveal r4" style="left:140px; top:778px; width:800px"><b>Two orbits agree on where.</b> The dawn and dusk orbits look from opposite sides, four days apart, and agree block by block: Spearman r = {{r_west}} in the west box, {{r_east}} in the east (the scatter shows Pearson r).</p>
+    <p class="caption reveal r5" style="left:980px; top:778px; width:800px"><b>Audited part way.</b> An SI reviewer we asked to audit the work found our first start date came just after rain. We now start from the first rain-free passes, and published the audit with our response.</p>
     <div class="rule"></div>
     <p class="source">Figures: pipeline/figures.py. Audit and response: docs/AUDIT.md.</p>
     <p class="page">05 / 07</p>
@@ -269,13 +269,13 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <h2 class="reveal r1">What the radar cannot tell us yet, and our answers</h2>
     <table class="limits reveal r2">
       <tr><th>limit</th><th>our answer</th></tr>
-      <tr><td><b>Not checked on the ground.</b> A fall in HH is not a measured water table.</td><td>A rainfall model from a published gauge record bridges the gap (right), as support only. About sixty dipwell visits would calibrate the map or prove it wrong.</td></tr>
+      <tr><td><b>Not checked on the ground.</b> A fall in HH is not a measured water table.</td><td>A rainfall model fitted to a published gauge record is shown beside the radar (right): modelled, not measured, and support only. About sixty dipwell visits would calibrate the map or show where it is wrong.</td></tr>
       <tr><td><b>One pass after the rain per orbit,</b> from a later NASA processing release.</td><td>We report the rise only where both orbits see it on their own, and the release change is in our limits.</td></tr>
       <tr><td><b>No fire forecast, no canal advice.</b></td><td>Inside drained land an early fall did not separate later fire from no fire, so we withdrew the claim.</td></tr>
-      <tr><td><b>Fire returns, but we cannot say why.</b></td><td>{{repeat}} of this year's fire on western peat fell on the {{earlier}} that burned in 2015, 2019 or 2023. Fire off peat is mapped too.</td></tr>
+      <tr><td><b>Fire returns, but we cannot say why.</b></td><td>{{repeat}} of this year's fire detections on western peat were on the {{earlier}} of it with a detection in 2015, 2019 or 2023 (NASA FIRMS). Fire off peat is mapped too.</td></tr>
     </table>
-    <div class="frame reveal r3" style="left:1150px; top:286px; width:630px; height:354px"><img src="assets/fig_water_table.png" alt="A bridge to the ground: a rainfall-driven water-table model beside the radar"></div>
-    <p class="caption reveal r4" style="left:1150px; top:664px; width:630px">The bridge: a rainfall-driven water-table model, run on 2026 rain beside the radar. Support, not validation.</p>
+    <div class="frame reveal r3" style="left:1150px; top:286px; width:630px; height:354px"><img src="assets/fig_water_table.png" alt="A rainfall-driven water-table model beside the radar curve"></div>
+    <p class="caption reveal r4" style="left:1150px; top:664px; width:630px">A rainfall-driven water-table model, run on 2026 rain beside the radar. Modelled, not measured: support, not validation.</p>
     <div class="rule"></div>
     <p class="source">Hirano groundwater record (CC BY 4.0), GPM IMERG, NISAR L2 GCOV. Full limits: docs/LIMITS.md.</p>
     <p class="page">06 / 07</p>
@@ -294,7 +294,7 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
     <p class="caption reveal r4" style="left:920px; top:716px; width:860px">The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.</p>
     <div class="links reveal r5"><div><b>Open the map</b><a href="{{app_url}}" target="_blank" rel="noopener">{{app_url}}</a></div><div><b>Code and data</b><a href="{{code_url}}" target="_blank" rel="noopener">{{code_url}}</a></div></div>
     <div class="rule"></div>
-    <p class="source">Made with Super Intelligence (SI) assistance from NASA and ISRO NISAR L2 GCOV data. All code and data open.</p>
+    <p class="source">Made with Super Intelligence (SI) assistance, from open NASA, ISRO and other data. All code is open; the data sources are in the README.</p>
     <p class="page">07 / 07</p>
   </section>
 

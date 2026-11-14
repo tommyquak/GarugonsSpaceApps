@@ -136,7 +136,7 @@ export function bindPlaceActions(root: HTMLElement, map: MapLibreMap, overlays: 
       caption,
       h("p", {
         class: "note",
-        text: "NASA GIBS: VIIRS true colour from Suomi NPP, one image a day at about 250 m. On most dry-season days it shows cloud or smoke. That is why this map uses radar, which sees through both.",
+        text: "NASA GIBS: VIIRS true colour from Suomi NPP, one image a day at about 250 m. On many dry-season days it shows cloud or smoke. Radar is not blocked by either.",
       }),
     );
     const show = (day: string): void => {

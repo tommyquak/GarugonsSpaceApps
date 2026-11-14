@@ -3,9 +3,9 @@
 
 Every number on a slide is read from validation.json; none is typed here. The order is the
 one agreed on issue #36: the problem, what NISAR sees, the season, the app, why believe it,
-what we do not see, what comes next. Claims stay inside docs/AUDIT.md "What we can still claim".
+what we do not see, what comes next. The limits behind each claim are in docs/LIMITS.md.
 
-    python submission/build_slides.py --figures submission/figures --validation pipeline/out/validation.json \\
+    python submission/build_slides.py --figures submission/figures --validation app/public/validation.json \\
         --out submission/deck.pptx            # draft: exploratory numbers, tagged on every slide
     python submission/build_slides.py ... --final   # only keys marked final; stops if one is missing
 
@@ -47,12 +47,12 @@ CHOICES = [
     ("Forest as the yardstick.", "Each pass is measured against closed forest, which removes shifts that affect a whole scene."),
     ("Two orbits must agree.", "Dawn and dusk look from opposite sides; a fall counts only where both see it."),
     ("The dry window comes from rainfall.", "Its start and end are set from the daily rain record by a fixed rule, not by eye."),
-    ("Wait for the first rain.", "What comes back with the rain was moisture; what stays low is where to look."),
-    ("Levels, not the size of the fall.", "Peat beside a canal falls far and recovers, so blocks are ranked by lasting change."),
+    ("Wait for the first rain.", "On most land HH rose again on the first pass after the rain. Where it stayed low we do not know why, so those are the places to check."),
+    ("Levels, not the size of the fall.", "Much of a large fall came back with the rain, so blocks are ranked by what was still changed after it."),
     ("One ontology.", "Sources, observations, states and classes, with their thresholds, live in one file that the pipeline and the app both read."),
 ]
 # What comes next (slide 7), also used by build_html_deck.py. The papers are in docs/REFERENCES.md.
-SUBSIDENCE = ("Drained peat sinks, and over the years much of that sinking is peat oxidising, which is carbon lost (Hooijer et al. 2012). L-band radar has measured the sinking in Central Kalimantan, checked in the field (Tay et al. 2025). NISAR's 12-day pairs, whose coherence we already use, could do the same with two to three years of passes.")
+SUBSIDENCE = ("Drained peat sinks, and over the years much of that sinking is peat oxidising, which is carbon lost (Hooijer et al. 2012). L-band radar has measured the sinking in Central Kalimantan, checked in the field (Tay et al. 2025). NISAR's 12-day pairs, which we already pull for their coherence, could be tested for the same with two to three years of passes.")
 MORE_SEASONS = "Every dry season set against wet years. The pipeline takes any bounding box; not yet run on a second site."
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
 CODE_URL = "https://github.com/tommyquak/GarugonsSpaceApps"
@@ -89,7 +89,9 @@ class Numbers:
 def ontology_counts(path):
     """How many sources, observations, states and classes the ontology file holds, as words for a sentence."""
     o = json.loads(Path(path).read_text())
-    return {k: str(len(o[k])) for k in ("sources", "observations", "states", "actions")}
+    counts = {k: str(len(o[k])) for k in ("sources", "observations", "states")}
+    counts["classes"] = str(sum(1 for a in o["actions"] if a.get("id") != "none"))   # "no class" is not a class
+    return counts
 
 
 def text(slide, x, y, w, h, runs, size=16, color=INK, bold=False, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP,
@@ -329,13 +331,13 @@ def build(a):
     framed(s, fig / "fig_cloud.png", M, Inches(1.6), Inches(5.95), "Cloud against radar figure")
     framed(s, fig / "explainer.gif", Inches(6.78), Inches(1.6), Inches(5.95), "Radar explainer animation")
     text(s, M, Inches(5.1), Inches(5.95), Inches(1.5),
-         [[("Every 12 days, day or night. ", {"bold": True, "color": INK}),
+         [[("A 12-day repeat by design, day or night. ", {"bold": True, "color": INK}),
            "The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar."]],
          size=14, color=DIM)
     text(s, Inches(6.78), Inches(5.1), Inches(5.95), Inches(1.5),
          [[("HH. ", {"bold": True, "color": SAND}),
-           "A wetter surface sends back a stronger echo: as open peat dries, HH falls. Closed forest barely changed, "
-           "so it is the yardstick. "], [("HV ", {"bold": True, "color": INK}),
+           "On open ground a drier surface sends back a weaker echo, so HH falls; clearing and standing water change it "
+           "too. Closed forest is the yardstick. "], [("HV ", {"bold": True, "color": INK}),
            "comes mostly from woody vegetation, but responds to moisture too. A schematic, not data."]],
          size=14, color=DIM, space_after=4)
     footer(s, 2, "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.", draft)
@@ -352,7 +354,7 @@ def build(a):
     gap = Inches(0.15)
     ty, tw, th = Inches(5.68), int((fw - 2 * gap) / 3), Inches(1.08)
     tile(s, M, ty, tw, th, num.km2("fell_1db_km2_on_peat_west"),
-         "of mapped peat in the west box fell 1 dB or more, on both orbits", SAND, small=True)
+         "of mapped peat in the west box where HH fell 1 dB or more, on both orbits", SAND, small=True)
     tile(s, M + tw + gap, ty, tw, th, num.km2("fell_1db_km2_on_peat_east"), "the same, in the east box", SAND, small=True)
     tile(s, M + 2 * (tw + gap), ty, tw, th, rise,
          f"rise on the first pass after rain, {rise_where}; none before it", RAIN, small=True)
@@ -379,7 +381,7 @@ def build(a):
          "1 km blocks in three levels, flat or in 3D, ranked, as CSV or GeoJSON."],
         [("How it decides. ", {"bold": True, "color": INK}),
          f"The ontology, drawn from its file: {o['sources']} sources, {o['observations']} observations, {o['states']} states "
-         f"and {o['actions']} classes, each rule open to read."],
+         f"and {o['classes']} classes, each rule open to read."],
         [("Field assessment. ", {"bold": True, "color": INK}), "Three pages to print, ending in the blocks to visit first."],
         [("Open the map", {"bold": True, "link": APP_URL})],
     ]
@@ -396,13 +398,13 @@ def build(a):
     framed(s, fig / "fig_orbits.png", M, Inches(1.7), Inches(5.95), "Orbits figure")
     framed(s, fig / "fig_start.png", Inches(6.78), Inches(1.7), Inches(5.95), "Start figure")
     text(s, M, Inches(5.2), Inches(5.95), Inches(1.4),
-         [[("Two orbits, one answer. ", {"bold": True, "color": INK}),
-           f"Dawn and dusk look from opposite sides, hours apart, and agree block by block: Spearman r = "
+         [[("Two orbits agree on where. ", {"bold": True, "color": INK}),
+           f"The dawn and dusk orbits look from opposite sides, four days apart, and agree block by block: Spearman r = "
            f"{num.get('track5_west_orbit_spearman'):.2f} in the west box, {num.get('track5_east_orbit_spearman'):.2f} "
            f"in the east (the scatter shows Pearson r)."]], size=14, color=DIM)
     text(s, Inches(6.78), Inches(5.2), Inches(5.95), Inches(1.4),
-         [[("Audited half way. ", {"bold": True, "color": INK}),
-           "An independent audit found our first start date came just after rain. We now start from the first "
+         [[("Audited part way. ", {"bold": True, "color": INK}),
+           "An SI reviewer we asked to audit the work found our first start date came just after rain. We now start from the first "
            "rain-free passes, and published the audit with our response."]], size=14, color=DIM)
     footer(s, 5, "Figures: pipeline/figures.py. Audit and response: docs/AUDIT.md.", draft)
     s.notes_slide.notes_text_frame.text = "Validity: independent orbits, and the audit as evidence, not as the headline."
@@ -413,19 +415,20 @@ def build(a):
     title(s, "What the radar cannot tell us yet, and our answers")
     limits_table(s, M, Inches(1.6), Inches(7.45), [
         ([("Not checked on the ground. ", {"bold": True}), ("A fall in HH is not a measured water table.", {})],
-         "A rainfall model from a published gauge record bridges the gap (right), as support only. About sixty "
-         "dipwell visits would calibrate the map or prove it wrong."),
+         "A rainfall model fitted to a published gauge record is shown beside the radar (right): modelled, not measured, "
+         "and support only. About sixty dipwell visits would calibrate the map or show where it is wrong."),
         ([("One pass after the rain per orbit, ", {"bold": True}), ("from a later NASA processing release.", {})],
          "We report the rise only where both orbits see it on their own, and the release change is in our limits."),
         ([("No fire forecast, no canal advice.", {"bold": True})],
          "Inside drained land an early fall did not separate later fire from no fire, so we withdrew the claim."),
         ([("Fire returns, but we cannot say why.", {"bold": True})],
-         f"{num.share('fire_repeat_share_on_peat_west')} of this year's fire on western peat fell on the "
-         f"{num.share('fire_earlier_share_on_peat_west')} that burned in 2015, 2019 or 2023. Fire off peat is mapped too."),
+         f"{num.share('fire_repeat_share_on_peat_west')} of this year's fire detections on western peat were on the "
+         f"{num.share('fire_earlier_share_on_peat_west')} of it with a detection in 2015, 2019 or 2023 (NASA FIRMS). "
+         f"Fire off peat is mapped too."),
     ])
     framed(s, fig / "fig_water_table.png", Inches(8.3), Inches(1.65), Inches(4.43), "Water table figure")
     text(s, Inches(8.3), Inches(4.25), Inches(4.43), Inches(1.0),
-         "The bridge: a rainfall-driven water-table model, run on 2026 rain beside the radar. Support, not validation.",
+         "A rainfall-driven water-table model, run on 2026 rain beside the radar. Modelled, not measured: support, not validation.",
          size=12, color=DIM)
     footer(s, 6, "Hirano groundwater record (CC BY 4.0), GPM IMERG, NISAR L2 GCOV. Full limits: docs/LIMITS.md.", draft)
     s.notes_slide.notes_text_frame.text = "The limits, each with what we did about it."
@@ -449,7 +452,7 @@ def build(a):
         [("Code and data  ", {"bold": True, "color": INK}), (CODE_URL, {"bold": True, "link": CODE_URL})],
     ]
     text(s, M, Inches(5.45), Inches(12.0), Inches(0.9), links, size=15, color=DIM, space_after=6)
-    footer(s, 7, "Made with Super Intelligence (SI) assistance from NASA and ISRO NISAR L2 GCOV data. All code and data open.", draft)
+    footer(s, 7, "Made with Super Intelligence (SI) assistance, from open NASA, ISRO and other data. All code is open; the data sources are in the README.", draft)
     s.notes_slide.notes_text_frame.text = ("Next steps and links. Subsidence is a plan, not a result: one season is too short "
                                            "to show it, and nothing in this deck measures it.")
 
@@ -463,7 +466,7 @@ def build(a):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--figures", default="submission/figures", type=Path)
-    p.add_argument("--validation", default="pipeline/out/validation.json", type=Path)
+    p.add_argument("--validation", default="app/public/validation.json", type=Path)
     p.add_argument("--ontology", default="pipeline/fusion/ontology.json", type=Path)
     p.add_argument("--out", default="submission/deck.pptx", type=Path)
     p.add_argument("--final", action="store_true", help="use only keys marked final, and drop the draft tag")

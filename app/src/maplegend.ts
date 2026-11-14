@@ -37,7 +37,7 @@ export function buildMapLegend(parent: HTMLElement, layers: LayerEntry[], overla
     const parts: (HTMLElement | null)[] = [
       h("h3", { text: "How far the radar echo fell" }),
       bar,
-      h("div", { class: "legend-ticks" }, h("span", { text: `${ramp.shown_from} ${unit}, a little` }), h("span", { text: `${ramp.full_at} ${unit} or more` })),
+      h("div", { class: "legend-ticks" }, h("span", { text: `${ramp.shown_from} ${unit}` }), h("span", { text: `${ramp.full_at} ${unit} or more` })),
       fireOn ? h("div", { class: "map-legend-row" }, swatch, h("span", { text: overlays.mode === "pass" ? "Fire detected up to this date" : "Fire detected" })) : null,
       h("p", { class: "note", text: "Darker is a bigger fall in HH over the dry season. It is not a grade of the land." }),
     ];

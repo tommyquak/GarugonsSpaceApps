@@ -112,7 +112,7 @@ function rule(ontology: Ontology): string {
   terms.forEach((term, k) => {
     const y = 34 + k * step;
     out +=
-      `<text x="12" y="${y}" font-size="10" fill="${term.negated ? MUTED : INK}">${term.negated ? "not" : "✓"}</text>` +
+      `<text x="12" y="${y}" font-size="10" fill="${term.negated ? MUTED : INK}">${term.negated ? "not" : "yes"}</text>` +
       `<text x="32" y="${y}" font-size="10" fill="${INK}">${esc(clip(titles.get(term.state) ?? term.state, 36))}</text>`;
   });
   const y = 34 + terms.length * step + 6;

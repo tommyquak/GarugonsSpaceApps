@@ -68,7 +68,7 @@ async function numbers(): Promise<HTMLElement> {
   }
   const waiting = entries.length - final.length;
   if (waiting > 0) {
-    box.append(h("p", { text: `${final.length ? "" : "No number has passed its final check yet, so none is shown. "}${waiting} ${waiting === 1 ? "number is" : "numbers are"} still being checked.` }));
+    box.append(h("p", { text: `${final.length ? "" : "No number has passed its final check yet, so none is shown. "}${waiting} exploratory ${waiting === 1 ? "number is" : "numbers are"} not shown.` }));
   }
   return box;
 }
