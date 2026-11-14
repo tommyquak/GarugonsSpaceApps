@@ -8,6 +8,7 @@
 #   SKIP_PULL=1 pipeline/run_all.sh     start from stacks already in pipeline/out/stacks
 #                                       (for example downloaded from the data-v1 release)
 #
+#   WITH_HYDRO=1 ...                    also run the water-table bridge (pipeline/hydro/README.md)
 #   WITH_CONTEXT=1 ...                  also rebuild the fire, rain, peat and canal layers (track 3).
 #                                       Needs FIRMS_MAP_KEY in the environment and an Earthdata login.
 #                                       Without it, layers already in pipeline/out/layers are used.
@@ -108,6 +109,12 @@ for site in $SITES; do
     fi
   fi
 done
+
+if [ -n "${WITH_HYDRO:-}" ]; then
+  echo "== 6d. water-table bridge (needs the downloads listed in pipeline/hydro/README.md)"
+  $PY pipeline/hydro/model.py --hydro pipeline/out/hydro --year 2026
+  $PY pipeline/hydro/compare.py --hydro pipeline/out/hydro --stacks "$S" --layers "$L"
+fi
 
 echo "== 7. checks"
 $PY pipeline/drying/selfcheck.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL" > "$L/selfcheck_report.json"
