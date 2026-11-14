@@ -4,6 +4,7 @@
 import limitsText from "../../docs/LIMITS.md?raw";
 import readmeText from "../../README.md?raw";
 import { baseStyle } from "./basemaps";
+import { numberChip } from "./chip";
 import { fetchJson, type LayerEntry } from "./data";
 import { h } from "./dom";
 import { canReplayIntro, playIntro } from "./intro";
@@ -59,9 +60,10 @@ async function numbers(): Promise<HTMLElement> {
   if (final.length) {
     const body = h("tbody");
     for (const [key, n] of final) {
-      body.append(h("tr", {}, h("td", { text: key.replace(/_/g, " ") }), h("td", { text: String(n.value) }), h("td", { text: n.unit ?? "" }), h("td", { text: n.site ?? "" })));
+      body.append(h("tr", {}, h("td", { text: key.replace(/_/g, " ") }), h("td", {}, numberChip(key, n)), h("td", { text: n.unit ?? "" }), h("td", { text: n.site ?? "" })));
     }
     const head = h("tr", {}, ...["Number", "Value", "Unit", "Site"].map((t) => h("th", { scope: "col", text: t })));
+    box.append(h("p", { text: "Select a value to see which entry it was read from, how it was checked and which script computed it." }));
     box.append(h("div", { class: "table-wrap" }, h("table", {}, h("thead", {}, head), body)));
   }
   const waiting = entries.length - final.length;
