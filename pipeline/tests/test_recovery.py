@@ -104,6 +104,10 @@ def test_main_writes_layers_and_numbers(tmp_path, monkeypatch):
     with rasterio.open(layers / "recovery_hh_west_125.tif") as src:
         assert np.isclose(src.read(1)[30, 50], rebound["hh"], atol=1e-4)
         assert src.tags()["after_pass"] == "20260812"
+    with rasterio.open(layers / "recovery_left_hv_west_125.tif") as src:
+        left = src.read(1)
+        assert np.isclose(left[30, 50], -1.6 + rebound["hv"], atol=1e-4)    # fall plus rebound: what the rain did not bring back
+        assert abs(left[30, 10]) < 1e-4 and src.tags()["start_passes"] == "20260601,20260613"
     v = json.loads(vpath.read_text())
     assert v["recovery_blocks_west_125"]["value"] == 12 * 6           # the right half of the blocks
     assert v["recovery_hh_share_regained_west_125"]["value"] > v["recovery_hv_share_regained_west_125"]["value"]

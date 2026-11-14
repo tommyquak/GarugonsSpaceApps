@@ -9,8 +9,8 @@ least one pass after the rain, on 250 m blocks and with the scene-wide shift rem
   rebound   first pass after the rain minus late dry season
   left      first pass after the rain minus start of season (what the rain did not bring back)
 
-Writes recovery_hh_<site>_<track>.tif and recovery_hv_<site>_<track>.tif (the rebound, in
-decibels), and numbers in validation.json for the blocks that fell by 1 dB or more on both
+Writes recovery_<pol>_<site>_<track>.tif (the rebound) and recovery_left_<pol>_<site>_<track>.tif
+(what is left, the third beat of the story) for HH and HV, in decibels, and numbers in validation.json for the blocks that fell by 1 dB or more on both
 orbits. Run it once per track. When both tracks have a pass after the rain, the second run
 also compares the two rebounds: they are measured days apart from opposite sides, so
 agreement between them is evidence that the rebound is on the ground and not in the radar.
@@ -99,10 +99,13 @@ def main():
         return
     out, dry, after = res
     for pol in ("hh", "hv"):
-        rebound = out[pol]["rebound"].astype("float32")
-        rebound[~stack["cov"]] = np.nan
-        write_layer(a.layers / f"recovery_{pol}_{a.site}_{a.track}.tif", rebound, stack, layer=f"{pol.upper()} rebound after the rain", units="dB",
-                    track=a.track, after_pass=stack["dates"][after], late_passes=",".join(stack["dates"][i] for i in dry[-2:]))
+        passes = {"track": a.track, "after_pass": stack["dates"][after], "start_passes": ",".join(stack["dates"][i] for i in dry[:2]),
+                  "late_passes": ",".join(stack["dates"][i] for i in dry[-2:])}
+        for kind, name, title in (("rebound", f"recovery_{pol}", "rebound after the rain"),
+                                  ("left", f"recovery_left_{pol}", "left after the rain against the start of the season")):
+            layer = out[pol][kind].astype("float32")
+            layer[~stack["cov"]] = np.nan
+            write_layer(a.layers / f"{name}_{a.site}_{a.track}.tif", layer, stack, layer=f"{pol.upper()} {title}", units="dB", **passes)
 
     # Blocks that fell by 1 dB or more in HH on both orbits; the other orbit's fall is independent of this track.
     fall_other = read(a.layers / f"drydown_{a.site}_{a.other_track}.tif")
