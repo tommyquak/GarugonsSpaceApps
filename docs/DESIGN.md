@@ -19,19 +19,21 @@ Every screen serves one of three verbs: **interpret** (what am I looking at), **
 
    | Meaning | Colour | Use |
    |---|---|---|
-   | Dry: the radar echo fell | Warm ramp, pale yellow to dark red | Dry-down layers, slider passes |
-   | Burn: a fire was detected | Near-white hatching with a dark edge | Fire layer. Not black: black vanishes on a dark map |
+   | The radar echo fell | Sand to dark brown | Dry-down layers, slider passes |
+   | A fire was detected | Red | Fire layers, and the fire switch on the slider |
    | Rewet: the echo rose after rain | Blue ramp | Recovery layers |
    | What the rain did not bring back | Violet | The "left" layer |
    | Steady, reference, context | Greys; reference forest as a green outline | Everything that is not a finding |
    | Peat boundary | Thin white line; land outside it drawn at about a third strength | Always available as a switch |
 
-   Buttons and focus use one accent that is none of these. Red is never used for errors or alerts.
+   | How affected (the at-a-glance levels) | Red, orange, pale yellow | "Where to check" |
+
+   The interface itself has no colour: text, lines, focus and selected states are ivory ink on dark. A selected control is filled, not outlined. Colour on screen therefore always means data. Red is never used for errors or alerts.
 3. **Sentence first, chart second, table third.** Every place and every layer gets one plain sentence before any graphic, for example "HH fell 1.8 dB from June to October and rose 1.1 dB after the rain".
 4. **Say what was measured, not what we wish we measured.** Legends read "Fall in HH radar brightness, dB", never "dryness" or "water table". Every image carries its date, including the basemap ("Sentinel-2 mosaic, 2016").
 5. **Confidence is visible.** Seen by both orbits: solid colour. Seen by one orbit only: lighter. Below the noise floor: no colour at all.
 6. **Limits are one tap away** from every screen, and numbers appear only when `validation.json` marks them `final`.
-7. **Quiet type.** System font, three sizes (13, 15, 20 px), tabular figures for numbers, sentence case, no capitals for emphasis.
+7. **Quiet type.** IBM Plex Sans (SIL Open Font Licence), served with the app. Body 14 px, small 12 px, headings 15 to 16 px. Tabular figures everywhere, sentence case, no capitals or letter-spacing for emphasis, and no label sitting above a heading.
 8. **Motion only when it carries meaning:** the season playing, and the camera moving between places. It stops if the device asks for reduced motion.
 9. **Usable by everyone:** text contrast of 4.5 to 1 or better, visible keyboard focus, touch targets of 44 px, ramps checked for colour-blind viewers, every chart with a table behind it.
 
