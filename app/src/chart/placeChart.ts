@@ -1,10 +1,13 @@
 // Written with Super Intelligence (SI) assistance.
 // Click a place: reads the time series of that cell (docs/DATA_CONTRACT.md section 4) and draws
-// HH and HV over the season for both orbits, with a plain reading of what HH did.
+// HH and HV over the season for both orbits, with a plain reading of what HH did, the days
+// with a fire detection in that cell, and daily rain.
+//
+//   createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
 import { Marker, type Map as MapLibreMap } from "maplibre-gl";
-import { asset, fetchJson, formatDay, monthName, parseDay } from "./data";
-import { h } from "./dom";
-import type { Overlays } from "./overlays";
+import { asset, fetchJson, formatDay, monthName, parseDay } from "../data";
+import { h } from "../dom";
+import type { Overlays } from "../overlays";
 
 interface Band {
   track: string;
@@ -28,6 +31,7 @@ interface SiteFiles {
   series: string;
   bin: string;
   rain: string | null;
+  fires?: string | null; // fire dates per cell, contract section 4
 }
 
 interface Site {
@@ -35,6 +39,7 @@ interface Site {
   files: SiteFiles;
   bin?: Promise<Uint8Array | null>;
   rain?: Promise<Record<string, number> | null>;
+  fires?: Promise<Record<string, string[]> | null>;
 }
 
 interface Pass {
@@ -55,6 +60,7 @@ const PANEL_GAP = 22;
 const AXIS_H = 18;
 const TOP = 18;
 const RAIN_H = 34;
+const FIRE_H = 14;
 
 function svg<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}, text?: string): SVGElementTagNameMap[K] {
   const el = document.createElementNS(SVG, tag);
@@ -96,6 +102,11 @@ function reading(passes: Pass[], orbit: string): string | null {
   const until = monthName(last.date) === monthName(v[lowAt].date) ? `${parseDay(last.date).getUTCDate()} ${monthName(last.date)}` : monthName(last.date);
   if (lowAt < v.length - 1 && rise >= 0.1) text += `, then rose ${rise.toFixed(1)} dB by ${until}`;
   return `${text}.`;
+}
+
+/** Draws the chart in `root` whenever the map is clicked. `onOpen` runs when a place is picked. */
+export function createPlaceChart(root: HTMLElement, map: MapLibreMap, overlays: Overlays, onOpen: () => void): PlaceChart {
+  return new PlaceChart(root, map, overlays, onOpen);
 }
 
 export class PlaceChart {
@@ -183,6 +194,7 @@ export class PlaceChart {
     }
     let passes: Pass[] = [];
     let site: Site | undefined;
+    let cellIndex = -1;
     for (const candidate of sites) {
       const cell = PlaceChart.cell(candidate.meta, lon, lat);
       if (cell === null) continue;
@@ -197,6 +209,7 @@ export class PlaceChart {
       if (found.some((p) => p.hh !== null || p.hv !== null)) {
         passes = found;
         site = candidate;
+        cellIndex = cell;
         break;
       }
     }
@@ -210,10 +223,18 @@ export class PlaceChart {
       rain = await site.rain;
       if (request !== this.request) return;
     }
-    this.draw(body, passes, [...new Set(site.meta.bands.map((b) => b.track))], rain);
+    // Fire dates exist only once track 3 has exported them. null means "not loaded", [] means "none here".
+    let fires: string[] | null = null;
+    if (site.files.fires) {
+      site.fires ??= fetchJson<Record<string, string[]>>(site.files.fires);
+      const byCell = await site.fires;
+      if (request !== this.request) return;
+      if (byCell) fires = [...(byCell[String(cellIndex)] ?? [])].sort();
+    }
+    this.draw(body, passes, [...new Set(site.meta.bands.map((b) => b.track))], rain, fires);
   }
 
-  private draw(body: HTMLElement, passes: Pass[], tracks: string[], rain: Record<string, number> | null): void {
+  private draw(body: HTMLElement, passes: Pass[], tracks: string[], rain: Record<string, number> | null, fires: string[] | null): void {
     const orbitOf = (track: string): string => this.overlays.layers.find((l) => l.track === track && l.orbit)?.orbit ?? `track ${track}`;
     const color = (track: string): string => TRACK_COLORS[tracks.indexOf(track) % TRACK_COLORS.length];
 
@@ -238,8 +259,11 @@ export class PlaceChart {
       return [Math.min(...values), Math.max(...values)];
     });
     const span = Math.max(2, ...ranges.map(([lo, hi]) => Math.ceil((hi - lo) * 1.15)));
-    const rows = pols.length + (rain ? 1 : 0);
-    const height = TOP + pols.length * PANEL_H + (rain ? RAIN_H : 0) + (rows - 1) * PANEL_GAP + AXIS_H;
+    const rows = pols.length + (fires ? 1 : 0) + (rain ? 1 : 0);
+    const height = TOP + pols.length * PANEL_H + (fires ? FIRE_H : 0) + (rain ? RAIN_H : 0) + (rows - 1) * PANEL_GAP + AXIS_H;
+    const fireTop = TOP + pols.length * (PANEL_H + PANEL_GAP);
+    const rainTop = fireTop + (fires ? FIRE_H + PANEL_GAP : 0);
+    const fireDays = (fires ?? []).filter((day) => parseDay(day).getTime() >= t0 && parseDay(day).getTime() <= t1);
     const chart = svg("svg", { viewBox: `0 0 ${W} ${height}`, class: "chart", role: "img", tabindex: 0, "aria-label": "HH and HV backscatter over the season at the clicked place, for both orbits. Use the arrow keys to read single passes." });
 
     const months: string[] = [];
@@ -283,8 +307,16 @@ export class PlaceChart {
       }
     });
 
+    if (fires) {
+      chart.append(svg("text", { x: 0, y: fireTop - 6, class: "chart-title" }, fireDays.length ? "Days with a fire detection here" : "No fire detection here this season"));
+      chart.append(svg("line", { x1: LEFT, x2: W - RIGHT, y1: fireTop + FIRE_H, y2: fireTop + FIRE_H, class: "grid" }));
+      for (const day of fireDays) {
+        chart.append(svg("rect", { x: x(day) - 1.5, y: fireTop, width: 3, height: FIRE_H, class: "fire" }));
+      }
+    }
+
     if (rain) {
-      const top = panelTop(pols.length);
+      const top = rainTop;
       const days = Object.entries(rain).filter(([day]) => parseDay(day).getTime() >= t0 && parseDay(day).getTime() <= t1);
       const most = Math.max(1, ...days.map(([, mm]) => mm));
       chart.append(svg("text", { x: 0, y: top - 6, class: "chart-title" }, "Rain, mm per day"));
@@ -328,7 +360,8 @@ export class PlaceChart {
       hair.setAttribute("x1", String(x(p.date)));
       hair.setAttribute("x2", String(x(p.date)));
       const values = pols.map((pol) => `${pol.toUpperCase()} ${p[pol] === null ? "no data" : db(p[pol] as number)}`).join(", ");
-      readout.replaceChildren(h("strong", { text: values }), ` on ${formatDay(p.date)}, ${orbitOf(p.track)} pass`);
+      const burning = fireDays.includes(p.date) ? ". A fire was detected here that day" : "";
+      readout.replaceChildren(h("strong", { text: values }), ` on ${formatDay(p.date)}, ${orbitOf(p.track)} pass${burning}`);
     };
     const nearest = (clientX: number): number => {
       const box = chart.getBoundingClientRect();

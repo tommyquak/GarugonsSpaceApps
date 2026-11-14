@@ -88,6 +88,11 @@ body {
   font-size: 11px;
 }
 
+/* MapLibre draws the attribution text dark; the names of our sources are plain text, not links. */
+.maplibregl-ctrl-attrib-inner {
+  color: var(--muted);
+}
+
 .maplibregl-ctrl-attrib a {
   color: var(--text);
 }
@@ -583,6 +588,10 @@ button {
   stroke-dasharray: 2 3;
 }
 
+.chart .fire {
+  fill: #ff5a3c;
+}
+
 .chart .rain {
   stroke: #6f7b88;
   stroke-width: 1.5;
@@ -736,6 +745,22 @@ button:disabled {
 
   #tabs .text-button {
     flex: 1;
+  }
+
+  /* Room for a finger: 44 px controls on a touch screen. */
+  .text-button,
+  .text-button.small {
+    min-height: 44px;
+  }
+
+  .maplibregl-ctrl-group button {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* The scale bar and the attribution share the bottom edge: keep the attribution to its own side. */
+  .maplibregl-ctrl-bottom-right {
+    max-width: calc(100% - 110px);
   }
 
   #tabs .text-button[aria-expanded="true"] {

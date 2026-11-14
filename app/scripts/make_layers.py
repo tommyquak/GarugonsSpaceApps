@@ -242,11 +242,15 @@ def main():
             continue
         shutil.copyfile(meta, out_series / meta.name)
         shutil.copyfile(meta.with_suffix(".bin"), out_series / f"series_{site}.bin")
-        index[site] = {"series": f"series/{meta.name}", "bin": f"series/series_{site}.bin", "rain": None}
+        index[site] = {"series": f"series/{meta.name}", "bin": f"series/series_{site}.bin", "rain": None, "fires": None}
         rain = a.layers / f"rain_daily_{site}.json"
         if rain.exists():
             shutil.copyfile(rain, out_series / rain.name)
             index[site]["rain"] = f"series/{rain.name}"
+        fires = series_dir / f"fire_dates_{site}.json"   # days with a fire detection per cell, from track 3
+        if fires.exists():
+            shutil.copyfile(fires, out_series / fires.name)
+            index[site]["fires"] = f"series/{fires.name}"
     (out_series / "index.json").write_text(json.dumps(index, indent=1) + "\n")
 
     if validation.exists():
