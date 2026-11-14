@@ -39,7 +39,7 @@ body {
 
 #map {
   position: absolute;
-  inset: 0;
+  inset: var(--bar-h) 0 0 0;
 }
 
 #bar {
@@ -81,11 +81,7 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Map controls sit below the title bar and use the dark theme. */
-.maplibregl-ctrl-top-right {
-  top: calc(var(--bar-h) + 2px);
-}
-
+/* Map controls in the dark theme. */
 .maplibregl-ctrl-attrib {
   background: rgba(16, 19, 23, 0.82) !important;
   color: var(--muted);
@@ -112,4 +108,190 @@ body {
 
 .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
   filter: invert(1);
+}
+
+/* Panels. On a wide screen they float over the map; the phone layout is further down. */
+#sheet,
+#col-left {
+  display: contents;
+}
+
+#col-left > .panel {
+  position: absolute;
+  z-index: 2;
+  left: 12px;
+  top: calc(var(--bar-h) + 12px);
+  width: 272px;
+  max-height: calc(100% - var(--bar-h) - 64px);
+  overflow: auto;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.note {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.switches {
+  display: grid;
+  gap: 2px;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  cursor: pointer;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 34px;
+  height: 20px;
+  margin: 0;
+}
+
+.knob {
+  flex: none;
+  position: relative;
+  width: 34px;
+  height: 20px;
+  border-radius: 10px;
+  background: #2b323b;
+  border: 1px solid #3a424d;
+  transition: background 0.15s;
+}
+
+.knob::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.15s, background 0.15s;
+}
+
+.switch input:checked + .knob {
+  background: rgba(240, 160, 75, 0.25);
+  border-color: var(--accent);
+}
+
+.switch input:checked + .knob::after {
+  transform: translateX(14px);
+  background: var(--accent);
+}
+
+.switch input:focus-visible + .knob {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.switch input:disabled + .knob,
+.switch input:disabled ~ .switch-text {
+  opacity: 0.45;
+}
+
+.switch-text {
+  flex: 1;
+}
+
+.swatch {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid;
+  border-radius: 3px;
+}
+
+.legend {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.legend-bar {
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  margin: 14px 0 0;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+
+.field-title {
+  display: block;
+  padding: 0;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+legend.field-title {
+  float: left;
+  width: 100%;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.radio {
+  clear: both;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  cursor: pointer;
+}
+
+.radio input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
