@@ -86,6 +86,7 @@ Each feature is a 1 km square in lon/lat:
 
 - `action` is `assess_burn`, `rewet_first`, `watch` or `none`. `confidence` is `high`, `medium`, `low`, or null when the action is `none`. `rank` counts from 1 inside each action, largest fall first.
 - Falls and "left" values are in decibels and positive when the echo is lower. A value can be null.
+- `hindcast_<site>.json` (same folder): for each peat block with no fire before the cut date, `id`, `early_fall_db`, `early_dry`, `burned_later` and `fire_days_later`. For a replay of what the radar showed in late July against what burned afterwards. See `docs/FUSION.md` for how to word it.
 - `ontology.json` lists the sources, observations, states and actions with their rules and reasons. Draw legends, the evidence graph and help text from it; do not retype them.
 
 ## 5. App files (track 4 owns; committed)

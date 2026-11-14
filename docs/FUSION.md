@@ -55,6 +55,17 @@ One point when the action's rule holds, plus one for each further condition that
 
 Three points or more is high, two is medium, one is low.
 
+## Fire-prone ground: a hindcast, not a forecast
+
+`pipeline/fusion/hindcast.py` asks one question after the fact: part way through the dry season, had the radar already marked the peat that later burned? It uses only radar passes before a cut date (1 August) and only fire from that date on, on peat blocks with no earlier fire.
+
+How to read the result honestly:
+
+- **Across all peat, the difference is large,** but most of it is the difference between intact forest, which neither dries nor burns, and everything else.
+- **Inside drained peat only** (within 1 km of a mapped canal) the difference is smaller and is the fairer number to quote. It is in `validation.json` under `hindcast_near_canal_*`.
+- **Distance to a canal alone does about as well** at ranking where fire came. The radar's contribution is the condition of the ground this season, updated every 12 days, not a better map of where drainage is.
+- **Fires are lit by people.** Dry ground makes fire possible. Say "ready to burn" or "fire-prone this season", never "predicted".
+
 ## What this is not
 
 - **Not a measurement of need.** It ranks where to look first. A team on the ground decides.
