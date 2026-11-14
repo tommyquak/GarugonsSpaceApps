@@ -101,9 +101,15 @@ export function bindLink(map: MapLibreMap, overlays: Overlays, chart: PlaceChart
     const hash = current();
     if (hash !== window.location.hash) window.history.replaceState(null, "", hash);
   };
+  // The fly-down turns the camera every frame, and browsers limit how often the address may change.
+  let pending = 0;
+  const writeSoon = (): void => {
+    window.clearTimeout(pending);
+    pending = window.setTimeout(write, 300);
+  };
 
   if (window.location.hash.length > 1) apply(parseLink(window.location.hash));
-  map.on("moveend", write);
+  map.on("moveend", writeSoon);
   overlays.onChange(write);
   chart.onPick(write);
   // Someone pasted another link into the same tab, or edited the address by hand.

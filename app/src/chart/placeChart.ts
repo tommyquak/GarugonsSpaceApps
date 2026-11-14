@@ -104,6 +104,14 @@ function reading(passes: Pass[], orbit: string): string | null {
   return `${text}.`;
 }
 
+/** Extra pieces of the place card, supplied by chart/actions.ts. */
+export interface PlaceParts {
+  /** Built for each place and shown between the heading and the chart. */
+  actions?: (lon: number, lat: number) => HTMLElement;
+  /** One element shown at the bottom of the panel, with or without a place. */
+  footer?: HTMLElement;
+}
+
 /** Draws the chart in `root` whenever the map is clicked. `onOpen` runs when a place is picked. */
 export function createPlaceChart(root: HTMLElement, map: MapLibreMap, overlays: Overlays, onOpen: () => void): PlaceChart {
   return new PlaceChart(root, map, overlays, onOpen);
@@ -115,6 +123,7 @@ export class PlaceChart {
   private request = 0;
   private drawn: (() => void) | undefined;
   private pickListeners: (() => void)[] = [];
+  private parts: PlaceParts = {};
   /** The place on show, or null. Read by the link to this view. */
   place: { lon: number; lat: number } | null = null;
 
@@ -131,7 +140,16 @@ export class PlaceChart {
 
   private hint(): void {
     this.root.classList.remove("has-data");
-    this.root.replaceChildren(h("h2", { text: "Place" }), h("p", { class: "note", text: "Click the map to see how the radar signal changed at that place over the season." }));
+    this.root.replaceChildren(
+      h("h2", { text: "Place" }),
+      h("p", { class: "note", text: "Click the map to see how the radar signal changed at that place over the season." }),
+      ...(this.parts.footer ? [this.parts.footer] : []),
+    );
+  }
+
+  setParts(parts: PlaceParts): void {
+    this.parts = parts;
+    if (!this.place) this.hint();
   }
 
   /** Calls `fn` whenever a place is picked or the card is closed. */
@@ -190,6 +208,7 @@ export class PlaceChart {
   /** Shows the chart for a place, as a click on the map does. */
   async pick(lon: number, lat: number): Promise<void> {
     const request = (this.request += 1);
+    this.root.scrollTop = 0;
     this.setPlace({ lon, lat });
     this.marker ??= new Marker({ element: h("div", { class: "place-marker" }) });
     this.marker.setLngLat([lon, lat]).addTo(this.map);
@@ -199,7 +218,11 @@ export class PlaceChart {
     const body = h("div", { class: "place-body" }, h("p", { class: "note", text: "Loading the radar series." }));
     this.drawn = undefined;
     this.root.classList.add("has-data");
-    this.root.replaceChildren(h("div", { class: "panel-head" }, h("h2", { text: "Place" }), h("span", { class: "where", text: where }), closeButton), body);
+    this.root.replaceChildren(h("div", { class: "panel-head" }, h("h2", { text: "Place" }), h("span", { class: "where", text: where }), closeButton),
+      ...(this.parts.actions ? [this.parts.actions(lon, lat)] : []),
+      body,
+      ...(this.parts.footer ? [this.parts.footer] : []),
+    );
     this.onOpen();
 
     const sites = await this.loadSites();
