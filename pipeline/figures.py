@@ -11,6 +11,8 @@ and from validation.json, never typed.
   fig_recovery.png    after the rain: HH and HV still below the start, with and without fire detections
   fig_edge.png        the fall by distance into the forest
   fig_water_table.png the water-table model against the gauge record, and its run on 2026 beside the radar
+  fig_cloud.png       the same day seen by an optical satellite (smoke and cloud) and by NISAR
+  fig_diagram.png     how the L-band radar sees wet and dry ground under vegetation (a drawing, not data)
 
     python pipeline/figures.py --out pipeline/out/figures
 """
@@ -251,13 +253,92 @@ def fig_water_table(out, v):
     finish(fig, out / "fig_water_table.png", "Hirano groundwater record (figshare, CC BY 4.0), GPM IMERG (GES DISC), NISAR L2 GCOV (ASF DAAC)")
 
 
+def fig_cloud(out, v, day_iso="2026-09-14", box=(113.6, -3.2, 114.83, -2.4)):
+    """Left: NASA's daily true-colour image for one day. Right: the NISAR pass of the same date."""
+    import io
+    import certifi
+    import requests
+    from PIL import Image
+    from rasterio.transform import from_origin
+    from rasterio.warp import Resampling, reproject
+    west, south, east, north = box
+    width, height = 984, 640
+    url = ("https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+           f"&LAYERS=VIIRS_NOAA20_CorrectedReflectance_TrueColor&CRS=EPSG:4326&BBOX={south},{west},{north},{east}"
+           f"&WIDTH={width}&HEIGHT={height}&FORMAT=image/png&TIME={day_iso}")
+    try:
+        optical = Image.open(io.BytesIO(requests.get(url, timeout=120, verify=certifi.where()).content)).convert("RGB")
+    except Exception as exc:   # no network: skip this figure, keep the others
+        print("skipped fig_cloud.png:", exc)
+        return
+    grid = from_origin(west, north, (east - west) / width, (north - south) / height)
+    radar = np.full((height, width), np.nan, "float32")
+    stamp = day_iso.replace("-", "")
+    for site in ("west", "east"):
+        z = np.load(S / f"{site}_125.npz")
+        dates = [str(d) for d in z["dates"]]
+        if stamp not in dates:
+            print(f"skipped fig_cloud.png: no dawn pass on {day_iso}")
+            return
+        part = np.full((height, width), np.nan, "float32")
+        reproject(z["hh"][dates.index(stamp)], part, src_transform=rasterio.Affine(*z["T"]), src_crs=f"EPSG:{int(z['crs'])}", src_nodata=np.nan,
+                  dst_transform=grid, dst_crs="EPSG:4326", dst_nodata=np.nan, resampling=Resampling.average)
+        radar = np.where(np.isfinite(part), part, radar)
+    fig = frame("The same ground, the same day", f"{dt.date.fromisoformat(day_iso):%d %B %Y}, Central Kalimantan. An optical satellite sees smoke and cloud. The L-band radar sees the ground.")
+    for k, (img, name, kw) in enumerate(((optical, "Optical: VIIRS true colour (NOAA-20), NASA GIBS", {}),
+                                         (radar, "Radar: NISAR L-band HH", {"cmap": "gray", "vmin": -14, "vmax": -3}))):
+        ax = fig.add_axes([0.05 + 0.46 * k, 0.12, 0.44, 0.7])
+        ax.set_facecolor("#eef1f4")     # where the radar window has no data
+        ax.imshow(img, extent=(west, east, south, north), interpolation="bilinear", aspect="equal", **kw)
+        ax.set_title(name, fontsize=14, color=INK, loc="left")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for side in ax.spines.values():
+            side.set_color(GRID)
+    finish(fig, out / "fig_cloud.png", "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). The two were taken hours apart")
+
+
+def fig_diagram(out, v):
+    """A drawing of the two echoes, wet ground against dry ground. Not data."""
+    from matplotlib.patches import Circle, FancyArrowPatch, Rectangle
+    fig = frame("How the radar sees the ground under the trees", "A drawing, not data. L-band waves pass through leaves. Two echoes come back, and the ground changes one of them.")
+    panels = (("Wet ground", "#6fa8dc", 5.0, "strong echo"), ("Dry ground", "#c9a36a", 2.0, "weaker echo"))
+    for k, (name, soil, strength, word) in enumerate(panels):
+        ax = fig.add_axes([0.05 + 0.47 * k, 0.16, 0.43, 0.66])
+        ax.set_xlim(0, 10)
+        ax.set_ylim(0, 7)
+        ax.axis("off")
+        ax.add_patch(Rectangle((0, 0), 10, 1.0, color=soil, zorder=1))
+        ax.text(0.2, 0.35, name, fontsize=16, fontweight="bold", color=INK, zorder=3)
+        for x in (3.2, 6.6, 8.6):                                   # trees: trunk and canopy
+            ax.add_patch(Rectangle((x - 0.12, 1.0), 0.24, 2.6, color="#6b4a2b", zorder=2))
+            for dx, dy, r in ((0, 4.3, 1.0), (-0.7, 3.8, 0.7), (0.7, 3.8, 0.7)):
+                ax.add_patch(Circle((x + dx, dy), r, color=FOREST, alpha=0.55, zorder=2, linewidth=0))
+        arrow = dict(arrowstyle="-|>", mutation_scale=18, zorder=4)
+        ax.add_patch(FancyArrowPatch((0.6, 6.7), (2.6, 1.05), color=INK, linewidth=2.2, **arrow))               # in, to the ground
+        ax.add_patch(FancyArrowPatch((2.6, 1.05), (3.08, 2.2), color=DUSK, linewidth=strength, **arrow))         # ground to trunk
+        ax.add_patch(FancyArrowPatch((3.08, 2.2), (1.0, 6.7), color=DUSK, linewidth=strength, **arrow))           # trunk back to the radar
+        ax.text(0.3, 5.3, "wave in", fontsize=12, color=INK, rotation=-70)
+        ax.text(1.75, 4.6, f"HH: {word}", fontsize=13, color=DUSK, fontweight="bold", rotation=65)
+        ax.add_patch(FancyArrowPatch((4.2, 6.7), (6.3, 4.6), color=INK, linewidth=2.2, **arrow))                 # in, to the canopy
+        ax.add_patch(FancyArrowPatch((6.3, 4.6), (5.0, 6.7), color=FOREST, linewidth=2.6, linestyle=(0, (4, 2)), **arrow))
+        ax.text(5.3, 5.7, "HV: from branches", fontsize=13, color=FOREST, fontweight="bold")
+    fig.text(0.05, 0.125, "HH carries the bounce between ground and trunk, which weakens as the surface dries. HV comes mostly from woody vegetation.", fontsize=12.5, color=MUTED)
+    fig.text(0.05, 0.098, "On most land the two rise and fall together, so they are not separate water and vegetation channels.", fontsize=12.5, color=MUTED)
+    fig.text(0.05, 0.048, "A schematic after Hess et al. 1990 and Richards et al. 1987. Not to scale.", fontsize=10.5, color=MUTED)
+    fig.text(0.05, 0.022, "Drawing made with Super Intelligence (SI) assistance", fontsize=10.5, color=MUTED)
+    fig.savefig(out / "fig_diagram.png", facecolor="white")
+    plt.close(fig)
+    print("wrote", out / "fig_diagram.png")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--out", required=True, type=Path)
     a = p.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
     v = json.loads(Path("pipeline/out/validation.json").read_text())
-    for make in (fig_season, fig_orbits, fig_start, fig_recovery, fig_edge, fig_water_table):
+    for make in (fig_season, fig_orbits, fig_start, fig_recovery, fig_edge, fig_water_table, fig_cloud, fig_diagram):
         make(a.out, v)
 
 
