@@ -2,11 +2,13 @@
  "east": {
   "series": "series/series_east.json",
   "bin": "series/series_east.bin",
-  "rain": null
+  "rain": "series/rain_daily_east.json",
+  "fires": "series/fire_dates_east.json"
  },
  "west": {
   "series": "series/series_west.json",
   "bin": "series/series_west.bin",
-  "rain": null
+  "rain": "series/rain_daily_west.json",
+  "fires": "series/fire_dates_west.json"
  }
 }
