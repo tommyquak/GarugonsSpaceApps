@@ -10,12 +10,8 @@ import { byId } from "./dom";
 import { Overlays } from "./overlays";
 import { buildPanel } from "./panel";
 import { buildSeason } from "./season";
-
-// Room the floating panels take on a wide screen, so views are framed in the free part of the map.
-export function viewPadding(): { top: number; bottom: number; left: number; right: number } {
-  const wide = window.matchMedia("(min-width: 700px)").matches;
-  return wide ? { top: 24, bottom: 130, left: 300, right: 24 } : { top: 16, bottom: 16, left: 16, right: 16 };
-}
+import { buildStory } from "./story";
+import { viewPadding } from "./view";
 
 async function start(): Promise<void> {
   const layers = await loadLayers();
@@ -42,7 +38,8 @@ async function start(): Promise<void> {
   await map.once("load");
   const overlays = new Overlays(map, layers);
   buildPanel(byId("panel-layers"), map, overlays);
-  buildSeason(byId("season"), overlays);
+  const season = buildSeason(byId("season"), overlays);
+  buildStory(byId("panel-story"), byId("btn-story"), map, overlays, { stopPlayback: season.stop, onOpen: () => undefined });
   new PlaceChart(byId("panel-place"), map, overlays, () => undefined);
 }
 
