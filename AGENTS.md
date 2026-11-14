@@ -35,6 +35,7 @@ Edit only your own folders. To change something in someone else's, ask for a han
 | 1. Radar data and stacks | Tommy (`@tommyquak`) | `pipeline/radar/` |
 | 2a. Drying: baseline, dry-down, noise floor | Tommy (`@tommyquak`) | `pipeline/drying/` |
 | 2b. Recovery after the rain | Reagan (`@D0bui`) | `pipeline/recovery/` |
+| 2c. Fusion into blocks and actions | Tommy (`@tommyquak`) | `pipeline/fusion/`, `docs/FUSION.md` |
 | 3. Fire and context layers | Gabriel (`@gabriel-wan`) | `pipeline/context/` |
 | 4. The app | Kalent (`@kccrcodes`) and Jan Hoe (`@NUSOffisher`) | `app/` |
 | 5. Checks and limits | Anson (`@iians0n`) | `pipeline/checks/`, `docs/LIMITS.md`, `docs/REFERENCES.md` |
