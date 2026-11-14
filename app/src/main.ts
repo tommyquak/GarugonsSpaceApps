@@ -10,6 +10,7 @@ import { createPlaceChart } from "./chart/placeChart";
 import { loadLayers, unionBounds } from "./data";
 import { buildDocs } from "./docs";
 import { maybePlayIntro } from "./intro";
+import { buildMapLegend } from "./maplegend";
 import { bindLink } from "./link";
 import { byId } from "./dom";
 import { Overlays } from "./overlays";
@@ -98,7 +99,8 @@ async function start(): Promise<void> {
   setTab("");
   const chart = createPlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
   bindPlaceActions(byId("panel-place"), map, overlays, chart);
-  const actions = await buildActions(map, chart, { setTab });
+  const legend = buildMapLegend(sheet, layers);
+  const actions = await buildActions(map, chart, { setTab, setLegend: (view) => legend.setBlocks(view) });
   // Last, so that a link someone was sent restores its view over the defaults set above.
   bindLink(map, overlays, chart, actions);
 }

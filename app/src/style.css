@@ -302,6 +302,44 @@ input[type="range"] {
 }
 
 /* Season slider */
+/* The legend on the map: bottom right, clear of the season slider. */
+#map-legend {
+  position: absolute;
+  z-index: 2;
+  right: 12px;
+  bottom: 34px;
+  width: 232px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+#map-legend h3 {
+  margin: 0 0 6px;
+}
+
+#map-legend .note {
+  margin: 6px 0 0;
+}
+
+.map-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  color: var(--text);
+  font-size: 13px;
+}
+
+@media (max-width: 1179px) {
+  #map-legend {
+    display: none;
+  }
+}
+
+.act-mode {
+  margin-bottom: 8px;
+}
+
 #season {
   position: absolute;
   z-index: 2;
