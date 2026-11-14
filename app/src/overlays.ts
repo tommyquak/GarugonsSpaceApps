@@ -20,7 +20,7 @@ function corners(b: LayerEntry["bounds"]): Corners {
 
 export class Overlays {
   mode: Mode = "season";
-  opacity = 0.9;
+  opacity = 0.8;
   stepIndex = 0;
   readonly on = new Set<string>();
   readonly statics: LayerEntry[];
