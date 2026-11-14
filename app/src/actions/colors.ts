@@ -1,18 +1,18 @@
 // Written with Super Intelligence (SI) assistance.
 // One colour per action, used by the map, the legend, the list and the evidence graph.
-// "No action flagged" has no colour of its own: it is not drawn, or drawn as a faint grey outline.
+// "No class" has no colour of its own: it is not drawn, or drawn as a faint grey outline.
 
 const ACTION_COLORS: Record<string, string> = {
-  assess_burn: "#ff5a36", // red-orange
-  rewet_first: "#3b82f6", // blue
-  watch: "#f5c431", // amber
+  fire_detected: "#ff5a36", // red-orange: fire was detected on this peat
+  fell_still_low: "#3b82f6", // blue: the echo fell and was still low after the first rain
+  fell_came_back: "#f5c431", // amber: the echo fell and came back with the rain
 };
 
 export const NONE_COLOR = "#8b949e";
 export const NO_ACTION = "none";
 const DARK = "#12161a";
 
-// Confidence is shown as strength of colour: the share of the action colour that is kept.
+// Agreement (a count of conditions that hold, stored as "confidence") is shown as strength of colour: the share of the action colour that is kept.
 const STRENGTH: Record<string, number> = { high: 0.92, medium: 0.64, low: 0.4 };
 
 export function actionColor(action: string): string {

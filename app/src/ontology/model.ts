@@ -16,7 +16,7 @@ export interface Ontology {
   thresholds?: Record<string, number | string>;
   states: { id: string; title: string; needs: string[]; rule: string; why?: string }[];
   actions: { id: string; title: string; rule: string; advice?: string; stronger_if?: string[] }[];
-  confidence?: { rule?: string; extra_conditions?: Record<string, string> };
+  confidence?: { label?: string; rule?: string; extra_conditions?: Record<string, string> };
   caveat?: string;
 }
 
@@ -217,7 +217,7 @@ export function buildGraph(ontology: Ontology, block: BlockProps | null): Graph 
       action: action.id,
       chosen: block ? isChosen : undefined,
       dimmed: block ? !isChosen : undefined,
-      note: isChosen && block?.confidence ? `Confidence: ${block.confidence}` : undefined,
+      note: isChosen && block?.confidence ? `Agreement: ${block.confidence}` : undefined,
       detail: [
         ...(block ? [isChosen ? "The action of this block." : "Not the action of this block."] : []),
         `Rule: ${action.rule}`,

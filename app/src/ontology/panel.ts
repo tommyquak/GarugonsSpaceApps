@@ -76,7 +76,7 @@ export function buildEvidencePanel(parent: HTMLElement, ontology: Ontology, hook
   return {
     showBlock(block) {
       const action = ontology.actions.find((a) => a.id === block.action)?.title ?? block.action;
-      fill("block", "Block", block.id, block.confidence ? `${action}, ${block.confidence} confidence` : action, buildCard(ontology, block, hooks), drawGraph(ontology, block, hooks.color));
+      fill("block", "Block", block.id, block.confidence ? `${action}, agreement ${block.confidence}` : action, buildCard(ontology, block, hooks), drawGraph(ontology, block, hooks.color));
     },
     showSchema() {
       fill("schema", "Vocabulary", "How it decides", "", buildVocabulary(ontology), drawGraph(ontology, null, hooks.color));

@@ -121,9 +121,15 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
       layer.setActionShown(action.id, toggle.checked);
       item.classList.toggle("is-off", !toggle.checked);
     });
+    // Fire is most of the classed blocks and hides the rest, so it starts switched off. Its count stays in view.
+    if (toggle && action.id === "fire_detected") {
+      toggle.checked = false;
+      layer.setActionShown(action.id, false);
+      item.classList.add("is-off");
+    }
     legend.append(item);
   }
-  const strengths = h("div", { class: "act-strengths", title: ontology.confidence?.rule ?? "" }, h("span", { text: "Confidence" }));
+  const strengths = h("div", { class: "act-strengths", title: ontology.confidence?.rule ?? "" }, h("span", { text: ontology.confidence?.label ?? "Agreement" }));
   for (const level of CONFIDENCE_LEVELS) {
     const swatch = h("span", { class: "act-swatch is-level", "aria-hidden": "true" });
     swatch.style.opacity = String(confidenceStrength(level));
@@ -136,15 +142,15 @@ export async function buildActions(map: MapLibreMap, chart: PlaceChart, hooks: {
     {},
     legend,
     strengths,
-    h("p", { class: "note", text: "A stronger colour means a higher confidence. Blocks without an action are a faint grid when you zoom in. The other layers are dimmed while this view is open." }),
+    h("p", { class: "note", text: "A stronger colour means more of the conditions for that class hold. It is a count, not a probability. Blocks without a class are a faint grid when you zoom in. The other layers are dimmed while this view is open." }),
     heightNote,
     ontology.caveat ? h("p", { class: "note", text: ontology.caveat }) : null,
     h("div", { class: "place-actions" }, howLink),
   );
   const listBox = h("div", { class: "act-list" });
   panel.replaceChildren(
-    h("div", { class: "panel-head" }, h("h2", { text: "Actions" }), status, closeButton),
-    h("div", { class: "act-bar" }, h("div", { class: "act-tabs", role: "group", "aria-label": "Parts of the Actions panel" }, legendTab, listTab), columnsSwitch),
+    h("div", { class: "panel-head" }, h("h2", { text: "Where to check" }), status, closeButton),
+    h("div", { class: "act-bar" }, h("div", { class: "act-tabs", role: "group", "aria-label": "Parts of the Where to check panel" }, legendTab, listTab), columnsSwitch),
     legendBox,
     listBox,
   );
