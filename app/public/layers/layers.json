@@ -1,7 +1,7 @@
 [
  {
   "id": "dried_east",
-  "title": "Dried over the season, east",
+  "title": "Fall in HH over the dry season, east",
   "url": "layers/dried_east.png",
   "bounds": [
    114.208627,
@@ -22,11 +22,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -38,7 +38,7 @@
  },
  {
   "id": "dried_west",
-  "title": "Dried over the season, west",
+  "title": "Fall in HH over the dry season, west",
   "url": "layers/dried_west.png",
   "bounds": [
    113.597672,
@@ -59,11 +59,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -94,11 +94,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -129,11 +129,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -164,11 +164,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -199,11 +199,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -234,11 +234,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -269,11 +269,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -304,11 +304,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -339,11 +339,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -374,11 +374,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -409,11 +409,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -444,11 +444,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -479,11 +479,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -514,11 +514,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -549,11 +549,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -584,11 +584,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -619,11 +619,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -654,11 +654,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -689,11 +689,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -724,11 +724,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -759,11 +759,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -794,11 +794,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -829,11 +829,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -864,11 +864,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -899,11 +899,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -934,11 +934,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -969,11 +969,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1004,11 +1004,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1039,11 +1039,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1074,11 +1074,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1109,11 +1109,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1144,11 +1144,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1179,11 +1179,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1214,11 +1214,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1249,11 +1249,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1284,11 +1284,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1319,11 +1319,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1354,11 +1354,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1389,11 +1389,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1424,11 +1424,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1459,11 +1459,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1494,11 +1494,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1529,11 +1529,11 @@
   "ramp": {
    "title": "Fall in HH brightness",
    "colors": [
-    "#f6e27a",
-    "#f0a04b",
-    "#d9502e",
-    "#8f1d1d",
-    "#4a0d12"
+    "#f4e3b1",
+    "#e0bd7c",
+    "#bd8a4a",
+    "#8b5a2b",
+    "#4e2f17"
    ],
    "scale": [
     0.0,
@@ -1634,5 +1634,41 @@
   "kind": "reference",
   "site": "west",
   "color": "#9fd6b8"
+ },
+ {
+  "id": "fire_east",
+  "title": "Fire detected, May to November, east",
+  "url": "layers/fire_east.png",
+  "bounds": [
+   114.208627,
+   -3.001236,
+   114.83116,
+   -2.418884
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire",
+  "site": "east",
+  "color": "#de3626"
+ },
+ {
+  "id": "fire_west",
+  "title": "Fire detected, May to November, west",
+  "url": "layers/fire_west.png",
+  "bounds": [
+   113.597672,
+   -3.202351,
+   114.301951,
+   -2.398428
+  ],
+  "date": null,
+  "unit": null,
+  "legend": "fill",
+  "source": "NASA FIRMS active fire detections",
+  "kind": "fire",
+  "site": "west",
+  "color": "#de3626"
  }
 ]

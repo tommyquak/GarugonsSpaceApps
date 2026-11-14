@@ -1,6 +1,86 @@
 {
+ "blocks_fell_came_back_east": {
+  "value": 72,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "on_peat and fell and not fire and not still_low"
+ },
+ "blocks_fell_came_back_west": {
+  "value": 242,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "on_peat and fell and not fire and not still_low"
+ },
+ "blocks_fell_still_low_clear_of_fire_east": {
+  "value": 5,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "with no fire detection within 1 km"
+ },
+ "blocks_fell_still_low_clear_of_fire_west": {
+  "value": 70,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "with no fire detection within 1 km"
+ },
+ "blocks_fell_still_low_east": {
+  "value": 30,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "on_peat and fell and not fire and still_low"
+ },
+ "blocks_fell_still_low_west": {
+  "value": 95,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "on_peat and fell and not fire and still_low"
+ },
+ "blocks_fire_detected_east": {
+  "value": 771,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "on_peat and fire"
+ },
+ "blocks_fire_detected_west": {
+  "value": 2117,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "on_peat and fire"
+ },
+ "blocks_none_east": {
+  "value": 3303,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "everything else"
+ },
+ "blocks_none_west": {
+  "value": 4410,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/blocks.py",
+  "note": "everything else"
+ },
  "dried_both_orbits_km2_east": {
-  "value": 3138.4525,
+  "value": 2889.0025,
   "unit": "km2",
   "site": "east",
   "status": "exploratory",
@@ -8,7 +88,7 @@
   "note": "not yet split into on and off mapped peat"
  },
  "dried_both_orbits_km2_west": {
-  "value": 3499.285,
+  "value": 3060.17,
   "unit": "km2",
   "site": "west",
   "status": "exploratory",
@@ -16,49 +96,579 @@
   "note": "not yet split into on and off mapped peat"
  },
  "dried_both_orbits_share_east": {
-  "value": 0.7494,
+  "value": 0.6899,
   "unit": "share of valid area",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "dried_both_orbits_share_west": {
-  "value": 0.5063,
+  "value": 0.4427,
   "unit": "share of valid area",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "dried_one_orbit_share_east_061": {
-  "value": 0.7834,
+  "value": 0.7317,
   "unit": "share of valid area",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "dried_one_orbit_share_east_125": {
-  "value": 0.8366,
+  "value": 0.7953,
   "unit": "share of valid area",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "dried_one_orbit_share_west_061": {
-  "value": 0.5455,
+  "value": 0.4832,
   "unit": "share of valid area",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "dried_one_orbit_share_west_125": {
-  "value": 0.5978,
+  "value": 0.5549,
   "unit": "share of valid area",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
+ "fell_1db_km2_off_peat_east": {
+  "value": 1181.3075,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "fell_1db_km2_off_peat_west": {
+  "value": 456.725,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "fell_1db_km2_on_peat_east": {
+  "value": 292.365,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "fell_1db_km2_on_peat_west": {
+  "value": 755.405,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "fell_1db_near_fire_share_off_peat_east": {
+  "value": 0.3898,
+  "unit": "share of the dried land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_near_fire_share_off_peat_west": {
+  "value": 0.341,
+  "unit": "share of the dried land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_near_fire_share_on_peat_east": {
+  "value": 0.5364,
+  "unit": "share of the dried land",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_near_fire_share_on_peat_west": {
+  "value": 0.4898,
+  "unit": "share of the dried land",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_no_fire_km2_off_peat_east": {
+  "value": 720.795,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "dried, with no fire detection within 200 m"
+ },
+ "fell_1db_no_fire_km2_off_peat_west": {
+  "value": 300.975,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "dried, with no fire detection within 200 m"
+ },
+ "fell_1db_no_fire_km2_on_peat_east": {
+  "value": 135.5425,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "dried, with no fire detection within 200 m"
+ },
+ "fell_1db_no_fire_km2_on_peat_west": {
+  "value": 385.43,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "dried, with no fire detection within 200 m"
+ },
+ "fell_1db_share_off_peat_east": {
+  "value": 0.3872,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_share_off_peat_west": {
+  "value": 0.2684,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_share_on_peat_east": {
+  "value": 0.2571,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fell_1db_share_on_peat_west": {
+  "value": 0.145,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fire_any_1km_km2_east": {
+  "value": 2863.955,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "within 1 km of a detection"
+ },
+ "fire_any_1km_km2_west": {
+  "value": 3318.0225,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "within 1 km of a detection"
+ },
+ "fire_any_km2_east": {
+  "value": 1682.8875,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "within the footprint of a detection, 2026-05-04 to 2026-11-13"
+ },
+ "fire_any_km2_west": {
+  "value": 2441.835,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "within the footprint of a detection, 2026-05-07 to 2026-11-13"
+ },
+ "fire_detections_east": {
+  "value": 38890,
+  "unit": "detections",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "after dropping low-confidence ones"
+ },
+ "fire_detections_west": {
+  "value": 78916,
+  "unit": "detections",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/fire_layers.py",
+  "note": "after dropping low-confidence ones"
+ },
+ "fire_km2_off_peat_east": {
+  "value": 936.5325,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "within 200 m of a 2026 fire detection"
+ },
+ "fire_km2_off_peat_west": {
+  "value": 502.1575,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "within 200 m of a 2026 fire detection"
+ },
+ "fire_km2_on_peat_east": {
+  "value": 691.3025,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "within 200 m of a 2026 fire detection"
+ },
+ "fire_km2_on_peat_west": {
+  "value": 1930.5825,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "within 200 m of a 2026 fire detection"
+ },
+ "fire_share_off_peat_east": {
+  "value": 0.307,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fire_share_off_peat_west": {
+  "value": 0.2951,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fire_share_on_peat_east": {
+  "value": 0.608,
+  "unit": "share of zone",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "fire_share_on_peat_west": {
+  "value": 0.3705,
+  "unit": "share of zone",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py"
+ },
+ "first_dry_day_east": {
+  "value": "2026-07-04",
+  "unit": "date",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/season.py",
+  "note": "day after the last day of 5 mm or more before the driest 30 days"
+ },
+ "first_dry_day_west": {
+  "value": "2026-07-04",
+  "unit": "date",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/season.py",
+  "note": "day after the last day of 5 mm or more before the driest 30 days"
+ },
+ "hindcast_auc_canal_distance_east": {
+  "value": 0.4709,
+  "unit": "AUC",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "the simplest alternative: nearer a mapped canal counts as riskier"
+ },
+ "hindcast_auc_canal_distance_west": {
+  "value": 0.7325,
+  "unit": "AUC",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "the simplest alternative: nearer a mapped canal counts as riskier"
+ },
+ "hindcast_auc_early_fall_east": {
+  "value": 0.4531,
+  "unit": "AUC",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "0.5 is no skill, 1 is perfect"
+ },
+ "hindcast_auc_early_fall_west": {
+  "value": 0.7161,
+  "unit": "AUC",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "0.5 is no skill, 1 is perfect"
+ },
+ "hindcast_blocks_east": {
+  "value": 1040,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "peat blocks of 1 km with no fire before 2026-09-01; radar passes used: 20260821 and 20260829; burned later = fire on 2 or more days from 2026-09-01 on"
+ },
+ "hindcast_blocks_west": {
+  "value": 5011,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "peat blocks of 1 km with no fire before 2026-09-01; radar passes used: 20260821 and 20260829; burned later = fire on 2 or more days from 2026-09-01 on"
+ },
+ "hindcast_burn_rate_by_fifth_east": {
+  "value": "0.60, 0.62, 0.56, 0.55, 0.50",
+  "unit": "share of blocks, least to most early fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burn_rate_by_fifth_west": {
+  "value": "0.14, 0.13, 0.39, 0.49, 0.55",
+  "unit": "share of blocks, least to most early fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burned_later_if_early_dry_east": {
+  "value": 0.5072,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burned_later_if_early_dry_west": {
+  "value": 0.5572,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burned_later_if_not_east": {
+  "value": 0.5853,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burned_later_if_not_west": {
+  "value": 0.2889,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burned_later_share_east": {
+  "value": 0.5644,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_burned_later_share_west": {
+  "value": 0.3409,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_difference_east": {
+  "value": -0.0781,
+  "unit": "difference in share",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "95% range -0.27 to +0.11, resampling 33 tiles of 10 km"
+ },
+ "hindcast_difference_high_east": {
+  "value": 0.1056,
+  "unit": "difference in share",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "upper end of the 95% range"
+ },
+ "hindcast_difference_high_west": {
+  "value": 0.3863,
+  "unit": "difference in share",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "upper end of the 95% range"
+ },
+ "hindcast_difference_low_east": {
+  "value": -0.272,
+  "unit": "difference in share",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "lower end of the 95% range"
+ },
+ "hindcast_difference_low_west": {
+  "value": 0.1391,
+  "unit": "difference in share",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "lower end of the 95% range"
+ },
+ "hindcast_difference_west": {
+  "value": 0.2683,
+  "unit": "difference in share",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "95% range +0.14 to +0.39, resampling 72 tiles of 10 km"
+ },
+ "hindcast_early_dry_blocks_east": {
+  "value": 278,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "HH down 0.5 dB or more on both orbits by the cut date"
+ },
+ "hindcast_early_dry_blocks_west": {
+  "value": 971,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "HH down 0.5 dB or more on both orbits by the cut date"
+ },
+ "hindcast_near_canal_auc_early_fall_east": {
+  "value": 0.4469,
+  "unit": "AUC",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_auc_early_fall_west": {
+  "value": 0.5059,
+  "unit": "AUC",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_blocks_east": {
+  "value": 867,
+  "unit": "blocks of 1 km",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "the same test on peat within 1 km of a mapped canal only"
+ },
+ "hindcast_near_canal_blocks_west": {
+  "value": 2026,
+  "unit": "blocks of 1 km",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "the same test on peat within 1 km of a mapped canal only"
+ },
+ "hindcast_near_canal_burned_later_if_early_dry_east": {
+  "value": 0.5094,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_burned_later_if_early_dry_west": {
+  "value": 0.5611,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_burned_later_if_not_east": {
+  "value": 0.5963,
+  "unit": "share of blocks",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_burned_later_if_not_west": {
+  "value": 0.5287,
+  "unit": "share of blocks",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_difference_east": {
+  "value": -0.0869,
+  "unit": "difference in share",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "95% range -0.28 to +0.08, resampling 33 tiles of 10 km"
+ },
+ "hindcast_near_canal_difference_high_east": {
+  "value": 0.0779,
+  "unit": "difference in share",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_difference_high_west": {
+  "value": 0.1814,
+  "unit": "difference in share",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_difference_low_east": {
+  "value": -0.2758,
+  "unit": "difference in share",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_difference_low_west": {
+  "value": -0.0936,
+  "unit": "difference in share",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py"
+ },
+ "hindcast_near_canal_difference_west": {
+  "value": 0.0323,
+  "unit": "difference in share",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/fusion/hindcast.py",
+  "note": "95% range -0.09 to +0.18, resampling 61 tiles of 10 km"
+ },
+ "last_dry_day_east": {
+  "value": "2026-10-25",
+  "unit": "date",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/season.py",
+  "note": "day before the first day of 5 mm or more that opens a 5-day window of 25 mm or more, after the driest 30 days"
+ },
+ "last_dry_day_west": {
+  "value": "2026-10-25",
+  "unit": "date",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/season.py",
+  "note": "day before the first day of 5 mm or more that opens a 5-day window of 25 mm or more, after the driest 30 days"
+ },
  "noise_floor_hh_061": {
-  "value": -0.3322,
+  "value": -0.2982,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -66,15 +676,159 @@
   "note": "5th percentile of the dry-down score over 10124 intact-forest blocks of 250 m"
  },
  "noise_floor_hh_125": {
-  "value": -0.2877,
+  "value": -0.282,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py",
   "note": "5th percentile of the dry-down score over 10124 intact-forest blocks of 250 m"
  },
+ "peat_km2_east": {
+  "value": 1136.9575,
+  "unit": "km2",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "mapped peat with radar data on both orbits"
+ },
+ "peat_km2_west": {
+  "value": 5210.44,
+  "unit": "km2",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "mapped peat with radar data on both orbits"
+ },
+ "peat_map_agreement_east": {
+  "value": 0.978,
+  "unit": "share of cells",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "cells where PEATMAP and the official Indonesian peat map say the same"
+ },
+ "peat_map_agreement_west": {
+  "value": 0.9894,
+  "unit": "share of cells",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "cells where PEATMAP and the official Indonesian peat map say the same"
+ },
+ "rain_mm_2026-05_east": {
+  "value": 126.81,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-05_west": {
+  "value": 162.42,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-06_east": {
+  "value": 73.09,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-06_west": {
+  "value": 71.33,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-07_east": {
+  "value": 32.65,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-07_west": {
+  "value": 21.36,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-08_east": {
+  "value": 1.48,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-08_west": {
+  "value": 0.52,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-09_east": {
+  "value": 14.48,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-09_west": {
+  "value": 11.68,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-10_east": {
+  "value": 55.04,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-10_west": {
+  "value": 70.21,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-11_east": {
+  "value": 90.0,
+  "unit": "mm",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
+ "rain_mm_2026-11_west": {
+  "value": 86.77,
+  "unit": "mm",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/context/rain.py",
+  "note": "site mean, GPM IMERG Late daily"
+ },
  "recovery_blocks_east_061": {
-  "value": 32739,
+  "value": 23560,
   "unit": "blocks of 250 m",
   "site": "east",
   "status": "exploratory",
@@ -82,15 +836,143 @@
   "note": "fell by 1 dB or more in HH on both orbits; pass after the rain: 20261028"
  },
  "recovery_blocks_east_125": {
-  "value": 32739,
+  "value": 23560,
   "unit": "blocks of 250 m",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py",
   "note": "fell by 1 dB or more in HH on both orbits; pass after the rain: 20261101"
  },
+ "recovery_blocks_off_peat_fire_east_061": {
+  "value": 7379,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_fire_east_125": {
+  "value": 7379,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_fire_west_061": {
+  "value": 2482,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_fire_west_125": {
+  "value": 2482,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_no_fire_east_061": {
+  "value": 11483,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_no_fire_east_125": {
+  "value": 11483,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_no_fire_west_061": {
+  "value": 4814,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_off_peat_no_fire_west_125": {
+  "value": 4814,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_fire_east_061": {
+  "value": 2518,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_fire_east_125": {
+  "value": 2518,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_fire_west_061": {
+  "value": 5934,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_fire_west_125": {
+  "value": 5934,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_no_fire_east_061": {
+  "value": 2180,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_no_fire_east_125": {
+  "value": 2180,
+  "unit": "blocks of 250 m",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_no_fire_west_061": {
+  "value": 6191,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
+ "recovery_blocks_on_peat_no_fire_west_125": {
+  "value": 6191,
+  "unit": "blocks of 250 m",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "fell by 1 dB or more in HH on both orbits"
+ },
  "recovery_blocks_west_061": {
-  "value": 31207,
+  "value": 19421,
   "unit": "blocks of 250 m",
   "site": "west",
   "status": "exploratory",
@@ -98,7 +980,7 @@
   "note": "fell by 1 dB or more in HH on both orbits; pass after the rain: 20261028"
  },
  "recovery_blocks_west_125": {
-  "value": 31207,
+  "value": 19421,
   "unit": "blocks of 250 m",
   "site": "west",
   "status": "exploratory",
@@ -106,35 +988,35 @@
   "note": "fell by 1 dB or more in HH on both orbits; pass after the rain: 20261101"
  },
  "recovery_hh_median_fall_east_061": {
-  "value": -1.7335,
+  "value": -1.5698,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_fall_east_125": {
-  "value": -2.017,
+  "value": -1.8925,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_fall_west_061": {
-  "value": -1.7221,
+  "value": -1.4355,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_fall_west_125": {
-  "value": -1.7676,
+  "value": -1.6794,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_left_east_061": {
-  "value": -0.7879,
+  "value": -0.5762,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -142,15 +1024,143 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hh_median_left_east_125": {
-  "value": -1.0021,
+  "value": -0.8257,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py",
   "note": "level after the rain against the start of the season"
  },
+ "recovery_hh_median_left_off_peat_fire_east_061": {
+  "value": -0.9646,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_fire_east_125": {
+  "value": -1.0848,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_fire_west_061": {
+  "value": -0.2631,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_fire_west_125": {
+  "value": -0.3988,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_no_fire_east_061": {
+  "value": -0.5068,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_no_fire_east_125": {
+  "value": -0.8364,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_no_fire_west_061": {
+  "value": -0.777,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_off_peat_no_fire_west_125": {
+  "value": -0.9783,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_fire_east_061": {
+  "value": -0.1442,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_fire_east_125": {
+  "value": -0.2622,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_fire_west_061": {
+  "value": -0.3622,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_fire_west_125": {
+  "value": -0.4431,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_no_fire_east_061": {
+  "value": -0.411,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_no_fire_east_125": {
+  "value": -0.5271,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_no_fire_west_061": {
+  "value": -0.4077,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hh_median_left_on_peat_no_fire_west_125": {
+  "value": -0.3204,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
  "recovery_hh_median_left_west_061": {
-  "value": -0.8002,
+  "value": -0.4557,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -158,7 +1168,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hh_median_left_west_125": {
-  "value": -0.7348,
+  "value": -0.57,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -166,84 +1176,260 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hh_median_rebound_east_061": {
-  "value": 1.042,
+  "value": 1.1141,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_rebound_east_125": {
-  "value": 1.0188,
+  "value": 1.0897,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_rebound_west_061": {
-  "value": 0.9899,
+  "value": 1.1188,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_median_rebound_west_125": {
-  "value": 1.076,
+  "value": 1.1494,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_back_within_noise_east_061": {
-  "value": 0.3152,
+  "value": 0.3875,
   "unit": "share of blocks",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_back_within_noise_east_125": {
-  "value": 0.174,
+  "value": 0.2659,
   "unit": "share of blocks",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_back_within_noise_west_061": {
-  "value": 0.3484,
+  "value": 0.4342,
   "unit": "share of blocks",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_back_within_noise_west_125": {
-  "value": 0.3293,
+  "value": 0.3843,
   "unit": "share of blocks",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_regained_east_061": {
-  "value": 0.6011,
+  "value": 0.7097,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_regained_east_125": {
-  "value": 0.5051,
+  "value": 0.5758,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
+ "recovery_hh_share_regained_off_peat_fire_east_061": {
+  "value": 0.5869,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_fire_east_125": {
+  "value": 0.5428,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_fire_west_061": {
+  "value": 1.0567,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_fire_west_125": {
+  "value": 0.8308,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_no_fire_east_061": {
+  "value": 0.717,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_no_fire_east_125": {
+  "value": 0.521,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_no_fire_west_061": {
+  "value": 0.7062,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_off_peat_no_fire_west_125": {
+  "value": 0.4633,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_fire_east_061": {
+  "value": 0.9802,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_fire_east_125": {
+  "value": 0.8684,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_fire_west_061": {
+  "value": 0.7918,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_fire_west_125": {
+  "value": 0.7313,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_no_fire_east_061": {
+  "value": 0.8022,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_no_fire_east_125": {
+  "value": 0.705,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_no_fire_west_061": {
+  "value": 0.7051,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_on_peat_no_fire_west_125": {
+  "value": 0.8128,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hh_share_regained_placebo_east_061": {
+  "value": -0.2269,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261016 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hh_share_regained_placebo_east_125": {
+  "value": -0.078,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261020 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hh_share_regained_placebo_west_061": {
+  "value": -0.2085,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261016 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hh_share_regained_placebo_west_125": {
+  "value": -0.1148,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261020 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hh_share_regained_sensitivity_east_061": {
+  "value": 0.078,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
+ "recovery_hh_share_regained_sensitivity_east_125": {
+  "value": 0.0176,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
+ "recovery_hh_share_regained_sensitivity_west_061": {
+  "value": 0.0782,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
+ "recovery_hh_share_regained_sensitivity_west_125": {
+  "value": 0.0174,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
  "recovery_hh_share_regained_west_061": {
-  "value": 0.5748,
+  "value": 0.7794,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hh_share_regained_west_125": {
-  "value": 0.6087,
+  "value": 0.6844,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
@@ -258,7 +1444,7 @@
   "note": "HH rebound of one orbit against the other, all blocks"
  },
  "recovery_hh_two_orbit_r_strong_east_061_125": {
-  "value": 0.6026,
+  "value": 0.5669,
   "unit": "Pearson r",
   "site": "east",
   "status": "exploratory",
@@ -266,7 +1452,7 @@
   "note": "the same, only blocks that fell by 1 dB or more on both orbits"
  },
  "recovery_hh_two_orbit_r_strong_west_061_125": {
-  "value": 0.693,
+  "value": 0.647,
   "unit": "Pearson r",
   "site": "west",
   "status": "exploratory",
@@ -282,35 +1468,35 @@
   "note": "HH rebound of one orbit against the other, all blocks"
  },
  "recovery_hv_median_fall_east_061": {
-  "value": -1.5323,
+  "value": -1.5623,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_fall_east_125": {
-  "value": -2.0938,
+  "value": -2.1088,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_fall_west_061": {
-  "value": -1.3128,
+  "value": -1.2367,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_fall_west_125": {
-  "value": -1.3669,
+  "value": -1.3875,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_left_east_061": {
-  "value": -1.0251,
+  "value": -1.0308,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -318,15 +1504,143 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_east_125": {
-  "value": -1.1935,
+  "value": -1.2371,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py",
   "note": "level after the rain against the start of the season"
  },
+ "recovery_hv_median_left_off_peat_fire_east_061": {
+  "value": -1.8602,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_fire_east_125": {
+  "value": -2.4397,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_fire_west_061": {
+  "value": -0.6661,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_fire_west_125": {
+  "value": -0.8344,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_no_fire_east_061": {
+  "value": -0.8459,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_no_fire_east_125": {
+  "value": -0.9755,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_no_fire_west_061": {
+  "value": -0.6252,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_off_peat_no_fire_west_125": {
+  "value": -0.6943,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_fire_east_061": {
+  "value": -1.1141,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_fire_east_125": {
+  "value": -1.0682,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_fire_west_061": {
+  "value": -0.8756,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_fire_west_125": {
+  "value": -0.8269,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_no_fire_east_061": {
+  "value": -0.8242,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_no_fire_east_125": {
+  "value": -0.6648,
+  "unit": "dB",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_no_fire_west_061": {
+  "value": -0.5369,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
+ "recovery_hv_median_left_on_peat_no_fire_west_125": {
+  "value": -0.2906,
+  "unit": "dB",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py",
+  "note": "level after the rain against the start of the season"
+ },
  "recovery_hv_median_left_west_061": {
-  "value": -0.7402,
+  "value": -0.6359,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -334,7 +1648,7 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_left_west_125": {
-  "value": -0.5953,
+  "value": -0.5819,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -342,91 +1656,267 @@
   "note": "level after the rain against the start of the season"
  },
  "recovery_hv_median_rebound_east_061": {
-  "value": 0.4742,
+  "value": 0.5408,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_rebound_east_125": {
-  "value": 0.8394,
+  "value": 0.9097,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_rebound_west_061": {
-  "value": 0.4924,
+  "value": 0.5949,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_median_rebound_west_125": {
-  "value": 0.7229,
+  "value": 0.8014,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_east_061": {
-  "value": 0.1747,
+  "value": 0.1712,
   "unit": "share of blocks",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_east_125": {
-  "value": 0.0841,
+  "value": 0.1016,
   "unit": "share of blocks",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_west_061": {
-  "value": 0.2759,
+  "value": 0.3002,
   "unit": "share of blocks",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_back_within_noise_west_125": {
-  "value": 0.3117,
+  "value": 0.3207,
   "unit": "share of blocks",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_east_061": {
-  "value": 0.3095,
+  "value": 0.3461,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_east_125": {
-  "value": 0.4009,
+  "value": 0.4314,
   "unit": "share of the fall",
   "site": "east",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
+ "recovery_hv_share_regained_off_peat_fire_east_061": {
+  "value": 0.2199,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_fire_east_125": {
+  "value": 0.2715,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_fire_west_061": {
+  "value": 0.5574,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_fire_west_125": {
+  "value": 0.5499,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_no_fire_east_061": {
+  "value": 0.3999,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_no_fire_east_125": {
+  "value": 0.4443,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_no_fire_west_061": {
+  "value": 0.5126,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_off_peat_no_fire_west_125": {
+  "value": 0.4599,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_fire_east_061": {
+  "value": 0.36,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_fire_east_125": {
+  "value": 0.5092,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_fire_west_061": {
+  "value": 0.3529,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_fire_west_125": {
+  "value": 0.4512,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_no_fire_east_061": {
+  "value": 0.3762,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_no_fire_east_125": {
+  "value": 0.6108,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_no_fire_west_061": {
+  "value": 0.5043,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_on_peat_no_fire_west_125": {
+  "value": 0.7743,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/recovery.py"
+ },
+ "recovery_hv_share_regained_placebo_east_061": {
+  "value": -0.224,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261016 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hv_share_regained_placebo_east_125": {
+  "value": -0.0771,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261020 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hv_share_regained_placebo_west_061": {
+  "value": -0.2318,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261016 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hv_share_regained_placebo_west_125": {
+  "value": -0.1441,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "rain pretended one pass sooner, so the 'rebound' is 20261020 against the two dry passes before it; near zero or negative means the rebound comes with the rain"
+ },
+ "recovery_hv_share_regained_sensitivity_east_061": {
+  "value": 0.0972,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
+ "recovery_hv_share_regained_sensitivity_east_125": {
+  "value": 0.0297,
+  "unit": "share of the fall",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
+ "recovery_hv_share_regained_sensitivity_west_061": {
+  "value": 0.0978,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
+ "recovery_hv_share_regained_sensitivity_west_125": {
+  "value": 0.0444,
+  "unit": "share of the fall",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/recovery/sensitivity.py",
+  "note": "largest move from the as-run value over: late one pass, late earlier"
+ },
  "recovery_hv_share_regained_west_061": {
-  "value": 0.375,
+  "value": 0.4811,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_hv_share_regained_west_125": {
-  "value": 0.5289,
+  "value": 0.5776,
   "unit": "share of the fall",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/recovery/recovery.py"
  },
  "recovery_rebound_vs_other_orbit_fall_r_east_061": {
-  "value": -0.2878,
+  "value": -0.274,
   "unit": "Pearson r",
   "site": "east",
   "status": "exploratory",
@@ -434,7 +1924,7 @@
   "note": "HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most"
  },
  "recovery_rebound_vs_other_orbit_fall_r_east_125": {
-  "value": -0.3092,
+  "value": -0.2422,
   "unit": "Pearson r",
   "site": "east",
   "status": "exploratory",
@@ -442,7 +1932,7 @@
   "note": "HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most"
  },
  "recovery_rebound_vs_other_orbit_fall_r_west_061": {
-  "value": -0.3667,
+  "value": -0.3655,
   "unit": "Pearson r",
   "site": "west",
   "status": "exploratory",
@@ -450,7 +1940,7 @@
   "note": "HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most"
  },
  "recovery_rebound_vs_other_orbit_fall_r_west_125": {
-  "value": -0.3034,
+  "value": -0.1999,
   "unit": "Pearson r",
   "site": "west",
   "status": "exploratory",
@@ -458,35 +1948,35 @@
   "note": "HH rebound on this track against the fall measured by the other orbit; negative means what dried most came back most"
  },
  "reference_drydown_median_061": {
-  "value": 0.017,
+  "value": -0.0059,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "reference_drydown_median_125": {
-  "value": 0.0133,
+  "value": 0.0046,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "reference_drydown_p95_061": {
-  "value": 0.3222,
+  "value": 0.3748,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "reference_drydown_p95_125": {
-  "value": 0.259,
+  "value": 0.2672,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/noise_floor.py"
  },
  "reference_flagged_share": {
-  "value": 0.0273,
+  "value": 0.0161,
   "unit": "share of reference forest",
   "site": "west",
   "status": "exploratory",
@@ -494,7 +1984,7 @@
   "note": "share of the intact reference forest that the dried rule flags; a false-alarm rate"
  },
  "selfcheck_forest_edge_median_061": {
-  "value": -0.52,
+  "value": -0.33,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -502,7 +1992,7 @@
   "note": "median dry-down of forest within 250 m of an edge"
  },
  "selfcheck_forest_edge_median_125": {
-  "value": -0.52,
+  "value": -0.4,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -510,7 +2000,7 @@
   "note": "median dry-down of forest within 250 m of an edge"
  },
  "selfcheck_forest_interior_median_061": {
-  "value": -0.02,
+  "value": -0.04,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -534,7 +2024,7 @@
   "note": "shift of the descending image that best matches the ascending one; 0,0 means registered"
  },
  "selfcheck_orbit_ramp_end_to_end_east": {
-  "value": 0.2109,
+  "value": 0.0773,
   "unit": "dB",
   "site": "east",
   "status": "exploratory",
@@ -542,7 +2032,7 @@
   "note": "largest drift between the two orbits' scores from one side of the site to the other"
  },
  "selfcheck_orbit_ramp_end_to_end_west": {
-  "value": 0.3493,
+  "value": 0.4094,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -550,21 +2040,21 @@
   "note": "largest drift between the two orbits' scores from one side of the site to the other"
  },
  "selfcheck_overlap_p95_abs_diff_061": {
-  "value": 0.0975,
+  "value": 0.0919,
   "unit": "dB",
   "site": "west and east",
   "status": "exploratory",
   "made_by": "pipeline/drying/selfcheck.py"
  },
  "selfcheck_overlap_p95_abs_diff_125": {
-  "value": 0.1248,
+  "value": 0.135,
   "unit": "dB",
   "site": "west and east",
   "status": "exploratory",
   "made_by": "pipeline/drying/selfcheck.py"
  },
  "selfcheck_overlap_r_061": {
-  "value": 0.997,
+  "value": 0.9964,
   "unit": "Pearson r",
   "site": "west and east",
   "status": "exploratory",
@@ -572,7 +2062,7 @@
   "note": "same ground in both boxes, 650 km2"
  },
  "selfcheck_overlap_r_125": {
-  "value": 0.9964,
+  "value": 0.9951,
   "unit": "Pearson r",
   "site": "west and east",
   "status": "exploratory",
@@ -580,7 +2070,7 @@
   "note": "same ground in both boxes, 656 km2"
  },
  "selfcheck_rebound_after_rain_061": {
-  "value": 1.4,
+  "value": 1.55,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -588,7 +2078,7 @@
   "note": "change in HH of strongly dried land from the last dry pass to 20261028"
  },
  "selfcheck_rebound_after_rain_125": {
-  "value": 1.45,
+  "value": 1.55,
   "unit": "dB",
   "site": "west",
   "status": "exploratory",
@@ -612,7 +2102,7 @@
   "note": "largest change in any date's offset across eight ways of drawing the reference forest"
  },
  "selfcheck_tilt_east_061": {
-  "value": 0.0436,
+  "value": 0.0786,
   "unit": "dB per 10 km",
   "site": "west",
   "status": "exploratory",
@@ -620,7 +2110,7 @@
   "note": "slope of the score across the reference forest, west to east"
  },
  "selfcheck_tilt_east_125": {
-  "value": -0.0286,
+  "value": -0.0175,
   "unit": "dB per 10 km",
   "site": "west",
   "status": "exploratory",
@@ -628,18 +2118,50 @@
   "note": "slope of the score across the reference forest, west to east"
  },
  "selfcheck_tilt_north_061": {
-  "value": -0.1122,
+  "value": -0.0902,
   "unit": "dB per 10 km",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/selfcheck.py"
  },
  "selfcheck_tilt_north_125": {
-  "value": -0.0202,
+  "value": -0.0199,
   "unit": "dB per 10 km",
   "site": "west",
   "status": "exploratory",
   "made_by": "pipeline/drying/selfcheck.py"
+ },
+ "start_passes_from_east": {
+  "value": "2026-07-10",
+  "unit": "date",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/season.py",
+  "note": "start passes are taken from this day on: 7 days after the last wet day"
+ },
+ "start_passes_from_west": {
+  "value": "2026-07-10",
+  "unit": "date",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/season.py",
+  "note": "start passes are taken from this day on: 7 days after the last wet day"
+ },
+ "two_orbit_r_peat_no_fire_east": {
+  "value": 0.8751,
+  "unit": "Pearson r",
+  "site": "east",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "7150 blocks of 250 m on mapped peat with no fire nearby"
+ },
+ "two_orbit_r_peat_no_fire_west": {
+  "value": 0.8894,
+  "unit": "Pearson r",
+  "site": "west",
+  "status": "exploratory",
+  "made_by": "pipeline/drying/split.py",
+  "note": "52464 blocks of 250 m on mapped peat with no fire nearby"
  },
  "valid_km2_east": {
   "value": 4187.8525,
