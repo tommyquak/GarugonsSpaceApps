@@ -895,6 +895,17 @@ a.text-button {
   stroke-dasharray: 2 3;
 }
 
+.chart .season-mark {
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.7;
+}
+
+.chart .season-mark-label {
+  font-size: 9px;
+}
+
 .chart .fire {
   fill: #ff5a3c;
 }

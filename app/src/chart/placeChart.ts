@@ -77,30 +77,44 @@ function mean(values: number[]): number {
   return values.reduce((a, b) => a + b, 0) / values.length;
 }
 
-// A plain sentence on HH for one orbit: start of the season against its lowest later level,
-// each taken as the mean of two passes, and what the last pass did after that.
-function reading(passes: Pass[], orbit: string): string | null {
+// The dry season as the pipeline defines it from the rainfall record (pipeline/season.py),
+// read from validation.json so the card measures the fall the same way the map does.
+interface SeasonRule {
+  startFrom: string; // earliest day a start pass may fall on
+  lastDry: string; // last dry day before the rain came back
+}
+
+interface DatedValue {
+  date: string;
+  value: string;
+}
+
+const PAIR_DAYS = 14; // as in pipeline/season.py: the second start pass must follow within this
+
+// A plain sentence on HH for one orbit, by the pipeline's rule: the start passes (the first
+// pass on or after the dry start, and the next if it follows within 14 days) against the last
+// two passes before the rain, and then what the first pass after the rain did.
+function reading(passes: Pass[], orbit: string, rule: SeasonRule): string | null {
   const v = passes.filter((p) => p.hh !== null).map((p) => ({ date: p.date, hh: p.hh as number }));
-  if (v.length < 4) return null;
-  const start = mean([v[0].hh, v[1].hh]);
-  let low = Infinity;
-  let lowAt = 3;
-  for (let i = 3; i < v.length; i += 1) {
-    const level = mean([v[i - 1].hh, v[i].hh]);
-    if (level < low) {
-      low = level;
-      lowAt = i;
-    }
-  }
+  const first = v.findIndex((p) => p.date >= rule.startFrom);
+  if (first < 0) return null;
+  const start = [v[first]];
+  const next = v[first + 1];
+  if (next && (parseDay(next.date).getTime() - parseDay(v[first].date).getTime()) / 86_400_000 <= PAIR_DAYS) start.push(next);
+  const late = v.filter((p) => p.date <= rule.lastDry && !start.includes(p)).slice(-2);
+  if (!late.length) return null;
+  const startLevel = mean(start.map((p) => p.hh));
+  const lateLevel = mean(late.map((p) => p.hh));
   const name = orbit.charAt(0).toUpperCase() + orbit.slice(1);
-  const fall = Math.round((start - low) * 10) / 10;
-  if (fall < 0.1) return `${name} pass: HH did not fall below its ${monthName(v[0].date)} level.`;
-  let text = `${name} pass: HH fell ${fall.toFixed(1)} dB from ${monthName(v[0].date)} to ${monthName(v[lowAt].date)}`;
-  const last = v[v.length - 1];
-  const rise = Math.round((last.hh - low) * 10) / 10;
-  // When the lowest level and the last pass share a month, name the day so the sentence still reads.
-  const until = monthName(last.date) === monthName(v[lowAt].date) ? `${parseDay(last.date).getUTCDate()} ${monthName(last.date)}` : monthName(last.date);
-  if (lowAt < v.length - 1 && rise >= 0.1) text += `, then rose ${rise.toFixed(1)} dB by ${until}`;
+  const span = `between the dry start in ${monthName(start[0].date)} and ${monthName(late[late.length - 1].date)}`;
+  const fall = Math.round((startLevel - lateLevel) * 10) / 10;
+  let text = fall >= 0.1 ? `${name} pass: HH fell ${fall.toFixed(1)} dB ${span}` : `${name} pass: HH did not fall ${span}`;
+  const after = v.find((p) => p.date > rule.lastDry);
+  if (after) {
+    const rise = Math.round((after.hh - lateLevel) * 10) / 10;
+    const day = `${parseDay(after.date).getUTCDate()} ${monthName(after.date)}`;
+    text += rise >= 0.1 ? `, then rose ${rise.toFixed(1)} dB on the first pass after the rain (${day})` : `, and had not risen on the first pass after the rain (${day})`;
+  }
   return `${text}.`;
 }
 
@@ -124,6 +138,7 @@ export class PlaceChart {
   private drawn: (() => void) | undefined;
   private pickListeners: (() => void)[] = [];
   private parts: PlaceParts = {};
+  private rules: Promise<Record<string, DatedValue> | null> | undefined;
   /** The place on show, or null. Read by the link to this view. */
   place: { lon: number; lat: number } | null = null;
 
@@ -271,14 +286,23 @@ export class PlaceChart {
       if (request !== this.request) return;
       if (byCell) fires = [...(byCell[String(cellIndex)] ?? [])].sort();
     }
-    this.draw(body, passes, [...new Set(site.meta.bands.map((b) => b.track))], rain, fires);
+    // The dry start and the last dry day of this site, from the numbers file.
+    this.rules ??= fetchJson<Record<string, DatedValue>>("validation.json");
+    const numbers = await this.rules;
+    if (request !== this.request) return;
+    const startFrom = numbers?.[`start_passes_from_${site.meta.site}`]?.value;
+    const lastDry = numbers?.[`last_dry_day_${site.meta.site}`]?.value;
+    const isDay = (value: unknown): value is string => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
+    const rule = isDay(startFrom) && isDay(lastDry) ? { startFrom, lastDry } : null;
+    this.draw(body, passes, [...new Set(site.meta.bands.map((b) => b.track))], rain, fires, rule);
   }
 
-  private draw(body: HTMLElement, passes: Pass[], tracks: string[], rain: Record<string, number> | null, fires: string[] | null): void {
+  private draw(body: HTMLElement, passes: Pass[], tracks: string[], rain: Record<string, number> | null, fires: string[] | null, rule: SeasonRule | null): void {
     const orbitOf = (track: string): string => this.overlays.layers.find((l) => l.track === track && l.orbit)?.orbit ?? `track ${track}`;
     const color = (track: string): string => TRACK_COLORS[tracks.indexOf(track) % TRACK_COLORS.length];
 
-    const lines = tracks.map((t) => reading(passes.filter((p) => p.track === t), orbitOf(t))).filter((t): t is string => Boolean(t));
+    // Without the season dates there is no agreed start to measure from, so no sentence is made up.
+    const lines = rule ? tracks.map((t) => reading(passes.filter((p) => p.track === t), orbitOf(t), rule)).filter((t): t is string => Boolean(t)) : [];
     // A place that burned brightens for a different reason than a place that got wet again,
     // so the fire days are said next to the reading, not only drawn under the chart.
     if (fires?.length) {
@@ -376,6 +400,20 @@ export class PlaceChart {
     // One time axis for all panels: the month names sit under the last one.
     for (const m of months) {
       chart.append(svg("text", { x: x(m), y: height - 4, class: "tick", "text-anchor": "middle" }, monthName(m).slice(0, 3)));
+    }
+
+    // The two dates the reading is measured between, so the sentence can be checked by eye.
+    if (rule) {
+      const marks: [string, string][] = [
+        [rule.startFrom, "dry start"],
+        [new Date(parseDay(rule.lastDry).getTime() + 86_400_000).toISOString().slice(0, 10), "rain"],
+      ];
+      for (const [day, label] of marks) {
+        const at = parseDay(day).getTime();
+        if (at < t0 || at > t1) continue;
+        chart.append(svg("line", { x1: x(day), x2: x(day), y1: TOP, y2: panelTop(pols.length - 1) + PANEL_H, class: "season-mark" }));
+        chart.append(svg("text", { x: x(day) + 3, y: TOP + 9, class: "season-mark-label" }, label));
+      }
     }
 
     // Reading single passes: a hairline that snaps to the nearest pass, by pointer or arrow keys.
