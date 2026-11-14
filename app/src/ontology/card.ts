@@ -62,7 +62,7 @@ export function buildCard(ontology: Ontology, block: BlockProps, hooks: CardHook
 
   const chips = h("div", { class: "chips" });
   if (block.confidence) {
-    chips.append(h("span", { class: `chip chip-${block.confidence}`, title: ontology.confidence?.rule ?? "", text: `Confidence: ${block.confidence}` }));
+    chips.append(h("span", { class: `chip chip-${block.confidence}`, title: ontology.confidence?.rule ?? "", text: `Agreement: ${block.confidence}` }));
   }
   if (block.rank !== null && block.rank !== undefined) {
     chips.append(h("span", { class: "chip", title: "Ranked inside this action and site, largest fall in HH first.", text: `${block.rank} of ${hooks.ranked(block)} in ${title}` }));
@@ -118,7 +118,7 @@ export function buildVocabulary(ontology: Ontology): HTMLElement {
 
   const confidence = ontology.confidence;
   if (confidence?.rule) {
-    box.append(h("h4", { text: "Confidence" }), h("p", { class: "object-advice", text: confidence.rule }));
+    box.append(h("h4", { text: confidence.label ?? "Agreement" }), h("p", { class: "object-advice", text: confidence.rule }));
     const extra = Object.entries(confidence.extra_conditions ?? {});
     if (extra.length) box.append(h("dl", { class: "object-terms" }, ...extra.flatMap(([name, rule]) => [h("dt", {}, h("code", { text: name })), h("dd", { text: rule })])));
   }

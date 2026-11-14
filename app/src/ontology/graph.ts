@@ -179,7 +179,7 @@ function asList(ontology: Ontology, block: BlockProps | null): HTMLElement {
       ...terms.map((t) => stateItem(t.state, t.negated ? "(the rule needs this to be false)." : "(the rule needs this to be true).", full)),
       ...(action.stronger_if ?? []).filter((id) => !terms.some((t) => t.state === id)).map((id) => {
         const extra = ontology.confidence?.extra_conditions?.[id];
-        return stateIds.includes(id) ? stateItem(id, "(adds to the confidence when true).", full) : extra ? h("li", { text: `${id}: ${extra} (adds to the confidence when true).` }) : null;
+        return stateIds.includes(id) ? stateItem(id, "(adds to the agreement count when true).", full) : extra ? h("li", { text: `${id}: ${extra} (adds to the confidence when true).` }) : null;
       }),
     ].filter((el): el is HTMLElement => el !== null);
     if (under.length) item.append(h("ul", {}, ...under));
@@ -297,7 +297,7 @@ export function drawGraph(ontology: Ontology, block: BlockProps | null, color: (
     { class: "graph-keys" },
     ...(block ? [key("carried evidence for this action", "g-edge is-lit from-state"), key("not used", "g-edge")] : []),
     key("the rule needs it to be false", `g-edge is-negated${schema ? " is-lit from-state" : ""}`),
-    key("adds to the confidence", `g-edge is-strengthens${schema ? " is-lit from-state" : ""}`),
+    key("adds to the agreement count", `g-edge is-strengthens${schema ? " is-lit from-state" : ""}`),
   );
   return h("div", { class: "graph" }, h("div", { class: "graph-scroll" }, root), keys, detail, asList(ontology, block));
 }
