@@ -20,12 +20,15 @@ Layers written, each only if its input exists:
     hh_<site>_<track>_<YYYYMMDD>    one per radar pass, fall in HH against the start of the season
     reference_<site>                the intact reference forest, as an outline with a light fill
     fire_<site>                     land with at least one fire detection day (fire_days_<site>.tif)
+    fire_<site>_to_<YYYYMMDD>       one per radar pass date: land with a fire detection on or before
+                                    that day (fire_first_day_<site>.tif), for the season slider
     recovery_hh_<site>              rise in HH across the first rain, mean of the orbits, in a blue ramp
 
 A fall is drawn from --min-db upward and reaches the end of the ramp at --full-db. Smaller falls
 and cells with no data are transparent. The ramp is the one of pipeline/drying/one_look_map.py.
 """
 import argparse
+import datetime as dt
 import json
 import re
 import shutil
@@ -228,6 +231,18 @@ def main():
         path = add(f"fire_{site}", f"Fire detected, May to November, {site}", grid, kind="fire", site=site,
                    unit=None, legend="fill", color="#%02x%02x%02x" % FIRE_RGB, source=SOURCE_FIRE)
         save_mask(path, grid.warp(days, Resampling.nearest) >= 1, FIRE_RGB, 150, 235, 1)
+
+    # Fire up to each radar pass date, so the season slider shows it building up.
+    for first_path in sorted(a.layers.glob("fire_first_day_*.tif")):
+        site = first_path.stem.split("_", 3)[3]
+        days = sorted({e["date"] for e in entries if e.get("kind") == "pass" and e.get("site") == site})
+        first, grid = grids.get(site, first_path, a.pass_res)
+        first_m = grid.warp(first, Resampling.nearest)
+        for day in days:
+            until = dt.date.fromisoformat(day).timetuple().tm_yday
+            path = add(f"fire_{site}_to_{day.replace('-', '')}", "Fire detected up to this date", grid, kind="fire-until", site=site,
+                       until=day, unit=None, legend="fill", color="#%02x%02x%02x" % FIRE_RGB, source=SOURCE_FIRE)
+            save_mask(path, first_m <= until, FIRE_RGB, 150, 235, 1)
 
     for stale in out_layers.glob("*.png"):
         if stale.name not in written:
