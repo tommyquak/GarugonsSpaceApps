@@ -81,19 +81,19 @@ export function unionBounds(layers: LayerEntry[]): [number, number, number, numb
   ];
 }
 
-const dayFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-const monthFormat = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "UTC" });
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export function parseDay(iso: string): Date {
   return new Date(`${iso}T00:00:00Z`);
 }
 
-export function formatDay(iso: string): string {
-  return dayFormat.format(parseDay(iso));
+export function monthName(iso: string): string {
+  return MONTHS[parseDay(iso).getUTCMonth()];
 }
 
-export function monthName(iso: string): string {
-  return monthFormat.format(parseDay(iso));
+export function formatDay(iso: string): string {
+  const day = parseDay(iso);
+  return `${day.getUTCDate()} ${monthName(iso).slice(0, 3)} ${day.getUTCFullYear()}`;
 }
 
 export function passLabel(step: { date: string; track: string; orbit: string | null }): string {
