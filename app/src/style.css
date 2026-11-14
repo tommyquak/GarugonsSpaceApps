@@ -1153,12 +1153,19 @@ a.text-button {
   order: 5;
 }
 
-#btn-limits {
+/* The field assessment is a page of its own (public/field-assessment), so this one is a link. */
+#btn-report {
   order: 6;
+  display: inline-flex;
+  align-items: center;
+}
+
+#btn-limits {
+  order: 7;
 }
 
 #btn-about {
-  order: 7;
+  order: 8;
 }
 
 /* A hairline between the two views and everything else. */
@@ -1637,6 +1644,7 @@ button:disabled {
   .brand p,
   #btn-story,
   #btn-season,
+  #btn-report,
   #btn-room span,
   .wide-only {
     display: none;
