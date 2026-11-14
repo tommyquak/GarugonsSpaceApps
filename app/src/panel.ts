@@ -93,6 +93,7 @@ export function buildPanel(root: HTMLElement, map: MapLibreMap, overlays: Overla
     }
     hiddenNote.hidden = overlays.mode !== "pass";
     opacity.value = String(Math.round(overlays.opacity * 100));
+    opacity.style.setProperty("--fill", `${opacity.value}%`);
   };
   overlays.onChange(render);
   render();
