@@ -9,6 +9,7 @@
 // When public/blocks is absent the buttons stay hidden and the rest of the app is unchanged.
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { PlaceChart } from "../chart/placeChart";
+import { asset } from "../data";
 import { byId, h } from "../dom";
 import { buildEvidencePanel } from "../ontology/panel";
 import { reducedMotion, WIDE } from "../view";
@@ -179,7 +180,8 @@ export async function buildActions(
     classBox,
     heightNote,
     ontology.caveat ? h("p", { class: "note", text: ontology.caveat }) : null,
-    h("div", { class: "place-actions" }, howLink),
+    // The same blocks as three pages to print and take into the field (public/field-assessment).
+    h("div", { class: "place-actions" }, howLink, h("a", { class: "text-button small", href: asset("field-assessment/"), text: "Field assessment to print" })),
   );
   classBox.append(
     legend,
