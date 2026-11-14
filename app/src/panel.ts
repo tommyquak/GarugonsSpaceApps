@@ -75,6 +75,7 @@ export function buildPanel(root: HTMLElement, map: MapLibreMap, overlays: Overla
     basemaps.append(h("label", { class: "radio" }, input, h("span", { text: base.title })));
   }
   root.append(basemaps);
+  root.append(h("p", { class: "note wide-only", text: "Click the map for a chart of that place over the season." }));
 
   const render = (): void => {
     for (const entry of overlays.statics) {
