@@ -19,7 +19,7 @@ This plan is a starting point. Read it, challenge it and change it.
 3. Post on the board: your track, and anything you disagree with in the plan.
 4. Check your tools: Python 3.11 or later with numpy, scipy, h5py, rasterio, pyproj and matplotlib; Node 20 or later for the app.
 
-Only track 1 needs a NASA Earthdata login. Everyone else works from the stacks that track 1 publishes as a release.
+Tracks 1 and 3 need a NASA Earthdata login (track 3 for rainfall, with the application "NASA GESDISC DATA ARCHIVE" approved). Everyone else works from the stacks that track 1 publishes as a release.
 
 ## The six tracks
 
