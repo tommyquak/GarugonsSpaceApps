@@ -87,12 +87,12 @@ const BEATS: Beat[] = [
   },
   {
     map: "check",
-    head: "After the rain, some land had not come back. That is where a field team should look first.",
-    sub: () => "Each square is one kilometre. The map opens on this view, with a ranked list and coordinates to take into the field.",
+    head: "The first rain brought the radar echo back on most land. On some, it did not.",
+    sub: () => "There the ground still looks different from the start of the season, which can mean burnt vegetation or peat that is still dry. That is where a field team should look first.",
     key: [
-      { color: "#ff3b30", label: "Fire on several days, and the vegetation has not returned" },
-      { color: "#ff9f0a", label: "The radar echo fell and is still low" },
-      { color: "#f2d98a", label: "Changed, then recovered with the rain" },
+      { color: "#ff3b30", label: "Fire on several days, and the vegetation echo is still low" },
+      { color: "#ff9f0a", label: "No fire, and the ground echo is still low" },
+      { color: "#f2d98a", label: "The echo is back near where it started" },
     ],
   },
 ];
