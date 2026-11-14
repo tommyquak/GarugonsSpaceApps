@@ -1,0 +1,130 @@
+{
+ "fire": {
+  "file": "fire.jpg",
+  "kind": "photograph",
+  "author": "DenY Krisbiyantoro",
+  "licence": "CC BY-SA 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "date": "2019-09-19",
+  "title": "Marking the Fire.jpg",
+  "description": "Once, the inner hidden embers of peatland, still alive. Produce the haze. Undermine the forest trees roots.",
+  "source": "https://commons.wikimedia.org/wiki/File:Marking_the_Fire.jpg",
+  "changes": "Resized and re-compressed.",
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "burnt": {
+  "file": "burnt.jpg",
+  "kind": "photograph",
+  "author": "DenY Krisbiyantoro",
+  "licence": "CC BY-SA 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "date": "2019-09-19",
+  "title": "Batlefield.jpg",
+  "description": "Besides the fire and smog, heavy terrain can not be avoided. The firefighters tim, threatened by the burn peat soil when their footsteps careless. The fallen trees, as like impossible removed from the lane. These are the first challenges.",
+  "source": "https://commons.wikimedia.org/wiki/File:Batlefield.jpg",
+  "changes": "Resized and re-compressed.",
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "canal": {
+  "file": "canal.jpg",
+  "kind": "photograph",
+  "author": "Josh Estey/AusAID",
+  "licence": "CC BY 2.0",
+  "licence_url": "https://creativecommons.org/licenses/by/2.0",
+  "date": "2009-12-11",
+  "title": "Kalimantan deforestation and degradation 8 (10706239044).jpg",
+  "description": "A boat travels up one of many drainage canals in Central Kalimantan, Indonesia. Dug as part of Indonesia's Mega Rice Project in the mid 1990s, the canals drain surrounding forests of water, making them highly susceptible to fires.",
+  "source": "https://commons.wikimedia.org/wiki/File:Kalimantan_deforestation_and_degradation_8_(10706239044).jpg",
+  "changes": "Resized and re-compressed.",
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "open": {
+  "file": "open.jpg",
+  "kind": "photograph",
+  "author": "Josh Estey/AusAID",
+  "licence": "CC BY 2.0",
+  "licence_url": "https://creativecommons.org/licenses/by/2.0",
+  "date": "2009-12-11",
+  "title": "Kalimantan deforestation and degradation 4 (10706228444).jpg",
+  "description": "A burnt out tree stands where an entire forest used to in Central Kalimantan, Indonesia. The land has been destroyed by poor farming practices, illegal logging and fires, resulting in significant greenhouse gas emissions.",
+  "source": "https://commons.wikimedia.org/wiki/File:Kalimantan_deforestation_and_degradation_4_(10706228444).jpg",
+  "changes": "Resized and re-compressed.",
+  "size": [
+   1920,
+   1268
+  ]
+ },
+ "forest": {
+  "file": "forest.jpg",
+  "kind": "photograph",
+  "author": "Ruanda Agung Sugardiman/AusAID",
+  "licence": "CC BY 2.0",
+  "licence_url": "https://creativecommons.org/licenses/by/2.0",
+  "date": "2005-01-14",
+  "title": "Peat Forest Swamp (10712654875).jpg",
+  "description": "Natural ecosystems provide essential ecological services including clean air, water and biodiversity. Peat swamp forest, Kalimantan, Indonesia.",
+  "source": "https://commons.wikimedia.org/wiki/File:Peat_Forest_Swamp_(10712654875).jpg",
+  "changes": "Resized and re-compressed.",
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "smoke": {
+  "file": "smoke.jpg",
+  "kind": "satellite image",
+  "author": "NASA EOSDIS GIBS, VIIRS on NOAA-20",
+  "licence": "NASA open data",
+  "licence_url": "https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance",
+  "date": "2026-09-19",
+  "title": "Southern Borneo in true colour",
+  "description": "VIIRS corrected reflectance, true colour.",
+  "source": "https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api",
+  "changes": "None.",
+  "size": [
+   1920,
+   1241
+  ]
+ },
+ "optical": {
+  "file": "optical.jpg",
+  "kind": "satellite image",
+  "author": "NASA EOSDIS GIBS, VIIRS on NOAA-20",
+  "licence": "NASA open data",
+  "licence_url": "https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance",
+  "date": "2026-09-14",
+  "title": "The study boxes on one day",
+  "description": "VIIRS corrected reflectance, true colour, over the study boxes.",
+  "source": "https://www.earthdata.nasa.gov",
+  "changes": "None.",
+  "size": [
+   1600,
+   754
+  ]
+ },
+ "radar": {
+  "file": "radar.jpg",
+  "kind": "satellite image",
+  "author": "NASA and ISRO, NISAR L2 GCOV from ASF DAAC",
+  "licence": "NASA open data",
+  "licence_url": "https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance",
+  "date": "2026-09-14",
+  "title": "The study boxes on one day",
+  "description": "NISAR L-band HH backscatter, -14 to -3 dB, over the study boxes. Built by pipeline/radar.",
+  "source": "https://search.asf.alaska.edu",
+  "changes": "None.",
+  "size": [
+   1600,
+   754
+  ]
+ }
+}
