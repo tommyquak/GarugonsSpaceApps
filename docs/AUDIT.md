@@ -38,7 +38,7 @@ On 14 Nov 2026, part way through the build, we asked an independent reviewer (a 
 1. Between mid July and mid October 2026, L-band HH fell by 1 dB or more, relative to deep forest, on about 755 km2 of mapped peat in the west box and 292 km2 in the east, and two orbits that look from opposite sides agree on where (r about 0.9).
 2. Deep intact forest is a stable yardstick in the dry season.
 3. Within days of the first heavy rain, HH on that land rose by about 1 dB on both orbits, and not one pass earlier.
-4. Fire was detected on 37% of mapped peat in the west box and 61% in the east. Among western peat blocks where HH fell by more than 1 dB on both orbits, the median HV change from the dry-season start to the first dawn pass after rain was 0.54 dB lower for blocks with fire detections. The other three comparisons remain exploratory: the differences were 0.34 dB at western dusk, 0.40 dB at eastern dawn and 0.29 dB at eastern dusk, all lower in the fire-detection group. The groups use detections from the full study period, including dates after the radar pass.
+4. Fire was detected on 37% of mapped peat in the west box and 61% in the east. Among western peat blocks where HH fell by 1 dB or more on both orbits, the median HV change from the dry-season start to the first dawn pass after rain was 0.54 dB lower for blocks with fire detections. The other three comparisons remain exploratory: the differences were 0.34 dB at western dusk, 0.40 dB at eastern dawn and 0.29 dB at eastern dusk, all lower in the fire-detection group. The groups use detections from the full study period, including dates after the radar pass.
 5. Every number comes from open data and open code that reruns from the published stacks.
 
 ## What we no longer claim
