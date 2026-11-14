@@ -87,6 +87,8 @@ export function buildDocs(limitsButton: HTMLElement, aboutButton: HTMLElement, l
   about.body.append(h("h3", { text: "Checked numbers" }), checked);
   const si = section(readmeText, "Use of Super Intelligence (SI)");
   if (si) about.body.append(h("h3", { text: "Use of Super Intelligence (SI)" }), renderMarkdown(si, 1));
+  // The animated explainer of the radar echoes: a page of its own, for those who want it.
+  about.body.append(h("p", {}, h("a", { href: "explainer/", target: "_blank", rel: "noopener", text: "How the radar sees a peat dry season (animation)" })));
   if (canReplayIntro()) {
     const replay = h("button", { type: "button", class: "text-button", text: "Replay intro" });
     replay.addEventListener("click", () => {
