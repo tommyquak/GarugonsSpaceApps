@@ -55,7 +55,7 @@ At L-band the wave passes through leaves and reaches branches, trunks and the gr
 - Five months of NISAR cannot yet show peat subsidence. That needs years.
 - The radar does not predict where fire will start.
 - Peat fires are not the only fires in Indonesia. The map shows fire off peat as well.
-- Each orbit has only one pass after the rain so far (1 Nov ascending, 28 Oct descending), so the recovery is a first look. Both orbits see it on their own, and the numbers move by up to [v: recovery_hh_share_regained_sensitivity_west_125] when the choice of passes changes.
+- Each orbit has only one pass after the rain so far (1 Nov ascending, 28 Oct descending), so the recovery is a first look. Both orbits see it on their own, and the share regained moves by up to [v: recovery_hh_share_regained_sensitivity_west_061] in HH when the choice of passes changes. Pretending the rain came one pass sooner shows no rebound ([v: recovery_hh_share_regained_placebo_west_061]), so the rebound comes with the rain.
 
 ### What NISAR could do next
 

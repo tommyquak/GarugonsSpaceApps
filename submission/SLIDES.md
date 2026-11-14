@@ -43,7 +43,7 @@ Three beats, one row each:
 
 - A screening map: it shows where to look. It does not measure the water table, subsidence or where fire will start.
 - Forest edges dry too: about [v: selfcheck_forest_edge_median_125] dB within 250 m of an edge, zero only about 4 km inside.
-- One or two passes after the rain so far; recovery numbers move by up to [v: recovery_hh_share_regained_sensitivity_west_125] when the choice of passes changes.
+- One pass after the rain per orbit so far; the share regained moves by up to [v: recovery_hh_share_regained_sensitivity_west_061] in HH when the choice of passes changes. A placebo (rain pretended one pass sooner) shows no rebound: [v: recovery_hh_share_regained_placebo_west_061].
 - Every check that failed, from `docs/LIMITS.md`.
 - Visual: the app's limits panel.
 
