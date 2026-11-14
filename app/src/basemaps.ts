@@ -24,7 +24,7 @@ export const baseStyle: StyleSpecification = {
       tileSize: 256,
       maxzoom: 8,
       attribution:
-        'Basemap: <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener">NASA GIBS</a>, Blue Marble (NASA Earth Observatory)',
+        '<a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener">NASA GIBS</a> Blue Marble',
     },
     osm: {
       type: "raster",
@@ -41,7 +41,7 @@ export const baseStyle: StyleSpecification = {
       id: "basemap-bluemarble",
       type: "raster",
       source: "bluemarble",
-      paint: { "raster-brightness-max": 0.62, "raster-saturation": -0.45, "raster-contrast": 0.1 },
+      paint: { "raster-brightness-min": 0.1, "raster-brightness-max": 0.88, "raster-saturation": -0.35, "raster-contrast": -0.15 },
     },
     {
       id: "basemap-osm",
@@ -50,5 +50,8 @@ export const baseStyle: StyleSpecification = {
       layout: { visibility: "none" },
       paint: { "raster-brightness-max": 0.55, "raster-saturation": -0.7 },
     },
+    // Empty anchors that fix the drawing order: colour layers go under z-fall, outlines under z-marks.
+    { id: "z-fall", type: "background", layout: { visibility: "none" } },
+    { id: "z-marks", type: "background", layout: { visibility: "none" } },
   ],
 };

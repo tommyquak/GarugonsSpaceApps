@@ -199,7 +199,7 @@ def main():
     for ref_path in sorted(a.layers.glob("reference_*.tif")):
         site = ref_path.stem.split("_", 1)[1]
         ref, grid = grids.get(site, ref_path, a.res)
-        path = add(f"reference_{site}", f"Intact reference forest, {site}", grid, kind="reference", site=site,
+        path = add(f"reference_{site}", f"Reference forest, {site}", grid, kind="reference", site=site,
                    unit=None, legend="outline", color="#%02x%02x%02x" % REFERENCE_RGB)
         save_mask(path, grid.warp(ref, Resampling.nearest) == 1, REFERENCE_RGB, 40, 235, 2)
     for fire_path in sorted(a.layers.glob("fire_days_*.tif")):
