@@ -483,6 +483,10 @@ button {
   display: none;
 }
 
+#tabs {
+  display: none;
+}
+
 .panel-head {
   display: flex;
   align-items: center;
@@ -664,5 +668,107 @@ button:disabled {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+}
+
+/* Phone: the map on top, and one bottom sheet below it that never covers the map. */
+@media (max-width: 699px) {
+  :root {
+    --bar-h: 46px;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #bar {
+    position: static;
+    flex: none;
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .brand p,
+  #btn-story,
+  .wide-only {
+    display: none;
+  }
+
+  .bar-actions {
+    gap: 6px;
+  }
+
+  #map {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    min-height: 0;
+  }
+
+  #sheet {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    background: #101317;
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  #season {
+    position: static;
+    max-width: none;
+    padding: 8px 12px 6px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .season-text {
+    margin-top: 2px;
+  }
+
+  #tabs {
+    display: flex;
+    gap: 6px;
+    padding: 4px 12px 8px;
+  }
+
+  #tabs .text-button {
+    flex: 1;
+  }
+
+  #tabs .text-button[aria-expanded="true"] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  #col-left {
+    display: contents;
+  }
+
+  #sheet .panel,
+  #sheet #panel-place {
+    position: static;
+    display: none;
+    width: auto;
+    max-height: 44vh;
+    max-height: 44dvh;
+    overflow: auto;
+    border: 0;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    background: none;
+  }
+
+  #sheet[data-tab="layers"] #panel-layers,
+  #sheet[data-tab="place"] #panel-place,
+  #sheet[data-tab="story"] #panel-story {
+    display: block;
+  }
+
+  .sheet-dialog {
+    max-height: 88vh;
+    max-height: 88dvh;
   }
 }

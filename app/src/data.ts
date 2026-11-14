@@ -2,13 +2,14 @@
 // Types and loaders for the files that scripts/make_layers.py writes into public/.
 
 export interface Ramp {
+  title?: string;
   colors: string[];
   scale: [number, number];
   shown_from: number;
   full_at: number;
 }
 
-export type LayerKind = "season" | "pass" | "reference" | "fire";
+export type LayerKind = "season" | "pass" | "reference" | "fire" | "recovery";
 
 // One entry of layers/layers.json (docs/DATA_CONTRACT.md section 5, plus a few fields).
 export interface LayerEntry {

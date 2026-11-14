@@ -17,13 +17,13 @@ function legend(entry: LayerEntry, ramp: Ramp): HTMLElement {
     const value = ramp.shown_from + ((ramp.full_at - ramp.shown_from) * i) / parts;
     stops.push(`${rampColor(ramp, value)} ${((100 * i) / parts).toFixed(1)}%`);
   }
-  const bar = h("div", { class: "legend-bar", role: "img", "aria-label": "Colour ramp from a small fall to a large fall" });
+  const bar = h("div", { class: "legend-bar", role: "img", "aria-label": "Colour ramp from a small change to a large change" });
   bar.style.background = `linear-gradient(to right, ${stops.join(", ")})`;
   const middle = (ramp.shown_from + ramp.full_at) / 2;
   return h(
     "div",
     { class: "legend" },
-    h("h3", { text: `Fall in HH brightness, ${entry.unit ?? "dB"}` }),
+    h("h3", { text: `${ramp.title ?? "Fall in HH brightness"}, ${entry.unit ?? "dB"}` }),
     bar,
     h(
       "div",
@@ -32,7 +32,6 @@ function legend(entry: LayerEntry, ramp: Ramp): HTMLElement {
       h("span", { text: trim(middle) }),
       h("span", { text: `${trim(ramp.full_at)}+` }),
     ),
-    h("p", { class: "note", text: "Smaller falls and places without data are left clear." }),
   );
 }
 
@@ -57,8 +56,16 @@ export function buildPanel(root: HTMLElement, map: MapLibreMap, overlays: Overla
   const hiddenNote = h("p", { class: "note", text: "Whole-season layers are hidden while you step through single passes." });
   root.append(hiddenNote);
 
-  const withRamp = overlays.layers.find((l) => l.ramp);
-  if (withRamp?.ramp) root.append(legend(withRamp, withRamp.ramp));
+  // One legend per ramp in use.
+  const seen = new Set<string>();
+  for (const entry of overlays.layers) {
+    const key = entry.ramp ? (entry.ramp.title ?? "") : null;
+    if (entry.ramp && key !== null && !seen.has(key)) {
+      seen.add(key);
+      root.append(legend(entry, entry.ramp));
+    }
+  }
+  if (seen.size) root.append(h("p", { class: "note", text: "Smaller changes and places without data are left clear." }));
 
   const opacity = h("input", { type: "range", min: 0, max: 100, step: 5, id: "opacity" });
   opacity.addEventListener("input", () => overlays.setOpacity(Number(opacity.value) / 100));

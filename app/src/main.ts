@@ -39,8 +39,26 @@ async function start(): Promise<void> {
   const overlays = new Overlays(map, layers);
   buildPanel(byId("panel-layers"), map, overlays);
   const season = buildSeason(byId("season"), overlays);
-  buildStory(byId("panel-story"), byId("btn-story"), map, overlays, { stopPlayback: season.stop, onOpen: () => undefined });
-  new PlaceChart(byId("panel-place"), map, overlays, () => undefined);
+
+  // On a phone the panels share one bottom sheet, one at a time. A wide screen ignores the tab.
+  const sheet = byId("sheet");
+  const tabs = ["layers", "place", "story"];
+  const setTab = (tab: string): void => {
+    sheet.dataset.tab = tab;
+    for (const name of tabs) byId(`tab-${name}`).setAttribute("aria-expanded", String(name === tab));
+  };
+  const toggleTab = (tab: string): void => setTab(sheet.dataset.tab === tab ? "" : tab);
+
+  const story = buildStory(byId("panel-story"), byId("btn-story"), map, overlays, {
+    stopPlayback: season.stop,
+    onOpen: () => setTab("story"),
+    onClose: () => setTab(""),
+  });
+  byId("tab-layers").addEventListener("click", () => toggleTab("layers"));
+  byId("tab-place").addEventListener("click", () => toggleTab("place"));
+  byId("tab-story").addEventListener("click", () => (story.isOpen() ? toggleTab("story") : story.open()));
+  setTab("");
+  new PlaceChart(byId("panel-place"), map, overlays, () => setTab("place"));
 }
 
 void start();
