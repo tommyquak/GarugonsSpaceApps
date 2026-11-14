@@ -1,5 +1,7 @@
 # Slide outline
 
+**A first full deck is built** (covering track 6 for Reagan, at Tommy's request, Sat 19:30): `app/public/slides/index.html`, live at https://tommyquak.github.io/GarugonsSpaceApps/slides/. It follows the seven-slide order agreed on issue #36 (the radar-under-forest slide dropped; the season and "Where to check" as two app slides) and reads every number from `validation.json` when it opens. Arrow keys or the Back and Next buttons page through it; printing it gives a seven-page PDF. Reagan: it is yours to change. The outline below is the earlier plan, kept for reference.
+
 Seven slides, the demo limit. Track 6, owner Reagan. Rewritten after the independent audit (`docs/AUDIT.md`): every claim is on its list of what we can still claim. Every `[v: key]` is filled from `pipeline/out/validation.json` (release `data-v9` or later) once the entry is `final`; until then the slide shows the key, never a typed number. Figures come from Tommy's `figures-v1` release; GIFs are recorded from the live app. Any SI-made image carries a visible "Made with SI" watermark and a line in its maker's file in `si_use/`.
 
 The thread through all seven: the dry season in three beats, **fall, fire, rain**, seen by a radar that does not stop for cloud or smoke.

@@ -1,0 +1,342 @@
+<!-- Written with Super Intelligence (SI) assistance. The seven demo slides. Every number on them is read from ../validation.json when the page opens; none is typed in. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0e11">
+  <title>Dry Season Waltz · slides</title>
+  <style>
+    :root {
+      --bg: #0b0e11;
+      --panel: #11151a;
+      --line: rgba(236, 232, 223, .14);
+      --text: #ece8df;
+      --muted: #9aa3a3;
+      --red: #ff3b30;
+      --orange: #ff9f0a;
+      --pale: #f2d98a;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; overflow: hidden; background: #050607; color: var(--text); font: 22px/1.45 var(--sans); }
+    a { color: inherit; }
+
+    /* One stage of 1600 by 900, scaled to the window by fit(). */
+    .deck { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; background: var(--bg); overflow: hidden; }
+    .slide { position: absolute; inset: 0; display: none; padding: 78px 96px 92px; }
+    .slide.is-on { display: block; }
+    .foot { position: absolute; left: 96px; right: 96px; bottom: 34px; display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+
+    h1, h2 { margin: 0; font-family: var(--serif); font-weight: 400; letter-spacing: -.025em; line-height: 1.04; }
+    h2 { font-size: 58px; max-width: 1250px; }
+    .label { margin: 0 0 18px; color: var(--muted); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; }
+    p { margin: 0; }
+    .lede { margin-top: 20px; max-width: 1180px; color: #c9c9c1; font-size: 26px; line-height: 1.4; }
+    .points { margin: 0; padding: 0; list-style: none; }
+    .points { font-size: 26px; line-height: 1.4; }
+    .points li { padding: 22px 0; border-top: 1px solid var(--line); }
+    .points li:last-child { border-bottom: 1px solid var(--line); }
+    .points b { font-weight: 600; }
+    figure { margin: 0; }
+    figcaption { margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.35; }
+    .frame { display: block; width: 100%; border: 1px solid var(--line); border-radius: 4px; background: #000; }
+    .num { font-family: var(--serif); font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+    .status { display: inline-block; margin-top: 12px; padding: 3px 9px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+    .status.is-final { border-color: var(--text); color: var(--text); }
+
+    /* 1. Title */
+    .s-title { padding: 0; }
+    .s-title .back { position: absolute; inset: 0; background: url("title_map.jpg") center / cover; }
+    .s-title .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,14,17,.9) 0, rgba(11,14,17,.5) 34%, rgba(11,14,17,.05) 60%, rgba(11,14,17,.75) 100%); }
+    .s-title .words { position: absolute; left: 96px; right: 96px; top: 84px; }
+    .s-title h1 { font-size: 128px; }
+    .s-title .lede { max-width: 980px; color: var(--text); font-size: 30px; }
+    .s-title .where { position: absolute; left: 96px; bottom: 60px; font-size: 22px; }
+    .s-title .where span { display: block; color: var(--muted); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; }
+
+    /* 2. The problem */
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 34px; }
+    .pair img { height: 362px; object-fit: cover; }
+    .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; margin-top: 26px; font-size: 22px; line-height: 1.42; }
+    .three p { padding-top: 15px; border-top: 1px solid var(--line); color: #c9c9c1; }
+
+    /* 3. The season, 4. Where to check */
+    .split { display: grid; grid-template-columns: 1000px 1fr; gap: 44px; margin-top: 34px; align-items: start; }
+    .side .stat { padding: 16px 0 18px; border-top: 1px solid var(--line); }
+    .side .stat:last-of-type { border-bottom: 1px solid var(--line); }
+    .side .num { display: block; font-size: 62px; line-height: 1; }
+    .side .stat p { margin-top: 8px; color: #c9c9c1; font-size: 19px; line-height: 1.35; }
+    .key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; color: var(--muted); font-size: 15px; }
+    .key i { display: inline-block; width: 11px; height: 11px; margin-right: 7px; border-radius: 2px; vertical-align: -1px; }
+    .split.roomy { grid-template-columns: 880px 1fr; }
+    .paper { width: 100%; height: 232px; border: 1px solid var(--line); border-radius: 4px; background: url("report_p3.jpg") -224px -52px / 945px auto no-repeat #1b1815; }
+    .levels { margin: 0 0 16px; padding: 0; list-style: none; font-size: 19px; }
+    .levels li { display: grid; grid-template-columns: 22px 1fr; padding: 9px 0; border-top: 1px solid var(--line); }
+    .levels i { width: 13px; height: 13px; margin-top: 8px; border-radius: 2px; }
+    .levels b { font-weight: 600; }
+    .levels span { grid-column: 2; color: #c9c9c1; font-size: 17px; }
+
+    /* 5. The evidence */
+    .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 40px; }
+    .tile { position: relative; height: 548px; padding: 30px 28px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+    .tile h3 { margin: 0 0 22px; color: var(--muted); font-size: 15px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+    .tile .num { display: block; font-size: 112px; line-height: .95; white-space: nowrap; }
+    .tile .num small { font-size: 34px; letter-spacing: 0; color: var(--muted); }
+    .tile p { margin-top: 26px; color: #c9c9c1; font-size: 23px; line-height: 1.4; }
+    .tile p b { color: var(--text); font-weight: 600; }
+    .tile .status { position: absolute; left: 28px; bottom: 28px; margin: 0; }
+
+    /* 6. The limits */
+    .two { display: grid; grid-template-columns: 1fr 480px; gap: 60px; margin-top: 36px; }
+    .aside { padding: 34px 34px 38px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); font-size: 23px; line-height: 1.45; align-self: start; }
+    .aside h3 { margin: 0 0 18px; font: 400 40px/1.08 var(--serif); letter-spacing: -.02em; }
+    .aside p + p { margin-top: 14px; color: #c9c9c1; }
+
+    /* 7. What comes next */
+    .links { display: grid; grid-template-columns: 230px 1fr; gap: 34px; align-items: center; padding: 28px 30px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+    .links img { width: 230px; height: 230px; border-radius: 4px; }
+    .links dl { margin: 0; font-size: 22px; }
+    .links dt { margin-top: 14px; color: var(--muted); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; }
+    .links dt:first-child { margin-top: 0; }
+    .links dd { margin: 2px 0 0; white-space: nowrap; }
+    .sources { margin-top: 24px; color: var(--muted); font-size: 17px; line-height: 1.45; }
+
+    /* Controls: not part of a slide, and not printed. */
+    .nav { position: fixed; left: 50%; bottom: 12px; z-index: 5; display: flex; gap: 8px; align-items: center; transform: translateX(-50%); padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: rgba(11,14,17,.82); color: var(--muted); font: 13px var(--sans); opacity: .25; transition: opacity .2s; }
+    .nav:hover, .nav:focus-within { opacity: 1; }
+    .nav button { padding: 5px 12px; border: 1px solid var(--line); border-radius: 4px; background: none; color: var(--text); font: inherit; cursor: pointer; }
+    .nav button:disabled { opacity: .35; cursor: default; }
+    .nav button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+    @media print {
+      @page { size: 1600px 900px; margin: 0; }
+      html, body { height: auto; overflow: visible; background: var(--bg); }
+      .nav { display: none; }
+      .deck { position: static; width: auto; height: auto; transform: none !important; overflow: visible; }
+      .slide { position: relative; display: block; width: 1600px; height: 900px; overflow: hidden; break-after: page; page-break-after: always; background: var(--bg); }
+      .slide:last-child { break-after: auto; page-break-after: auto; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+
+    <section class="slide s-title is-on" aria-label="Slide 1 of 7: title">
+      <div class="back" role="img" aria-label="Blocks of Borneo peat drawn as columns over a satellite image: red, orange and pale blocks by how affected they are"></div>
+      <div class="shade"></div>
+      <div class="words">
+        <p class="label">NASA Space Apps Challenge 2026 · Dancing with the SARs · Team Garugons</p>
+        <h1>Dry Season Waltz</h1>
+        <p class="lede">What NISAR's L-band radar saw over Borneo's peat in the 2026 dry season: where the ground dried, where it burned, and what the first rain did not bring back.</p>
+      </div>
+      <p class="where"><span>Open map, code and data</span>tommyquak.github.io/GarugonsSpaceApps</p>
+    </section>
+
+    <section class="slide" aria-label="Slide 2 of 7: the problem">
+      <p class="label">The problem</p>
+      <h2>Every dry season, drained peat in Borneo burns. A camera sees the smoke.</h2>
+      <div class="pair">
+        <figure><img class="frame" src="../story/smoke.jpg" alt="Southern Borneo in true colour, with smoke plumes over the peat"><figcaption>19 September 2026, as a camera sees it. VIIRS true colour, NASA EOSDIS GIBS.</figcaption></figure>
+        <figure><img class="frame" src="../story/radar.jpg" alt="The same region as a radar image: the ground is clear, with no cloud or smoke"><figcaption>14 September 2026, as the radar sees it. NISAR L-band HH, NASA and ISRO, from ASF DAAC.</figcaption></figure>
+      </div>
+      <div class="three">
+        <p>Canals cut for the Mega Rice Project in the 1990s still drain this peat. Dry peat burns, and the smoke reaches cities across the region.</p>
+        <p>Cloud first, then smoke: optical satellites lose the ground in exactly the weeks that matter.</p>
+        <p>NISAR's radar sees the ground through both. Peat fires are not the only fires in Indonesia, so the map shows fire off peat too.</p>
+      </div>
+      <div class="foot"><span>2 / 7</span><span>Dry Season Waltz · Team Garugons</span></div>
+    </section>
+
+    <section class="slide" aria-label="Slide 3 of 7: the season">
+      <p class="label">The app · The season</p>
+      <h2>The dry season, one radar pass at a time.</h2>
+      <div class="split">
+        <figure>
+          <video class="frame" src="season.mp4" poster="season_poster.jpg" autoplay loop muted playsinline aria-label="The app's season view playing from June to November: brown spreads along the canals as the radar echo falls, red fire builds up, then the brown fades after the rain"></video>
+          <div class="key"><span><i style="background:#8a5a2b"></i>The radar echo fell (darker is further)</span><span><i style="background:var(--red)"></i>Fire detected up to that date</span></div>
+        </figure>
+        <div class="side">
+          <div class="stat"><b class="num"><span data-v="fell_1db_km2_on_peat_west" data-as="whole">…</span> km²</b><p>of mapped peat in the west box fell by 1 dB or more, on both orbits, against closed forest.</p></div>
+          <div class="stat"><b class="num">+<span data-v="recovery_hh_median_rebound_west_125" data-as="one">…</span> dB</b><p>median rise of the echo on the first pass after the first rain, on the blocks that had dried most.</p></div>
+          <p class="lede" style="font-size:20px">The echo fell along the canals, fire built up on the same open peat, and the rain brought the echo back on most land. Click any place for its own curve, with rain and fire dates.</p>
+        </div>
+      </div>
+      <div class="foot"><span>3 / 7</span><span>Dry Season Waltz · Team Garugons</span></div>
+    </section>
+
+    <section class="slide" aria-label="Slide 4 of 7: where to check">
+      <p class="label">The app · Where to check</p>
+      <h2>From a map to a list a team can carry.</h2>
+      <div class="split roomy">
+        <figure>
+          <img class="frame" src="check_list.jpg" alt="The app's Where to check view: one-kilometre blocks as columns in three colours, with a ranked list of blocks beside it">
+          <figcaption>Every 1 km block of peat, by signs of lasting change after the rain. Taller and redder is a higher level.</figcaption>
+        </figure>
+        <div class="side">
+          <ul class="levels">
+            <li><i style="background:var(--red)"></i><b>Most affected</b><span>fire on several days, vegetation echo still low</span></li>
+            <li><i style="background:var(--orange)"></i><b>Affected</b><span>the echo fell and stayed low after the rain</span></li>
+            <li><i style="background:var(--pale)"></i><b>Recovered</b><span>changed, then came back with the rain</span></li>
+          </ul>
+          <div class="paper" role="img" aria-label="Page 3 of the printable field assessment: a table of twelve blocks to visit, each with a box to tick"></div>
+          <figcaption>The list exports to CSV and GeoJSON, and a three-page field assessment prints with the twelve blocks to visit first. It says where to look, not what to do.</figcaption>
+        </div>
+      </div>
+      <div class="foot"><span>4 / 7</span><span>Dry Season Waltz · Team Garugons</span></div>
+    </section>
+
+    <section class="slide" aria-label="Slide 5 of 7: the evidence">
+      <p class="label">The evidence</p>
+      <h2>Why believe it.</h2>
+      <div class="tiles">
+        <div class="tile">
+          <h3>Forest held still</h3>
+          <b class="num"><span data-v="cover_fell_share_hv_below_m15_west" data-as="pct">…</span></b>
+          <p>of open peat fell by 1 dB or more on both orbits. In closed forest on the same peat: <b><span data-v="cover_fell_share_hv_above_m11_west" data-as="pct">…</span></b>.</p>
+          <span class="status" data-status="cover_fell_share_hv_below_m15_west"></span>
+        </div>
+        <div class="tile">
+          <h3>Two orbits agree</h3>
+          <b class="num"><span data-v="track5_west_orbit_spearman" data-as="two">…</span></b>
+          <p>rank agreement between the dawn and dusk orbits, which look from opposite sides, on where the echo fell. East box: <b><span data-v="track5_east_orbit_spearman" data-as="two">…</span></b>.</p>
+          <span class="status" data-status="track5_west_orbit_spearman"></span>
+        </div>
+        <div class="tile">
+          <h3>Rain brought it back</h3>
+          <b class="num">+<span data-v="recovery_hh_median_rebound_west_125" data-as="one">…</span> <small>dB</small></b>
+          <p>median rise on the first pass after the first rain, on the blocks that had dried most. Dusk orbit: <b><span data-v="recovery_hh_median_rebound_west_061" data-as="one">…</span> dB</b>.</p>
+          <span class="status" data-status="recovery_hh_median_rebound_west_125"></span>
+        </div>
+        <div class="tile">
+          <h3>Fire returns</h3>
+          <b class="num"><span data-v="fire_repeat_share_on_peat_west" data-as="pct">…</span></b>
+          <p>of this year's fire on western peat fell on the <b><span data-v="fire_earlier_share_on_peat_west" data-as="pct">…</span></b> of it that had burned in 2015, 2019 or 2023.</p>
+          <span class="status" data-status="fire_repeat_share_on_peat_west"></span>
+        </div>
+      </div>
+      <div class="foot"><span>5 / 7</span><span>Every number is read from validation.json · final means recomputed independently by our checks track</span></div>
+    </section>
+
+    <section class="slide" aria-label="Slide 6 of 7: the limits">
+      <p class="label">The limits</p>
+      <h2>What it is not.</h2>
+      <div class="two">
+        <ul class="points">
+          <li><b>Not a measurement.</b> It is a screening map of where to look. It does not measure the water table and does not recommend any work.</li>
+          <li><b>Not checked on the ground.</b> No field data exists for this season, and public water-level records end before NISAR began.</li>
+          <li><b>One season.</b> And one pass per orbit after the rain, from a later processing release than the dry passes.</li>
+          <li><b>Not a fire forecast.</b> A bigger fall is not worse land: peat beside a canal falls far and recovers with the first rain.</li>
+          <li><b>The east box depends on the peat map.</b> Two published peat maps disagree there.</li>
+        </ul>
+        <div class="aside">
+          <h3>We had it attacked part-way through.</h3>
+          <p>An independent review went through the method and the numbers.</p>
+          <p>It cut our headline area, and we published what it found and what we changed, in <b>docs/AUDIT.md</b>. The limits live inside the app, one click from the map.</p>
+        </div>
+      </div>
+      <div class="foot"><span>6 / 7</span><span>Dry Season Waltz · Team Garugons</span></div>
+    </section>
+
+    <section class="slide" aria-label="Slide 7 of 7: what comes next">
+      <p class="label">What comes next</p>
+      <h2>Ground truth first.</h2>
+      <div class="two" style="grid-template-columns: 1fr 780px; gap: 54px;">
+        <ul class="points">
+          <li><b>Go and look.</b> About sixty field visits would calibrate the map, or show where it is wrong. The protocol is written.</li>
+          <li><b>More seasons.</b> Every NISAR pass adds to the record: wet years against dry, and subsidence by interferometry.</li>
+          <li><b>Other peatlands.</b> The pipeline takes any bounding box. It has not yet been run on a second site.</li>
+        </ul>
+        <div>
+          <div class="links">
+            <img src="qr_app.png" alt="QR code for the app">
+            <dl>
+              <dt>The app</dt><dd>tommyquak.github.io/GarugonsSpaceApps</dd>
+              <dt>Code and data, MIT licence</dt><dd>github.com/tommyquak/GarugonsSpaceApps</dd>
+              <dt>Reproduce it</dt><dd>one script, pipeline/run_all.sh</dd>
+            </dl>
+          </div>
+          <p class="sources">Data: NISAR L2 GCOV, NASA and ISRO, from ASF DAAC. FIRMS active fire, NASA. GPM IMERG rainfall, NASA. PEATMAP, Xu et al. 2018, CC BY 4.0. OpenStreetMap contributors. Built with Super Intelligence (SI) assistance, logged in submission/si_use.</p>
+        </div>
+      </div>
+      <div class="foot"><span>7 / 7</span><span>Dry Season Waltz · Team Garugons</span></div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Slides">
+    <button type="button" id="prev">Back</button>
+    <span id="count">1 / 7</span>
+    <button type="button" id="next">Next</button>
+  </nav>
+
+  <script>
+    const deck = document.getElementById("deck");
+    const slides = [...deck.querySelectorAll(".slide")];
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+    const count = document.getElementById("count");
+    let at = 0;
+
+    // The stage is drawn at 1600 by 900 and scaled to the window, centred.
+    function fit() {
+      const k = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+      deck.style.transform = `translate(${((window.innerWidth - 1600 * k) / 2).toFixed(1)}px, ${((window.innerHeight - 900 * k) / 2).toFixed(1)}px) scale(${k.toFixed(4)})`;
+    }
+    function show(n, record = true) {
+      at = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((slide, i) => slide.classList.toggle("is-on", i === at));
+      count.textContent = `${at + 1} / ${slides.length}`;
+      prev.disabled = at === 0;
+      next.disabled = at === slides.length - 1;
+      const video = slides[at].querySelector("video");
+      if (video) { video.currentTime = 0; video.play().catch(() => undefined); }
+      if (record) history.replaceState(null, "", `#${at + 1}`);
+    }
+    prev.addEventListener("click", () => show(at - 1));
+    next.addEventListener("click", () => show(at + 1));
+    document.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) { event.preventDefault(); show(at + 1); }
+      if (["ArrowLeft", "PageUp"].includes(event.key)) { event.preventDefault(); show(at - 1); }
+      if (event.key === "Home") show(0);
+      if (event.key === "End") show(slides.length - 1);
+    });
+    let touchX = null;
+    document.addEventListener("touchstart", (event) => { touchX = event.touches[0].clientX; }, { passive: true });
+    document.addEventListener("touchend", (event) => {
+      if (touchX === null) return;
+      const moved = event.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(moved) > 50) show(at + (moved < 0 ? 1 : -1));
+    });
+    window.addEventListener("resize", fit);
+    window.addEventListener("hashchange", () => show(Number(location.hash.slice(1)) - 1 || 0, false));
+    fit();
+    show(Number(location.hash.slice(1)) - 1 || 0, false);
+
+    // Every number on the slides comes from the app's numbers file. A number that is missing stays blank.
+    const AS = {
+      pct: (v) => `${Math.round(v * 100)}%`,
+      whole: (v) => Math.round(v).toLocaleString("en"),
+      one: (v) => Number(v).toFixed(1),
+      two: (v) => Number(v).toFixed(2),
+    };
+    fetch("../validation.json").then((r) => (r.ok ? r.json() : Promise.reject())).then((numbers) => {
+      for (const el of document.querySelectorAll("[data-v]")) {
+        const entry = numbers[el.dataset.v];
+        el.textContent = entry && typeof entry.value === "number" ? AS[el.dataset.as](entry.value) : "";
+        if (entry) el.title = `${el.dataset.v} in validation.json`;
+      }
+      for (const el of document.querySelectorAll("[data-status]")) {
+        const final = numbers[el.dataset.status]?.status === "final";
+        el.textContent = final ? "Final" : "Exploratory";
+        el.classList.toggle("is-final", final);
+      }
+    }).catch(() => {
+      for (const el of document.querySelectorAll("[data-v]")) el.textContent = "";
+    });
+  </script>
+</body>
+</html>
