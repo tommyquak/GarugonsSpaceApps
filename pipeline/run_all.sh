@@ -24,6 +24,7 @@ START_FROM=${START_FROM:-20260710}
 DRY_UNTIL=${DRY_UNTIL:-20261025}
 SEASON_START=${SEASON_START:-2026-05-01}
 SEASON_END=${SEASON_END:-2026-11-12}
+FIRE_YEARS=${FIRE_YEARS:-"2015 2019 2023"}   # earlier fire seasons for repeat fire (July to November of each)
 S=pipeline/out/stacks
 L=pipeline/out/layers
 SITES="west east"
@@ -74,6 +75,9 @@ if [ -n "${WITH_CONTEXT:-}" ]; then
   echo "== 5b. context layers: fire, rain, peat, canals"
   for site in $SITES; do
     $PY pipeline/context/pull_firms.py --site "$site" --start "$SEASON_START" --out "data/firms/$site"
+    for y in $FIRE_YEARS; do   # past seasons do not change, so each is pulled once
+      [ -d "data/firms_history/$site/$y" ] || $PY pipeline/context/pull_firms.py --site "$site" --start "$y-07-01" --end "$y-11-30" --out "data/firms_history/$site/$y"
+    done
     $PY pipeline/context/peatmap.py --site "$site" --layers "$L"
     $PY pipeline/context/peat.py --site "$site" --layers "$L"      # official map, local cross-check only
     $PY pipeline/context/canals.py --site "$site" --layers "$L"
@@ -89,6 +93,9 @@ for site in $SITES; do   # these two only read what is on disk, so they always r
   fi
   if [ -n "${WITH_CONTEXT:-}" ] || [ -f "data/cifor/TROP-SUBTROP_PeatV21_2016_CIFOR.tif" ]; then
     $PY pipeline/context/peat_cifor.py --site "$site" --layers "$L"     # an independent peat map, local cross-check only
+  fi
+  if [ -d "data/firms_history/$site" ] && [ -f "$L/fire_days_$site.tif" ] && [ -f "$L/peat_peatmap_$site.tif" ]; then
+    $PY pipeline/context/repeat_fire.py --site "$site" --history "data/firms_history/$site" --layers "$L"
   fi
 done
 
