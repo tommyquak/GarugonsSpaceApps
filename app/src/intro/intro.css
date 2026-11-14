@@ -50,14 +50,6 @@
   background: #1b2128;
   outline: 3px solid #07090b;
   animation: intro-wall-on 600ms ease-out both;
-  pointer-events: auto;
-  cursor: pointer;
-}
-.intro-wall:hover {
-  outline: 6px solid var(--accent);
-}
-.intro-wall:hover .intro-wall-hint {
-  fill: var(--accent);
 }
 .intro-wall svg {
   display: block;
@@ -205,15 +197,6 @@
   }
 }
 
-/* The dip to dark between a wall screen that has filled the view and the app behind it. */
-.intro-veil {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: #0b0f14;
-  opacity: 0;
-  pointer-events: none;
-}
 
 /* Wide screens: a photo-real room (room.png, 1672 x 941, generated with SI) instead of the
    drawn one. Its five wall screens are blank. Measured in the image, as shares of its size:
