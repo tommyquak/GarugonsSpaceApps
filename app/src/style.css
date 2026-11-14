@@ -963,10 +963,9 @@ a.text-button {
   margin: 0 0 8px;
 }
 
-.place-actions .text-button[aria-pressed="true"],
+/* A pressed action takes the app's filled style (ivory fill, dark ink). An open one is outlined. */
 .place-actions .text-button[aria-expanded="true"] {
   border-color: var(--accent);
-  color: var(--accent);
 }
 
 .place-actions a.text-button {

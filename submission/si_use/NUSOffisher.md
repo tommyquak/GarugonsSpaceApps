@@ -8,3 +8,4 @@ One line per use, same columns for everyone. Rules in `AGENTS.md` section 6.
 | 14 Nov | Jan Hoe | Coding assistant | Take me there on the place card, share link closes a place it does not name | `app/src/chart/actions.ts`, `app/src/link.ts`, `app/src/chart/placeChart.ts`, `app/src/style.css` |
 | 14 Nov | Jan Hoe | Coding assistant | Place reading measured from the audited dry start, with the two dates marked on the chart | `app/src/chart/placeChart.ts`, `app/src/style.css` |
 | 14 Nov | Jan Hoe | Coding assistant | Phone layout: a way into the season view from the bottom bar, map credits start folded | `app/index.html`, `app/src/main.ts` |
+| 14 Nov | Jan Hoe | Coding assistant | Pressed place card buttons readable again after the style pass | `app/src/style.css` |
