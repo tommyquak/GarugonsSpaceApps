@@ -8,12 +8,18 @@
 #   SKIP_PULL=1 pipeline/run_all.sh     start from stacks already in pipeline/out/stacks
 #                                       (for example downloaded from the data-v1 release)
 #
+#   WITH_CONTEXT=1 ...                  also rebuild the fire, rain, peat and canal layers (track 3).
+#                                       Needs FIRMS_MAP_KEY in the environment and an Earthdata login.
+#                                       Without it, layers already in pipeline/out/layers are used.
+#
 # The pull needs a NASA Earthdata login in ~/.netrc and takes a few hours.
 # Everything after the stacks takes a few minutes.
 set -euo pipefail
 
 PY=${PYTHON:-python3}
-DRY_UNTIL=${DRY_UNTIL:-20261025}   # last day before the rain returned, from the rainfall record
+DRY_UNTIL=${DRY_UNTIL:-20261025}   # last day before the rain returned: last_dry_day_<site> in validation.json
+SEASON_START=${SEASON_START:-2026-05-01}
+SEASON_END=${SEASON_END:-2026-11-12}
 S=pipeline/out/stacks
 L=pipeline/out/layers
 SITES="west east"
@@ -46,9 +52,31 @@ for site in $SITES; do
   done
 done
 
+echo "== 4b. time series for the app"
+for site in $SITES; do
+  $PY pipeline/drying/series.py --site "$site" --tracks $ASC $DESC --stacks "$S" --layers "$L" --out pipeline/out/series
+done
+
 echo "== 5. noise floor and the dried layers"
 rm -f pipeline/out/validation.json
 $PY pipeline/drying/noise_floor.py --layers "$L" --sites $SITES --tracks $ASC $DESC
+
+if [ -n "${WITH_CONTEXT:-}" ]; then
+  echo "== 5b. context layers: fire, rain, peat, canals"
+  for site in $SITES; do
+    $PY pipeline/context/pull_firms.py --site "$site" --start "$SEASON_START" --out "data/firms/$site"
+    $PY pipeline/context/peat.py --site "$site" --layers "$L"
+    $PY pipeline/context/canals.py --site "$site" --layers "$L"
+  done
+fi
+for site in $SITES; do   # these two only read what is on disk, so they always run when their input exists
+  if [ -d "data/firms/$site" ]; then
+    $PY pipeline/context/fire_layers.py --site "$site" --firms "data/firms/$site" --layers "$L" --series pipeline/out/series
+  fi
+  if [ -n "${WITH_CONTEXT:-}" ] || [ -f "$L/rain_daily_$site.json" ]; then
+    $PY pipeline/context/rain.py --site "$site" --start "$SEASON_START" --end "$SEASON_END" --out "$L"
+  fi
+done
 
 echo "== 6. recovery after the rain"
 for site in $SITES; do
@@ -63,10 +91,7 @@ echo "== 7. checks"
 $PY pipeline/drying/selfcheck.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL" > "$L/selfcheck_report.json"
 $PY pipeline/drying/sensitivity.py --stacks "$S" --layers "$L" --dry-until "$DRY_UNTIL"
 
-echo "== 8. time series for the app, and the map"
-for site in $SITES; do
-  $PY pipeline/drying/series.py --site "$site" --tracks $ASC $DESC --stacks "$S" --layers "$L" --out pipeline/out/series
-done
+echo "== 8. the map"
 $PY pipeline/drying/one_look_map.py --layers "$L" --stacks "$S" --sites $SITES --tracks $ASC $DESC --min-db 1 --out pipeline/out/one_look_map.png > /dev/null
 
 echo "done: layers in $L, numbers in pipeline/out/validation.json"
