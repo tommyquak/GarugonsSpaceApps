@@ -57,8 +57,8 @@ Field teams, peat restoration agencies and researchers who need to choose where 
 ### What we found
 
 - Between mid July and mid October 2026, HH fell by 1 dB or more on both orbits, relative to deep forest, across about 755 km² of mapped peat in the west and about 292 km² in the east. The study areas overlap. The two orbits ranked the locations of the fall similarly (Spearman ρ = 0.83 west and 0.87 east).
-- The fall follows the calendar. In an exact test that tried every other way of sorting the same passes into an early and a late group, no other sorting gave a fall as large as the real order (one-sided p = 0.010 on the dawn orbit and 0.002 on the dusk orbit, in both areas).
-- In the western reference forest used to correct the radar baseline, the 95th percentile of the HH change was +0.27 dB at dawn and +0.37 dB at dusk. At western forest edges, the median dawn change was −0.4 dB for locations 50 to under 250 m inside the edge.
+- In both study areas, the observed early and late dates gave the largest median fall in HH. Only one of 105 possible date groupings at dawn and one of 420 at dusk gave a fall that large (one-sided p = 0.0095 and 0.0024, respectively).
+- In the western forest used to set the baseline, the middle 90% of HH changes ranged from −0.28 to +0.27 dB at dawn and from −0.30 to +0.37 dB at dusk. At western forest edges, the median dawn change was −0.4 dB for locations 50 to under 250 m inside the edge.
 - In western blocks where HH fell by 1 dB or more on both orbits, the median echo rose 1.15 dB on the first dawn pass after the rain and 1.12 dB on the first dusk pass. Each orbit observed the rebound once.
 - Among mapped peat pixels with radar coverage on both orbits, active-fire detection footprints covered about 37% in the west and 61% in the east. In western peat blocks where HH fell by 1 dB or more on both orbits, the median HV change from the dry-season start to the first dawn pass after rain was 0.54 dB lower in blocks with a fire detection than in those without one. The groups use the full study-period fire record, so the comparison cannot establish when fire affected a block.
 
@@ -68,7 +68,7 @@ At L-band the wave passes through thin vegetation and reaches the ground on open
 
 ### What we do not see, and what we do not claim
 
-- Nothing here has been checked against the ground. Our tests are internal: two orbits agree, closed forest barely changes, HH rises with the rain. They show the change is on the ground and repeatable, not what it means in centimetres of water. The public water-level records for this landscape end before NISAR began. About sixty dipwell visits to 30 of our blocks, in the late dry season and after the first rain, would calibrate the map or show where it is wrong (`submission/IMPACT.md`).
+- Nothing here has been checked against the ground. Our tests are internal: two orbits agree, closed forest barely changes, HH rises with the rain. They show the change is on the ground and repeatable, not what it means in centimetres of water. The public water-level records for this landscape end before NISAR began. For a first field test, we propose visiting about 30 blocks twice: once late in the dry season and again two weeks after the first rain, for about 60 visits in all. That would calibrate the map or show where it is wrong (`submission/IMPACT.md`).
 - A fall in HH is not a measured drop in the water table, and no block is a recommendation to block a canal.
 - We do not claim to find fire-prone ground ahead of fire. Inside drained land, an early fall did not separate later fire from no fire.
 - The passes after the rain come from a later NASA processing release than the dry passes, so the size of the rise is uncertain by a few tenths of a decibel (`docs/AUDIT.md`, finding 3). Each orbit has one pass after the rain so far.
