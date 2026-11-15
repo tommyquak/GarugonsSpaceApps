@@ -23,7 +23,7 @@ Everything is a static file under `public/`, committed, so the app runs without 
 | Folder or file | What it holds | Made by |
 |---|---|---|
 | `public/layers/` | `layers.json` and the image of each map layer (`docs/DATA_CONTRACT.md` section 5) | `scripts/make_layers.py` |
-| `public/series/` | HH and HV of every pass, packed for the click-a-place chart (section 4) | `pipeline/drying/series.py` |
+| `public/series/` | For the place card (section 4): HH and HV of every pass, the daily rain, and the days with a fire detection per cell | `pipeline/drying/series.py` for the passes, track 3 for rain and fire; `scripts/make_layers.py` copies all of them in and writes `index.json` |
 | `public/season/` | The measured curves of the season view | `scripts/make_season_data.py` |
 | `public/blocks/` | The 1 km blocks with their classes, and `ontology.json` (section 6) | `scripts/copy_blocks.py` |
 | `public/story/` | Pictures, credits and narration of the opening story | `scripts/make_story_images.py`, `make_story_voice.py` |
