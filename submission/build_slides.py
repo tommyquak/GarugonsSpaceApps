@@ -117,9 +117,9 @@ NEXT = [
      "canals and fire scars, at squares from each class. That calibrates the map, or shows where it is wrong."),
     ("Every season", "Run it again", "The code takes any area. A second and a third season will show how the method "
      "behaves in a wet year, and other peatlands can be added."),
-    ("In two to three years", "Add sinking ground", "Drained peat sinks as it rots away, which is carbon lost to the air "
-     "(Hooijer et al. 2012). L-band radar has measured that in Central Kalimantan (Tay et al. 2025). With enough NISAR "
-     "passes we can test for it here."),
+    ("In two to three years", "Add subsidence measurement", "Drained peat sinks as it rots away. That sinking, called "
+     "subsidence, is carbon lost to the air (Hooijer et al. 2012). L-band radar has measured it in Central Kalimantan "
+     "(Tay et al. 2025). With enough NISAR passes we can test for it here."),
     ("Then", "Hand it over", "The list opens in any GIS or GPS. It needs an agency or a field group to take it up."),
 ]
 SOURCES = {
@@ -476,8 +476,9 @@ def build(a):
         x = 140 + k * 420
         shape(s, MSO_SHAPE.OVAL, px(x), px(244), px(18), px(18), SAND)
         words(s, x, 286, 380, 32, when, 22, color=SAND, font=MONO)
-        words(s, x, 322, 380, 46, name, 31, bold=True)
-        words(s, x, 374, 380, 300, sentence, 23, color=DIM)
+        # one box, so a name that takes two lines pushes its sentence down
+        words(s, x, 322, 380, 380, [[(name, {"bold": True, "color": INK, "size": 15.5})], sentence], 23, color=DIM,
+              space_after=5)
     links = [
         [("Open the map   ", {"bold": True, "color": INK}), (APP_URL, {"link": APP_URL})],
         [("Code and data   ", {"bold": True, "color": INK}), (CODE_URL, {"link": CODE_URL})],
