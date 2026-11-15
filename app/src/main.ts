@@ -1,4 +1,7 @@
 // Written with Super Intelligence (SI) assistance.
+// The entry point. Builds the map, the header and the panels (the season, Where to check, How it
+// decides, the story, Limits and About), wires them to each other, and keeps the address bar in
+// step with what is shown, so that any view can be sent as a link (link.ts, view.ts).
 import { AttributionControl, LngLat, Map as MapLibreMap, NavigationControl, ScaleControl, setWorkerUrl } from "maplibre-gl";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import "maplibre-gl/dist/maplibre-gl.css";

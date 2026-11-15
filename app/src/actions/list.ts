@@ -65,7 +65,7 @@ export function buildList(root: HTMLElement, store: BlockStore, firstSite: () =>
   ]);
   const site = select("Site", store.sites.map((s) => [s.id, s.id.charAt(0).toUpperCase() + s.id.slice(1)]));
   let sitePicked = false;
-  // Rewetting is the first question the list is opened for, when the data has that action.
+  // The list opens on "Fell, and still low after the rain", the class a field check is most for, when the data has it.
   if (actions.some((a) => a.id === "fell_still_low")) action.input.value = "fell_still_low";
 
   const count = h("p", { class: "act-count", "aria-live": "polite" });

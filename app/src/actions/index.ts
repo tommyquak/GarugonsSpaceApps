@@ -1,6 +1,6 @@
 // Written with Super Intelligence (SI) assistance.
-// The Actions view (docs/DESIGN.md, "Act"; docs/FUSION.md): the fused 1 km blocks coloured by the
-// action recommended for them, flat or as columns, a legend and a ranked list, and for one block
+// "Where to check" (docs/DESIGN.md, "Take away"; docs/FUSION.md): the fused 1 km blocks coloured by
+// their level or their class, flat or as columns, a legend and a ranked list, and for one block
 // the object card with its evidence graph. Everything it says is read from public/blocks.
 //
 //   const actions = await buildActions(map, chart, { setTab });
