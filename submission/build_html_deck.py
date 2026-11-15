@@ -21,7 +21,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, IN_TERMS, LEAD, MEMBERS, NEXT, PEAT, PEAT_SUM,  # noqa: E402
+from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, IN_TERMS, LEAD, MEMBERS, NEXT, PEAT, PEAT_SUM, PEAT_TITLE,  # noqa: E402
                           RADAR, RADAR_TITLE, SOURCES, STEPS, STEPS_TITLE, TEAM, TILES, TRUST, TRUST_TITLE, USE,
                           USE_SUM, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
 
@@ -85,7 +85,7 @@ def page(n, draft, counts):
         for k, (when, name, words) in enumerate(NEXT))
     parts = {"peat": peat, "radar": radar, "steps": steps, "frames": frames, "views": views, "trust": trust,
              "use": use, "use_sum": e(USE_SUM), "trust_title": e(TRUST_TITLE), "in_terms": e(IN_TERMS), "plan": plan, "lead": e(LEAD), "team": e(TEAM), "members": e(MEMBERS), "event": e(EVENT),
-             "peat_sum": e(PEAT_SUM), "radar_title": e(RADAR_TITLE), "steps_title": e(STEPS_TITLE),
+             "peat_sum": e(PEAT_SUM), "peat_title": e(PEAT_TITLE), "radar_title": e(RADAR_TITLE), "steps_title": e(STEPS_TITLE),
              "tile_west": e(TILES[0]), "tile_east": e(TILES[1]), "tile_rise": e(TILES[2].format(where=n["rise_where"])), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
              "draft": '<div class="badge">draft: exploratory numbers</div>' if draft else ""}
     parts.update({f"source{k}": e(v) for k, v in SOURCES.items()})
@@ -261,7 +261,7 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
   <!-- 2. The problem: how peat is degraded -->
   <section class="slide" aria-label="Slide 2: the problem">
     {{draft}}
-    <h2 class="reveal r1">Peat does not burn until someone drains it</h2>
+    <h2 class="reveal r1">{{peat_title}}</h2>
 {{peat}}
     <p class="sum reveal r5">{{peat_sum}}</p>
     <div class="rule"></div>

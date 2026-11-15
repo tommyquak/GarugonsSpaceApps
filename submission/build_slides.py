@@ -50,9 +50,10 @@ EVENT = "NASA Space Apps Challenge 2026 · Dancing with the SARs"
 LEAD = ("What NASA's new radar saw on Borneo's peat through the 2026 dry season, "
         "while cloud and smoke hid it from every camera.")
 # Slide 2: how peat is degraded, one photograph a step. (photo in app/public/story, word, sentence)
+PEAT_TITLE = "Peat burns far more easily once it is drained"
 PEAT = [
     ("forest.jpg", "Wet", "A peat swamp is forest growing on metres of dead plants that never rotted, because the ground "
-     "stays under water. It holds thousands of years of carbon, and wet peat does not burn."),
+     "stays under water. It holds thousands of years of carbon, and while it stays wet it rarely burns."),
     ("canal.jpg", "Drained", "In the 1990s the Mega Rice Project dug some 4,600 km of canals to turn a million hectares "
      "of this swamp into rice fields. The scheme failed. The canals still drain the peat."),
     ("burnt.jpg", "Burnt", "Dry peat catches fire and smoulders under the surface for weeks. Indonesia's 2015 fires, many "
@@ -409,7 +410,7 @@ def build(a):
     s.notes_slide.notes_text_frame.text = "Title: what the project is, who made it, which challenge."
 
     # 2. The problem: how peat is degraded
-    s = new(2, "Peat does not burn until someone drains it")
+    s = new(2, PEAT_TITLE)
     for k, (name, word, sentence) in enumerate(PEAT):
         x = 140 + k * 560
         photo(s, story / name, x, 232, 520, 300, f"Photograph: {word.lower()} peat")
