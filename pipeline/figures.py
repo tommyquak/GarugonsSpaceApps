@@ -116,7 +116,7 @@ def fig_season(out, v):
 def fig_orbits(out, v):
     site = "west"
     a, d = read(L / f"drydown_{site}_125.tif"), read(L / f"drydown_{site}_061.tif")
-    fig = frame("Two orbits, one answer", "West box. The change in HH from the dry start to mid October, seen from opposite sides at dawn and at dusk.")
+    fig = frame("Two orbits agree on where", "West box. The change in HH from the dry start to mid October, seen from opposite sides at dawn and at dusk.")
     from matplotlib.colors import LinearSegmentedColormap
     ramp = LinearSegmentedColormap.from_list("fall", ["#4e2f17", "#8b5a2b", "#bd8a4a", "#e0bd7c", "#f7f3ea", "#cfe3f3"])
     for k, (img, name) in enumerate(((a, "Dawn orbit, track 125"), (d, "Dusk orbit, track 061"))):
@@ -138,7 +138,7 @@ def fig_orbits(out, v):
     r = float(np.corrcoef(a[k], d[k])[0, 1])
     ax.set_xlabel("Dawn orbit, dB", fontsize=13, color=MUTED)
     ax.set_ylabel("Dusk orbit, dB", fontsize=13, color=MUTED)
-    ax.set_title(f"Block by block, r = {r:.2f}", fontsize=14, color=INK, loc="left")
+    ax.set_title(f"Block by block, Pearson r = {r:.2f}", fontsize=14, color=INK, loc="left")
     tidy(ax)
     ax.set_aspect("equal")
     finish(fig, out / "fig_orbits.png", "NISAR L2 GCOV (ASF DAAC)")
@@ -214,7 +214,7 @@ def fig_water_table(out, v):
     gauge = json.loads((H / "gauge_daily.json").read_text())["DF"]
     model = json.loads((H / "water_table_modelled.json").read_text())["DF"]
     radar = json.loads((H / "radar_vs_water_table.json").read_text())["sites"]["DF"]["tracks"]
-    fig = frame("A bridge to the ground, without fieldwork", "Drained forest near Palangka Raya. A rainfall-driven model fitted to the 2013 to 2017 gauge record, then run on 2026 rainfall.")
+    fig = frame("A modelled water table beside the radar", "Drained forest near Palangka Raya. A rainfall-driven model fitted to the 2013 to 2017 gauge record, then run on 2026 rainfall.")
     ax = fig.add_axes([0.06, 0.2, 0.42, 0.58])
     d = sorted(gauge)
     ax.plot([dt.date.fromisoformat(k) for k in d], [gauge[k] for k in d], color="#9aa3ad", linewidth=1.6, label="Measured (gauge)")
