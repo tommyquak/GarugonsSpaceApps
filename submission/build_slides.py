@@ -62,8 +62,9 @@ PEAT_SUM = ("This is peat degradation: drained, dried out, burnt, then burnt aga
             "once the water sits more than 0.4 m below the surface. The hard part is seeing which ground is drying, "
             "because in the dry season it lies under cloud, and then under smoke.")
 # Slide 3: what the radar is and what it measures.
+RADAR_TITLE = "An optical satellite can't see past cloud and smoke, but radar can see the ground"
 RADAR = [
-    ("Same place, same day.", "14 September 2026. On the left, what a camera in orbit saw: smoke and cloud. "
+    ("Same place, same day.", "14 September 2026. On the left, what an optical satellite saw: smoke and cloud. "
      "On the right, what NISAR saw: the land."),
     ("It brings its own light.", "NISAR, launched by NASA and ISRO in 2025, sends out radio waves 24 cm long. They pass "
      "through cloud and smoke, by day or night, and the satellite is built to return every 12 days."),
@@ -380,7 +381,7 @@ def build(a):
         s = prs.slides.add_slide(blank)
         background(s, BG)
         if heading:
-            words(s, 140, 96, 1640, 90, heading, 64, bold=True, name="Title")
+            words(s, 140, 96, 1640, 160, heading, 64, bold=True, name="Title")
         return s
 
     # 1. Title
@@ -405,11 +406,11 @@ def build(a):
     s.notes_slide.notes_text_frame.text = "The problem: what peat is, how it is degraded, what it costs, and why nobody can watch it in the dry season."
 
     # 3. What the radar is, and what it measures
-    s = new(3, "A camera sees the smoke. Radar sees the ground")
-    framed(s, fig / "fig_cloud.png", px(140), px(232), px(800), "Cloud against radar figure")
-    framed(s, fig / "explainer.gif", px(980), px(232), px(800), "Radar explainer animation")
+    s = new(3, RADAR_TITLE)   # two lines, so the pictures sit lower than on the other slides
+    framed(s, fig / "fig_cloud.png", px(140), px(280), px(800), "Cloud against radar figure")
+    framed(s, fig / "explainer.gif", px(980), px(280), px(800), "Radar explainer animation")
     for k, (name, sentence) in enumerate(RADAR):
-        words(s, 140 + k * 560, 716, 520, 230, [[(name, {"bold": True, "color": INK, "size": 14})], sentence], 24,
+        words(s, 140 + k * 560, 756, 520, 200, [[(name, {"bold": True, "color": INK, "size": 14})], sentence], 24,
               color=DIM, space_after=3)
     footer(s, 3, SOURCES[3], draft)
     s.notes_slide.notes_text_frame.text = "What NISAR is and what the echo means. Physics claims are the audited ones only."
