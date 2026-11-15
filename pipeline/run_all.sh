@@ -6,7 +6,8 @@
 #
 #   pipeline/run_all.sh                 pull the NISAR windows, build the stacks, then everything else
 #   SKIP_PULL=1 pipeline/run_all.sh     start from stacks already in pipeline/out/stacks
-#                                       (for example downloaded from the data-v1 release)
+#                                       (track 125 from the data-v1 release and track 061 from data-v5;
+#                                       the two download lines are in README.md)
 #
 #   WITH_HYDRO=1 ...                    also run the water-table bridge (pipeline/hydro/README.md)
 #   WITH_CONTEXT=1 ...                  also rebuild the fire, rain, peat and canal layers (track 3).
