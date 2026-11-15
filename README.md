@@ -1,4 +1,4 @@
-# Dry Season Waltz (working title)
+# Dry Season Waltz
 
 Team Garugons, NASA Space Apps Challenge 2026, challenge "Dancing with the SARs".
 
