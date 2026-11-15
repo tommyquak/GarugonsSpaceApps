@@ -1,4 +1,5 @@
 # Written with Super Intelligence (SI) assistance.
+"""Tests of how the runner hands its results on: what it writes to validation.json and with which status."""
 import json
 import tempfile
 import unittest

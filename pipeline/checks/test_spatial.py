@@ -1,4 +1,5 @@
 # Written with Super Intelligence (SI) assistance.
+"""Tests of the spatial helpers of the checks: block centres and the spread inside the reference forest."""
 import unittest
 
 import numpy as np
