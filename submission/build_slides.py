@@ -69,14 +69,14 @@ RADAR = [
      "On the right, what NISAR saw: the land."),
     ("NISAR allows us to see beyond the smoke.", "Launched by NASA and ISRO in 2025, it sends out its own radio waves, "
      "24 cm long. They pass through cloud and smoke, by day or night, and it is built to return every 12 days."),
-    ("The echo tells wet from dry.", "On open ground a wet surface sends back a strong echo and a dry one a weak echo. "
+    ("A drier surface gives a weaker echo.", "On open ground a wet surface sends back a strong echo and a dry one a weak echo. "
      "When open peat dries, the echo fades. Clearing fades it too, so we only ever say the echo fell."),
 ]
 # Slide 4: how the map is made, one step a row, in the words we would use out loud.
 STEPS_TITLE = "How we made the map, in five steps"
 STEPS = [
-    ("Get the radar pictures.", "NISAR flew over our two study areas about every 12 days from June to November 2026, "
-     "once at dawn and once at dusk. We lined every picture up on the same 50 m grid."),
+    ("Get the radar pictures.", "NISAR passed over our two study areas from June to November 2026, at dawn and "
+     "at dusk, with some gaps. We lined every picture up on the same 50 m grid."),
     ("Use the forest as a ruler.", "Thick forest looks the same to the radar all season. So we compare every spot with "
      "the forest near it, which cancels out the small differences between one picture and the next."),
     ("Find when the rain stopped.", "NASA's daily rainfall data gives the day the dry season began and the day the rain "
@@ -91,8 +91,8 @@ TILES = ["of peat in the west area where the echo got weaker", "the same, in the
 IN_TERMS = ("In technical terms: NISAR L2 GCOV backscatter (L-band, HH and HV) from ascending track 125 and descending "
             "track 061, on a 50 m grid, each pass referenced to closed forest. A fall is 1 dB or more on both tracks. "
             "Classes are set per 1 km block by rules kept in one file, the ontology.")
-CAME_OUT = ("In most places the echo came back after the first rain. In some it stayed weak, and we do not know why. "
-            "Those are the places to check first.")
+CAME_OUT = ("In most places the echo came back after the first rain. In some it stayed weak. We cannot yet say why from "
+            "space, which is why a field team should go there.")
 # Slide 5: the app. (recording, name, sentence); {o} is filled with the ontology counts.
 VIEWS = [
     ("demo_season.gif", "Play the season.", "Watch the echo fade pass by pass, with NASA's fire detections building up beside it."),
@@ -107,8 +107,8 @@ TRUST_TITLE = "How far to trust it, and what to do with it"
 TRUST = [
     ("Two orbits agree.", "Looking from opposite sides, four days apart, they picked the same places "
      "(rank correlation {r_west} in the west, {r_east} in the east)."),
-    ("It survived an attack.", "We asked an SI reviewer to break it. It found a start date just after rain. "
-     "We fixed it, and the numbers got smaller."),
+    ("We had it audited.", "We asked an SI reviewer to break it. It found a start date just after rain. "
+     "We fixed that, the numbers got smaller, and what we could not fix is in our limits."),
     ("It is not ground truth.", "Nobody has checked it in the field. It does not predict fire, and it covers "
      "one dry season in two areas."),
 ]
@@ -127,8 +127,8 @@ USE_SUM = "The map does not choose the remedy. It tells an agency where to look 
 NEXT = [
     ("Next dry season", "Check it on the ground", "About sixty visits with a field partner: water depth in a dipwell, "
      "canals and fire scars, at squares from each class. That calibrates the map, or shows where it is wrong."),
-    ("Every season", "Run it again", "The code takes any area. A second and a third season will show how the method "
-     "behaves in a wet year, and other peatlands can be added."),
+    ("Every season", "Run it again", "A second and a third season will show how the method behaves in a wet year. The code takes "
+     "any bounding box; a second peatland is the next test."),
     ("In two to three years", "Add subsidence measurement", "Drained peat sinks as it rots away. That sinking, called "
      "subsidence, is carbon lost to the air (Hooijer et al. 2012). L-band radar has measured it in Central Kalimantan "
      "(Tay et al. 2025). With enough NISAR passes we can test for it here."),
