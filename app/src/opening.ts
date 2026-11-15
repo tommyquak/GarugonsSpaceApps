@@ -56,7 +56,7 @@ const BEATS: Beat[] = [
     head: "In the 1990s the Mega Rice Project cut canals through this peat. They still drain it.",
     sub: (n) => {
       const share = percent(n, "fire_repeat_share_on_peat_west");
-      const again = share ? ` In our western study area, ${share} of this year's fire on peat fell on land that had burned before.` : "";
+      const again = share ? ` In our western study area, ${share} of this year's fire detections on peat were on land where fire was also detected in 2015, 2019 or 2023.` : "";
       return `Water runs out along a canal, the peat beside it dries, and dry peat burns.${again}`;
     },
   },
@@ -69,16 +69,16 @@ const BEATS: Beat[] = [
   {
     image: "open",
     head: "A wetter surface sends back a stronger echo. As open peat dries, the echo falls.",
-    sub: () => "A fall is a sign of drying. Clearing and farming can cause it too.",
+    sub: () => "A fall can mean drying. Clearing and farming can cause it too.",
   },
   {
     image: "burnt",
-    head: "Dry peat is the peat that burns, and it gives up its carbon as it burns.",
+    head: "When peat burns, it gives up the carbon it stored.",
     sub: () => "Sebangau after fire, September 2019. Drained peat also sinks, and the smoke reaches cities across the region.",
   },
   {
     map: "season",
-    head: "Through the dry season the radar echo fell along the canals, and fire built up on the same open peat.",
+    head: "Through the dry season the radar echo fell on the open peat, most of which lies along the canals. Fire detections built up on open peat too.",
     sub: () => "",
     key: [
       { color: "#bd8a4a", label: "The radar echo fell" },
@@ -88,10 +88,10 @@ const BEATS: Beat[] = [
   {
     map: "check",
     head: "The first rain brought the radar echo back on most land. On some, it did not.",
-    sub: () => "There the ground still looks different from the start of the season, which can mean burnt vegetation or peat that is still dry. That is where a peat restoration team should look first.",
+    sub: () => "There the ground still looks different from the start of the season, which can mean burnt vegetation or peat that is still dry. Those are the places worth a field check.",
     key: [
       { color: "#ff3b30", label: "Fire on several days, and the vegetation echo is still low" },
-      { color: "#ff9f0a", label: "No fire, and the ground echo is still low" },
+      { color: "#ff9f0a", label: "The echo is still low after the rain" },
       { color: "#f2d98a", label: "The echo is back near where it started" },
     ],
   },
