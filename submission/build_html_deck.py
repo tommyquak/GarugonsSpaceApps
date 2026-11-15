@@ -21,8 +21,9 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, HOLDS, LEAD, LIMITS, MEMBERS, NEXT, PEAT, PEAT_SUM,  # noqa: E402
-                          RADAR, RADAR_TITLE, SOURCES, STEPS, STEPS_TITLE, TEAM, TILES, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
+from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, IN_TERMS, LEAD, MEMBERS, NEXT, PEAT, PEAT_SUM,  # noqa: E402
+                          RADAR, RADAR_TITLE, SOURCES, STEPS, STEPS_TITLE, TEAM, TILES, TRUST, TRUST_TITLE, USE,
+                          USE_SUM, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
 
 PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "fig_orbits.png"] + [v[0] for v in VIEWS]
 PHOTOS = ["fire.jpg"] + [p[0] for p in PEAT]
@@ -76,14 +77,14 @@ def page(n, draft, counts):
     views = "\n".join(
         f'      <p><span class="tag">{k + 1}</span><b>{e(name)}</b> {e(words.format(o=ontology_words(counts)))}</p>'
         for k, (_, name, words) in enumerate(VIEWS))
-    holds = "\n".join(f'      <p><b>{e(name)}</b> {e(words.format(**n))}</p>' for name, words in HOLDS)
-    limits = "\n".join(f'      <p><b>{e(name)}</b>{e(words)}</p>' for name, words in LIMITS)
+    trust = "\n".join(f'      <p><b>{e(name)}</b> {e(words.format(**n))}</p>' for name, words in TRUST)
+    use = "\n".join(f'      <p><span class="no">{k + 1}</span><b>{e(name)}</b> {e(words)}</p>' for k, (name, words) in enumerate(USE))
     plan = "\n".join(
         f'    <div class="when reveal r{2 + k}" style="left:{140 + k * 420}px"><i></i><div class="t">{e(when)}</div>'
         f'<div class="name">{e(name)}</div><p>{e(words)}</p></div>'
         for k, (when, name, words) in enumerate(NEXT))
-    parts = {"peat": peat, "radar": radar, "steps": steps, "frames": frames, "views": views, "holds": holds,
-             "limits": limits, "plan": plan, "lead": e(LEAD), "team": e(TEAM), "members": e(MEMBERS), "event": e(EVENT),
+    parts = {"peat": peat, "radar": radar, "steps": steps, "frames": frames, "views": views, "trust": trust,
+             "use": use, "use_sum": e(USE_SUM), "trust_title": e(TRUST_TITLE), "in_terms": e(IN_TERMS), "plan": plan, "lead": e(LEAD), "team": e(TEAM), "members": e(MEMBERS), "event": e(EVENT),
              "peat_sum": e(PEAT_SUM), "radar_title": e(RADAR_TITLE), "steps_title": e(STEPS_TITLE),
              "tile_west": e(TILES[0]), "tile_east": e(TILES[1]), "tile_rise": e(TILES[2].format(where=n["rise_where"])), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
              "draft": '<div class="badge">draft: exploratory numbers</div>' if draft else ""}
@@ -199,6 +200,7 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
 .tile .num { font: 500 32px var(--mono); white-space: nowrap; }
 .tile .label { margin-top: 8px; font: 400 18px/1.32 var(--sans); color: var(--dim); }
 .out { position: absolute; left: 1080px; top: 842px; width: 700px; font: 400 24px/1.4 var(--sans); }
+.terms { position: absolute; left: 140px; top: 876px; width: 880px; font: 400 19px/1.4 var(--sans); color: var(--dim); }
 
 /* ===========================================
    SLIDE 5: four recordings of the app, numbered, with what each is for
@@ -211,13 +213,14 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
 .do .go { margin-top: 30px; font-size: 28px; }
 
 /* ===========================================
-   SLIDE 6: what holds up, and what the map cannot say
+   SLIDE 6: how far to trust it, in short, beside what a restoration agency can do with it
    =========================================== */
-.half { position: absolute; top: 224px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.half { position: absolute; top: 224px; font: 400 24px/1.42 var(--sans); color: var(--dim); }
 .half h3 { font: 600 34px var(--sans); color: var(--ink); margin-bottom: 20px; }
-.half p { margin-bottom: 16px; } .half b { color: var(--ink); font-weight: 600; }
-.cannot p { padding: 20px 0; margin: 0; border-top: 1px solid var(--line); font-size: 27px; }
-.cannot b { display: block; font-size: 32px; margin-bottom: 4px; }
+.half p { margin-bottom: 14px; } .half b { color: var(--ink); font-weight: 600; }
+.use p { position: relative; padding-left: 50px; margin-bottom: 18px; }
+.use .no { position: absolute; left: 0; top: 0; font: 500 24px/1.42 var(--mono); color: var(--sand); }
+.use .last { padding: 20px 0 0; margin: 4px 0 0; border-top: 1px solid var(--line); color: var(--ink); font-size: 26px; }
 
 /* ===========================================
    SLIDE 7: the plan along a line, and the links
@@ -290,6 +293,7 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
     <div class="tile reveal r4" style="left:1320px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">{{tile_east}}</div></div>
     <div class="tile reveal r4" style="left:1560px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">{{tile_rise}}</div></div>
     <p class="out reveal r5">{{came_out}}</p>
+    <p class="terms reveal r5">{{in_terms}}</p>
     <div class="rule"></div>
     <p class="source">{{source4}}</p>
     <p class="page">04 / 07</p>
@@ -309,20 +313,21 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
     <p class="page">05 / 07</p>
   </section>
 
-  <!-- 6. How far to trust it -->
-  <section class="slide" aria-label="Slide 6: how far to trust it">
+  <!-- 6. How far to trust it, and what to do with it -->
+  <section class="slide" aria-label="Slide 6: how far to trust it, and what to do with it">
     {{draft}}
-    <h2 class="reveal r1">How far you can trust it</h2>
-    <div class="half reveal r2" style="left:140px; width:800px">
-      <h3>What holds up</h3>
+    <h2 class="reveal r1">{{trust_title}}</h2>
+    <div class="half reveal r2" style="left:140px; width:760px">
+      <h3>How far you can trust it</h3>
     </div>
-    <div class="frame reveal r2" style="left:140px; top:292px; width:720px; height:405px"><img src="assets/fig_orbits.png" alt="The dawn and the dusk orbit side by side, and compared square by square"></div>
-    <div class="half reveal r3" style="left:140px; top:722px; width:800px">
-{{holds}}
+    <div class="frame reveal r2" style="left:140px; top:286px; width:480px; height:270px"><img src="assets/fig_orbits.png" alt="The dawn and the dusk orbit side by side, and compared square by square"></div>
+    <div class="half reveal r3" style="left:140px; top:578px; width:760px">
+{{trust}}
     </div>
-    <div class="half cannot reveal r4" style="left:1010px; width:770px">
-      <h3>What it cannot tell you</h3>
-{{limits}}
+    <div class="half use reveal r4" style="left:980px; width:800px">
+      <h3>What a restoration agency can do with it</h3>
+{{use}}
+      <p class="last">{{use_sum}}</p>
     </div>
     <div class="rule"></div>
     <p class="source">{{source6}}</p>

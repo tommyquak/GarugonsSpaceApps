@@ -87,6 +87,9 @@ STEPS = [
 ]
 TILES = ["of peat in the west area where the echo got weaker", "the same, in the east area",
          "how much it came back on the first pass after the rain, {where}"]
+IN_TERMS = ("In technical terms: NISAR L2 GCOV backscatter (L-band, HH and HV) from ascending track 125 and descending "
+            "track 061, on a 50 m grid, each pass referenced to closed forest. A fall is 1 dB or more on both tracks. "
+            "Classes are set per 1 km block by rules kept in one file, the ontology.")
 CAME_OUT = ("In most places the echo came back after the first rain. In some it stayed weak, and we do not know why. "
             "Those are the places to check first.")
 # Slide 5: the app. (recording, name, sentence); {o} is filled with the ontology counts.
@@ -98,19 +101,27 @@ VIEWS = [
      "We call it the ontology: {o}."),
     ("demo_report.gif", "Print it.", "Three pages for a field team, ending in the squares to visit first."),
 ]
-# Slide 6: what holds up, and what the map cannot say.
-HOLDS = [
-    ("Two orbits picked the same places.", "They look from opposite sides, four days apart, and agree square by square "
-     "(rank correlation {r_west} in the west area, {r_east} in the east)."),
-    ("We asked a reviewer to break it.", "An SI reviewer found our first start date fell just after rain. We moved the "
-     "start, the numbers got smaller, and the audit is published with the code."),
+# Slide 6: how far to trust the map, in short, and what a restoration agency can do with it.
+TRUST_TITLE = "How far to trust it, and what to do with it"
+TRUST = [
+    ("Two orbits agree.", "Looking from opposite sides, four days apart, they picked the same places "
+     "(rank correlation {r_west} in the west, {r_east} in the east)."),
+    ("It survived an attack.", "We asked an SI reviewer to break it. It found a start date just after rain. "
+     "We fixed it, and the numbers got smaller."),
+    ("It is not ground truth.", "Nobody has checked it in the field. It does not predict fire, and it covers "
+     "one dry season in two areas."),
 ]
-LIMITS = [
-    ("Nobody has checked it on the ground.", "A weaker echo is not a measured water level."),
-    ("It does not predict fire.", "We tested that, found nothing clear, and dropped the claim."),
-    ("It is one dry season, in two areas.", "Both in Central Kalimantan. A wet year may look different."),
-    ("It says where to look, not what to do.", "A square on the list is a place to visit, not a verdict."),
+USE = [
+    ("Take the list.", "Every 1 km square comes with its coordinates and the evidence behind it, in a file that opens "
+     "in a GIS or on a GPS."),
+    ("Visit the top of the list first.", "Start where the echo stayed weak after the rain, and where fire was detected. "
+     "Measure the water depth and look at the canals."),
+    ("Restore where the visit confirms it.", "Indonesia's peat agency works by rewetting, replanting and supporting "
+     "local livelihoods. Rewetting means blocking canals with dams, filling them in, and drilling deep wells."),
+    ("Look again next season.", "NISAR is built to come back every 12 days. Run after a canal is blocked, the same map "
+     "could show whether the echo there holds up through the next dry season. We have not tested this."),
 ]
+USE_SUM = "The map does not choose the remedy. It tells an agency where to look first."
 # Slide 7: the plan. (when, what, sentence). The papers are in docs/REFERENCES.md.
 NEXT = [
     ("Next dry season", "Check it on the ground", "About sixty visits with a field partner: water depth in a dipwell, "
@@ -129,7 +140,7 @@ SOURCES = {
     3: "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (NASA and ISRO, ASF DAAC). The animation is a schematic made with SI assistance.",
     4: "Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), NASA FIRMS, PEATMAP (CC BY 4.0).",
     5: "Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.",
-    6: "Figure: pipeline/figures.py. Audit and response: docs/AUDIT.md. All limits: docs/LIMITS.md.",
+    6: "Figure: pipeline/figures.py. Audit: docs/AUDIT.md. Limits: docs/LIMITS.md. Restoration measures: Indonesia's peat and mangrove restoration agency (BRGM), as described by UN DESA.",
     7: "Made with Super Intelligence (SI) assistance, from open NASA, ISRO and other data. Sources and licences: submission/LICENCES.md.",
 }
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
@@ -422,7 +433,8 @@ def build(a):
     s = new(4, STEPS_TITLE)
     rows = [[(f"{k + 1}  ", {"color": SAND, "font": MONO, "bold": True}), (name + " ", {"bold": True, "color": INK}), sentence]
             for k, (name, sentence) in enumerate(STEPS)]
-    words(s, 140, 232, 880, 720, rows, 24, color=DIM, space_after=11)
+    words(s, 140, 232, 880, 620, rows, 24, color=DIM, space_after=11)
+    words(s, 140, 876, 880, 84, IN_TERMS, 18, color=DIM)
     framed(s, fig / "fig_season.png", px(1080), px(232), px(700), "Season figure")   # 16:9, so 394 px tall
     rise, rise_where = rise_words(num)
     tiles = [(num.km2("fell_1db_km2_on_peat_west"), SAND), (num.km2("fell_1db_km2_on_peat_east"), SAND), (rise, RAIN)]
@@ -453,21 +465,21 @@ def build(a):
     s.notes_slide.notes_text_frame.text = ("Four recordings of the live app (figures-v3): the season, Where to check tilting "
                                            "into 3D, the ontology under How it decides, and the field assessment.")
 
-    # 6. How far to trust it
-    s = new(6, "How far you can trust it")
-    words(s, 140, 224, 800, 50, "What holds up", 34, bold=True)
-    framed(s, fig / "fig_orbits.png", px(140), px(292), px(720), "Orbits figure")
+    # 6. How far to trust it, and what to do with it
+    s = new(6, TRUST_TITLE)
+    words(s, 140, 224, 760, 50, "How far you can trust it", 34, bold=True)
+    framed(s, fig / "fig_orbits.png", px(140), px(286), px(480), "Orbits figure")
     n = {"r_west": f"{num.get('track5_west_orbit_spearman'):.2f}", "r_east": f"{num.get('track5_east_orbit_spearman'):.2f}"}
-    words(s, 140, 722, 800, 240, [lead_in(name, sentence.format(**n)) for name, sentence in HOLDS], 24, color=DIM,
+    words(s, 140, 578, 760, 380, [lead_in(name, sentence.format(**n)) for name, sentence in TRUST], 23, color=DIM,
           space_after=8)
-    words(s, 1010, 224, 770, 50, "What it cannot tell you", 34, bold=True)
-    for k, (name, sentence) in enumerate(LIMITS):
-        y = 292 + k * 150
-        line(s, px(1010), px(y), px(1780), px(y), LINE, 0.75)
-        words(s, 1010, y + 24, 770, 46, name, 31, bold=True)
-        words(s, 1010, y + 72, 770, 60, sentence, 26, color=DIM)
+    words(s, 980, 224, 800, 50, "What a restoration agency can do with it", 34, bold=True)
+    rows = [[(f"{k + 1}  ", {"color": SAND, "font": MONO, "bold": True}), (name + " ", {"bold": True, "color": INK}), sentence]
+            for k, (name, sentence) in enumerate(USE)]
+    words(s, 980, 286, 800, 570, rows, 23, color=DIM, space_after=10)
+    words(s, 980, 880, 800, 80, USE_SUM, 26)
     footer(s, 6, SOURCES[6], draft)
-    s.notes_slide.notes_text_frame.text = "Validity: two independent orbits and the audit; then the limits, plainly."
+    s.notes_slide.notes_text_frame.text = ("Validity in short, then use: the list, the field visit, the agency's own restoration "
+                                           "measures, and a second look next season. The map does not recommend an intervention.")
 
     # 7. The plan
     s = new(7, "What comes next")
