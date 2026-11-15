@@ -22,7 +22,7 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, HOLDS, LEAD, LIMITS, MEMBERS, NEXT, PEAT, PEAT_SUM,  # noqa: E402
-                          RADAR, SOURCES, STEPS, TEAM, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
+                          RADAR, RADAR_TITLE, SOURCES, STEPS, TEAM, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
 
 PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "fig_orbits.png"] + [v[0] for v in VIEWS]
 PHOTOS = ["fire.jpg"] + [p[0] for p in PEAT]
@@ -85,7 +85,7 @@ def page(n, draft, counts):
         for k, (when, name, words) in enumerate(NEXT))
     parts = {"peat": peat, "radar": radar, "steps": steps, "frames": frames, "views": views, "holds": holds,
              "limits": limits, "plan": plan, "lead": e(LEAD), "team": e(TEAM), "members": e(MEMBERS), "event": e(EVENT),
-             "peat_sum": e(PEAT_SUM), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
+             "peat_sum": e(PEAT_SUM), "radar_title": e(RADAR_TITLE), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
              "draft": '<div class="badge">draft: exploratory numbers</div>' if draft else ""}
     parts.update({f"source{k}": e(v) for k, v in SOURCES.items()})
     parts.update({k: e(v) for k, v in n.items()})
@@ -182,9 +182,9 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
   font: 400 28px/1.42 var(--sans); }
 
 /* ===========================================
-   SLIDE 3: three facts under the two pictures
+   SLIDE 3: three facts under the two pictures (its title takes two lines, so everything sits lower)
    =========================================== */
-.fact { position: absolute; top: 716px; width: 520px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.fact { position: absolute; top: 756px; width: 520px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
 .fact b { display: block; margin-bottom: 4px; color: var(--ink); font: 600 28px/1.3 var(--sans); }
 
 /* ===========================================
@@ -270,9 +270,9 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
   <!-- 3. What the radar is, and what it measures -->
   <section class="slide" aria-label="Slide 3: what the radar sees">
     {{draft}}
-    <h2 class="reveal r1">A camera sees the smoke. Radar sees the ground</h2>
-    <div class="frame reveal r2" style="left:140px; top:232px; width:800px; height:450px"><img src="assets/fig_cloud.png" alt="The same ground on 14 September 2026: smoke and cloud in VIIRS true colour, the land in NISAR L-band radar"></div>
-    <div class="frame dark reveal r3" style="left:980px; top:232px; width:800px; height:450px"><img src="assets/explainer.gif" alt="Animated schematic of how the radar echo changes over wet and dry peat"></div>
+    <h2 class="reveal r1">{{radar_title}}</h2>
+    <div class="frame reveal r2" style="left:140px; top:280px; width:800px; height:450px"><img src="assets/fig_cloud.png" alt="The same ground on 14 September 2026: smoke and cloud in VIIRS true colour, the land in NISAR L-band radar"></div>
+    <div class="frame dark reveal r3" style="left:980px; top:280px; width:800px; height:450px"><img src="assets/explainer.gif" alt="Animated schematic of how the radar echo changes over wet and dry peat"></div>
 {{radar}}
     <div class="rule"></div>
     <p class="source">{{source3}}</p>
