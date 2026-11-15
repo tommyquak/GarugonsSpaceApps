@@ -116,10 +116,10 @@ USE = [
      "in a GIS or on a GPS."),
     ("Visit the top of the list first.", "Start where the echo stayed weak after the rain, and where fire was detected. "
      "Measure the water depth and look at the canals."),
-    ("Restore where the visit confirms it.", "Indonesia's peat agency works by rewetting, replanting and supporting "
+    ("The field team decides whether to act.", "Indonesia's peat agency restores by rewetting, replanting and supporting "
      "local livelihoods. Rewetting means blocking canals with dams, filling them in, and drilling deep wells."),
-    ("Look again next season.", "NISAR is built to come back every 12 days. Run after a canal is blocked, the same map "
-     "could show whether the echo there holds up through the next dry season. We have not tested this."),
+    ("Look again next season.", "NISAR is built to come back every 12 days. If the agency blocks a canal, it could use "
+     "the same map next season to check how the radar echo changes there. We have not tested this."),
 ]
 USE_SUM = "The map does not choose the remedy. It tells an agency where to look first."
 # Slide 7: the plan. (when, what, sentence). The papers are in docs/REFERENCES.md.

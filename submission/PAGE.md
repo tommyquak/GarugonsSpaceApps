@@ -76,8 +76,8 @@ Field teams, peat restoration agencies and researchers who need to choose where 
 
 1. **Take the list.** Every 1 km square comes with its coordinates and the evidence behind it, as CSV and GeoJSON that open in a GIS or on a GPS.
 2. **Visit the top of the list first.** Start where the echo stayed weak after the rain, and where fire was detected. Measure the water depth and look at the canals.
-3. **Restore where the visit confirms it.** The remedy is the agency's, not ours. Indonesia's peat restoration programme works by rewetting (blocking canals with dams, filling them in, drilling deep wells), replanting, and supporting local livelihoods.
-4. **Look again next season.** NISAR is built to come back every 12 days. Run again after a canal is blocked, the same map could show whether the echo there holds up through the next dry season. We have not tested this.
+3. **The field team decides whether to act.** The remedy is the agency's, not ours. Indonesia's peat restoration programme works by rewetting (blocking canals with dams, filling them in, drilling deep wells), replanting, and supporting local livelihoods.
+4. **Look again next season.** NISAR is built to come back every 12 days. If the agency blocks a canal, it could use the same map next season to check how the radar echo changes there. We have not tested this.
 
 ### Tools and technologies
 
