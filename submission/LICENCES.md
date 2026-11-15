@@ -28,9 +28,9 @@ Checked on 14 November 2026 against the repository, the twelve releases and the 
 
 | File | Maker | Licence | Credit shown |
 |---|---|---|---|
-| `app/public/story/fire.jpg`, `burnt.jpg` | DenY Krisbiyantoro, Wikimedia Commons | CC BY-SA 4.0 | In the story, and `app/public/story/CREDITS.md` with the changes made |
-| `canal.jpg`, `open.jpg` | Josh Estey, AusAID, Wikimedia Commons | CC BY 2.0 | Same |
-| `forest.jpg` | Ruanda Agung Sugardiman, AusAID, Wikimedia Commons | CC BY 2.0 | `CREDITS.md` (not shown in the story at present) |
+| `app/public/story/fire.jpg`, `burnt.jpg` | DenY Krisbiyantoro, Wikimedia Commons | CC BY-SA 4.0 | In the story, on slides 1 and 2 of the deck, and `app/public/story/CREDITS.md` with the changes made |
+| `canal.jpg`, `open.jpg` | Josh Estey, AusAID, Wikimedia Commons | CC BY 2.0 | In the story, `canal.jpg` on slide 2 of the deck, and `CREDITS.md` |
+| `forest.jpg` | Ruanda Agung Sugardiman, AusAID, Wikimedia Commons | CC BY 2.0 | On slide 2 of the deck, and `CREDITS.md` (not shown in the story at present) |
 | `app/src/intro/room.png`, and `app_room.jpg` in `figures-v3` | Made with SI | Ours, MIT | Labelled on the page as an illustrative scene made with SI, and wherever it is shown |
 | `explainer.gif`, `explainer.mp4` | Made with SI assistance, by code in this repo | Ours, MIT | Carries a visible SI line and says it is a schematic |
 | `app/public/story/voice/beat-1.mp3` to `beat-7.mp3` | Made with a text-to-speech service, in a synthetic copy of a team member's own voice | Ours | Named in the SI statement (`submission/SI_USE.md`) and logged in `submission/si_use/tommyquak.md`; not labelled where it plays |
