@@ -231,7 +231,7 @@ def background(slide, color):
 
 
 def compact(path):
-    """The figure as a smaller image for the deck: charts to a 256-colour PNG, the photographic map to JPEG.
+    """The figure as a smaller image for the deck: charts to a 256-colour PNG, figures with satellite pictures to JPEG.
 
     Keeps the deck small enough to upload to Google Drive in one call; the release files stay untouched."""
     if path.suffix.lower() == ".gif":
@@ -240,7 +240,8 @@ def compact(path):
     buf = io.BytesIO()
     if path.suffix.lower() in (".jpg", ".jpeg"):
         return str(path)
-    if path.stem == "fig_map":
+    img.thumbnail((1600, 1600))   # twice the widest a figure is shown, on a 1920 stage
+    if path.stem in ("fig_map", "fig_cloud", "fig_orbits"):   # these hold satellite pictures, which PNG stores badly
         img.save(buf, "JPEG", quality=86, optimize=True)
     else:
         img.quantize(colors=256, method=Image.Quantize.MEDIANCUT).save(buf, "PNG", optimize=True)
@@ -360,9 +361,9 @@ def photo(slide, path, x, y, w, h, name, focus=(0.5, 0.5)):
         ch = int(img.width / want)
         top = int((img.height - ch) * focus[1])
         img = img.crop((0, top, img.width, top + ch))
-    img.thumbnail((1400, 1400))
+    img.thumbnail((int(w * 1.3), int(h * 1.3)))   # a third more than the box, in stage pixels: sharp at full screen, and small
     buf = io.BytesIO()
-    img.save(buf, "JPEG", quality=84, optimize=True)
+    img.save(buf, "JPEG", quality=78, optimize=True)
     buf.seek(0)
     pic = slide.shapes.add_picture(buf, px(x), px(y), px(w), px(h))
     pic.name = name
