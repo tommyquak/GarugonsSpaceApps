@@ -1,16 +1,16 @@
 # Written with Super Intelligence (SI) assistance.
-"""Build the seven-slide demo deck as one HTML page (track 6), in the app's control-room look.
+"""Build the seven-slide demo deck as one HTML page (track 6), in the app's dark look.
 
-Same slides, order and wording as build_slides.py, which makes the .pptx; this makes a web deck with a
-fixed 1920 x 1080 stage scaled to any screen. Every number is read from
-validation.json through build_slides.Numbers; none is typed here. No in-browser editing, on purpose:
-numbers change only by rebuilding from the file.
+Same slides, order and wording as build_slides.py, which makes the .pptx: the words are lists in that file
+and both builders read them. This one makes a web deck with a fixed 1920 x 1080 stage scaled to any screen.
+Every number of ours is read from validation.json through build_slides.Numbers; none is typed here.
 
-    python submission/build_html_deck.py --figures submission/figures --validation app/public/validation.json \\
-        --out submission/deck            # writes index.html and copies the pictures to assets/
+    python submission/build_html_deck.py --figures submission/figures --out submission/deck
+        # writes index.html and copies the pictures to assets/
     python submission/build_html_deck.py ... --final   # only keys marked final; no draft badge
 
-Pictures: gh release download figures-v3 --dir submission/figures (the figures, the four app GIFs and app_room.jpg).
+Pictures: gh release download figures-v3 --dir submission/figures (the figures and the four app recordings).
+The photographs are the ones of the app's opening story, in app/public/story, with their credits.
 """
 import argparse
 import html
@@ -21,24 +21,27 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_slides import APP_URL, CHOICES, CODE_URL, MORE_SEASONS, Numbers, SUBSIDENCE, ontology_counts  # noqa: E402
+from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, HOLDS, LEAD, LIMITS, MEMBERS, NEXT, PEAT, PEAT_SUM,  # noqa: E402
+                          RADAR, SOURCES, STEPS, TEAM, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
 
-PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "demo_season.gif", "demo_check.gif", "demo_decide.gif",
-            "demo_report.gif", "fig_orbits.png", "fig_start.png", "fig_water_table.png", "app_room.jpg"]
+PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "fig_orbits.png"] + [v[0] for v in VIEWS]
+PHOTOS = ["fire.jpg"] + [p[0] for p in PEAT]
 
 
-def copy_pictures(fig, assets):
-    """Copy the figures next to the page; the map loses its baked-in title band and colour bar."""
+def copy_pictures(fig, photos, assets):
+    """Copy the figures and recordings next to the page, and the photographs at the size the slides show them."""
     assets.mkdir(parents=True, exist_ok=True)
-    Image.open(fig / "fig_map.png").convert("RGB").crop((0, 70, 1480, 1032)).save(assets / "map.jpg", quality=88)
     for name in PICTURES:
         shutil.copyfile(fig / name, assets / name)
+    for name in PHOTOS:
+        img = Image.open(photos / name).convert("RGB")
+        img.thumbnail((1920, 1280) if name == "fire.jpg" else (1100, 740))
+        img.save(assets / name, quality=84, optimize=True)
 
 
 def numbers(num):
-    """Every number on the deck, keyed for the page template."""
-    dawn, dusk = num.db("recovery_hh_median_rebound_west_125"), num.db("recovery_hh_median_rebound_west_061")
-    rise, rise_where = (dawn, "on both orbits") if dawn == dusk else (f"{dawn} / {dusk}", "dawn / dusk orbit")
+    """Every number of ours on the deck, keyed for the page template."""
+    rise, rise_where = rise_words(num)
     return {
         "west_km2": num.km2("fell_1db_km2_on_peat_west"),
         "east_km2": num.km2("fell_1db_km2_on_peat_east"),
@@ -46,23 +49,50 @@ def numbers(num):
         "rise_where": rise_where,
         "r_west": f"{num.get('track5_west_orbit_spearman'):.2f}",
         "r_east": f"{num.get('track5_east_orbit_spearman'):.2f}",
-        "repeat": num.share("fire_repeat_share_on_peat_west"),
-        "earlier": num.share("fire_earlier_share_on_peat_west"),
     }
 
 
+def e(words):
+    return html.escape(words)
+
+
 def page(n, draft, counts):
-    """The deck. {{key}} slots are filled from validation.json and the ontology file; everything else is fixed text."""
-    out = TEMPLATE.replace("{{app_url}}", APP_URL).replace("{{code_url}}", CODE_URL)
-    out = out.replace("{{subsidence}}", html.escape(SUBSIDENCE)).replace("{{more_seasons}}", html.escape(MORE_SEASONS))
-    out = out.replace("{{why}}", "\n".join(f"      <p><b>{html.escape(name)}</b> {html.escape(reason)}</p>" for name, reason in CHOICES))
-    for key, value in counts.items():
-        out = out.replace("{{o_" + key + "}}", html.escape(value))
-    out = out.replace("{{draft}}", '<div class="badge">draft: exploratory numbers</div>' if draft else "")
-    for key, value in n.items():
-        out = out.replace("{{" + key + "}}", html.escape(value))
+    """The deck. Lists from build_slides.py become the parts of each slide; {{key}} slots take the numbers."""
+    out = TEMPLATE
+    peat = "\n".join(
+        f'    <div class="step reveal r{k + 2}" style="left:{140 + k * 560}px"><img src="assets/{photo}" alt="{e(word)} peat">'
+        f'<div class="word"><span>{k + 1}</span>{e(word)}</div><p>{e(words)}</p></div>'
+        for k, (photo, word, words) in enumerate(PEAT))
+    radar = "\n".join(
+        f'    <p class="fact reveal r4" style="left:{140 + k * 560}px"><b>{e(name)}</b> {e(words)}</p>'
+        for k, (name, words) in enumerate(RADAR))
+    steps = "\n".join(
+        f'    <div class="card reveal r2" style="left:{140 + k * 332}px"><div class="no">{k + 1}</div>'
+        f'<div class="name">{e(name)}</div><p>{e(words)}</p></div>'
+        for k, (name, words) in enumerate(STEPS))
+    frames = "\n".join(
+        f'    <div class="frame dark reveal r{2 + k // 2}" style="left:{140 + (k % 2) * 590}px; top:{232 + (k // 2) * 340}px; '
+        f'width:570px; height:320px"><img src="assets/{gif}" alt="Recording of the app: {e(name)}"><span class="tag">{k + 1}</span></div>'
+        for k, (gif, name, _) in enumerate(VIEWS))
+    views = "\n".join(
+        f'      <p><span class="tag">{k + 1}</span><b>{e(name)}</b> {e(words.format(o=ontology_words(counts)))}</p>'
+        for k, (_, name, words) in enumerate(VIEWS))
+    holds = "\n".join(f'      <p><b>{e(name)}</b> {e(words.format(**n))}</p>' for name, words in HOLDS)
+    limits = "\n".join(f'      <p><b>{e(name)}</b>{e(words)}</p>' for name, words in LIMITS)
+    plan = "\n".join(
+        f'    <div class="when reveal r{2 + k}" style="left:{140 + k * 420}px"><i></i><div class="t">{e(when)}</div>'
+        f'<div class="name">{e(name)}</div><p>{e(words)}</p></div>'
+        for k, (when, name, words) in enumerate(NEXT))
+    parts = {"peat": peat, "radar": radar, "steps": steps, "frames": frames, "views": views, "holds": holds,
+             "limits": limits, "plan": plan, "lead": e(LEAD), "team": e(TEAM), "members": e(MEMBERS), "event": e(EVENT),
+             "peat_sum": e(PEAT_SUM), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
+             "draft": '<div class="badge">draft: exploratory numbers</div>' if draft else ""}
+    parts.update({f"source{k}": e(v) for k, v in SOURCES.items()})
+    parts.update({k: e(v) for k, v in n.items()})
+    for key, value in parts.items():
+        out = out.replace("{{" + key + "}}", value)
     if "{{" in out:
-        raise SystemExit("a number slot was left unfilled: " + out[out.index("{{"):out.index("{{") + 40])
+        raise SystemExit("a slot was left unfilled: " + out[out.index("{{"):out.index("{{") + 40])
     return out
 
 
@@ -104,9 +134,9 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
    =========================================== */
 body { font-family: var(--sans); color: var(--ink); }
 .slide { transition: opacity .5s ease; }
-h2 { position: absolute; left: 140px; top: 104px; width: 1500px; font: 600 60px/1.12 var(--sans); letter-spacing: -0.02em; }
+h2 { position: absolute; left: 140px; top: 96px; width: 1640px; font: 600 64px/1.12 var(--sans); letter-spacing: -0.02em; }
 .rule { position: absolute; left: 140px; right: 140px; bottom: 112px; height: 1px; background: var(--line); }
-.source { position: absolute; left: 140px; bottom: 62px; width: 1400px; font: 400 20px var(--sans); color: var(--dim); }
+.source { position: absolute; left: 140px; top: 990px; width: 1500px; font: 400 20px/1.3 var(--sans); color: var(--dim); }
 .page { position: absolute; right: 140px; bottom: 62px; font: 400 20px var(--mono); color: var(--dim); }
 .badge { position: absolute; right: 140px; top: 40px; padding: 6px 18px; border: 1px solid var(--warn); border-radius: 999px;
   font: 400 18px var(--mono); color: var(--warn); }
@@ -129,53 +159,79 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
 .slide.visible .r5 { transition-delay: .57s }
 
 /* ===========================================
-   SLIDE 1: title, the map bleeding in from the right
+   SLIDE 1: title over a photograph
    =========================================== */
-.s1 .map { position: absolute; right: 0; top: 0; width: 1220px; height: 1080px; object-fit: cover; object-position: 20% 50%;
+.s1 .photo { position: absolute; right: 0; top: 0; width: 1240px; height: 1080px; object-fit: cover; object-position: 55% 40%;
   opacity: 0; transition: opacity 1.6s ease-out; }
-.s1.visible .map { opacity: 1; }
-.s1 .veil { position: absolute; inset: 0; background: linear-gradient(90deg, #0b0f14 0%, #0b0f14 38%, rgba(11,15,20,.82) 52%, rgba(11,15,20,.15) 78%, rgba(11,15,20,0) 100%); }
-.s1 h1 { position: absolute; left: 140px; top: 200px; width: 900px; font: 600 128px/0.98 var(--sans); letter-spacing: -0.03em; }
-.s1 .lead { position: absolute; left: 140px; top: 490px; width: 800px; font: 300 34px/1.42 var(--sans); }
-.s1 .problem { position: absolute; left: 140px; top: 760px; width: 780px; font: 400 24px/1.5 var(--sans); color: var(--dim); }
-.s1 .team { position: absolute; left: 140px; bottom: 150px; font: 400 22px var(--sans); color: var(--dim); }
+.s1.visible .photo { opacity: 1; }
+.s1 .veil { position: absolute; inset: 0; background: linear-gradient(90deg, #0b0f14 0%, #0b0f14 36%, rgba(11,15,20,.86) 50%, rgba(11,15,20,.25) 76%, rgba(11,15,20,.1) 100%); }
+.s1 h1 { position: absolute; left: 140px; top: 210px; width: 900px; font: 600 132px/0.98 var(--sans); letter-spacing: -0.03em; }
+.s1 .lead { position: absolute; left: 140px; top: 510px; width: 760px; font: 300 38px/1.38 var(--sans); }
+.s1 .who { position: absolute; left: 140px; top: 760px; width: 800px; font: 400 26px/1.6 var(--sans); color: var(--dim); }
+.s1 .who b { color: var(--ink); font-weight: 600; }
 
 /* ===========================================
-   SLIDE 3: number tiles beside the season figure
+   SLIDE 2: how peat is degraded, one photograph a step
    =========================================== */
-.tile { position: absolute; left: 1360px; width: 420px; height: 196px; padding: 26px 30px; background: var(--panel);
+.step { position: absolute; top: 232px; width: 520px; }
+.step img { display: block; width: 520px; height: 300px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+.step .word { margin-top: 22px; font: 600 36px var(--sans); }
+.step .word span { display: inline-block; width: 44px; font: 500 26px var(--mono); color: var(--sand); }
+.step p { margin-top: 10px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.sum { position: absolute; left: 140px; top: 806px; width: 1640px; padding-top: 24px; border-top: 1px solid var(--line);
+  font: 400 28px/1.42 var(--sans); }
+
+/* ===========================================
+   SLIDE 3: three facts under the two pictures
+   =========================================== */
+.fact { position: absolute; top: 716px; width: 520px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.fact b { display: block; margin-bottom: 4px; color: var(--ink); font: 600 28px/1.3 var(--sans); }
+
+/* ===========================================
+   SLIDE 4: the method as five cards, then what came out
+   =========================================== */
+.card { position: absolute; top: 224px; width: 312px; height: 312px; padding: 22px 24px; background: var(--panel);
   border: 1px solid var(--line); border-radius: 10px; }
-.tile .num { font: 500 46px var(--mono); }
-.tile .label { margin-top: 14px; font: 400 22px/1.4 var(--sans); color: var(--dim); }
-.tile.small { width: 290px; height: 126px; padding: 14px 20px; }
-.tile.small .num { font-size: 32px; }
-.tile.small .label { margin-top: 4px; font-size: 16px; line-height: 1.3; }
-/* The choices behind the method, each with its reason */
-.why { position: absolute; left: 1090px; top: 290px; width: 690px; font: 400 21px/1.36 var(--sans); color: var(--dim); }
-.why p { margin-bottom: 15px; } .why b { display: block; color: var(--ink); font: 600 23px/1.3 var(--sans); }
+.card .no { font: 500 24px var(--mono); color: var(--sand); }
+.card .name { margin-top: 6px; font: 600 28px/1.2 var(--sans); }
+.card p { margin-top: 10px; font: 400 21px/1.4 var(--sans); color: var(--dim); }
+.tile { position: absolute; width: 283px; height: 176px; padding: 20px 22px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 10px; }
+.tile .num { font: 500 40px var(--mono); }
+.tile .label { margin-top: 8px; font: 400 20px/1.35 var(--sans); color: var(--dim); }
+.out { position: absolute; left: 891px; top: 768px; width: 889px; font: 400 26px/1.42 var(--sans); }
 
 /* ===========================================
-   SLIDE 4: what you can do in the app
+   SLIDE 5: four recordings of the app, numbered, with what each is for
    =========================================== */
-.do { position: absolute; left: 1330px; top: 292px; width: 450px; font: 400 22px/1.4 var(--sans); color: var(--dim); }
-.do p { margin-bottom: 16px; } .do b { color: var(--ink); font-weight: 600; }
+.frame .tag, .do .tag { display: inline-block; width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: #0b0f14;
+  font: 600 20px/34px var(--mono); text-align: center; }
+.frame .tag { position: absolute; left: 12px; top: 12px; }
+.do { position: absolute; left: 1350px; top: 232px; width: 430px; font: 400 24px/1.4 var(--sans); color: var(--dim); }
+.do p { margin-bottom: 22px; } .do b { color: var(--ink); font-weight: 600; } .do .tag { margin-right: 12px; }
+.do .go { margin-top: 30px; font-size: 28px; }
 
 /* ===========================================
-   SLIDE 6: the limits, each with our answer
+   SLIDE 6: what holds up, and what the map cannot say
    =========================================== */
-table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border-collapse: collapse; font: 400 24px/1.4 var(--sans); }
-.limits th { text-align: left; font: 500 18px var(--mono); color: var(--dim); padding: 0 16px 14px 0; border-bottom: 1px solid var(--line); }
-.limits td { vertical-align: top; padding: 18px 20px 18px 0; border-bottom: 1px solid var(--line); color: var(--dim); }
-.limits td:first-child { width: 42%; color: var(--ink); }
-.limits td b { font-weight: 600; }
+.half { position: absolute; top: 224px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.half h3 { font: 600 34px var(--sans); color: var(--ink); margin-bottom: 20px; }
+.half p { margin-bottom: 16px; } .half b { color: var(--ink); font-weight: 600; }
+.cannot p { padding: 20px 0; margin: 0; border-top: 1px solid var(--line); font-size: 27px; }
+.cannot b { display: block; font-size: 32px; margin-bottom: 4px; }
 
 /* ===========================================
-   SLIDE 7: what next, and the links
+   SLIDE 7: the plan along a line, and the links
    =========================================== */
-.next { position: absolute; left: 140px; top: 286px; width: 700px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
-.next p { margin-bottom: 24px; } .next b { color: var(--ink); font-weight: 600; }
-.links { position: absolute; left: 140px; top: 800px; font: 400 26px/1.8 var(--sans); color: var(--ink); }
-.links b { display: inline-block; width: 210px; font-weight: 600; }
+.track { position: absolute; left: 140px; right: 140px; top: 252px; height: 2px; background: var(--line); }
+.when { position: absolute; top: 244px; width: 380px; }
+.when i { display: block; width: 18px; height: 18px; border-radius: 50%; background: var(--sand); }
+.when .t { margin-top: 24px; font: 500 22px var(--mono); color: var(--sand); }
+.when .name { margin-top: 8px; font: 600 32px/1.2 var(--sans); }
+.when p { margin-top: 12px; font: 400 24px/1.42 var(--sans); color: var(--dim); }
+.links { position: absolute; left: 140px; top: 760px; font: 400 28px/1.8 var(--sans); color: var(--ink); }
+.links b { display: inline-block; width: 230px; font-weight: 600; }
+.by { position: absolute; left: 140px; top: 880px; font: 400 24px var(--sans); color: var(--dim); }
 
 /* ===========================================
    PROGRESS (outside the stage)
@@ -187,114 +243,101 @@ table.limits { position: absolute; left: 140px; top: 280px; width: 960px; border
 <div class="deck-viewport">
 <main class="deck-stage" id="deckStage">
 
-  <!-- 1. The problem, and the takeaway -->
+  <!-- 1. Title -->
   <section class="slide s1" aria-label="Slide 1: Dry Season Waltz">
-    <img class="map" src="assets/map.jpg" alt="Map of Central Kalimantan where the HH radar echo fell by 1 dB or more, mid July to mid October 2026">
+    <img class="photo" src="assets/fire.jpg" alt="A firefighter hoses smouldering peat in a burnt forest">
     <div class="veil"></div>
     {{draft}}
     <h1 class="reveal r1">Dry Season Waltz</h1>
-    <p class="lead reveal r2">NISAR lets anyone watch a peat dry season through cloud and smoke: an open map of where the radar echo fell, where fire was detected and what changed with the rain, with its evidence and its limits attached.</p>
-    <p class="problem reveal r3">Every dry season, drained peat in Borneo is at its most flammable, some of it burns, and the haze reaches cities across the region. Cloud, then smoke, hides the ground from optical satellites just then.</p>
-    <p class="team reveal r4">Team Garugons · NASA Space Apps 2026 · Dancing with the SARs</p>
+    <p class="lead reveal r2">{{lead}}</p>
+    <p class="who reveal r3"><b>{{team}}</b><br>{{members}}<br>{{event}}</p>
     <div class="rule"></div>
-    <p class="source">Map: where HH fell by 1 dB or more, mid July to mid October 2026, with the PEATMAP outline.</p>
+    <p class="source">{{source1}}</p>
     <p class="page">01 / 07</p>
   </section>
 
-  <!-- 2. What NISAR sees -->
-  <section class="slide" aria-label="Slide 2: what NISAR sees">
+  <!-- 2. The problem: how peat is degraded -->
+  <section class="slide" aria-label="Slide 2: the problem">
     {{draft}}
-    <h2 class="reveal r1">Cloud and smoke hide the ground from optical satellites. NISAR's radar sees through them</h2>
-    <div class="frame reveal r2" style="left:140px; top:300px; width:800px; height:450px"><img src="assets/fig_cloud.png" alt="The same ground on 14 September 2026: smoke and cloud in VIIRS true colour, the land in NISAR L-band HH"></div>
-    <div class="frame dark reveal r3" style="left:980px; top:300px; width:800px; height:450px"><img src="assets/explainer.gif" alt="Animated schematic of how the L-band radar sees a peat dry season"></div>
-    <p class="caption reveal r4" style="left:140px; top:782px; width:800px"><b>A 12-day repeat by design, day or night.</b> The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar.</p>
-    <p class="caption reveal r5" style="left:980px; top:782px; width:800px"><b class="hh">HH.</b> On open ground a drier surface sends back a weaker echo, so HH falls; clearing and standing water change it too. Closed forest is the yardstick. <b>HV</b> comes mostly from woody vegetation, but responds to moisture too. A schematic, not data.</p>
+    <h2 class="reveal r1">Peat does not burn until someone drains it</h2>
+{{peat}}
+    <p class="sum reveal r5">{{peat_sum}}</p>
     <div class="rule"></div>
-    <p class="source">VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.</p>
+    <p class="source">{{source2}}</p>
     <p class="page">02 / 07</p>
   </section>
 
-  <!-- 3. The season in one picture -->
-  <section class="slide" aria-label="Slide 3: the season">
+  <!-- 3. What the radar is, and what it measures -->
+  <section class="slide" aria-label="Slide 3: what the radar sees">
     {{draft}}
-    <h2 class="reveal r1">On open peat HH fell through the dry season, then rose with the first rain. Six choices make that hold</h2>
-    <div class="frame reveal r2" style="left:140px; top:296px; width:900px; height:506px"><img src="assets/fig_season.png" alt="Season figure: the HH fall pass by pass on both orbits, deep forest flat, daily rain underneath"></div>
-    <div class="tile small reveal r3" style="left:140px; top:822px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of mapped peat in the west box where HH fell 1 dB or more, on both orbits</div></div>
-    <div class="tile small reveal r3" style="left:445px; top:822px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east box</div></div>
-    <div class="tile small reveal r3" style="left:750px; top:822px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">rise on the first pass after rain, {{rise_where}}; none before it</div></div>
-    <div class="why reveal r4">
-{{why}}
-    </div>
+    <h2 class="reveal r1">A camera sees the smoke. Radar sees the ground</h2>
+    <div class="frame reveal r2" style="left:140px; top:232px; width:800px; height:450px"><img src="assets/fig_cloud.png" alt="The same ground on 14 September 2026: smoke and cloud in VIIRS true colour, the land in NISAR L-band radar"></div>
+    <div class="frame dark reveal r3" style="left:980px; top:232px; width:800px; height:450px"><img src="assets/explainer.gif" alt="Animated schematic of how the radar echo changes over wet and dry peat"></div>
+{{radar}}
     <div class="rule"></div>
-    <p class="source">Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), PEATMAP (CC BY 4.0).</p>
+    <p class="source">{{source3}}</p>
     <p class="page">03 / 07</p>
   </section>
 
-  <!-- 4. The app -->
-  <section class="slide" aria-label="Slide 4: the app">
+  <!-- 4. How it is done -->
+  <section class="slide" aria-label="Slide 4: the method">
     {{draft}}
-    <h2 class="reveal r1">An open map with four views: play the season, see where to check, read the rule, print the list</h2>
-    <div class="frame dark reveal r2" style="left:140px; top:296px; width:570px; height:320px"><img src="assets/demo_season.gif" alt="Recording of the app: the season playing from June to November, with fire building up beside the fall"></div>
-    <div class="frame dark reveal r2" style="left:730px; top:296px; width:570px; height:320px"><img src="assets/demo_check.gif" alt="Recording of the app: Where to check tilting from a flat map into columns by level"></div>
-    <div class="frame dark reveal r3" style="left:140px; top:636px; width:570px; height:320px"><img src="assets/demo_decide.gif" alt="Recording of the app: How it decides, the ontology graph from sources to classes"></div>
-    <div class="frame dark reveal r3" style="left:730px; top:636px; width:570px; height:320px"><img src="assets/demo_report.gif" alt="Recording of the field assessment: three sheets on a table, the view moving in and the pages turning"></div>
-    <div class="do reveal r4">
-      <p><b>The season.</b> Every pass on both orbits; fire builds up beside the fall.</p>
-      <p><b>Where to check.</b> 1 km blocks in three levels, flat or in 3D, ranked, as CSV or GeoJSON.</p>
-      <p><b>How it decides.</b> The ontology, drawn from its file: {{o_sources}} sources, {{o_observations}} observations, {{o_states}} states and {{o_classes}} classes, each rule open to read.</p>
-      <p><b>Field assessment.</b> Three pages to print, ending in the blocks to visit first.</p>
-      <p><a href="{{app_url}}" target="_blank" rel="noopener">Open the map</a></p>
-    </div>
+    <h2 class="reveal r1">How we turned radar passes into a map</h2>
+{{steps}}
+    <div class="frame reveal r3" style="left:140px; top:566px; width:711px; height:386px"><img src="assets/fig_season.png" alt="The season in one picture: the echo fading pass by pass on both orbits, forest flat, daily rain underneath"></div>
+    <div class="tile reveal r4" style="left:891px; top:566px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of peat in the west area where the echo fell on both orbits</div></div>
+    <div class="tile reveal r4" style="left:1194px; top:566px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east area</div></div>
+    <div class="tile reveal r4" style="left:1497px; top:566px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">back up on the first pass after the rain, {{rise_where}}</div></div>
+    <p class="out reveal r5">{{came_out}}</p>
     <div class="rule"></div>
-    <p class="source">Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.</p>
+    <p class="source">{{source4}}</p>
     <p class="page">04 / 07</p>
   </section>
 
-  <!-- 5. Why believe it -->
-  <section class="slide" aria-label="Slide 5: why believe it">
+  <!-- 5. The app -->
+  <section class="slide" aria-label="Slide 5: the app">
     {{draft}}
-    <h2 class="reveal r1">Why believe it: two orbits agree, and an audit we asked for made the answer smaller</h2>
-    <div class="frame reveal r2" style="left:140px; top:296px; width:800px; height:450px"><img src="assets/fig_orbits.png" alt="Two orbits side by side and block by block"></div>
-    <div class="frame reveal r3" style="left:980px; top:296px; width:800px; height:450px"><img src="assets/fig_start.png" alt="Why the starting point matters: share of land that fell for three choices of start"></div>
-    <p class="caption reveal r4" style="left:140px; top:778px; width:800px"><b>Two orbits agree on where.</b> The dawn and dusk orbits look from opposite sides, four days apart, and agree block by block: Spearman r = {{r_west}} in the west box, {{r_east}} in the east (the scatter shows Pearson r).</p>
-    <p class="caption reveal r5" style="left:980px; top:778px; width:800px"><b>Audited part way.</b> An SI reviewer we asked to audit the work found our first start date came just after rain. We now start from the first rain-free passes, and published the audit with our response.</p>
+    <h2 class="reveal r1">The result is a map anyone can open</h2>
+{{frames}}
+    <div class="do reveal r4">
+{{views}}
+      <p class="go"><a href="{{app_url}}" target="_blank" rel="noopener">Open the map</a></p>
+    </div>
     <div class="rule"></div>
-    <p class="source">Figures: pipeline/figures.py. Audit and response: docs/AUDIT.md.</p>
+    <p class="source">{{source5}}</p>
     <p class="page">05 / 07</p>
   </section>
 
-  <!-- 6. The honest limits, with our answers -->
-  <section class="slide" aria-label="Slide 6: limits">
+  <!-- 6. How far to trust it -->
+  <section class="slide" aria-label="Slide 6: how far to trust it">
     {{draft}}
-    <h2 class="reveal r1">What the radar cannot tell us yet, and our answers</h2>
-    <table class="limits reveal r2">
-      <tr><th>limit</th><th>our answer</th></tr>
-      <tr><td><b>Not checked on the ground.</b> A fall in HH is not a measured water table.</td><td>A rainfall model fitted to a published gauge record is shown beside the radar (right): modelled, not measured, and support only. About sixty dipwell visits would calibrate the map or show where it is wrong.</td></tr>
-      <tr><td><b>One pass after the rain per orbit,</b> from a later NASA processing release.</td><td>We report the rise only where both orbits see it on their own, and the release change is in our limits.</td></tr>
-      <tr><td><b>No fire forecast, no canal advice.</b></td><td>Inside drained land an early fall did not separate later fire from no fire, so we withdrew the claim.</td></tr>
-      <tr><td><b>Fire returns, but we cannot say why.</b></td><td>{{repeat}} of this year's fire detections on western peat were on the {{earlier}} of it with a detection in 2015, 2019 or 2023 (NASA FIRMS). Fire off peat is mapped too.</td></tr>
-    </table>
-    <div class="frame reveal r3" style="left:1150px; top:286px; width:630px; height:354px"><img src="assets/fig_water_table.png" alt="A rainfall-driven water-table model beside the radar curve"></div>
-    <p class="caption reveal r4" style="left:1150px; top:664px; width:630px">A rainfall-driven water-table model, run on 2026 rain beside the radar. Modelled, not measured: support, not validation.</p>
+    <h2 class="reveal r1">How far you can trust it</h2>
+    <div class="half reveal r2" style="left:140px; width:800px">
+      <h3>What holds up</h3>
+    </div>
+    <div class="frame reveal r2" style="left:140px; top:292px; width:720px; height:405px"><img src="assets/fig_orbits.png" alt="The dawn and the dusk orbit side by side, and compared square by square"></div>
+    <div class="half reveal r3" style="left:140px; top:722px; width:800px">
+{{holds}}
+    </div>
+    <div class="half cannot reveal r4" style="left:1010px; width:770px">
+      <h3>What it cannot tell you</h3>
+{{limits}}
+    </div>
     <div class="rule"></div>
-    <p class="source">Hirano groundwater record (CC BY 4.0), GPM IMERG, NISAR L2 GCOV. Full limits: docs/LIMITS.md.</p>
+    <p class="source">{{source6}}</p>
     <p class="page">06 / 07</p>
   </section>
 
-  <!-- 7. What comes next -->
-  <section class="slide" aria-label="Slide 7: what next">
+  <!-- 7. The plan -->
+  <section class="slide" aria-label="Slide 7: what comes next">
     {{draft}}
-    <h2 class="reveal r1">What NISAR could do next</h2>
-    <div class="next reveal r2">
-      <p><b>Ground truth first.</b> A sixty-visit field protocol, in the late dry season and after the first rain.</p>
-      <p><b>Subsidence, a second layer.</b> {{subsidence}}</p>
-      <p><b>More seasons, other peatlands.</b> {{more_seasons}}</p>
-    </div>
-    <div class="frame dark reveal r3" style="left:920px; top:290px; width:860px; height:404px"><img src="assets/app_room.jpg" alt="The app's entry view: an illustrative control room made with SI, with the live dashboard on its screens"></div>
-    <p class="caption reveal r4" style="left:920px; top:716px; width:860px">The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.</p>
+    <h2 class="reveal r1">What comes next</h2>
+    <div class="track"></div>
+{{plan}}
     <div class="links reveal r5"><div><b>Open the map</b><a href="{{app_url}}" target="_blank" rel="noopener">{{app_url}}</a></div><div><b>Code and data</b><a href="{{code_url}}" target="_blank" rel="noopener">{{code_url}}</a></div></div>
+    <p class="by reveal r5">{{team}}: {{members}}</p>
     <div class="rule"></div>
-    <p class="source">Made with Super Intelligence (SI) assistance, from open NASA, ISRO and other data. All code is open; the data sources are in the README.</p>
+    <p class="source">{{source7}}</p>
     <p class="page">07 / 07</p>
   </section>
 
@@ -359,12 +402,13 @@ def main():
     p.add_argument("--figures", default="submission/figures", type=Path)
     p.add_argument("--validation", default="app/public/validation.json", type=Path)
     p.add_argument("--ontology", default="pipeline/fusion/ontology.json", type=Path)
+    p.add_argument("--photos", default="app/public/story", type=Path)
     p.add_argument("--out", default="submission/deck", type=Path)
     p.add_argument("--final", action="store_true", help="use only keys marked final, and drop the draft badge")
     a = p.parse_args()
     num = Numbers(a.validation, a.final)
     filled = page(numbers(num), draft=not a.final, counts=ontology_counts(a.ontology))
-    copy_pictures(a.figures, a.out / "assets")
+    copy_pictures(a.figures, a.photos, a.out / "assets")
     (a.out / "index.html").write_text(filled, encoding="utf-8")
     print(f"wrote {a.out / 'index.html'} ({'final' if a.final else 'draft'}); numbers from {len(set(num.used))} validation keys:")
     for k in sorted(set(num.used)):
