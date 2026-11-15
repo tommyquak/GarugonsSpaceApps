@@ -10,9 +10,9 @@ Dry Season Waltz
 
 Drainage makes peat more vulnerable to fire. In Central Kalimantan, thousands of kilometres of canals dug in the 1990s still drain the peat, and in dry years it burns and sends haze across the region, Singapore included. Restoring it starts with knowing which ground is drying, but cloud and smoke can hide that ground from optical satellites during the dry season.
 
-We built Dry Season Waltz, an open web map of what NISAR, the new NASA and ISRO L-band radar, saw over these peatlands in its first dry season. Radar sees through cloud and smoke. We followed the radar echo of the land through the 2026 dry season in three steps: where it fell, where NASA detected fire, and what changed after the first rain. We measure the fall against closed forest and check whether two orbits looking from opposite sides saw it. The map uses that two-orbit check and the area covered by fire detections to select 1 km blocks on mapped peat for field visits.
+We built Dry Season Waltz, an open web map for peat restoration teams of what NISAR, the new NASA and ISRO L-band radar, saw over these peatlands in its first dry season. Radar sees through cloud and smoke. We followed the radar echo of the land through the 2026 dry season in three steps: where it fell, where NASA detected fire, and what changed after the first rain. A fall counts only where two orbits looking from opposite sides both saw it, measured against closed forest.
 
-Why it matters: it turns one season of free NASA data into a list of places to check on the ground first, with coordinates and the evidence behind each, at no cost per use. It is a screening map. It does not measure the water table, predict fire or recommend an intervention, and nothing in it has been checked on the ground yet.
+What a team can do with it: open the map, play the season, and download a list of 1 km blocks to visit first, each with its coordinates and the radar and fire evidence behind it, ready for a GIS or a GPS. NISAR adds what fire records cannot: where the echo had still not recovered after the first rain. It runs on free NASA data. It is a screening map that says where to look. It has not been checked on the ground yet, so it does not measure the water table, predict fire or choose a remedy.
 
 ## 3. Link to project demo
 
@@ -34,7 +34,17 @@ https://docs.google.com/presentation/d/1vesg1eznCPqGbcpzD-PjqL7T5cbiIpfgGebKZvpY
 - **Where to check.** 1 km blocks labelled by what was seen (fire detected; fell and still low after the rain; fell and came back), drawn as 3D columns and as a ranked list that exports to CSV and GeoJSON. Each block shows the evidence behind its label.
 - **How it decides.** Every class has a written rule, drawn as a graph from the data source to the answer, with its thresholds. We call it the ontology, and the pipeline and the app read it from the same file.
 - **Field assessment.** Three pages to print: a map of the blocks, the evidence, and a table of blocks to visit, with a box to tick.
+- **What is new.** A change counts only when two orbits looking from opposite sides both saw it, and every label on the map can be traced, rule by rule, to the measurement behind it. NISAR adds what the fire record cannot: whether the echo recovered after the first rain.
 - **Shows its limits.** A panel lists what the map cannot tell you, from `docs/LIMITS.md`, and the audit and our response are published with the code.
+
+### Who it is for, and what they can do with it
+
+Field teams, peat restoration agencies and researchers who need to choose where on a peat landscape to look first, and who today often get a cloud-free picture of it only after the season is over.
+
+1. **Take the list.** Every 1 km square comes with its coordinates and the evidence behind it, as CSV and GeoJSON that open in a GIS or on a GPS.
+2. **Visit the top of the list first.** Start where the echo stayed weak after the rain, and where fire was detected. Measure the water depth and look at the canals.
+3. **The field team decides whether to act.** The remedy is the agency's, not ours. Indonesia's peat restoration programme works by rewetting (blocking canals with dams, filling them in, drilling deep wells), replanting, and supporting local livelihoods.
+4. **Look again next season.** NISAR is built to come back every 12 days. If the agency blocks a canal, it could use the same map next season to check how the radar echo changes there. We have not tested this.
 
 ### How it works
 
@@ -47,6 +57,7 @@ https://docs.google.com/presentation/d/1vesg1eznCPqGbcpzD-PjqL7T5cbiIpfgGebKZvpY
 ### What we found
 
 - Between mid July and mid October 2026, HH fell by 1 dB or more on both orbits, relative to deep forest, across about 755 km² of mapped peat in the west and about 292 km² in the east. The study areas overlap. The two orbits ranked the locations of the fall similarly (Spearman ρ = 0.83 west and 0.87 east).
+- The fall follows the calendar. In an exact test that tried every other way of sorting the same passes into an early and a late group, no other sorting gave a fall as large as the real order (one-sided p = 0.010 on the dawn orbit and 0.002 on the dusk orbit, in both areas).
 - In the western reference forest used to correct the radar baseline, the 95th percentile of the HH change was +0.27 dB at dawn and +0.37 dB at dusk. At western forest edges, the median dawn change was −0.4 dB for locations 50 to under 250 m inside the edge.
 - In western blocks where HH fell by 1 dB or more on both orbits, the median echo rose 1.15 dB on the first dawn pass after the rain and 1.12 dB on the first dusk pass. Each orbit observed the rebound once.
 - Among mapped peat pixels with radar coverage on both orbits, active-fire detection footprints covered about 37% in the west and 61% in the east. In western peat blocks where HH fell by 1 dB or more on both orbits, the median HV change from the dry-season start to the first dawn pass after rain was 0.54 dB lower in blocks with a fire detection than in those without one. The groups use the full study-period fire record, so the comparison cannot establish when fire affected a block.
@@ -70,26 +81,17 @@ At L-band the wave passes through thin vegetation and reaches the ground on open
 
 With two to three years of observations, we could test whether the phase of NISAR’s 12-day interferometric pairs (GUNW) can show long-term peat subsidence, beside the seasonal change in HH. We already pull those pairs and use their coherence in an exploratory check. The current HH and HV backscatter maps do not measure subsidence. Field studies of drained peat and field-tested L-band interferometry motivate this next step (Hooijer et al. 2012; Tay et al. 2025). The pipeline accepts a bounding box. Applying it to a second peatland remains untested.
 
-### Who it is for, and what they can do with it
-
-Field teams, peat restoration agencies and researchers who need to choose where on a peat landscape to look first, and who today often get a cloud-free picture of it only after the season is over.
-
-1. **Take the list.** Every 1 km square comes with its coordinates and the evidence behind it, as CSV and GeoJSON that open in a GIS or on a GPS.
-2. **Visit the top of the list first.** Start where the echo stayed weak after the rain, and where fire was detected. Measure the water depth and look at the canals.
-3. **The field team decides whether to act.** The remedy is the agency's, not ours. Indonesia's peat restoration programme works by rewetting (blocking canals with dams, filling them in, drilling deep wells), replanting, and supporting local livelihoods.
-4. **Look again next season.** NISAR is built to come back every 12 days. If the agency blocks a canal, it could use the same map next season to check how the radar echo changes there. We have not tested this.
-
 ### Tools and technologies
 
 - **Pipeline:** Python 3.11 with numpy, scipy, h5py, rasterio, pyproj and matplotlib. It reads the NISAR files over the network from NASA's archive at the Alaska Satellite Facility, a block at a time, so nothing has to be downloaded whole.
 - **App:** TypeScript, Vite and MapLibre GL JS, served as a static site from GitHub Pages. No server, and no commercial map tiles.
 - **Checks:** We ran 80 automated tests covering the pipeline and its independent checks. GitHub Actions runs the pipeline tests and builds the app on every pull request.
-- **One file of numbers.** Every figure on this page, in the app and on the slides is read from `app/public/validation.json`. A number is marked final only after a second team member has reproduced it independently.
+- **One file of numbers.** Every figure on this page and on the slides is read from `app/public/validation.json`, and the app lists them with their status. A number is marked final only after a second team member has reproduced it independently.
 - **Slides:** built by a script, which reads its numbers from that same file.
 
 ### How we built it
 
-Six people over one weekend, in one repository, each with an SI coding assistant. The work was split into tracks: radar stacks, the fall, the change after the rain, fire and context layers, the app, checks and limits, story and submission. The assistants passed work between team members on a shared message board in the repository, and every change went in through a pull request with automated checks. Part way through we asked an SI reviewer to audit the work adversarially. It found that our first start date came just after rain; we moved the start, and the result got smaller. The audit and our response are in `docs/AUDIT.md`.
+Six people over one weekend, in one repository, each with an SI coding assistant. The work was split into parts: radar stacks, the fall, the change after the rain, fire and context layers, the app, checks and limits, story and submission. The assistants passed work between team members on a shared message board in the repository, and every change went in through a pull request with automated checks. Part way through we asked an SI reviewer to audit the work adversarially. It found that our first start date came just after rain; we moved the start, and the result got smaller. The audit and our response are in `docs/AUDIT.md`.
 
 ## 6. Use of Super Intelligence (SI)
 
