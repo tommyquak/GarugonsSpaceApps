@@ -25,6 +25,10 @@ python pipeline/drying/one_look_map.py --layers $L --stacks $S --sites west east
 | 3 | `noise_floor.py` | The 5th percentile of the score on the reference forest, and which blocks went beyond that on both orbits. |
 | 4 | `one_look_map.py` | The map. |
 | 5 | `split.py` | Areas on and off mapped peat, near and away from fire. Needs track 3's peat and fire layers. |
+| - | `per_pass.py` | One layer per radar pass, for the season slider: HH on that pass minus HH at the start, shift removed. |
+| - | `series.py` | HH and HV of every pass on a regular grid, packed for the app's click-a-place chart (`docs/DATA_CONTRACT.md` section 4). |
+| - | `by_cover.py` | Where the method can see a fall: sorts mapped peat by its HV brightness at the start, from open ground to closed forest. |
+| - | `common.py` | Helpers the scripts share: load a stack, average over blocks, write a layer. Not run on its own. |
 | - | `selfcheck.py` | Seven checks for artefacts we could have introduced. |
 | - | `sensitivity.py` | How much the result depends on choices we made. |
 
