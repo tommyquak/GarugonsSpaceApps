@@ -12,3 +12,4 @@ One line per use, same columns for everyone. Rules in `AGENTS.md` section 6.
 | 14 Nov | Jan Hoe | Coding assistant | Place reading says so when a pass it is measured from is missing, and no longer uses other dates | `app/src/chart/placeChart.ts` |
 | 14 Nov | Jan Hoe | Coding assistant | Two date chips in the place reading, for the dry start and the last dry day | `app/src/chart/placeChart.ts` |
 | 14 Nov | Jan Hoe | Coding assistant | Fly down returns to the view before it, flat or 3D, and never leaves the map tilted | `app/src/chart/actions.ts` |
+| 15 Nov | Jan Hoe | Coding assistant | 3D at-a-glance view: the blocks of a level drawn as one shape with slightly rounded corners | `app/src/actions/merged.ts`, `app/src/actions/layer.ts` |
