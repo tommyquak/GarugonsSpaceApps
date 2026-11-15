@@ -54,7 +54,7 @@ PEAT = [
     ("forest.jpg", "Wet", "A peat swamp is forest growing on metres of dead plants that never rotted, because the ground "
      "stays under water. It holds thousands of years of carbon, and wet peat does not burn."),
     ("canal.jpg", "Drained", "In the 1990s the Mega Rice Project dug some 4,600 km of canals to turn a million hectares "
-     "of this swamp into rice fields. The rice failed. The canals still drain the peat."),
+     "of this swamp into rice fields. The scheme failed. The canals still drain the peat."),
     ("burnt.jpg", "Burnt", "Dry peat catches fire and smoulders under the surface for weeks. Indonesia's 2015 fires, many "
      "of them on peat, cost the country USD 16 billion, and the haze shut Singapore's schools."),
 ]
