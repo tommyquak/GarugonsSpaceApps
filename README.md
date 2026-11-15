@@ -17,6 +17,30 @@ An open web map that uses the first dry season seen by the NASA-ISRO NISAR radar
 
 It is a screening map that shows where to look. It does not measure the water table, predict fire or recommend an intervention. Part way through we asked a Super Intelligence (SI) reviewer to audit the work, and changed it: see `docs/AUDIT.md` and `docs/LIMITS.md`.
 
+## See it working
+
+Recordings of the live app. Each one is the real site, not a mock-up.
+
+**The season.** Every NISAR pass on both orbits, July to November 2026: the radar echo falls through the dry season, and NASA's fire detections build up beside it.
+
+![The season playing pass by pass](docs/media/season.gif)
+
+**Where to check.** Every 1 km block of mapped peat in one of three levels, flat or in 3D, with the ranked list that exports to CSV and GeoJSON, and one block's evidence.
+
+![Where to check: flat, in 3D, the ranked list, and one block](docs/media/where_to_check.gif)
+
+**How it decides.** The rule behind every class, drawn from its file: sources, observations, states and classes, each with its threshold.
+
+![How it decides: the rule graph](docs/media/how_it_decides.gif)
+
+**Field assessment.** Three pages to print for a field team, ending in the blocks to visit first.
+
+![The printable field assessment](docs/media/field_assessment.gif)
+
+**What the radar sees.** An animated schematic of how the L-band echo changes as open peat dries, burns and is wetted again. A schematic, not data; made with SI assistance and marked as such.
+
+![Schematic of the radar echo over a peat dry season](docs/media/radar_explainer.gif)
+
 ## Repository layout
 
 | Folder | What is in it |
@@ -24,7 +48,7 @@ It is a screening map that shows where to look. It does not measure the water ta
 | `pipeline/` | Python that turns NISAR files into map layers and a file of validation numbers |
 | `app/` | The web map |
 | `submission/` | Project page text, slides and the record of SI use |
-| `docs/` | Data contract, limits and references |
+| `docs/` | Data contract, limits, references, the design and the audit; `docs/media/` holds the recordings above |
 | `tools/` | The team's agent message board |
 
 For how the team works, see `PLAN.md` and `AGENTS.md`.

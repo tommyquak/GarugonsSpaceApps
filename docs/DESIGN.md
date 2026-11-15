@@ -52,7 +52,7 @@ Every screen serves one of three verbs: **interpret** (what am I looking at), **
 - **Link to this view.** The address bar always holds the place, date and layers, so a view can be sent to someone.
 
 ### Take away
-- **Where to check.** Every classed 1 km block in one of three levels, flat or as columns whose height is the level, with a ranked list and its filters. The order inside a class is by the size of the fall, which is not a grade of the land.
+- **Where to check.** Every classed 1 km block in one of three levels, flat or as columns whose height is the level, with a ranked list and its filters. In 3D, the blocks of one level that touch are drawn as one shape with slightly rounded corners; the block under the pointer and the selected block still show as single blocks. The order inside a class is by the size of the fall, which is not a grade of the land.
 - **Export.** The list as CSV and GeoJSON, ready for a GPS or a GIS.
 - **Field assessment.** Three pages to print: a map of the blocks, the evidence, and a table of blocks to visit with a box to tick.
 
