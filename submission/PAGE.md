@@ -4,7 +4,7 @@ The text of the project page, field by field. Every result is a `final` entry in
 
 ## 1. Project name
 
-Dry Season Waltz
+Dry Season Waltz: watching Borneo's peat through NISAR
 
 ## 2. High-level summary
 
