@@ -71,21 +71,24 @@ RADAR = [
     ("The echo tells wet from dry.", "On open ground a wet surface sends back a strong echo and a dry one a weak echo. "
      "When open peat dries, the echo fades. Clearing fades it too, so we only ever say the echo fell."),
 ]
-# Slide 4: the method, one step a card.
+# Slide 4: how the map is made, one step a row, in the words we would use out loud.
+STEPS_TITLE = "How we made the map, in five steps"
 STEPS = [
-    ("Collect", "Every NISAR pass over two study areas, June to November 2026, from two orbits: one at dawn, one at dusk. "
-     "All on one 50 m grid."),
-    ("Steady", "Whole images shift a little between passes. Closed forest hardly changes, so we measure every pass "
-     "against the forest nearby and the shift drops out."),
-    ("Date the dry season", "NASA's daily rainfall record shows when the rain stopped and when it returned. A fixed rule "
-     "picks the dates, not our eyes."),
-    ("Measure the fall", "From the dry start to mid October, how much did the echo fade? A place counts only if both "
-     "orbits saw it fade by 1 dB, about a fifth."),
-    ("Wait for the rain", "Did the echo come back on the first pass after the rain? Add NASA's fire detections and a "
-     "peat map, and each 1 km square gets a class by a written rule."),
+    ("Get the radar pictures.", "NISAR flew over our two study areas about every 12 days from June to November 2026, "
+     "once at dawn and once at dusk. We lined every picture up on the same 50 m grid."),
+    ("Use the forest as a ruler.", "Thick forest looks the same to the radar all season. So we compare every spot with "
+     "the forest near it, which cancels out the small differences between one picture and the next."),
+    ("Find when the rain stopped.", "NASA's daily rainfall data gives the day the dry season began and the day the rain "
+     "came back. A fixed rule reads the dates off, so we cannot pick ones that suit us."),
+    ("Mark where the echo got weaker.", "We compare the start of the dry season with mid October. A spot is marked only "
+     "if its echo got at least a fifth weaker (1 dB) in both the dawn and the dusk pictures."),
+    ("See what came back with the rain.", "After the first rain, did the echo recover? We add where NASA detected fire "
+     "and where the peat is, then sort every 1 km square into a group, by rules anyone can read."),
 ]
-CAME_OUT = ("On most of that land the echo rose again on the first pass after the rain. Where it stayed low we do not "
-            "know why. Those are the places to check.")
+TILES = ["of peat in the west area where the echo got weaker", "the same, in the east area",
+         "how much it came back on the first pass after the rain, {where}"]
+CAME_OUT = ("In most places the echo came back after the first rain. In some it stayed weak, and we do not know why. "
+            "Those are the places to check first.")
 # Slide 5: the app. (recording, name, sentence); {o} is filled with the ontology counts.
 VIEWS = [
     ("demo_season.gif", "Play the season.", "Watch the echo fade pass by pass, with NASA's fire detections building up beside it."),
@@ -416,28 +419,22 @@ def build(a):
     s.notes_slide.notes_text_frame.text = "What NISAR is and what the echo means. Physics claims are the audited ones only."
 
     # 4. How it is done
-    s = new(4, "How we turned radar passes into a map")
-    for k, (name, sentence) in enumerate(STEPS):
-        x = 140 + k * 332
-        card = shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, px(x), px(224), px(312), px(312), PANEL, LINE)
-        card.adjustments[0] = 0.04
-        words(s, x + 24, 244, 264, 34, str(k + 1), 24, color=SAND, font=MONO)
-        words(s, x + 24, 282, 264, 40, name, 27, bold=True)
-        words(s, x + 24, 330, 268, 200, sentence, 20, color=DIM)
-    framed(s, fig / "fig_season.png", px(140), px(566), px(686), "Season figure")   # 16:9, so 386 px tall
+    s = new(4, STEPS_TITLE)
+    rows = [[(f"{k + 1}  ", {"color": SAND, "font": MONO, "bold": True}), (name + " ", {"bold": True, "color": INK}), sentence]
+            for k, (name, sentence) in enumerate(STEPS)]
+    words(s, 140, 232, 880, 720, rows, 24, color=DIM, space_after=11)
+    framed(s, fig / "fig_season.png", px(1080), px(232), px(700), "Season figure")   # 16:9, so 394 px tall
     rise, rise_where = rise_words(num)
-    tiles = [(num.km2("fell_1db_km2_on_peat_west"), "of peat in the west area where the echo fell on both orbits", SAND),
-             (num.km2("fell_1db_km2_on_peat_east"), "the same, in the east area", SAND),
-             (rise, f"back up on the first pass after the rain, {rise_where}", RAIN)]
-    for k, (number, label, colour) in enumerate(tiles):
-        x = 891 + k * 303
-        t = shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, px(x), px(566), px(283), px(176), PANEL, LINE)
+    tiles = [(num.km2("fell_1db_km2_on_peat_west"), SAND), (num.km2("fell_1db_km2_on_peat_east"), SAND), (rise, RAIN)]
+    for k, ((number, colour), label) in enumerate(zip(tiles, TILES)):
+        x = 1080 + k * 240
+        t = shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, px(x), px(650), px(220), px(170), PANEL, LINE)
         t.adjustments[0] = 0.06
-        words(s, x + 22, 584, 245, 56, number, 38, color=colour, font=MONO, bold=True)
-        words(s, x + 22, 648, 245, 90, label, 19, color=DIM)
-    words(s, 891, 772, 889, 150, CAME_OUT, 25)
+        words(s, x + 18, 664, 190, 50, number, 32, color=colour, font=MONO, bold=True)
+        words(s, x + 18, 716, 188, 100, label.format(where=rise_where), 17, color=DIM)
+    words(s, 1080, 842, 700, 110, CAME_OUT, 23)
     footer(s, 4, SOURCES[4], draft)
-    s.notes_slide.notes_text_frame.text = "The method in five steps, the season in one figure, and the three numbers that came out."
+    s.notes_slide.notes_text_frame.text = "How the map is made, in five plain steps, with the season in one figure and the three numbers that came out."
 
     # 5. The app
     s = new(5, "The result is a map anyone can open")

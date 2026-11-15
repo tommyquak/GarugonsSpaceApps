@@ -22,7 +22,7 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_slides import (APP_URL, CAME_OUT, CODE_URL, EVENT, HOLDS, LEAD, LIMITS, MEMBERS, NEXT, PEAT, PEAT_SUM,  # noqa: E402
-                          RADAR, RADAR_TITLE, SOURCES, STEPS, TEAM, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
+                          RADAR, RADAR_TITLE, SOURCES, STEPS, STEPS_TITLE, TEAM, TILES, VIEWS, Numbers, ontology_counts, ontology_words, rise_words)
 
 PICTURES = ["fig_cloud.png", "explainer.gif", "fig_season.png", "fig_orbits.png"] + [v[0] for v in VIEWS]
 PHOTOS = ["fire.jpg"] + [p[0] for p in PEAT]
@@ -67,8 +67,7 @@ def page(n, draft, counts):
         f'    <p class="fact reveal r4" style="left:{140 + k * 560}px"><b>{e(name)}</b> {e(words)}</p>'
         for k, (name, words) in enumerate(RADAR))
     steps = "\n".join(
-        f'    <div class="card reveal r2" style="left:{140 + k * 332}px"><div class="no">{k + 1}</div>'
-        f'<div class="name">{e(name)}</div><p>{e(words)}</p></div>'
+        f'      <p><span class="no">{k + 1}</span><b>{e(name)}</b> {e(words)}</p>'
         for k, (name, words) in enumerate(STEPS))
     frames = "\n".join(
         f'    <div class="frame dark reveal r{2 + k // 2}" style="left:{140 + (k % 2) * 590}px; top:{232 + (k // 2) * 340}px; '
@@ -85,7 +84,8 @@ def page(n, draft, counts):
         for k, (when, name, words) in enumerate(NEXT))
     parts = {"peat": peat, "radar": radar, "steps": steps, "frames": frames, "views": views, "holds": holds,
              "limits": limits, "plan": plan, "lead": e(LEAD), "team": e(TEAM), "members": e(MEMBERS), "event": e(EVENT),
-             "peat_sum": e(PEAT_SUM), "radar_title": e(RADAR_TITLE), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
+             "peat_sum": e(PEAT_SUM), "radar_title": e(RADAR_TITLE), "steps_title": e(STEPS_TITLE),
+             "tile_west": e(TILES[0]), "tile_east": e(TILES[1]), "tile_rise": e(TILES[2].format(where=n["rise_where"])), "came_out": e(CAME_OUT), "app_url": APP_URL, "code_url": CODE_URL,
              "draft": '<div class="badge">draft: exploratory numbers</div>' if draft else ""}
     parts.update({f"source{k}": e(v) for k, v in SOURCES.items()})
     parts.update({k: e(v) for k, v in n.items()})
@@ -188,18 +188,17 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
 .fact b { display: block; margin-bottom: 4px; color: var(--ink); font: 600 28px/1.3 var(--sans); }
 
 /* ===========================================
-   SLIDE 4: the method as five cards, then what came out
+   SLIDE 4: the method as five numbered rows, beside the season figure and what came out
    =========================================== */
-.card { position: absolute; top: 224px; width: 312px; height: 312px; padding: 22px 24px; background: var(--panel);
+.steps { position: absolute; left: 140px; top: 228px; width: 880px; font: 400 25px/1.42 var(--sans); color: var(--dim); }
+.steps p { position: relative; padding-left: 50px; margin-bottom: 20px; }
+.steps b { color: var(--ink); font-weight: 600; }
+.steps .no { position: absolute; left: 0; top: 0; font: 500 25px/1.42 var(--mono); color: var(--sand); }
+.tile { position: absolute; top: 650px; width: 220px; height: 170px; padding: 16px 18px; background: var(--panel);
   border: 1px solid var(--line); border-radius: 10px; }
-.card .no { font: 500 24px var(--mono); color: var(--sand); }
-.card .name { margin-top: 6px; font: 600 28px/1.2 var(--sans); }
-.card p { margin-top: 10px; font: 400 21px/1.4 var(--sans); color: var(--dim); }
-.tile { position: absolute; width: 283px; height: 176px; padding: 20px 22px; background: var(--panel);
-  border: 1px solid var(--line); border-radius: 10px; }
-.tile .num { font: 500 40px var(--mono); }
-.tile .label { margin-top: 8px; font: 400 20px/1.35 var(--sans); color: var(--dim); }
-.out { position: absolute; left: 891px; top: 768px; width: 889px; font: 400 26px/1.42 var(--sans); }
+.tile .num { font: 500 32px var(--mono); white-space: nowrap; }
+.tile .label { margin-top: 8px; font: 400 18px/1.32 var(--sans); color: var(--dim); }
+.out { position: absolute; left: 1080px; top: 842px; width: 700px; font: 400 24px/1.4 var(--sans); }
 
 /* ===========================================
    SLIDE 5: four recordings of the app, numbered, with what each is for
@@ -280,14 +279,16 @@ a { color: var(--rain); text-decoration: none; border-bottom: 1px solid rgba(90,
   </section>
 
   <!-- 4. How it is done -->
-  <section class="slide" aria-label="Slide 4: the method">
+  <section class="slide" aria-label="Slide 4: how the map is made">
     {{draft}}
-    <h2 class="reveal r1">How we turned radar passes into a map</h2>
+    <h2 class="reveal r1">{{steps_title}}</h2>
+    <div class="steps reveal r2">
 {{steps}}
-    <div class="frame reveal r3" style="left:140px; top:566px; width:711px; height:386px"><img src="assets/fig_season.png" alt="The season in one picture: the echo fading pass by pass on both orbits, forest flat, daily rain underneath"></div>
-    <div class="tile reveal r4" style="left:891px; top:566px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">of peat in the west area where the echo fell on both orbits</div></div>
-    <div class="tile reveal r4" style="left:1194px; top:566px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">the same, in the east area</div></div>
-    <div class="tile reveal r4" style="left:1497px; top:566px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">back up on the first pass after the rain, {{rise_where}}</div></div>
+    </div>
+    <div class="frame reveal r3" style="left:1080px; top:232px; width:700px; height:394px"><img src="assets/fig_season.png" alt="The season in one picture: the echo getting weaker pass by pass on both orbits, forest flat, daily rain underneath"></div>
+    <div class="tile reveal r4" style="left:1080px"><div class="num" style="color:var(--sand)">{{west_km2}}</div><div class="label">{{tile_west}}</div></div>
+    <div class="tile reveal r4" style="left:1320px"><div class="num" style="color:var(--sand)">{{east_km2}}</div><div class="label">{{tile_east}}</div></div>
+    <div class="tile reveal r4" style="left:1560px"><div class="num" style="color:var(--rain)">{{rise}}</div><div class="label">{{tile_rise}}</div></div>
     <p class="out reveal r5">{{came_out}}</p>
     <div class="rule"></div>
     <p class="source">{{source4}}</p>
