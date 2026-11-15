@@ -1,18 +1,18 @@
 # Written with Super Intelligence (SI) assistance.
 """Build the seven-slide demo deck (track 6) as a .pptx, ready to upload to Google Slides.
 
-Every number on a slide is read from validation.json; none is typed here. The order is the
-one agreed on issue #36: the problem, what NISAR sees, the season, the app, why believe it,
-what we do not see, what comes next. The limits behind each claim are in docs/LIMITS.md.
+The order: title, the problem (how peat is degraded), what the radar sees, how the map is made, the app,
+how far to trust it, what comes next. The words are the lists below; build_html_deck.py reads the same
+lists. Every number of ours is read from validation.json; none is typed here. Outside facts carry their
+source on the slide. The limits behind each claim are in docs/LIMITS.md.
 
-    python submission/build_slides.py --figures submission/figures --validation app/public/validation.json \\
-        --out submission/deck.pptx            # draft: exploratory numbers, tagged on every slide
+    python submission/build_slides.py --figures submission/figures --out submission/deck.pptx
+        # draft: exploratory numbers, tagged on every slide
     python submission/build_slides.py ... --final   # only keys marked final; stops if one is missing
 
-Figures, the four app GIFs and app_room.jpg (the app's entry view) come from the release:
-gh release download figures-v3 --dir submission/figures
-Slide 3 gives the reasons behind the method and slide 4 the app's four views; the counts of the
-ontology on slide 4 are read from pipeline/fusion/ontology.json, not typed.
+The figures and the four app recordings come from the release: gh release download figures-v3 --dir submission/figures
+The photographs are the ones of the app's opening story, in app/public/story, with their credits.
+Both decks are laid out on a 1920 x 1080 stage, so a position here is the same number as in the web deck.
 """
 import argparse
 import io
@@ -42,18 +42,92 @@ FONT = "Archivo"
 MONO = "JetBrains Mono"   # numbers only: they are measurements
 W, H = Inches(13.333), Inches(7.5)
 M = Inches(0.6)
-# The choices behind the method, each with its reason (slide 3). build_html_deck.py uses the same list.
-CHOICES = [
-    ("Forest as the yardstick.", "Each pass is measured against closed forest, which removes shifts that affect a whole scene."),
-    ("Two orbits must agree.", "Dawn and dusk look from opposite sides; a fall counts only where both see it."),
-    ("The dry window comes from rainfall.", "Its start and end are set from the daily rain record by a fixed rule, not by eye."),
-    ("Wait for the first rain.", "On most land HH rose again on the first pass after the rain. Where it stayed low we do not know why, so those are the places to check."),
-    ("Levels, not the size of the fall.", "Much of a large fall came back with the rain, so blocks are ranked by what was still changed after it."),
-    ("One ontology.", "Sources, observations, states and classes, with their thresholds, live in one file that the pipeline and the app both read."),
+# The words of the deck. build_html_deck.py reads the same lists, so the two decks cannot drift apart.
+# Outside facts carry their source on the slide; our own numbers come from validation.json.
+TEAM = "Team Garugons"
+MEMBERS = "Tommy, Reagan, Gabriel, Kalent, Jan Hoe, Anson"
+EVENT = "NASA Space Apps Challenge 2026 · Dancing with the SARs"
+LEAD = ("What NASA's new radar saw on Borneo's peat through the 2026 dry season, "
+        "while cloud and smoke hid it from every camera.")
+# Slide 2: how peat is degraded, one photograph a step. (photo in app/public/story, word, sentence)
+PEAT = [
+    ("forest.jpg", "Wet", "A peat swamp is forest growing on metres of dead plants that never rotted, because the ground "
+     "stays under water. It holds thousands of years of carbon, and wet peat does not burn."),
+    ("canal.jpg", "Drained", "In the 1990s the Mega Rice Project dug some 4,600 km of canals to turn a million hectares "
+     "of this swamp into rice fields. The rice failed. The canals still drain the peat."),
+    ("burnt.jpg", "Burnt", "Dry peat catches fire and smoulders under the surface for weeks. Indonesia's 2015 fires, many "
+     "of them on peat, cost the country USD 16 billion, and the haze shut Singapore's schools."),
 ]
-# What comes next (slide 7), also used by build_html_deck.py. The papers are in docs/REFERENCES.md.
-SUBSIDENCE = ("Drained peat sinks, and over the years much of that sinking is peat oxidising, which is carbon lost (Hooijer et al. 2012). L-band radar has measured the sinking in Central Kalimantan, checked in the field (Tay et al. 2025). NISAR's 12-day pairs, which we already pull for their coherence, could be tested for the same with two to three years of passes.")
-MORE_SEASONS = "Every dry season set against wet years. The pipeline takes any bounding box; not yet run on a second site."
+PEAT_SUM = ("This is peat degradation: drained, dried out, burnt, then burnt again. Indonesian law counts peat as damaged "
+            "once the water sits more than 0.4 m below the surface. The hard part is seeing which ground is drying, "
+            "because in the dry season it lies under cloud, and then under smoke.")
+# Slide 3: what the radar is and what it measures.
+RADAR = [
+    ("Same place, same day.", "14 September 2026. On the left, what a camera in orbit saw: smoke and cloud. "
+     "On the right, what NISAR saw: the land."),
+    ("It brings its own light.", "NISAR, launched by NASA and ISRO in 2025, sends out radio waves 24 cm long. They pass "
+     "through cloud and smoke, by day or night, and the satellite is built to return every 12 days."),
+    ("The echo tells wet from dry.", "On open ground a wet surface sends back a strong echo and a dry one a weak echo. "
+     "When open peat dries, the echo fades. Clearing fades it too, so we only ever say the echo fell."),
+]
+# Slide 4: the method, one step a card.
+STEPS = [
+    ("Collect", "Every NISAR pass over two study areas, June to November 2026, from two orbits: one at dawn, one at dusk. "
+     "All on one 50 m grid."),
+    ("Steady", "Whole images shift a little between passes. Closed forest hardly changes, so we measure every pass "
+     "against the forest nearby and the shift drops out."),
+    ("Date the dry season", "NASA's daily rainfall record shows when the rain stopped and when it returned. A fixed rule "
+     "picks the dates, not our eyes."),
+    ("Measure the fall", "From the dry start to mid October, how much did the echo fade? A place counts only if both "
+     "orbits saw it fade by 1 dB, about a fifth."),
+    ("Wait for the rain", "Did the echo come back on the first pass after the rain? Add NASA's fire detections and a "
+     "peat map, and each 1 km square gets a class by a written rule."),
+]
+CAME_OUT = ("On most of that land the echo rose again on the first pass after the rain. Where it stayed low we do not "
+            "know why. Those are the places to check.")
+# Slide 5: the app. (recording, name, sentence); {o} is filled with the ontology counts.
+VIEWS = [
+    ("demo_season.gif", "Play the season.", "Watch the echo fade pass by pass, with NASA's fire detections building up beside it."),
+    ("demo_check.gif", "See where to check.", "Every 1 km square of peat sorted into three levels, flat or in 3D. "
+     "Download the list for a GPS."),
+    ("demo_decide.gif", "Ask why.", "Each class has a written rule, open to read from the data to the answer. "
+     "We call it the ontology: {o}."),
+    ("demo_report.gif", "Print it.", "Three pages for a field team, ending in the squares to visit first."),
+]
+# Slide 6: what holds up, and what the map cannot say.
+HOLDS = [
+    ("Two orbits picked the same places.", "They look from opposite sides, four days apart, and agree square by square "
+     "(rank correlation {r_west} in the west area, {r_east} in the east)."),
+    ("We asked a reviewer to break it.", "An SI reviewer found our first start date fell just after rain. We moved the "
+     "start, the numbers got smaller, and the audit is published with the code."),
+]
+LIMITS = [
+    ("Nobody has checked it on the ground.", "A weaker echo is not a measured water level."),
+    ("It does not predict fire.", "We tested that, found nothing clear, and dropped the claim."),
+    ("It is one dry season, in two areas.", "Both in Central Kalimantan. A wet year may look different."),
+    ("It says where to look, not what to do.", "A square on the list is a place to visit, not a verdict."),
+]
+# Slide 7: the plan. (when, what, sentence). The papers are in docs/REFERENCES.md.
+NEXT = [
+    ("Next dry season", "Check it on the ground", "About sixty visits with a field partner: water depth in a dipwell, "
+     "canals and fire scars, at squares from each class. That calibrates the map, or shows where it is wrong."),
+    ("Every season", "Run it again", "The code takes any area. A second and a third season will show how the method "
+     "behaves in a wet year, and other peatlands can be added."),
+    ("In two to three years", "Add sinking ground", "Drained peat sinks as it rots away, which is carbon lost to the air "
+     "(Hooijer et al. 2012). L-band radar has measured that in Central Kalimantan (Tay et al. 2025). With enough NISAR "
+     "passes we can test for it here."),
+    ("Then", "Hand it over", "The list opens in any GIS or GPS. It needs an agency or a field group to take it up."),
+]
+SOURCES = {
+    1: "Photo: putting out a peat fire, 2019. DenY Krisbiyantoro, Wikimedia Commons, CC BY-SA 4.0.",
+    2: "Photos: Sugardiman / AusAID and Estey / AusAID (CC BY 2.0), Krisbiyantoro (CC BY-SA 4.0), Wikimedia Commons. "
+       "Facts: Mongabay 2018, World Bank 2016, Regulation 57 of 2016.",
+    3: "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (NASA and ISRO, ASF DAAC). The animation is a schematic made with SI assistance.",
+    4: "Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), NASA FIRMS, PEATMAP (CC BY 4.0).",
+    5: "Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.",
+    6: "Figure: pipeline/figures.py. Audit and response: docs/AUDIT.md. All limits: docs/LIMITS.md.",
+    7: "Made with Super Intelligence (SI) assistance, from open NASA, ISRO and other data. Sources and licences: submission/LICENCES.md.",
+}
 APP_URL = "https://tommyquak.github.io/GarugonsSpaceApps/"
 CODE_URL = "https://github.com/tommyquak/GarugonsSpaceApps"
 
@@ -92,6 +166,18 @@ def ontology_counts(path):
     counts = {k: str(len(o[k])) for k in ("sources", "observations", "states")}
     counts["classes"] = str(sum(1 for a in o["actions"] if a.get("id") != "none"))   # "no class" is not a class
     return counts
+
+
+def ontology_words(counts):
+    """The ontology's size as words for a sentence."""
+    return (f"{counts['sources']} sources, {counts['observations']} observations, {counts['states']} states "
+            f"and {counts['classes']} classes")
+
+
+def rise_words(num):
+    """The median rise on the first pass after the rain in the west area, and which orbits it holds for."""
+    dawn, dusk = num.db("recovery_hh_median_rebound_west_125"), num.db("recovery_hh_median_rebound_west_061")
+    return (dawn, "on both orbits") if dawn == dusk else (f"{dawn} / {dusk}", "dawn / dusk orbit")
 
 
 def text(slide, x, y, w, h, runs, size=16, color=INK, bold=False, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP,
@@ -184,7 +270,7 @@ def title(slide, words):
 
 def footer(slide, n, source, draft):
     line(slide, M, H - Inches(0.62), W - M, H - Inches(0.62), LINE, 0.75)
-    text(slide, M, H - Inches(0.5), Inches(10.5), Inches(0.3), source, size=10, color=DIM, name="Source")
+    text(slide, M, H - Inches(0.5), Inches(11.0), Inches(0.4), source, size=10, color=DIM, name="Source")
     text(slide, W - M - Inches(1.2), H - Inches(0.5), Inches(1.2), Inches(0.3), f"{n:02d} / 07",
          size=10, color=DIM, align=PP_ALIGN.RIGHT, name="Page", font=MONO)
     if draft:
@@ -202,62 +288,6 @@ def framed(slide, path, x, y, w, name):
     pic.line.color.rgb = LINE
     pic.line.width = Pt(0.75)
     return pic
-
-
-def tile(slide, x, y, w, h, number, label, colour, small=False):
-    """A panel with a measured number over a short label; small is the size for a row of three under a figure."""
-    t = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, y, w, h, PANEL, LINE)
-    t.adjustments[0] = 0.08
-    pad, top, below = (Inches(0.14), Inches(0.1), Inches(0.46)) if small else (Inches(0.18), Inches(0.15), Inches(0.62))
-    text(slide, x + pad, y + top, w - 2 * pad, Inches(0.4), number, size=17 if small else 22, color=colour,
-         font=MONO, bold=True)
-    text(slide, x + pad, y + below, w - 2 * pad, h - below - Inches(0.06), label, size=10 if small else 12, color=DIM)
-
-
-def limits_table(slide, x, y, w, rows):
-    """Limit | Our answer, with hairlines under each row and no fills."""
-    t = slide.shapes.add_table(len(rows) + 1, 2, x, y, w, Inches(0.4) * (len(rows) + 1)).table
-    t.columns[0].width = int(w * 0.42)
-    t.columns[1].width = w - int(w * 0.42)
-    tbl = t._tbl
-    tbl.tblPr.set("firstRow", "0")
-    tbl.tblPr.set("bandRow", "0")
-    style = tbl.tblPr.find(qn("a:tableStyleId"))
-    if style is None:
-        style = tbl.tblPr.makeelement(qn("a:tableStyleId"), {})
-        tbl.tblPr.append(style)
-    style.text = "{2D5ABB26-0587-4C30-8999-92F81FD0307C}"   # built-in "No Style, No Grid"
-    for r, row in enumerate([("Limit", "Our answer")] + rows):
-        for c, content in enumerate(row):
-            cell = t.cell(r, c)
-            cell.fill.solid()
-            cell.fill.fore_color.rgb = BG
-            cell.margin_left = Inches(0.08)
-            cell.margin_right = Inches(0.12)
-            cell.margin_top = cell.margin_bottom = Inches(0.07)
-            tf = cell.text_frame
-            tf.word_wrap = True
-            p = tf.paragraphs[0]
-            runs = [(content.upper(), {"bold": True, "color": DIM, "size": 10})] if r == 0 else (
-                content if isinstance(content, list) else [(content, {})])
-            for t_, o in runs:
-                run = p.add_run()
-                run.text = t_
-                run.font.name = FONT
-                run.font.size = Pt(o.get("size", 13))
-                run.font.bold = o.get("bold", False)
-                run.font.color.rgb = o.get("color", INK)
-            tcPr = cell._tc.get_or_add_tcPr()
-            for k, edge in enumerate(("a:lnL", "a:lnR", "a:lnT", "a:lnB")):   # borders come before the fill
-                ln = tcPr.makeelement(qn(edge), {"w": "9525" if edge == "a:lnB" else "0"})
-                if edge == "a:lnB":
-                    fill = ln.makeelement(qn("a:solidFill"), {})
-                    fill.append(fill.makeelement(qn("a:srgbClr"), {"val": "23303E"}))
-                else:
-                    fill = ln.makeelement(qn("a:noFill"), {})
-                ln.append(fill)
-                tcPr.insert(k, ln)
-    return t
 
 
 def line(slide, x1, y1, x2, y2, color, width=2.0, arrow=False):
@@ -298,162 +328,166 @@ def link_colour(prs, hex6):
     theme._blob = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
 
 
+def px(n):
+    """Stage pixels to slide units: both decks are laid out on a 1920 x 1080 stage, and the slide is 13.333 in wide."""
+    return Emu(int(n * 914400 / 144))
+
+
+def photo(slide, path, x, y, w, h, name, focus=(0.5, 0.5)):
+    """A photograph cropped to fill a box of w by h stage pixels, keeping the part around focus."""
+    img = Image.open(path).convert("RGB")
+    want = w / h
+    if img.width / img.height > want:
+        cw = int(img.height * want)
+        left = int((img.width - cw) * focus[0])
+        img = img.crop((left, 0, left + cw, img.height))
+    else:
+        ch = int(img.width / want)
+        top = int((img.height - ch) * focus[1])
+        img = img.crop((0, top, img.width, top + ch))
+    img.thumbnail((1400, 1400))
+    buf = io.BytesIO()
+    img.save(buf, "JPEG", quality=84, optimize=True)
+    buf.seek(0)
+    pic = slide.shapes.add_picture(buf, px(x), px(y), px(w), px(h))
+    pic.name = name
+    return pic
+
+
+def words(slide, x, y, w, h, runs, size, **kw):
+    """text() in stage pixels; a size in pixels is half as many points."""
+    return text(slide, px(x), px(y), px(w), px(h), runs, size=size / 2, **kw)
+
+
+def lead_in(name, rest, size=None):
+    """A paragraph that opens with a few bold words in ink and goes on in the dim colour."""
+    o = {"bold": True, "color": INK}
+    if size:
+        o["size"] = size / 2
+    return [(name + " ", o), rest]
+
+
 def build(a):
     num = Numbers(a.validation, a.final)
     draft = not a.final
-    fig = Path(a.figures)
+    fig, story = Path(a.figures), Path(a.photos)
+    counts = ontology_counts(a.ontology)
     prs = Presentation()
     prs.slide_width, prs.slide_height = W, H
     blank = prs.slide_layouts[6]
 
-    # 1. The problem, and the takeaway
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    framed(s, fig / "fig_map.png", Inches(6.55), Inches(1.6), Inches(6.2), "One-look map")   # 1617 x 1032 px
-    text(s, M, Inches(0.9), Inches(5.6), Inches(1.0), "Dry Season Waltz", size=44, bold=True, color=INK)
-    text(s, M, Inches(1.95), Inches(5.6), Inches(2.2),
-         "NISAR lets anyone watch a peat dry season through cloud and smoke: an open map of where the radar "
-         "echo fell, where fire was detected and what changed with the rain, with its evidence and its limits attached.",
-         size=17, color=INK)
-    text(s, M, Inches(4.0), Inches(5.6), Inches(1.6),
-         "Every dry season, drained peat in Borneo is at its most flammable, some of it burns, and the haze reaches "
-         "cities across the region. Cloud, then smoke, hides the ground from optical satellites just then.",
-         size=14, color=DIM)
-    text(s, M, Inches(6.05), Inches(5.6), Inches(0.3), "Team Garugons · NASA Space Apps 2026 · Dancing with the SARs",
-         size=12, color=DIM)
-    footer(s, 1, "Map: where HH fell by 1 dB or more, mid July to mid October 2026, with the PEATMAP outline.", draft)
-    s.notes_slide.notes_text_frame.text = "The problem and the one takeaway."
+    def new(n, heading=None):
+        s = prs.slides.add_slide(blank)
+        background(s, BG)
+        if heading:
+            words(s, 140, 96, 1640, 90, heading, 64, bold=True, name="Title")
+        return s
 
-    # 2. What NISAR sees: the problem in one picture, and how the radar gets through
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    title(s, "Cloud and smoke hide the ground from optical satellites. NISAR's radar sees through them")
-    framed(s, fig / "fig_cloud.png", M, Inches(1.6), Inches(5.95), "Cloud against radar figure")
-    framed(s, fig / "explainer.gif", Inches(6.78), Inches(1.6), Inches(5.95), "Radar explainer animation")
-    text(s, M, Inches(5.1), Inches(5.95), Inches(1.5),
-         [[("A 12-day repeat by design, day or night. ", {"bold": True, "color": INK}),
-           "The same ground on the same day: smoke and cloud for the optical satellite, the land for the radar."]],
-         size=14, color=DIM)
-    text(s, Inches(6.78), Inches(5.1), Inches(5.95), Inches(1.5),
-         [[("HH. ", {"bold": True, "color": SAND}),
-           "On open ground a drier surface sends back a weaker echo, so HH falls; clearing and standing water change it "
-           "too. Closed forest is the yardstick. "], [("HV ", {"bold": True, "color": INK}),
-           "comes mostly from woody vegetation, but responds to moisture too. A schematic, not data."]],
-         size=14, color=DIM, space_after=4)
-    footer(s, 2, "VIIRS Corrected Reflectance (NASA GIBS), NISAR L2 GCOV (ASF DAAC). Animation made with SI assistance.", draft)
-    s.notes_slide.notes_text_frame.text = "The problem in one picture, and how the radar sees the ground. Physics claims are the audited ones only."
+    # 1. Title
+    s = new(1)
+    photo(s, story / "fire.jpg", 880, 0, 1040, 968, "Photograph: putting out a peat fire", focus=(0.85, 0.4))
+    words(s, 140, 200, 720, 290, "Dry Season Waltz", 124, bold=True)
+    words(s, 140, 510, 700, 220, LEAD, 36)
+    words(s, 140, 770, 700, 150, [[(TEAM, {"bold": True, "color": INK})], MEMBERS, EVENT], 25, color=DIM, space_after=4)
+    footer(s, 1, SOURCES[1], draft)
+    s.notes_slide.notes_text_frame.text = "Title: what the project is, who made it, which challenge."
 
-    # 3. The season in one picture
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    title(s, "On open peat HH fell through the dry season, then rose with the first rain. Six choices make that hold")
-    fw = Inches(6.9)
-    framed(s, fig / "fig_season.png", M, Inches(1.65), fw, "Season figure")   # 16:9, so 3.88 in tall
-    dawn, dusk = num.db("recovery_hh_median_rebound_west_125"), num.db("recovery_hh_median_rebound_west_061")
-    rise, rise_where = (dawn, "on both orbits") if dawn == dusk else (f"{dawn} / {dusk}", "dawn / dusk orbit")
-    gap = Inches(0.15)
-    ty, tw, th = Inches(5.68), int((fw - 2 * gap) / 3), Inches(1.08)
-    tile(s, M, ty, tw, th, num.km2("fell_1db_km2_on_peat_west"),
-         "of mapped peat in the west box where HH fell 1 dB or more, on both orbits", SAND, small=True)
-    tile(s, M + tw + gap, ty, tw, th, num.km2("fell_1db_km2_on_peat_east"), "the same, in the east box", SAND, small=True)
-    tile(s, M + 2 * (tw + gap), ty, tw, th, rise,
-         f"rise on the first pass after rain, {rise_where}; none before it", RAIN, small=True)
-    why = [[(name + " ", {"bold": True, "color": INK}), reason] for name, reason in CHOICES]
-    text(s, Inches(7.85), Inches(1.6), Inches(4.88), Inches(5.2), why, size=13, color=DIM, space_after=9)
-    footer(s, 3, "Figure: pipeline/figures.py. NISAR L2 GCOV (ASF DAAC), GPM IMERG (GES DISC), PEATMAP (CC BY 4.0).", draft)
-    s.notes_slide.notes_text_frame.text = ("The season at a glance: the fall, deep forest flat as the yardstick, daily rain underneath. "
-                                           "Beside it, the six choices behind the method and the reason for each.")
+    # 2. The problem: how peat is degraded
+    s = new(2, "Peat does not burn until someone drains it")
+    for k, (name, word, sentence) in enumerate(PEAT):
+        x = 140 + k * 560
+        photo(s, story / name, x, 232, 520, 300, f"Photograph: {word.lower()} peat")
+        words(s, x, 550, 520, 50, [[(f"{k + 1}  ", {"color": SAND, "font": MONO, "size": 13}), (word, {"bold": True})]], 36)
+        words(s, x, 610, 520, 190, sentence, 24, color=DIM)
+    line(s, px(140), px(806), px(1780), px(806), LINE, 0.75)
+    words(s, 140, 826, 1640, 130, PEAT_SUM, 27)
+    footer(s, 2, SOURCES[2], draft)
+    s.notes_slide.notes_text_frame.text = "The problem: what peat is, how it is degraded, what it costs, and why nobody can watch it in the dry season."
 
-    # 4. The app
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    title(s, "An open map with four views: play the season, see where to check, read the rule, print the list")
-    gw, gap = Inches(4.4), Inches(0.15)   # the four recordings in a grid of two by two, each 16:9
-    gh = int(gw * 9 / 16)
-    views = [("demo_season.gif", "Season demo"), ("demo_check.gif", "Where to check demo"),
-             ("demo_decide.gif", "How it decides demo"), ("demo_report.gif", "Field assessment demo")]
-    for k, (name, label) in enumerate(views):
-        framed(s, fig / name, M + (k % 2) * (gw + gap), Inches(1.65) + (k // 2) * (gh + gap), gw, label)
-    o = ontology_counts(a.ontology)
-    items = [
-        [("The season. ", {"bold": True, "color": INK}), "Every pass on both orbits; fire builds up beside the fall."],
-        [("Where to check. ", {"bold": True, "color": INK}),
-         "1 km blocks in three levels, flat or in 3D, ranked, as CSV or GeoJSON."],
-        [("How it decides. ", {"bold": True, "color": INK}),
-         f"The ontology, drawn from its file: {o['sources']} sources, {o['observations']} observations, {o['states']} states "
-         f"and {o['classes']} classes, each rule open to read."],
-        [("Field assessment. ", {"bold": True, "color": INK}), "Three pages to print, ending in the blocks to visit first."],
-        [("Open the map", {"bold": True, "link": APP_URL})],
-    ]
-    tx = M + 2 * gw + gap + Inches(0.3)
-    text(s, tx, Inches(1.65), W - M - tx, Inches(5.1), items, size=13, color=DIM, space_after=10)
-    footer(s, 4, "Live app: tommyquak.github.io/GarugonsSpaceApps. Basemap: Sentinel-2 cloudless 2016 by EOX, CC BY 4.0.", draft)
-    s.notes_slide.notes_text_frame.text = ("Four recordings of the live app (figures-v3), left to right, top to bottom: the season, "
-                                           "Where to check tilting into 3D, the ontology under How it decides, and the field assessment.")
+    # 3. What the radar is, and what it measures
+    s = new(3, "A camera sees the smoke. Radar sees the ground")
+    framed(s, fig / "fig_cloud.png", px(140), px(232), px(800), "Cloud against radar figure")
+    framed(s, fig / "explainer.gif", px(980), px(232), px(800), "Radar explainer animation")
+    for k, (name, sentence) in enumerate(RADAR):
+        words(s, 140 + k * 560, 716, 520, 230, [[(name, {"bold": True, "color": INK, "size": 14})], sentence], 24,
+              color=DIM, space_after=3)
+    footer(s, 3, SOURCES[3], draft)
+    s.notes_slide.notes_text_frame.text = "What NISAR is and what the echo means. Physics claims are the audited ones only."
 
-    # 5. Why believe it
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    title(s, "Why believe it: two orbits agree, and an audit we asked for made the answer smaller")
-    framed(s, fig / "fig_orbits.png", M, Inches(1.7), Inches(5.95), "Orbits figure")
-    framed(s, fig / "fig_start.png", Inches(6.78), Inches(1.7), Inches(5.95), "Start figure")
-    text(s, M, Inches(5.2), Inches(5.95), Inches(1.4),
-         [[("Two orbits agree on where. ", {"bold": True, "color": INK}),
-           f"The dawn and dusk orbits look from opposite sides, four days apart, and agree block by block: Spearman r = "
-           f"{num.get('track5_west_orbit_spearman'):.2f} in the west box, {num.get('track5_east_orbit_spearman'):.2f} "
-           f"in the east (the scatter shows Pearson r)."]], size=14, color=DIM)
-    text(s, Inches(6.78), Inches(5.2), Inches(5.95), Inches(1.4),
-         [[("Audited part way. ", {"bold": True, "color": INK}),
-           "An SI reviewer we asked to audit the work found our first start date came just after rain. We now start from the first "
-           "rain-free passes, and published the audit with our response."]], size=14, color=DIM)
-    footer(s, 5, "Figures: pipeline/figures.py. Audit and response: docs/AUDIT.md.", draft)
-    s.notes_slide.notes_text_frame.text = "Validity: independent orbits, and the audit as evidence, not as the headline."
+    # 4. How it is done
+    s = new(4, "How we turned radar passes into a map")
+    for k, (name, sentence) in enumerate(STEPS):
+        x = 140 + k * 332
+        card = shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, px(x), px(224), px(312), px(312), PANEL, LINE)
+        card.adjustments[0] = 0.04
+        words(s, x + 24, 244, 264, 34, str(k + 1), 24, color=SAND, font=MONO)
+        words(s, x + 24, 282, 264, 40, name, 27, bold=True)
+        words(s, x + 24, 330, 268, 200, sentence, 20, color=DIM)
+    framed(s, fig / "fig_season.png", px(140), px(566), px(686), "Season figure")   # 16:9, so 386 px tall
+    rise, rise_where = rise_words(num)
+    tiles = [(num.km2("fell_1db_km2_on_peat_west"), "of peat in the west area where the echo fell on both orbits", SAND),
+             (num.km2("fell_1db_km2_on_peat_east"), "the same, in the east area", SAND),
+             (rise, f"back up on the first pass after the rain, {rise_where}", RAIN)]
+    for k, (number, label, colour) in enumerate(tiles):
+        x = 891 + k * 303
+        t = shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, px(x), px(566), px(283), px(176), PANEL, LINE)
+        t.adjustments[0] = 0.06
+        words(s, x + 22, 584, 245, 56, number, 38, color=colour, font=MONO, bold=True)
+        words(s, x + 22, 648, 245, 90, label, 19, color=DIM)
+    words(s, 891, 772, 889, 150, CAME_OUT, 25)
+    footer(s, 4, SOURCES[4], draft)
+    s.notes_slide.notes_text_frame.text = "The method in five steps, the season in one figure, and the three numbers that came out."
 
-    # 6. The honest limits, with our answers
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    title(s, "What the radar cannot tell us yet, and our answers")
-    limits_table(s, M, Inches(1.6), Inches(7.45), [
-        ([("Not checked on the ground. ", {"bold": True}), ("A fall in HH is not a measured water table.", {})],
-         "A rainfall model fitted to a published gauge record is shown beside the radar (right): modelled, not measured, "
-         "and support only. About sixty dipwell visits would calibrate the map or show where it is wrong."),
-        ([("One pass after the rain per orbit, ", {"bold": True}), ("from a later NASA processing release.", {})],
-         "We report the rise only where both orbits see it on their own, and the release change is in our limits."),
-        ([("No fire forecast, no canal advice.", {"bold": True})],
-         "Inside drained land an early fall did not separate later fire from no fire, so we withdrew the claim."),
-        ([("Fire returns, but we cannot say why.", {"bold": True})],
-         f"{num.share('fire_repeat_share_on_peat_west')} of this year's fire detections on western peat were on the "
-         f"{num.share('fire_earlier_share_on_peat_west')} of it with a detection in 2015, 2019 or 2023 (NASA FIRMS). "
-         f"Fire off peat is mapped too."),
-    ])
-    framed(s, fig / "fig_water_table.png", Inches(8.3), Inches(1.65), Inches(4.43), "Water table figure")
-    text(s, Inches(8.3), Inches(4.25), Inches(4.43), Inches(1.0),
-         "A rainfall-driven water-table model, run on 2026 rain beside the radar. Modelled, not measured: support, not validation.",
-         size=12, color=DIM)
-    footer(s, 6, "Hirano groundwater record (CC BY 4.0), GPM IMERG, NISAR L2 GCOV. Full limits: docs/LIMITS.md.", draft)
-    s.notes_slide.notes_text_frame.text = "The limits, each with what we did about it."
+    # 5. The app
+    s = new(5, "The result is a map anyone can open")
+    items = []
+    for k, (gif, name, sentence) in enumerate(VIEWS):
+        x, y = 140 + (k % 2) * 590, 232 + (k // 2) * 340
+        framed(s, fig / gif, px(x), px(y), px(570), f"Recording: {name}")
+        dot = shape(s, MSO_SHAPE.OVAL, px(x + 12), px(y + 12), px(34), px(34), INK)
+        dot.name = f"Number {k + 1}"
+        words(s, x + 12, y + 16, 34, 26, str(k + 1), 20, color=BG, bold=True, align=PP_ALIGN.CENTER, font=MONO)
+        items.append([(f"{k + 1}  ", {"color": SAND, "font": MONO, "bold": True}), (name + " ", {"bold": True, "color": INK}),
+                      sentence.format(o=ontology_words(counts))])
+    items.append([("Open the map", {"bold": True, "link": APP_URL, "size": 14})])
+    words(s, 1350, 232, 430, 700, items, 23, color=DIM, space_after=11)
+    footer(s, 5, SOURCES[5], draft)
+    s.notes_slide.notes_text_frame.text = ("Four recordings of the live app (figures-v3): the season, Where to check tilting "
+                                           "into 3D, the ontology under How it decides, and the field assessment.")
 
-    # 7. What comes next
-    s = prs.slides.add_slide(blank)
-    background(s, BG)
-    title(s, "What NISAR could do next")
-    nxt = [
-        [("Ground truth first. ", {"bold": True, "color": INK}), "A sixty-visit field protocol, in the late dry season and after the first rain."],
-        [("Subsidence, a second layer. ", {"bold": True, "color": INK}), SUBSIDENCE],
-        [("More seasons, other peatlands. ", {"bold": True, "color": INK}), MORE_SEASONS],
-    ]
-    text(s, M, Inches(1.75), Inches(5.6), Inches(3.6), nxt, size=15, color=DIM, space_after=14)
-    framed(s, fig / "app_room.jpg", Inches(6.55), Inches(1.75), Inches(6.18), "App entry view")   # 1915 x 900 px
-    text(s, Inches(6.55), Inches(4.75), Inches(6.18), Inches(0.5),
-         "The app's entry view: an illustrative scene made with SI, with the live dashboard on its screens.",
-         size=12, color=DIM)
+    # 6. How far to trust it
+    s = new(6, "How far you can trust it")
+    words(s, 140, 224, 800, 50, "What holds up", 34, bold=True)
+    framed(s, fig / "fig_orbits.png", px(140), px(292), px(720), "Orbits figure")
+    n = {"r_west": f"{num.get('track5_west_orbit_spearman'):.2f}", "r_east": f"{num.get('track5_east_orbit_spearman'):.2f}"}
+    words(s, 140, 722, 800, 240, [lead_in(name, sentence.format(**n)) for name, sentence in HOLDS], 24, color=DIM,
+          space_after=8)
+    words(s, 1010, 224, 770, 50, "What it cannot tell you", 34, bold=True)
+    for k, (name, sentence) in enumerate(LIMITS):
+        y = 292 + k * 150
+        line(s, px(1010), px(y), px(1780), px(y), LINE, 0.75)
+        words(s, 1010, y + 24, 770, 46, name, 31, bold=True)
+        words(s, 1010, y + 72, 770, 60, sentence, 26, color=DIM)
+    footer(s, 6, SOURCES[6], draft)
+    s.notes_slide.notes_text_frame.text = "Validity: two independent orbits and the audit; then the limits, plainly."
+
+    # 7. The plan
+    s = new(7, "What comes next")
+    line(s, px(140), px(253), px(1780), px(253), LINE, 1.5)
+    for k, (when, name, sentence) in enumerate(NEXT):
+        x = 140 + k * 420
+        shape(s, MSO_SHAPE.OVAL, px(x), px(244), px(18), px(18), SAND)
+        words(s, x, 286, 380, 32, when, 22, color=SAND, font=MONO)
+        words(s, x, 322, 380, 46, name, 31, bold=True)
+        words(s, x, 374, 380, 300, sentence, 23, color=DIM)
     links = [
-        [("Open the map  ", {"bold": True, "color": INK}), (APP_URL, {"bold": True, "link": APP_URL})],
-        [("Code and data  ", {"bold": True, "color": INK}), (CODE_URL, {"bold": True, "link": CODE_URL})],
+        [("Open the map   ", {"bold": True, "color": INK}), (APP_URL, {"link": APP_URL})],
+        [("Code and data   ", {"bold": True, "color": INK}), (CODE_URL, {"link": CODE_URL})],
     ]
-    text(s, M, Inches(5.45), Inches(12.0), Inches(0.9), links, size=15, color=DIM, space_after=6)
-    footer(s, 7, "Made with Super Intelligence (SI) assistance, from open NASA, ISRO and other data. All code is open; the data sources are in the README.", draft)
-    s.notes_slide.notes_text_frame.text = ("Next steps and links. Subsidence is a plan, not a result: one season is too short "
+    words(s, 140, 760, 1640, 110, links, 27, color=DIM, space_after=6)
+    words(s, 140, 880, 1640, 40, f"{TEAM}: {MEMBERS}", 24, color=DIM)
+    footer(s, 7, SOURCES[7], draft)
+    s.notes_slide.notes_text_frame.text = ("The plan, in order. Subsidence is a plan, not a result: one season is too short "
                                            "to show it, and nothing in this deck measures it.")
 
     link_colour(prs, "5AA9EE")
@@ -468,6 +502,7 @@ if __name__ == "__main__":
     p.add_argument("--figures", default="submission/figures", type=Path)
     p.add_argument("--validation", default="app/public/validation.json", type=Path)
     p.add_argument("--ontology", default="pipeline/fusion/ontology.json", type=Path)
+    p.add_argument("--photos", default="app/public/story", type=Path)
     p.add_argument("--out", default="submission/deck.pptx", type=Path)
     p.add_argument("--final", action="store_true", help="use only keys marked final, and drop the draft tag")
     build(p.parse_args())
