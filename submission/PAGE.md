@@ -4,15 +4,20 @@ The text of the project page, field by field. Every result is a `final` entry in
 
 ## 1. Project name
 
-Dry Season Waltz (working title; the team has not confirmed it)
+Dry Season Waltz
 
 ## 2. High-level summary
 
-Every dry season, drained peatland in Borneo is at its most flammable, some of it burns, and the smoke reaches cities across the region, Singapore included. Optical satellites often lose sight of the ground just then, behind cloud and then smoke. We built an open web map that follows NISAR's first dry season over these peatlands in three steps: where the radar echo of the land fell, where fire was detected, and what changed after the first rain. NISAR's L-band radar sees through cloud and smoke and reaches into the forest canopy. Each orbit has a nominal 12-day repeat cycle, with gaps in the available observations. We measure the fall of its HH echo against deep intact forest, keep only what two orbits looking from opposite sides both see, and show it as a map anyone can play through the season. It is a screening map of where to check on the ground. It does not measure the water table or predict fire.
+Peat only burns once it has been drained. In Central Kalimantan, thousands of kilometres of canals dug in the 1990s still drain the peat, and in dry years it burns and sends haze across the region, Singapore included. Restoring it starts with knowing which ground is drying, but in the dry season that ground is hidden from optical satellites, first by cloud and then by smoke.
+
+We built Dry Season Waltz, an open web map of what NISAR, the new NASA and ISRO L-band radar, saw over these peatlands in its first dry season. Radar sees through cloud and smoke. We followed the radar echo of the land through the 2026 dry season in three steps: where it fell, where NASA detected fire, and what changed after the first rain. We measure the fall against closed forest, keep only what two orbits looking from opposite sides both see, and sort every 1 km square of mapped peat into a class by rules anyone can read.
+
+Why it matters: it turns one season of free NASA data into a list of places to check on the ground first, with coordinates and the evidence behind each, at no cost per use. It is a screening map. It does not measure the water table, predict fire or recommend an intervention, and nothing in it has been checked on the ground yet.
 
 ## 3. Link to project demo
 
-To be added: seven slides with animated GIFs (public link).
+Seven slides, with recordings of the app playing inside them:
+https://docs.google.com/presentation/d/1vesg1eznCPqGbcpzD-PjqL7T5cbiIpfgGebKZvpY5_A/edit?usp=sharing
 
 ## 4. Link to final project
 
@@ -27,6 +32,8 @@ To be added: seven slides with animated GIFs (public link).
 - **Play the season.** A slider steps through every NISAR pass on both orbits, with a "whole season" view.
 - **Click a place.** A chart shows HH and HV at that spot for the whole season, with daily rain and the dates fire was detected.
 - **Where to check.** 1 km blocks labelled by what was seen (fire detected; fell and still low after the rain; fell and came back), drawn as 3D columns and as a ranked list that exports to CSV and GeoJSON. Each block shows the evidence behind its label.
+- **How it decides.** Every class has a written rule, drawn as a graph from the data source to the answer, with its thresholds. We call it the ontology, and the pipeline and the app read it from the same file.
+- **Field assessment.** Three pages to print: a map of the blocks, the evidence, and a table of blocks to visit, with a box to tick.
 - **Shows its limits.** A panel lists what the map cannot tell you, from `docs/LIMITS.md`, and the audit and our response are published with the code.
 
 ### How it works
@@ -63,22 +70,44 @@ At L-band the wave passes through thin vegetation and reaches the ground on open
 
 With two to three years of observations, we could test whether the phase of NISAR’s 12-day interferometric pairs (GUNW) can show long-term peat subsidence, beside the seasonal change in HH. We already pull those pairs and use their coherence in an exploratory check. The current HH and HV backscatter maps do not measure subsidence. Field studies of drained peat and field-tested L-band interferometry motivate this next step (Hooijer et al. 2012; Tay et al. 2025). The pipeline accepts a bounding box. Applying it to a second peatland remains untested.
 
-### Who it is for
+### Who it is for, and what they can do with it
 
-Field teams and researchers who need to choose where on a peat landscape to look first in a dry season, and who today often get a cloud-free picture of it only after the season is over.
+Field teams, peat restoration agencies and researchers who need to choose where on a peat landscape to look first, and who today often get a cloud-free picture of it only after the season is over.
+
+1. **Take the list.** Every 1 km square comes with its coordinates and the evidence behind it, as CSV and GeoJSON that open in a GIS or on a GPS.
+2. **Visit the top of the list first.** Start where the echo stayed weak after the rain, and where fire was detected. Measure the water depth and look at the canals.
+3. **Restore where the visit confirms it.** The remedy is the agency's, not ours. Indonesia's peat restoration programme works by rewetting (blocking canals with dams, filling them in, drilling deep wells), replanting, and supporting local livelihoods.
+4. **Look again next season.** NISAR is built to come back every 12 days. Run again after a canal is blocked, the same map could show whether the echo there holds up through the next dry season. We have not tested this.
+
+### Tools and technologies
+
+- **Pipeline:** Python 3.11 with numpy, scipy, h5py, rasterio, pyproj and matplotlib. It reads the NISAR files over the network from NASA's archive at the Alaska Satellite Facility, a block at a time, so nothing has to be downloaded whole.
+- **App:** TypeScript, Vite and MapLibre GL JS, served as a static site from GitHub Pages. No server, and no commercial map tiles.
+- **Checks:** 80 automated tests (pytest) and a build of the app run on every pull request, with GitHub Actions.
+- **One file of numbers.** Every figure on this page, in the app and on the slides is read from `app/public/validation.json`. A number is marked final only after a second team member has reproduced it independently.
+- **Slides:** built by a script, which reads its numbers from that same file.
+
+### How we built it
+
+Six people over one weekend, in one repository, each with an SI coding assistant. The work was split into tracks: radar stacks, the fall, the change after the rain, fire and context layers, the app, checks and limits, story and submission. The assistants passed work between team members on a shared message board in the repository, and every change went in through a pull request with automated checks. Part way through we asked an SI reviewer to audit the work adversarially. It found that our first start date came just after rain; we moved the start, and the result got smaller. The audit and our response are in `docs/AUDIT.md`.
 
 ## 6. Use of Super Intelligence (SI)
 
-Team to confirm before submission. Draft: We used SI coding assistants throughout the weekend, under each team member's direction, to write and test the pipeline and app code, to run the analysis, to draft documentation and this page, and to coordinate work through a shared message board. An SI reviewer was also asked to audit the work adversarially; its findings and our response are published in `docs/AUDIT.md`. Team members decided the approach, reviewed the results and chose what to claim. Code files written with SI assistance say so in their first line, and `submission/si_use/` lists each use. SI-made images and video carry a visible watermark.
+Yes. We used Super Intelligence (SI) coding assistants throughout the weekend, each under the direction of one team member. They wrote and tested the pipeline and app code, ran the analysis, drafted the documentation, this page and the slides, and passed work between team members on a shared message board. An SI reviewer was asked to audit the work adversarially part way through; what it found and what we changed are published in `docs/AUDIT.md`. Team members decided the approach, checked the results and chose what to claim.
+
+Three things on the site were made with SI: the illustrative control room on the entry view and the animated schematic of the radar echoes, which are both labelled where they appear, and the narration of the opening story, which is synthetic speech in a copy of a team member's own voice. Every code file written with SI assistance says so in its first comment line, and `submission/si_use/` lists each use, one file per team member. No SI-made picture is presented as data: every map layer, figure and number is computed by the code in the repository from NASA, ISRO and other open data.
 
 ## 7. NASA data
 
-- NISAR L2 GCOV (NASA and ISRO), Alaska Satellite Facility DAAC, https://search.asf.alaska.edu
-- GPM IMERG Late daily rainfall, version 07, NASA GES DISC. [NASA dataset record](https://www.earthdata.nasa.gov/data/catalog/ges-disc-gpm-3imergdl-07)
-- FIRMS active fire detections (VIIRS and MODIS), https://firms.modaps.eosdis.nasa.gov
-- NASA GIBS imagery: Blue Marble for a basemap option, and VIIRS daily true colour (`VIIRS_SNPP_CorrectedReflectance_TrueColor`, Suomi NPP) for the dated ground look in the place card, https://nasa-gibs.github.io/gibs-api-docs/
+- **NISAR L2 GCOV** (NASA and ISRO), from the Alaska Satellite Facility DAAC, https://search.asf.alaska.edu. The core of the project: L-band HH and HV backscatter on a dawn and a dusk orbit, June to November 2026. Every fall, every rise after the rain and every class is computed from it.
+- **NISAR L2 GUNW** (NASA and ISRO), same archive. The 12-day interferometric pairs, used for their coherence in one exploratory check, and the basis of the planned subsidence layer.
+- **GPM IMERG Late daily rainfall**, version 07, NASA GES DISC. [NASA dataset record](https://www.earthdata.nasa.gov/data/catalog/ges-disc-gpm-3imergdl-07). Sets the dry season: a fixed rule reads its start and its end from the daily rain, and it is the rain shown under every chart.
+- **FIRMS active fire detections** (VIIRS and MODIS), https://firms.modaps.eosdis.nasa.gov. Where and when fire was detected, on peat and off it. It decides the fire class, and the 2015, 2019 and 2023 records show where fire returns.
+- **NASA GIBS imagery**, https://nasa-gibs.github.io/gibs-api-docs/. VIIRS daily true colour (`VIIRS_SNPP_CorrectedReflectance_TrueColor`) shows what an optical satellite saw on the same day as the radar: cloud and smoke. It is the dated ground look in the place card and the picture on slide 3. Blue Marble is a basemap option.
 
 ## 8. Space agency partner and other data, and references
+
+Space agency partner: ISRO, with NASA, for NISAR.
 
 - OpenStreetMap contributors, waterways and base map, https://www.openstreetmap.org
 - Sentinel-2 cloudless 2016 by EOX, the default base map (contains modified Copernicus Sentinel data 2016), CC BY 4.0, https://s2maps.eu
@@ -90,4 +119,10 @@ Team to confirm before submission. Draft: We used SI coding assistants throughou
 - Hooijer et al. 2012, Subsidence and carbon loss in drained tropical peatlands, Biogeosciences 9, 1053 to 1071. [DOI 10.5194/bg-9-1053-2012](https://doi.org/10.5194/bg-9-1053-2012). Cited for the future plan only.
 - Tay et al. 2025, Satellite radar advances carbon emissions accountability over tropical peat, Communications Earth and Environment 6, 971. [DOI 10.1038/s43247-025-02926-6](https://doi.org/10.1038/s43247-025-02926-6). Cited for the future plan only; its data are not used.
 
-The full list, with a confidence tag for each claim, is in `docs/REFERENCES.md`.
+- Hirano and colleagues, daily groundwater level in drained and undrained peat swamp forest near Palangka Raya, 2013 to 2018, figshare, [DOI 10.6084/m9.figshare.22321129](https://doi.org/10.6084/m9.figshare.22321129), CC BY 4.0. Used to fit the rainfall-driven water-table model shown beside the radar.
+- World Bank 2016, The Cost of Fire: an economic analysis of Indonesia's 2015 fire crisis. Koplitz et al. 2016, Environmental Research Letters 11, 094023. Government of Indonesia, Regulation 57 of 2016 on peat ecosystems. Jong 2018, Mongabay, on the Mega Rice Project. UN DESA, on Indonesia's peat restoration measures. Links for each are in `submission/IMPACT.md`.
+- Photographs in the opening story and on the slides, from Wikimedia Commons: DenY Krisbiyantoro (CC BY-SA 4.0); Josh Estey / AusAID and Ruanda Agung Sugardiman / AusAID (CC BY 2.0). Author, source and changes for each are in `app/public/story/CREDITS.md`.
+- Software: MapLibre GL JS (BSD-3-Clause), Vite, TypeScript, IBM Plex Sans (SIL OFL); Python with numpy, scipy, h5py, fsspec, rasterio, pyproj, matplotlib, pillow, python-pptx and pytest.
+- SI tools: coding assistants (code, analysis, documentation, the audit), an image generator (the illustrative control room), and a text-to-speech service (the story narration).
+
+Every source with its licence is in `submission/LICENCES.md`. The full list, with a confidence tag for each claim, is in `docs/REFERENCES.md`.
