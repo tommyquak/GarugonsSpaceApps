@@ -5,16 +5,22 @@
 // height is its level too, so that colour and height say the same thing. The block under
 // the pointer lights up and the pointer becomes a hand, flat and as columns, so it is plain
 // that a block can be clicked.
+// As columns in the at-a-glance view, the blocks of a level that touch are drawn as one shape
+// with slightly rounded corners (merged.ts). The blocks stay underneath, unseen, so that the
+// pointer still finds a block, and the block under the pointer or selected is drawn on top.
 import type { ExpressionSpecification, GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import { actionColor, confidenceStrength, CONFIDENCE_LEVELS, NONE_COLOR, NO_ACTION, solidColor } from "./colors";
 import type { BlockFeature, BlockStore } from "./data";
 import { LEVELS, levelOf } from "./levels";
+import { levelShapes } from "./merged";
 
 /** Metres of column per decibel of fall in HH. */
 export const METRES_PER_DB = 1200;
 const ANCHOR = "z-marks"; // blocks sit over the colour layers and under the outlines (basemaps.ts)
 const SELECTED = "blocks-selected";
 const VEIL = "blocks-veil";
+const LIT = "blocks-lit"; // the hovered and the selected block, as columns over the rounded shapes
+const COLUMN_OPACITY = 0.92;
 const GRID_FROM_ZOOM = 10.5;
 const HOVER_COLOR = "#ece8df"; // the ink of the interface: a hovered block reads as a control
 
@@ -50,6 +56,14 @@ export class BlockLayer {
   ) {
     // A dark veil over the basemap and the colour layers, so the blocks are the brightest thing on the map.
     map.addLayer({ id: VEIL, type: "background", layout: { visibility: "none" }, paint: { "background-color": "#0d1013", "background-opacity": 0.55 } }, ANCHOR);
+    map.addSource(LIT, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+    map.addLayer({
+      id: LIT,
+      type: "fill-extrusion",
+      source: LIT,
+      layout: { visibility: "none" },
+      paint: { "fill-extrusion-color": ["get", "color"], "fill-extrusion-height": ["get", "height"], "fill-extrusion-base": 0, "fill-extrusion-opacity": 1 },
+    });
     map.addSource(SELECTED, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
     map.addLayer({ id: `${SELECTED}-edge`, type: "line", source: SELECTED, paint: { "line-color": "#0d1013", "line-width": 5.5, "line-opacity": 0.85 } });
     map.addLayer({ id: `${SELECTED}-line`, type: "line", source: SELECTED, paint: { "line-color": "#ffffff", "line-width": 2.5 } });
@@ -113,7 +127,24 @@ export class BlockLayer {
           "fill-extrusion-color": ["case", isSelected, "#ffffff", isHovered, HOVER_COLOR, solid],
           "fill-extrusion-height": height,
           "fill-extrusion-base": 0,
-          "fill-extrusion-opacity": 0.92,
+          "fill-extrusion-opacity": COLUMN_OPACITY,
+        },
+      },
+      ANCHOR,
+    );
+    // The same blocks joined into one rounded shape per level, for the 3D at-a-glance view.
+    const shapes = levelShapes(data.features.filter((f) => f.properties.level > 0).map((f) => ({ ring: f.geometry.coordinates[0], level: f.properties.level })));
+    this.map.addSource(`${id}-shapes`, { type: "geojson", data: { type: "FeatureCollection", features: shapes } });
+    this.map.addLayer(
+      {
+        id: `${id}-shapes`,
+        type: "fill-extrusion",
+        source: `${id}-shapes`,
+        paint: {
+          "fill-extrusion-color": byLevel((l) => l.solid),
+          "fill-extrusion-height": byLevel((l) => l.height),
+          "fill-extrusion-base": 0,
+          "fill-extrusion-opacity": COLUMN_OPACITY,
         },
       },
       ANCHOR,
@@ -165,6 +196,7 @@ export class BlockLayer {
   setGlance(on: boolean): void {
     this.glance = on;
     this.applyMode();
+    this.sync();
   }
 
   /** Lights the classed block at a point of the map canvas, and shows a hand over it. */
@@ -184,6 +216,7 @@ export class BlockLayer {
     if (this.hovered && this.map.getSource(this.hovered.source)) this.map.setFeatureState(this.hovered, { hover: false });
     this.hovered = next;
     if (next) this.map.setFeatureState(next, { hover: true });
+    this.light();
     this.map.getCanvas().style.cursor = next ? "pointer" : "";
   }
 
@@ -192,16 +225,33 @@ export class BlockLayer {
     this.map.setFeatureState({ source: `blocks-${feature.properties.site}`, id: feature.properties.id }, { selected });
   }
 
+  /** The hovered and the selected block as columns of their own, which the rounded shapes would otherwise hide. */
+  private light(): void {
+    const column = (block: BlockFeature | null | undefined, color: string) => {
+      const level = block ? LEVELS.find((l) => l.id === levelOf(block.properties)) : undefined;
+      return block && level ? [{ type: "Feature" as const, geometry: block.geometry, properties: { color, height: level.height + 30 } }] : [];
+    };
+    const hovered = this.hovered && this.hovered.id !== this.selected?.properties.id ? this.store.get(this.hovered.id) : null;
+    const source = this.map.getSource(LIT) as GeoJSONSource | undefined;
+    void source?.setData({ type: "FeatureCollection", features: [...column(hovered, HOVER_COLOR), ...column(this.selected, "#ffffff")] });
+  }
+
   private sync(): void {
     const show = (id: string, on: boolean): void => {
       if (this.map.getLayer(id)) this.map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
     };
+    // Rounded shapes only as columns in the at-a-glance view; flat, and by class, the blocks are drawn as they are.
+    const rounded = this.shown && this.columns && this.glance;
     for (const site of this.sites) {
       show(`blocks-${site}-rest`, this.shown);
       show(`blocks-${site}-grid`, this.shown);
       show(`blocks-${site}-fill`, this.shown && !this.columns);
       show(`blocks-${site}-columns`, this.shown && this.columns);
+      show(`blocks-${site}-shapes`, rounded);
+      // Under the shapes the block columns are not painted, but they are still what the pointer finds.
+      if (this.map.getLayer(`blocks-${site}-columns`)) this.map.setPaintProperty(`blocks-${site}-columns`, "fill-extrusion-opacity", rounded ? 0 : COLUMN_OPACITY);
     }
+    show(LIT, rounded);
     show(VEIL, this.shown);
     show(`${SELECTED}-edge`, this.shown);
     show(`${SELECTED}-line`, this.shown);
@@ -234,6 +284,7 @@ export class BlockLayer {
     this.mark(this.selected, false);
     this.selected = feature;
     this.mark(feature, true);
+    this.light();
     const source = this.map.getSource(SELECTED) as GeoJSONSource | undefined;
     void source?.setData({ type: "FeatureCollection", features: feature ? [{ type: "Feature", geometry: feature.geometry, properties: {} }] : [] });
   }
