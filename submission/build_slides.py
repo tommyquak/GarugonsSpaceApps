@@ -66,8 +66,8 @@ RADAR_TITLE = "An optical satellite can't see past cloud and smoke, but radar ca
 RADAR = [
     ("Same place, same day.", "14 September 2026. On the left, what an optical satellite saw: smoke and cloud. "
      "On the right, what NISAR saw: the land."),
-    ("It brings its own light.", "NISAR, launched by NASA and ISRO in 2025, sends out radio waves 24 cm long. They pass "
-     "through cloud and smoke, by day or night, and the satellite is built to return every 12 days."),
+    ("NISAR allows us to see beyond the smoke.", "Launched by NASA and ISRO in 2025, it sends out its own radio waves, "
+     "24 cm long. They pass through cloud and smoke, by day or night, and it is built to return every 12 days."),
     ("The echo tells wet from dry.", "On open ground a wet surface sends back a strong echo and a dry one a weak echo. "
      "When open peat dries, the echo fades. Clearing fades it too, so we only ever say the echo fell."),
 ]
@@ -407,10 +407,10 @@ def build(a):
 
     # 3. What the radar is, and what it measures
     s = new(3, RADAR_TITLE)   # two lines, so the pictures sit lower than on the other slides
-    framed(s, fig / "fig_cloud.png", px(140), px(280), px(800), "Cloud against radar figure")
-    framed(s, fig / "explainer.gif", px(980), px(280), px(800), "Radar explainer animation")
+    framed(s, fig / "fig_cloud.png", px(140), px(270), px(800), "Cloud against radar figure")
+    framed(s, fig / "explainer.gif", px(980), px(270), px(800), "Radar explainer animation")
     for k, (name, sentence) in enumerate(RADAR):
-        words(s, 140 + k * 560, 756, 520, 200, [[(name, {"bold": True, "color": INK, "size": 14})], sentence], 24,
+        words(s, 140 + k * 560, 738, 520, 220, [[(name, {"bold": True, "color": INK, "size": 14})], sentence], 24,
               color=DIM, space_after=3)
     footer(s, 3, SOURCES[3], draft)
     s.notes_slide.notes_text_frame.text = "What NISAR is and what the echo means. Physics claims are the audited ones only."
